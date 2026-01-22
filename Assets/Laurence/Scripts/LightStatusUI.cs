@@ -73,7 +73,7 @@ public class LightStatusUI : MonoBehaviour
 
         if (lightLevelText != null)
         {
-            lightLevelText.text = $"Light Level: {(lightLevel * 100f):F0}%";
+            lightLevelText.text = $"Light Level: {(lightLevel * 100f):F1}";
         }
 
         targetColor = inLight ? lightColor : shadowColor;
