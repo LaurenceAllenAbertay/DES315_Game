@@ -58,8 +58,13 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
             {
+                agent.isStopped = false;
                 agent.SetDestination(hit.point);
             }
+        }
+        if (mouse.rightButton.wasPressedThisFrame)
+        {
+            agent.isStopped = true;
         }
     }
 
