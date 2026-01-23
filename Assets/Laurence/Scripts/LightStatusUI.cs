@@ -55,7 +55,7 @@ public class LightStatusUI : MonoBehaviour
 
     private void HandleLightStateChanged(bool inLight, float lightLevel)
     {
-        Debug.Log($"Light state changed: {(inLight ? "LIGHT" : "SHADOW")}");
+        // Debug.Log($"Light state changed: {(inLight ? "LIGHT" : "SHADOW")}");
     }
 
     private void UpdateUI()

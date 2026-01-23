@@ -1,87 +1,78 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Simple player controller for the demo.
-/// Moves with WASD/Arrow keys and checks light status.
-/// </summary>
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
-    public float moveSpeed = 5f;
-    public float gravity = -9.81f;
+    [Header("Click Settings")]
+    public LayerMask walkableMask = ~0;
 
     [Header("Light Detection")]
-    [Tooltip("Offset from transform.position to check light (usually center of character)")]
     public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
 
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
     [SerializeField] private float currentLightLevel;
-    [SerializeField] private int lightsReaching;
+    [SerializeField] private bool isMoving;
 
-    private CharacterController characterController;
-    private Vector3 velocity;
+    private NavMeshAgent agent;
+    private Camera mainCamera;
 
-    // Events for UI and other systems to subscribe to
     public delegate void LightStateChanged(bool inLight, float lightLevel);
     public event LightStateChanged OnLightStateChanged;
 
+    public delegate void MovementStateChanged(bool moving);
+    public event MovementStateChanged OnMovementStateChanged;
+
     public bool IsInLight => isInLight;
     public float CurrentLightLevel => currentLightLevel;
+    public bool IsMoving => isMoving;
 
     private void Awake()
     {
-        characterController = GetComponent<CharacterController>();
+        agent = GetComponent<NavMeshAgent>();
+        mainCamera = Camera.main;
     }
 
     private void Start()
     {
-        // Initial light check
         UpdateLightState();
     }
 
     private void Update()
     {
-        HandleMovement();
+        HandleClickInput();
+        UpdateMovingState();
         UpdateLightState();
     }
 
-    private void HandleMovement()
+    private void HandleClickInput()
     {
-        // Get input using new Input System
-        Vector2 input = Vector2.zero;
+        Mouse mouse = Mouse.current;
+        if (mouse == null) return;
 
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard != null)
+        if (mouse.leftButton.wasPressedThisFrame)
         {
-            if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed)
-                input.y += 1f;
-            if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed)
-                input.y -= 1f;
-            if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
-                input.x += 1f;
-            if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
-                input.x -= 1f;
+            Ray ray = mainCamera.ScreenPointToRay(mouse.position.ReadValue());
+
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
+            {
+                agent.SetDestination(hit.point);
+            }
         }
+    }
 
-        // Calculate movement direction
-        Vector3 move = new Vector3(input.x, 0f, input.y).normalized;
+    private void UpdateMovingState()
+    {
+        bool wasMoving = isMoving;
 
-        // Apply movement
-        if (move.magnitude >= 0.1f)
+        isMoving = agent.hasPath && agent.remainingDistance > agent.stoppingDistance;
+
+        if (wasMoving != isMoving)
         {
-            characterController.Move(move * moveSpeed * Time.deltaTime);
+            OnMovementStateChanged?.Invoke(isMoving);
         }
-
-        // Apply gravity
-        if (characterController.isGrounded && velocity.y < 0)
-        {
-            velocity.y = -2f; // Small downward force to keep grounded
-        }
-        velocity.y += gravity * Time.deltaTime;
-        characterController.Move(velocity * Time.deltaTime);
     }
 
     private void UpdateLightState()
@@ -95,18 +86,13 @@ public class PlayerController : MonoBehaviour
 
         isInLight = result.isInLight;
         currentLightLevel = result.totalLightContribution;
-        lightsReaching = result.contributingLights.Count;
 
-        // Fire event if state changed
         if (previousState != isInLight)
         {
             OnLightStateChanged?.Invoke(isInLight, currentLightLevel);
         }
     }
 
-    /// <summary>
-    /// Get the point where light detection occurs
-    /// </summary>
     public Vector3 GetLightCheckPoint()
     {
         return transform.position + lightCheckOffset;
@@ -114,9 +100,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Visualize light check point
         Vector3 checkPoint = transform.position + lightCheckOffset;
         Gizmos.color = isInLight ? Color.yellow : Color.blue;
         Gizmos.DrawWireSphere(checkPoint, 0.2f);
+
+        if (agent != null && agent.hasPath)
+        {
+            Gizmos.color = Color.green;
+            Vector3[] corners = agent.path.corners;
+            for (int i = 0; i < corners.Length - 1; i++)
+            {
+                Gizmos.DrawLine(corners[i], corners[i + 1]);
+            }
+        }
     }
 }
