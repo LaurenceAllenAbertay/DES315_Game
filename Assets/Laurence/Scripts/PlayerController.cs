@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
     [Header("Light Detection")]
     public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
 
+    //Input system updated - EM//
+    [Header("Input Actions")]
+    public InputActionAsset inputActions;
+
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
     [SerializeField] private float currentLightLevel;
@@ -18,6 +22,12 @@ public class PlayerController : MonoBehaviour
 
     private NavMeshAgent agent;
     private Camera mainCamera;
+
+    //Input Actions - EM//
+    private InputAction moveAction;
+    private InputAction stopMovementAction;
+    private InputAction pointerPositionAction;
+
 
     public delegate void LightStateChanged(bool inLight, float lightLevel);
     public event LightStateChanged OnLightStateChanged;
@@ -33,6 +43,57 @@ public class PlayerController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
+
+        //Setup input action - EM//
+        if (inputActions != null)
+        {
+            var playerMap = inputActions.FindActionMap("Player");
+            moveAction = playerMap.FindAction("Move");
+            stopMovementAction = playerMap.FindAction("StopMovement");
+            pointerPositionAction = playerMap.FindAction("PointerPosition");
+        }
+    }
+
+    //Movement System on Enable - EM//
+    private void OnEnable()
+    {
+        if(moveAction != null)
+        {
+            moveAction.performed += OnMovePerformed;
+            moveAction.Enable();
+        }
+
+        if(stopMovementAction != null)
+        {
+            stopMovementAction.performed += OnStopMovement;
+            stopMovementAction.Enable();
+        }
+
+        if(pointerPositionAction != null)
+        {
+            pointerPositionAction.Enable();
+        }
+    }
+
+    //Movement System on Disable- EM//
+    private void OnDisable()
+    {
+        if(moveAction != null)
+        {
+            moveAction.performed -= OnMovePerformed;
+            moveAction.Disable();
+        }
+
+        if(stopMovementAction != null)
+        {
+            stopMovementAction.performed -= OnStopMovement;
+            stopMovementAction.Disable();
+        }
+
+        if(pointerPositionAction != null)
+        {
+            pointerPositionAction.Disable();
+        }
     }
 
     private void Start()
@@ -42,30 +103,33 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleClickInput();
         UpdateMovingState();
         UpdateLightState();
     }
 
-    private void HandleClickInput()
+    //Input system on move performed- EM//
+    private void OnMovePerformed(InputAction.CallbackContext context)
     {
-        Mouse mouse = Mouse.current;
-        if (mouse == null) return;
+        if (mainCamera == null) return;
 
-        if (mouse.leftButton.wasPressedThisFrame)
-        {
-            Ray ray = mainCamera.ScreenPointToRay(mouse.position.ReadValue());
 
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
-            {
-                agent.isStopped = false;
-                agent.SetDestination(hit.point);
-            }
-        }
-        if (mouse.rightButton.wasPressedThisFrame)
+        if (pointerPositionAction == null) return;
+
+        Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
+        Ray ray = mainCamera.ScreenPointToRay(pointerPos);
+
+        if(Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
         {
-            agent.isStopped = true;
+            agent.isStopped = false;
+            agent.SetDestination(hit.point);
         }
+        
+    }
+
+    //Input System On stop movement - EM//
+    private void OnStopMovement(InputAction.CallbackContext context)
+    {
+        agent.isStopped = true;
     }
 
     private void UpdateMovingState()

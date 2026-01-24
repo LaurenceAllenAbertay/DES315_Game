@@ -631,13 +631,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 740575464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d62afcfb66ef7054db41853211a05c72, type: 3}
+  m_Script: {fileID: 11500000, guid: cae980fe209b34b49bfecf141a8b522d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   walkableMask:
     serializedVersion: 2
     m_Bits: 4294967295
   lightCheckOffset: {x: 0, y: 1, z: 0}
+  inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   isInLight: 0
   currentLightLevel: 0
   isMoving: 0
@@ -1753,12 +1754,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1437648967}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06d6cc3074655ed4d9dac8aa91579553, type: 3}
+  m_Script: {fileID: 11500000, guid: b5d0a8ad4afbe62419920f812f1c1344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
   fastMoveMultiplier: 2
   rotateSpeed: 0.3
+  inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
 --- !u!1 &1512805848
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,13 +2157,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2e17b820eab18e4696b0c4919d9712c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoFindFeature: 1
-  shadowDarkness: 0.15
-  shadowTint: {r: 0.1, g: 0.1, b: 0.2, a: 1}
-  wobbleIntensity: 0.5
-  wobbleSpeed: 3
-  noiseScale: 5
-  currentPreset: 0
 --- !u!4 &1622474059
 Transform:
   m_ObjectHideFlags: 0

@@ -10,29 +10,122 @@ public class CameraController : MonoBehaviour
     [Header("Rotation Settings")]
     public float rotateSpeed = 0.3f;
 
-    private bool isRotating;
+    //Input actions update -EM//
+    [Header("Input Actions")]
+    public InputActionAsset inputActions;
 
+    //Input actions -EM//
+    private InputAction movementAction;
+    private InputAction fastMoveAction;
+    private InputAction rotateAction;
+    private InputAction rotateDeltaAction;
+
+    private bool isRotating;
+    private bool isFastMoving;
+
+    //Input actions awake -EM//
+    private void Awake()
+    {
+        //Setup input actions//
+        if(inputActions != null)
+        {
+            var cameraMap = inputActions.FindActionMap("Camera");
+            movementAction = cameraMap.FindAction("Movement");
+            fastMoveAction = cameraMap.FindAction("FastMove");
+            rotateAction = cameraMap.FindAction("Rotate");
+            rotateDeltaAction = cameraMap.FindAction("RotateDelta");
+        }
+    }
+
+    //Input action on Enable -EM//
+    private void OnEnable()
+    {
+        if(movementAction != null)
+        {
+            movementAction.Enable();
+        }
+
+        if (fastMoveAction != null)
+        {
+            fastMoveAction.performed += OnFastMovePerformed;
+            fastMoveAction.canceled += OnFastMoveCanceled;
+            fastMoveAction.Enable();
+        }
+
+        if(rotateAction != null)
+        {
+            rotateAction.performed += OnRotateStarted;
+            rotateAction.canceled += OnRotateCanceled;
+            rotateAction.Enable();
+        }
+
+        if(rotateDeltaAction != null)
+        {
+            rotateDeltaAction.Enable();
+        }
+    }
+
+    //Input action on Disable -EM//
+    private void OnDisable()
+    {
+        if(movementAction != null)
+        {
+            movementAction.Disable();
+        }
+
+        if(fastMoveAction != null)
+        {
+            fastMoveAction.performed -= OnFastMovePerformed;
+            fastMoveAction.canceled -= OnFastMoveCanceled;
+            fastMoveAction.Disable();
+        }
+
+        if (rotateAction != null)
+        {
+            rotateAction.performed -= OnRotateStarted;
+            rotateAction.canceled -= OnRotateCanceled;
+            rotateAction.Disable();
+        }
+
+        if (rotateDeltaAction != null)
+        {
+            rotateDeltaAction.Disable();
+        }
+    }
     private void Update()
     {
         HandlePan();
         HandleRotation();
     }
 
+    //On fast move perfromed -EM//
+    private void OnFastMovePerformed(InputAction.CallbackContext context)
+    {
+        isFastMoving = true;
+    }
+    //on fast movment cancelled -EM//
+    private void OnFastMoveCanceled(InputAction.CallbackContext context)
+    {
+        isFastMoving = false;
+    }
+    //On rotate started -EM/
+    private void OnRotateStarted(InputAction.CallbackContext context)
+    {
+        isRotating = true;
+    }
+
+    //On rotate canceled -EM//
+    private void OnRotateCanceled(InputAction.CallbackContext context)
+    {
+        isRotating= false;
+    }
+
+    //Update on Handle pan -EM//
     private void HandlePan()
     {
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard == null) return;
+        if (movementAction == null) return;
 
-        Vector2 input = Vector2.zero;
-
-        if (keyboard.wKey.isPressed)
-            input.y += 1f;
-        if (keyboard.sKey.isPressed)
-            input.y -= 1f;
-        if (keyboard.dKey.isPressed)
-            input.x += 1f;
-        if (keyboard.aKey.isPressed)
-            input.x -= 1f;
+        Vector2 input = movementAction.ReadValue<Vector2>();
 
         if (input == Vector2.zero) return;
 
@@ -42,38 +135,27 @@ public class CameraController : MonoBehaviour
 
         Vector3 right = transform.right;
         right.y = 0f;
-        right.Normalize();
+        right.Normalize(); 
 
         Vector3 moveDirection = (forward * input.y + right * input.x).normalized;
 
         float speed = moveSpeed;
-        if (keyboard.shiftKey.isPressed)
+        if (isFastMoving)
+        {
             speed *= fastMoveMultiplier;
+        }
 
         transform.position += moveDirection * speed * Time.deltaTime;
     }
 
+    //Handle rotation update -EM//
     private void HandleRotation()
     {
-        Mouse mouse = Mouse.current;
-        if (mouse == null) return;
+       if(!isRotating || rotateAction == null) return;
 
-        if (mouse.rightButton.wasPressedThisFrame)
-        {
-            isRotating = true;
-        }
+       Vector2 mouseDelta = rotateDeltaAction.ReadValue<Vector2>();
+        float angle = mouseDelta.x * rotateSpeed;
 
-        if (mouse.rightButton.wasReleasedThisFrame)
-        {
-            isRotating = false;
-        }
-
-        if (isRotating)
-        {
-            float mouseDelta = mouse.delta.x.ReadValue();
-            float angle = mouseDelta * rotateSpeed;
-
-            transform.Rotate(0f, angle, 0f, Space.World);
-        }
+        transform.Rotate(0f, angle, 0f, Space.World);
     }
 }
