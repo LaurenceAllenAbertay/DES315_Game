@@ -15,6 +15,12 @@ public class PlayerController : MonoBehaviour
     [Header("Input Actions")]
     public InputActionAsset inputActions;
 
+    [Header("Path Visualization")]
+    private LineRenderer pathLineRenderer;
+    public float pathLineHeight = 0.1f;
+    public Color pathLineColor = Color.green;
+    public float pathLineWidth = 0.1f;
+
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
     [SerializeField] private float currentLightLevel;
@@ -52,24 +58,38 @@ public class PlayerController : MonoBehaviour
             stopMovementAction = playerMap.FindAction("StopMovement");
             pointerPositionAction = playerMap.FindAction("PointerPosition");
         }
+
+        // Setup LineRenderer
+        if (pathLineRenderer == null)
+        {
+            pathLineRenderer = gameObject.AddComponent<LineRenderer>();
+        }
+
+        // Configure LineRenderer
+        pathLineRenderer.startWidth = pathLineWidth;
+        pathLineRenderer.endWidth = pathLineWidth;
+        pathLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        pathLineRenderer.startColor = pathLineColor;
+        pathLineRenderer.endColor = pathLineColor;
+        pathLineRenderer.positionCount = 0;
     }
 
     //Movement System on Enable - EM//
     private void OnEnable()
     {
-        if(moveAction != null)
+        if (moveAction != null)
         {
             moveAction.performed += OnMovePerformed;
             moveAction.Enable();
         }
 
-        if(stopMovementAction != null)
+        if (stopMovementAction != null)
         {
             stopMovementAction.performed += OnStopMovement;
             stopMovementAction.Enable();
         }
 
-        if(pointerPositionAction != null)
+        if (pointerPositionAction != null)
         {
             pointerPositionAction.Enable();
         }
@@ -78,19 +98,19 @@ public class PlayerController : MonoBehaviour
     //Movement System on Disable- EM//
     private void OnDisable()
     {
-        if(moveAction != null)
+        if (moveAction != null)
         {
             moveAction.performed -= OnMovePerformed;
             moveAction.Disable();
         }
 
-        if(stopMovementAction != null)
+        if (stopMovementAction != null)
         {
             stopMovementAction.performed -= OnStopMovement;
             stopMovementAction.Disable();
         }
 
-        if(pointerPositionAction != null)
+        if (pointerPositionAction != null)
         {
             pointerPositionAction.Disable();
         }
@@ -105,6 +125,7 @@ public class PlayerController : MonoBehaviour
     {
         UpdateMovingState();
         UpdateLightState();
+        UpdatePathLine();
     }
 
     //Input system on move performed- EM//
@@ -118,12 +139,12 @@ public class PlayerController : MonoBehaviour
         Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
-        if(Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
         {
             agent.isStopped = false;
             agent.SetDestination(hit.point);
         }
-        
+
     }
 
     //Input System On stop movement - EM//
@@ -159,6 +180,31 @@ public class PlayerController : MonoBehaviour
         if (previousState != isInLight)
         {
             OnLightStateChanged?.Invoke(isInLight, currentLightLevel);
+        }
+    }
+
+    private void UpdatePathLine()
+    {
+        if (pathLineRenderer == null) return;
+
+        if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
+        {
+            // Get the path corners
+            Vector3[] corners = agent.path.corners;
+
+            // Set the number of positions in the line renderer
+            pathLineRenderer.positionCount = corners.Length;
+
+            // Set each position
+            for (int i = 0; i < corners.Length; i++)
+            {
+                pathLineRenderer.SetPosition(i, corners[i] + Vector3.up * pathLineHeight);
+            }
+        }
+        else
+        {
+            // Clear the line when there's no path
+            pathLineRenderer.positionCount = 0;
         }
     }
 
