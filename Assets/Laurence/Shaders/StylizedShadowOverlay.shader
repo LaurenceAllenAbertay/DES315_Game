@@ -52,35 +52,38 @@
                 float4 positionCS : SV_POSITION;
                 float2 texcoord : TEXCOORD0;
             };
-            
+
             // Simple noise function using layered sine waves
             float WobbleNoise(float3 worldPos, float3 lightPos, float time)
             {
                 // Direction from light to point (for consistent wobble around the sphere)
                 float3 dir = normalize(worldPos - lightPos);
-                
+    
                 // Create wobble based on spherical coordinates
-                // Use multiple frequencies for organic look
                 float angle1 = atan2(dir.z, dir.x);
                 float angle2 = asin(dir.y);
-                
+    
+                // IMPORTANT: Use INTEGER frequency multipliers to ensure seamless wrapping
+                // Non-integer values cause discontinuities at the atan2 wrap point (-π to π)
+                float baseFreq = floor(_WobbleFrequency); // Ensure base is integer
+    
                 // Layer multiple sine waves at different frequencies and phases
                 float wobble = 0.0;
-                
-                // Primary wobble
-                wobble += sin(angle1 * _WobbleFrequency + time * _WobbleSpeed) * 0.5;
-                wobble += sin(angle2 * _WobbleFrequency * 0.7 + time * _WobbleSpeed * 1.3) * 0.3;
-                
-                // Secondary detail
-                wobble += sin(angle1 * _WobbleFrequency * 2.1 - time * _WobbleSpeed * 0.8) * 0.15;
-                wobble += sin((angle1 + angle2) * _WobbleFrequency * 1.5 + time * _WobbleSpeed * 0.6) * 0.2;
-                
-                // Tertiary fine detail
-                wobble += sin(angle1 * _WobbleFrequency * 3.7 + time * _WobbleSpeed * 1.1) * 0.08;
-                
+    
+                // Primary wobble (integer multipliers: 1x, 1x)
+                wobble += sin(angle1 * baseFreq + time * _WobbleSpeed) * 0.5;
+                wobble += sin(angle2 * baseFreq + time * _WobbleSpeed * 1.3) * 0.3;
+    
+                // Secondary detail (integer multipliers: 2x, 2x)
+                wobble += sin(angle1 * baseFreq * 2.0 - time * _WobbleSpeed * 0.8) * 0.15;
+                wobble += sin((angle1 + angle2) * baseFreq * 2.0 + time * _WobbleSpeed * 0.6) * 0.2;
+    
+                // Tertiary fine detail (integer multiplier: 4x)
+                wobble += sin(angle1 * baseFreq * 4.0 + time * _WobbleSpeed * 1.1) * 0.08;
+    
                 // Normalize to roughly -1 to 1 range
                 wobble *= 0.8;
-                
+    
                 return wobble;
             }
             
