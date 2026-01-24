@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 /// <summary>
-/// Tracks all stylized lights in the scene and provides their data to the shadow renderer.
-/// This is auto-created when the first StylizedLight registers.
+/// Tracks all lights in the scene and provides their data to the shadow renderer.
+/// This is automatically created when the first StylizedLight registers.
 /// </summary>
 public class StylizedShadowController : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class StylizedShadowController : MonoBehaviour
     
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
-    [SerializeField] private int trackedLightCount = 0; // Visible in inspector
+    [SerializeField] private int trackedLightCount = 0; 
     
     public struct LightData
     {
@@ -46,7 +46,6 @@ public class StylizedShadowController : MonoBehaviour
     
     private void Update()
     {
-        // Update inspector display
         trackedLightCount = registeredLights.Count;
     }
     
@@ -74,7 +73,6 @@ public class StylizedShadowController : MonoBehaviour
     {
         lightDataCache.Clear();
         
-        // Clean up any null references
         registeredLights.RemoveWhere(l => l == null);
         
         foreach (var light in registeredLights)
@@ -99,7 +97,6 @@ public class StylizedShadowController : MonoBehaviour
         return registeredLights.Count;
     }
     
-    // Draw gizmos showing all tracked light ranges
     private void OnDrawGizmos()
     {
         if (!debugMode) return;

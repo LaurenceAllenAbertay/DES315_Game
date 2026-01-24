@@ -1888,7 +1888,7 @@ MonoBehaviour:
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
-  drawDebugRays: 1
+  drawDebugRays: 0
 --- !u!114 &1596103845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1916,11 +1916,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useCustomRange: 1
-  customRange: 10
-  showRangeGizmo: 1
-  gizmoColor: {r: 1, g: 1, b: 0, a: 0.5}
-  currentRange: 0
 --- !u!114 &1596103847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1951,7 +1946,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596103840}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.9528302, g: 0.6662664, b: 0.29214135, a: 1}
@@ -2279,7 +2274,7 @@ MonoBehaviour:
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
-  drawDebugRays: 1
+  drawDebugRays: 0
 --- !u!114 &1753537519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2292,11 +2287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useCustomRange: 1
-  customRange: 6
-  showRangeGizmo: 1
-  gizmoColor: {r: 1, g: 1, b: 0, a: 0.5}
-  currentRange: 0
 --- !u!114 &1753537520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2327,7 +2317,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1753537514}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 0.9528302, g: 0.6662664, b: 0.29214135, a: 1}

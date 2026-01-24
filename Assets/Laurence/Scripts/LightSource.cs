@@ -11,7 +11,7 @@ public class LightSource : MonoBehaviour
     public float strength = 10f;
 
     [Tooltip("Layer mask for objects that block light")]
-    public LayerMask occluderMask = ~0; // Default: everything blocks light
+    public LayerMask occluderMask = ~0;
 
     [Header("Debug")]
     [SerializeField] private bool drawDebugRays = true;

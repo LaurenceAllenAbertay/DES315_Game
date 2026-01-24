@@ -94,7 +94,6 @@ public class StylizedShadowPass : ScriptableRenderPass
     private static readonly int LightPositionsID = Shader.PropertyToID("_LightPositions");
     private static readonly int LightRangesID = Shader.PropertyToID("_LightRanges");
 
-    // Wobble parameters
     private static readonly int WobbleAmountID = Shader.PropertyToID("_WobbleAmount");
     private static readonly int WobbleSpeedID = Shader.PropertyToID("_WobbleSpeed");
     private static readonly int WobbleFrequencyID = Shader.PropertyToID("_WobbleFrequency");
@@ -150,7 +149,6 @@ public class StylizedShadowPass : ScriptableRenderPass
         public Vector4[] lightPositions;
         public float[] lightRanges;
 
-        // Wobble settings
         public float wobbleAmount;
         public float wobbleSpeed;
         public float wobbleFrequency;
@@ -190,7 +188,6 @@ public class StylizedShadowPass : ScriptableRenderPass
             passData.lightPositions = lightPositions;
             passData.lightRanges = lightRanges;
 
-            // Pass wobble settings
             passData.wobbleAmount = settings.wobbleAmount;
             passData.wobbleSpeed = settings.wobbleSpeed;
             passData.wobbleFrequency = settings.wobbleFrequency;
@@ -203,12 +200,10 @@ public class StylizedShadowPass : ScriptableRenderPass
             {
                 CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(ctx.cmd);
 
-                // Set material properties
                 data.material.SetColor(ShadowColorID, data.shadowColor);
                 data.material.SetColor(LightColorID, data.lightColor); 
                 data.material.SetInt(LightCountID, data.lightCount);
 
-                // Set wobble properties
                 data.material.SetFloat(WobbleAmountID, data.wobbleAmount);
                 data.material.SetFloat(WobbleSpeedID, data.wobbleSpeed);
                 data.material.SetFloat(WobbleFrequencyID, data.wobbleFrequency);
