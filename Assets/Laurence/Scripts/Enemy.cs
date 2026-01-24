@@ -6,15 +6,41 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
 
+    [Header("Vision Cone")]
+    public EnemyVisionCone visionCone;
+
     public delegate void HealthChanged(int current, int max);
     public event HealthChanged OnHealthChanged;
 
     public delegate void EnemyDied(Enemy enemy);
     public event EnemyDied OnDied;
 
+    private void Awake()
+    {
+        // Get or create vision cone
+        visionCone = GetComponentInChildren<EnemyVisionCone>();
+        if (visionCone == null)
+        {
+            GameObject coneObj = new GameObject("VisionCone");
+            coneObj.transform.SetParent(transform);
+            coneObj.transform.localPosition = Vector3.zero;
+            coneObj.transform.localRotation = Quaternion.identity;
+            visionCone = coneObj.AddComponent<EnemyVisionCone>();
+        }
+
+        // Subscribe to player detection
+        visionCone.OnPlayerDetected += OnPlayerEnteredVisionCone;
+    }
+
     private void Start()
     {
         currentHealth = maxHealth;
+    }
+
+    private void OnPlayerEnteredVisionCone()
+    {
+        Debug.Log($"{gameObject.name}: Combat starts!");
+        // Add your combat start logic here
     }
 
     public void TakeDamage(int damage)
@@ -41,5 +67,13 @@ public class Enemy : MonoBehaviour
         Debug.Log($"{gameObject.name} died!");
         OnDied?.Invoke(this);
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        if (visionCone != null)
+        {
+            visionCone.OnPlayerDetected -= OnPlayerEnteredVisionCone;
+        }
     }
 }
