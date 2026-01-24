@@ -31,6 +31,7 @@
             
             // Parameters from C#
             float4 _ShadowColor;
+            float4 _LightColor;
             int _LightCount;
             float4 _LightPositions[MAX_LIGHTS];
             float _LightRanges[MAX_LIGHTS];
@@ -164,11 +165,15 @@
                 
                 // Shadow = not in any light
                 float inShadow = 1.0 - inLight;
-                
-                // Apply shadow tint
+
+                // Apply both light tint and shadow tint
+                float3 litColor = sceneColor.rgb * _LightColor.rgb;
                 float3 shadowedColor = sceneColor.rgb * _ShadowColor.rgb;
-                float3 finalColor = lerp(sceneColor.rgb, shadowedColor, inShadow * _ShadowColor.a);
-                
+
+                // Blend between lit and shadowed based on light influence
+                float3 finalColor = lerp(shadowedColor, litColor, inLight * _LightColor.a);
+                finalColor = lerp(sceneColor.rgb, finalColor, inShadow * _ShadowColor.a + inLight * _LightColor.a);
+
                 return float4(finalColor, 1.0);
             }
             

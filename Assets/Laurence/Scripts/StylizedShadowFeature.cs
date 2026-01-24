@@ -10,6 +10,7 @@ public class StylizedShadowFeature : ScriptableRendererFeature
     {
         public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
         public Color shadowColor = new Color(0.1f, 0.1f, 0.2f, 0.85f);
+        public Color lightColor = new Color(1f, 0.7f, 0.4f, 0.5f);
         public int maxLights = 16;
 
         [Header("Edge Wobble")]
@@ -88,6 +89,7 @@ public class StylizedShadowPass : ScriptableRenderPass
     private StylizedShadowFeature.Settings settings;
 
     private static readonly int ShadowColorID = Shader.PropertyToID("_ShadowColor");
+    private static readonly int LightColorID = Shader.PropertyToID("_LightColor");
     private static readonly int LightCountID = Shader.PropertyToID("_LightCount");
     private static readonly int LightPositionsID = Shader.PropertyToID("_LightPositions");
     private static readonly int LightRangesID = Shader.PropertyToID("_LightRanges");
@@ -144,6 +146,7 @@ public class StylizedShadowPass : ScriptableRenderPass
         public Material material;
         public int lightCount;
         public Color shadowColor;
+        public Color lightColor;
         public Vector4[] lightPositions;
         public float[] lightRanges;
 
@@ -183,6 +186,7 @@ public class StylizedShadowPass : ScriptableRenderPass
             passData.material = material;
             passData.lightCount = lightCount;
             passData.shadowColor = settings.shadowColor;
+            passData.lightColor = settings.lightColor;
             passData.lightPositions = lightPositions;
             passData.lightRanges = lightRanges;
 
@@ -201,6 +205,7 @@ public class StylizedShadowPass : ScriptableRenderPass
 
                 // Set material properties
                 data.material.SetColor(ShadowColorID, data.shadowColor);
+                data.material.SetColor(LightColorID, data.lightColor); 
                 data.material.SetInt(LightCountID, data.lightCount);
 
                 // Set wobble properties
