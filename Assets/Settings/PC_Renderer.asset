@@ -90,8 +90,8 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: 5791246380287980528}
   - {fileID: -7725403641769349537}
-  - {fileID: -7802504514982236640}
-  m_RendererFeatureMap: ad6b866f10d7b46cf0f3d447e6a35e505f2ed49951dac994202e1aaa7befb793
+  - {fileID: 1094063085425912892}
+  m_RendererFeatureMap: ad6b866f10d7b46cf0f3d447e6a35e505f2ed49951dac9943cecad6094e42e0f
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -117,6 +117,28 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
+--- !u!114 &1094063085425912892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a34fa6b42e45e4498f37eb3b81abf2b, type: 3}
+  m_Name: StylizedShadowFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 500
+    shadowColor: {r: 0.1, g: 0.1, b: 0.2, a: 0.85}
+    maxLights: 16
+    wobbleAmount: 1
+    wobbleSpeed: 3
+    wobbleFrequency: 5
+    edgeSoftness: 0.5
+    debugMode: 0
 --- !u!114 &5791246380287980528
 MonoBehaviour:
   m_ObjectHideFlags: 0

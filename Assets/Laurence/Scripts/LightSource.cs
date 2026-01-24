@@ -37,7 +37,7 @@ public class LightSource : MonoBehaviour
     /// Check if this light can see the target point
     /// </summary>
     /// <param name="targetPoint">World position to check</param>
-    /// <param name="lightContribution">Output: 0-1 value based on distance (1 = close, 0 = at max range)</param>
+    /// <param name="lightContribution">Output: 1 if in light, 0 if in shadow (binary)</param>
     /// <returns>True if light reaches the target unobstructed</returns>
     public bool CanReachPoint(Vector3 targetPoint, out float lightContribution)
     {
@@ -46,6 +46,7 @@ public class LightSource : MonoBehaviour
         Vector3 toTarget = targetPoint - transform.position;
         float distance = toTarget.magnitude;
 
+        // Outside range = in shadow
         if (distance > strength)
         {
             return false;
@@ -61,13 +62,14 @@ public class LightSource : MonoBehaviour
             Debug.DrawLine(transform.position, targetPoint, rayColor);
         }
 
+        // Blocked by obstacle = in shadow
         if (isBlocked)
         {
             return false;
         }
 
-        // Calculate contribution based on distance (inverse falloff)
-        lightContribution = 1f - (distance / strength);
+        lightContribution = 1f;
+
         return true;
     }
 
