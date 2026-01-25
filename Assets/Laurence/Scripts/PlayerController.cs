@@ -15,11 +15,11 @@ public class PlayerController : MonoBehaviour
     [Header("Input Actions")]
     public InputActionAsset inputActions;
 
-    [Header("Path Visualization")]
-    private LineRenderer pathLineRenderer;
-    public float pathLineHeight = 0.1f;
-    public Color pathLineColor = Color.green;
-    public float pathLineWidth = 0.1f;
+    [Header("Destination Indicator")]
+    [Tooltip("Prefab to spawn at the destination point")]
+    public GameObject destinationIndicatorPrefab;
+    [Tooltip("Height offset above the clicked point")]
+    public float indicatorHeight = 0.05f;
 
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private InputAction stopMovementAction;
     private InputAction pointerPositionAction;
 
+    private GameObject destinationIndicatorInstance;
 
     public delegate void LightStateChanged(bool inLight, float lightLevel);
     public event LightStateChanged OnLightStateChanged;
@@ -59,19 +60,11 @@ public class PlayerController : MonoBehaviour
             pointerPositionAction = playerMap.FindAction("PointerPosition");
         }
 
-        // Setup LineRenderer
-        if (pathLineRenderer == null)
+        if (destinationIndicatorPrefab != null)
         {
-            pathLineRenderer = gameObject.AddComponent<LineRenderer>();
+            destinationIndicatorInstance = Instantiate(destinationIndicatorPrefab);
+            destinationIndicatorInstance.SetActive(false);
         }
-
-        // Configure LineRenderer
-        pathLineRenderer.startWidth = pathLineWidth;
-        pathLineRenderer.endWidth = pathLineWidth;
-        pathLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        pathLineRenderer.startColor = pathLineColor;
-        pathLineRenderer.endColor = pathLineColor;
-        pathLineRenderer.positionCount = 0;
     }
 
     //Movement System on Enable - EM//
@@ -125,14 +118,13 @@ public class PlayerController : MonoBehaviour
     {
         UpdateMovingState();
         UpdateLightState();
-        UpdatePathLine();
+        UpdateDestinationIndicator();
     }
 
     //Input system on move performed- EM//
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
         if (mainCamera == null) return;
-
 
         if (pointerPositionAction == null) return;
 
@@ -143,14 +135,41 @@ public class PlayerController : MonoBehaviour
         {
             agent.isStopped = false;
             agent.SetDestination(hit.point);
-        }
 
+            ShowDestinationIndicator(hit.point);
+        }
     }
 
     //Input System On stop movement - EM//
     private void OnStopMovement(InputAction.CallbackContext context)
     {
         agent.isStopped = true;
+        HideDestinationIndicator();
+    }
+
+    private void ShowDestinationIndicator(Vector3 position)
+    {
+        if (destinationIndicatorInstance == null) return;
+
+        destinationIndicatorInstance.transform.position = position + Vector3.up * indicatorHeight;
+        destinationIndicatorInstance.SetActive(true);
+    }
+
+    private void HideDestinationIndicator()
+    {
+        if (destinationIndicatorInstance == null) return;
+
+        destinationIndicatorInstance.SetActive(false);
+    }
+
+    private void UpdateDestinationIndicator()
+    {
+        if (destinationIndicatorInstance == null || !destinationIndicatorInstance.activeSelf) return;
+
+        if (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance)
+        {
+            HideDestinationIndicator();
+        }
     }
 
     private void UpdateMovingState()
@@ -162,6 +181,11 @@ public class PlayerController : MonoBehaviour
         if (wasMoving != isMoving)
         {
             OnMovementStateChanged?.Invoke(isMoving);
+
+            if (!isMoving)
+            {
+                HideDestinationIndicator();
+            }
         }
     }
 
@@ -183,34 +207,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpdatePathLine()
-    {
-        if (pathLineRenderer == null) return;
-
-        if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
-        {
-            // Get the path corners
-            Vector3[] corners = agent.path.corners;
-
-            // Set the number of positions in the line renderer
-            pathLineRenderer.positionCount = corners.Length;
-
-            // Set each position
-            for (int i = 0; i < corners.Length; i++)
-            {
-                pathLineRenderer.SetPosition(i, corners[i] + Vector3.up * pathLineHeight);
-            }
-        }
-        else
-        {
-            // Clear the line when there's no path
-            pathLineRenderer.positionCount = 0;
-        }
-    }
-
     public Vector3 GetLightCheckPoint()
     {
         return transform.position + lightCheckOffset;
+    }
+
+    private void OnDestroy()
+    {
+        if (destinationIndicatorInstance != null)
+        {
+            Destroy(destinationIndicatorInstance);
+        }
     }
 
     private void OnDrawGizmosSelected()

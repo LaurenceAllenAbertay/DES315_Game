@@ -746,9 +746,8 @@ MonoBehaviour:
     m_Bits: 4294967295
   lightCheckOffset: {x: 0, y: 0.1, z: 0}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
-  pathLineHeight: 0.01
-  pathLineColor: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 0.050980393}
-  pathLineWidth: 0.05
+  destinationIndicatorPrefab: {fileID: 686496462743916664, guid: fb557d0c6b58434468fc525fe04912d9, type: 3}
+  indicatorHeight: 0.05
   isInLight: 0
   currentLightLevel: 0
   isMoving: 0
