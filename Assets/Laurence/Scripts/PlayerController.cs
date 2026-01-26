@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
     [Header("Light Detection")]
     public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
 
+    [Header("Movement Range")]
+    [Tooltip("Maximum distance the player can move in a single click")]
+    public float maxMoveDistance = 20f;
+
     //Input system updated - EM//
     [Header("Input Actions")]
     public InputActionAsset inputActions;
@@ -148,19 +152,22 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
         {
-            // Only move if the clicked point is actually on the NavMesh
-            // Using a small sample distance to avoid finding NavMesh through walls
-            if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+            Vector3 targetPoint = hit.point;
+
+            // Ignore clicks outside max move distance
+            Vector3 toTarget = targetPoint - transform.position;
+            if (toTarget.magnitude > maxMoveDistance)
+            {
+                return;
+            }
+
+            if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
             {
                 agent.isStopped = false;
                 agent.SetDestination(navHit.position);
-
-                // Reset stuck timer when starting new movement
                 lowVelocityTimer = 0f;
-
                 ShowDestinationIndicator(navHit.position);
             }
-            // If not on NavMesh, do nothing (no movement, no indicator)
         }
     }
 
