@@ -3,39 +3,39 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Tracks all lights in the scene and provides their data to the shadow renderer.
-/// This is automatically created when the first StylizedLight registers.
+/// This is automatically created when the first LightSource registers.
 /// </summary>
-public class StylizedShadowController : MonoBehaviour
+public class HardShadowManager : MonoBehaviour
 {
-    public static StylizedShadowController Instance { get; private set; }
-    
+    public static HardShadowManager Instance { get; private set; }
+
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
-    [SerializeField] private int trackedLightCount = 0; 
-    
+    [SerializeField] private int trackedLightCount = 0;
+
     public struct LightData
     {
         public Vector3 position;
         public float range;
     }
-    
-    private static HashSet<StylizedLight> registeredLights = new HashSet<StylizedLight>();
+
+    private static HashSet<LightSource> registeredLights = new HashSet<LightSource>();
     private List<LightData> lightDataCache = new List<LightData>();
-    
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("StylizedShadowController: Duplicate instance destroyed");
+            Debug.LogWarning("HardShadowManager: Duplicate instance destroyed");
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        
+
         if (debugMode)
-            Debug.Log("StylizedShadowController: Initialized");
+            Debug.Log("HardShadowManager: Initialized");
     }
-    
+
     private void OnDestroy()
     {
         if (Instance == this)
@@ -43,70 +43,68 @@ public class StylizedShadowController : MonoBehaviour
             Instance = null;
         }
     }
-    
+
     private void Update()
     {
         trackedLightCount = registeredLights.Count;
     }
-    
-    public static void RegisterLight(StylizedLight light)
+
+    public static void RegisterLight(LightSource light)
     {
         if (light == null) return;
-        
+
         registeredLights.Add(light);
-        
+
         if (Instance != null && Instance.debugMode)
-            Debug.Log($"StylizedShadowController: Registered light '{light.name}' (total: {registeredLights.Count})");
+            Debug.Log($"HardShadowManager: Registered light '{light.name}' (total: {registeredLights.Count})");
     }
-    
-    public static void UnregisterLight(StylizedLight light)
+
+    public static void UnregisterLight(LightSource light)
     {
         if (light == null) return;
-        
+
         registeredLights.Remove(light);
-        
+
         if (Instance != null && Instance.debugMode)
-            Debug.Log($"StylizedShadowController: Unregistered light '{light.name}' (total: {registeredLights.Count})");
+            Debug.Log($"HardShadowManager: Unregistered light '{light.name}' (total: {registeredLights.Count})");
     }
-    
+
     public List<LightData> GetTrackedLights()
     {
         lightDataCache.Clear();
-        
+
         registeredLights.RemoveWhere(l => l == null);
-        
+
         foreach (var light in registeredLights)
         {
             if (!light.isActiveAndEnabled)
                 continue;
-            
-            float range = light.GetRange();
-            
+
             lightDataCache.Add(new LightData
             {
                 position = light.transform.position,
-                range = range
+                range = light.GetRange()
             });
         }
-        
+
         return lightDataCache;
     }
-    
+
     public int GetLightCount()
     {
         return registeredLights.Count;
     }
-    
+
     private void OnDrawGizmos()
     {
         if (!debugMode) return;
-        
+
         Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
-        
+
         foreach (var light in registeredLights)
         {
             if (light == null || !light.isActiveAndEnabled) continue;
-            
+
             Gizmos.DrawWireSphere(light.transform.position, light.GetRange());
         }
     }

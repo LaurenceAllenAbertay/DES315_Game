@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Attach this to any GameObject to make it a light source
-/// Defines gameplay relevant light properties for shadow detection
+/// Attach this to any GameObject to make it a light source.
+/// Handles both gameplay light detection and stylized shadow visuals.
 /// </summary>
 public class LightSource : MonoBehaviour
 {
     [Header("Light Properties")]
-    [Tooltip("How far this light reaches for gameplay purposes")]
+    [Tooltip("How far this light reaches (used for both gameplay and visuals)")]
     public float strength = 10f;
 
     [Tooltip("Layer mask for objects that block light")]
@@ -16,28 +16,27 @@ public class LightSource : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool drawDebugRays = true;
 
-    private Light unityLight;
-
-    private void Awake()
-    {
-        unityLight = GetComponent<Light>();
-    }
-
     private void OnEnable()
     {
+        // Register with gameplay system
         LightDetectionManager.RegisterLight(this);
+
+        // Register with visual system
+        HardShadowManager.RegisterLight(this);
     }
 
     private void OnDisable()
     {
+        // Unregister from both systems
         LightDetectionManager.UnregisterLight(this);
+        HardShadowManager.UnregisterLight(this);
     }
 
     /// <summary>
-    /// Check if this light can see the target point
+    /// Check if this light can see the target point (for gameplay)
     /// </summary>
     /// <param name="targetPoint">World position to check</param>
-    /// <param name="lightContribution">Output: 1 if in light, 0 if in shadow (binary)</param>
+    /// <param name="lightContribution">Output: 1 if in light, 0 if in shadow</param>
     /// <returns>True if light reaches the target unobstructed</returns>
     public bool CanReachPoint(Vector3 targetPoint, out float lightContribution)
     {
@@ -69,8 +68,15 @@ public class LightSource : MonoBehaviour
         }
 
         lightContribution = 1f;
-
         return true;
+    }
+
+    /// <summary>
+    /// Get the range for this light (used by stylized shadow system)
+    /// </summary>
+    public float GetRange()
+    {
+        return strength;
     }
 
     private void OnDrawGizmosSelected()

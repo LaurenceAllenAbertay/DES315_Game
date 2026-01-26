@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
     // Stuck detection
     private float lowVelocityTimer = 0f;
 
-    public delegate void LightStateChanged(bool inLight, float lightLevel);
+    public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
 
     public delegate void MovementStateChanged(bool moving);
@@ -271,7 +271,7 @@ public class PlayerController : MonoBehaviour
 
         if (previousState != isInLight)
         {
-            OnLightStateChanged?.Invoke(isInLight, currentLightLevel);
+            OnLightStateChanged?.Invoke(isInLight);
         }
     }
 

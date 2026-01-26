@@ -986,7 +986,7 @@ GameObject:
   - component: {fileID: 200997572}
   - component: {fileID: 200997571}
   - component: {fileID: 200997570}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1226,6 +1226,41 @@ Transform:
   - {fileID: 563789713}
   m_Father: {fileID: 285508514}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &245225322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 245225323}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &245225323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245225322}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1549351977}
+  - {fileID: 1622474059}
+  - {fileID: 1305270802}
+  - {fileID: 1912224226}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &254905849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1470,6 +1505,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &255060028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1623,6 +1660,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &267603519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2017,6 +2056,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &300168594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2530,6 +2571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &347502417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2703,6 +2746,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &437396114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2856,6 +2901,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &440151771
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3081,7 +3128,7 @@ GameObject:
   - component: {fileID: 452540935}
   - component: {fileID: 452540934}
   - component: {fileID: 452540933}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Crate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4037,6 +4084,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &570884459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4371,7 +4420,7 @@ GameObject:
   - component: {fileID: 622608858}
   - component: {fileID: 622608857}
   - component: {fileID: 622608856}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Barrel (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4638,6 +4687,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &676571553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4791,6 +4842,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &676754177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5198,7 +5251,7 @@ Transform:
   m_GameObject: {fileID: 740575464}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.89, y: 0, z: 19.95}
+  m_LocalPosition: {x: 27.08, y: 0, z: 20.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6289,7 +6342,7 @@ GameObject:
   - component: {fileID: 937588674}
   - component: {fileID: 937588673}
   - component: {fileID: 937588672}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Barrel (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7783,11 +7836,11 @@ Transform:
   m_GameObject: {fileID: 1305270800}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4793, y: 0.5025, z: -1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 245225323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1320175948
 GameObject:
@@ -8906,7 +8959,6 @@ MonoBehaviour:
   rotateSpeed: 0.3
   player: {fileID: 740575467}
   maxDistanceFromPlayer: 15
-  slowdownStartDistance: 12
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
 --- !u!1 &1472588647
 GameObject:
@@ -9369,7 +9421,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 245225323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1556356137
 GameObject:
@@ -9668,6 +9720,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &1596103847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9941,7 +9995,7 @@ GameObject:
   - component: {fileID: 1622474059}
   - component: {fileID: 1622474060}
   m_Layer: 0
-  m_Name: StylizedShadowController
+  m_Name: ShadowManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9960,7 +10014,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 245225323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1622474060
 MonoBehaviour:
@@ -10464,6 +10518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &1675718654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10500,7 +10556,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!195 &1682862678
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -10581,15 +10637,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682862676}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.9320395, z: 0, w: 0.3623568}
-  m_LocalPosition: {x: 1.9, y: 1, z: 4.69}
+  m_LocalRotation: {x: -0, y: -0.49250796, z: -0, w: -0.870308}
+  m_LocalPosition: {x: 8.3, y: 1, z: 9.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 928232972}
   - {fileID: 1275361054}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -137.51, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -300.989, z: 0}
 --- !u!114 &1682862682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10957,6 +11013,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &1732623058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11147,6 +11205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &1753537520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11695,6 +11755,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &1854033143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12116,11 +12178,11 @@ Transform:
   m_GameObject: {fileID: 1912224224}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.49032, y: -26.75977, z: 27.75123}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 245225323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1936365351
 GameObject:
@@ -12566,7 +12628,7 @@ GameObject:
   - component: {fileID: 1989756849}
   - component: {fileID: 1989756848}
   - component: {fileID: 1989756847}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Crate (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12581,13 +12643,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1989756845}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.10532263, z: -0, w: 0.9944382}
-  m_LocalPosition: {x: -0.75, y: 1, z: -4.95}
+  m_LocalRotation: {x: -0, y: -0.13428131, z: -0, w: 0.99094325}
+  m_LocalPosition: {x: -0.52, y: 1, z: -5.34}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1476452511}
-  m_LocalEulerAnglesHint: {x: 0, y: -12.092, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -15.434, z: 0}
 --- !u!65 &1989756847
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13014,6 +13076,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6bf23bec0f727449a497fc9f5bf2f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lightSource: {fileID: 0}
+  isRegistered: 0
 --- !u!114 &2052295178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13238,11 +13302,8 @@ SceneRoots:
   - {fileID: 1437648970}
   - {fileID: 740575467}
   - {fileID: 1682862681}
+  - {fileID: 285508514}
   - {fileID: 724920498}
   - {fileID: 1512805851}
-  - {fileID: 1549351977}
   - {fileID: 1627125915}
-  - {fileID: 1622474059}
-  - {fileID: 1305270802}
-  - {fileID: 1912224226}
-  - {fileID: 285508514}
+  - {fileID: 245225323}

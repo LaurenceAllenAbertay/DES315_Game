@@ -94,7 +94,6 @@ public class OccludedOutlineManager : MonoBehaviour
                 if (feature.name.Contains(targetName))
                 {
                     featureList.Add(feature);
-                    Debug.Log($"OccludedOutlineManager: Found feature '{feature.name}'");
                     break;
                 }
             }

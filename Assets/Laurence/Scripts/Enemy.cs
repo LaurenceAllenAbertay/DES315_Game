@@ -39,7 +39,6 @@ public class Enemy : MonoBehaviour
 
     private void OnPlayerEnteredVisionCone()
     {
-        Debug.Log($"{gameObject.name}: Combat starts!");
         // Add your combat start logic here
     }
 

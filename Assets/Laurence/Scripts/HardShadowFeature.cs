@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RenderGraphModule;
 
-public class StylizedShadowFeature : ScriptableRendererFeature
+public class HardShadowFeature : ScriptableRendererFeature
 {
     [System.Serializable]
     public class Settings
@@ -36,30 +36,30 @@ public class StylizedShadowFeature : ScriptableRendererFeature
     }
 
     public Settings settings = new Settings();
-    private StylizedShadowPass shadowPass;
+    private HardShadowPass shadowPass;
     private Material shadowMaterial;
 
     public override void Create()
     {
-        Shader shader = Shader.Find("Hidden/StylizedShadowOverlay");
+        Shader shader = Shader.Find("Hidden/HardShadowOverlay");
         if (shader == null)
         {
-            Debug.LogError("StylizedShadowFeature: Could not find shader");
+            Debug.LogError("HardShadowFeature: Could not find shader");
             return;
         }
 
         shadowMaterial = CoreUtils.CreateEngineMaterial(shader);
         if (shadowMaterial == null)
         {
-            Debug.LogError("StylizedShadowFeature: Failed to create material");
+            Debug.LogError("HardShadowFeature: Failed to create material");
             return;
         }
 
-        shadowPass = new StylizedShadowPass(shadowMaterial, settings);
+        shadowPass = new HardShadowPass(shadowMaterial, settings);
         shadowPass.renderPassEvent = settings.renderPassEvent;
 
         if (settings.debugMode)
-            Debug.Log("StylizedShadowFeature: Created successfully");
+            Debug.Log("HardShadowFeature: Created successfully");
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -83,10 +83,10 @@ public class StylizedShadowFeature : ScriptableRendererFeature
     }
 }
 
-public class StylizedShadowPass : ScriptableRenderPass
+public class HardShadowPass : ScriptableRenderPass
 {
     private Material material;
-    private StylizedShadowFeature.Settings settings;
+    private HardShadowFeature.Settings settings;
 
     private static readonly int ShadowColorID = Shader.PropertyToID("_ShadowColor");
     private static readonly int LightColorID = Shader.PropertyToID("_LightColor");
@@ -102,7 +102,7 @@ public class StylizedShadowPass : ScriptableRenderPass
     private Vector4[] lightPositions = new Vector4[16];
     private float[] lightRanges = new float[16];
 
-    public StylizedShadowPass(Material material, StylizedShadowFeature.Settings settings)
+    public HardShadowPass(Material material, HardShadowFeature.Settings settings)
     {
         this.material = material;
         this.settings = settings;
@@ -110,7 +110,7 @@ public class StylizedShadowPass : ScriptableRenderPass
         requiresIntermediateTexture = true;
     }
 
-    public void Setup(StylizedShadowFeature.Settings settings, Material mat)
+    public void Setup(HardShadowFeature.Settings settings, Material mat)
     {
         this.settings = settings;
         this.material = mat;
@@ -123,7 +123,7 @@ public class StylizedShadowPass : ScriptableRenderPass
 
     private int GatherLightData()
     {
-        var controller = StylizedShadowController.Instance;
+        var controller = HardShadowManager.Instance;
         if (controller == null) return 0;
 
         var lights = controller.GetTrackedLights();
@@ -166,7 +166,7 @@ public class StylizedShadowPass : ScriptableRenderPass
         int lightCount = GatherLightData();
 
         if (settings.debugMode && Time.frameCount % 180 == 0)
-            Debug.Log($"StylizedShadowPass: {lightCount} lights");
+            Debug.Log($"HardShadowPass: {lightCount} lights");
 
         var source = resourceData.activeColorTexture;
 
@@ -177,7 +177,7 @@ public class StylizedShadowPass : ScriptableRenderPass
         var temp = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, "_TempShadow", false);
 
         // Use UnsafePass for full CommandBuffer control
-        using (var builder = renderGraph.AddUnsafePass<PassData>("Stylized Shadow", out var passData))
+        using (var builder = renderGraph.AddUnsafePass<PassData>("Hard Shadow", out var passData))
         {
             passData.source = source;
             passData.temp = temp;

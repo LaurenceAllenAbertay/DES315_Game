@@ -52,9 +52,9 @@ public class LightStatusUI : MonoBehaviour
         }
     }
 
-    private void HandleLightStateChanged(bool inLight, float lightLevel)
+    private void HandleLightStateChanged(bool inLight)
     {
-        
+        // In future, stuff will go here probably
     }
 
     private void UpdateUI()
