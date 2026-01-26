@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
 
     private void OnPlayerEnteredVisionCone()
     {
-        // Add your combat start logic here
+        // Add combat start logic here
     }
 
     public void TakeDamage(int damage)

@@ -119,7 +119,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""ShowVisionCones"",
+                    ""name"": ""ShowVisibilityFeatures"",
                     ""type"": ""Button"",
                     ""id"": ""c6f58baa-a3f6-4af4-92f7-3c0c558524cc"",
                     ""expectedControlType"": """",
@@ -169,7 +169,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ShowVisionCones"",
+                    ""action"": ""ShowVisibilityFeatures"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -315,7 +315,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_StopMovement = m_Player.FindAction("StopMovement", throwIfNotFound: true);
         m_Player_PointerPosition = m_Player.FindAction("PointerPosition", throwIfNotFound: true);
-        m_Player_ShowVisionCones = m_Player.FindAction("ShowVisionCones", throwIfNotFound: true);
+        m_Player_ShowVisibilityFeatures = m_Player.FindAction("ShowVisibilityFeatures", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Movement = m_Camera.FindAction("Movement", throwIfNotFound: true);
@@ -406,7 +406,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_StopMovement;
     private readonly InputAction m_Player_PointerPosition;
-    private readonly InputAction m_Player_ShowVisionCones;
+    private readonly InputAction m_Player_ShowVisibilityFeatures;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -431,9 +431,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @PointerPosition => m_Wrapper.m_Player_PointerPosition;
         /// <summary>
-        /// Provides access to the underlying input action "Player/ShowVisionCones".
+        /// Provides access to the underlying input action "Player/ShowVisibilityFeatures".
         /// </summary>
-        public InputAction @ShowVisionCones => m_Wrapper.m_Player_ShowVisionCones;
+        public InputAction @ShowVisibilityFeatures => m_Wrapper.m_Player_ShowVisibilityFeatures;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -469,9 +469,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @PointerPosition.started += instance.OnPointerPosition;
             @PointerPosition.performed += instance.OnPointerPosition;
             @PointerPosition.canceled += instance.OnPointerPosition;
-            @ShowVisionCones.started += instance.OnShowVisionCones;
-            @ShowVisionCones.performed += instance.OnShowVisionCones;
-            @ShowVisionCones.canceled += instance.OnShowVisionCones;
+            @ShowVisibilityFeatures.started += instance.OnShowVisibilityFeatures;
+            @ShowVisibilityFeatures.performed += instance.OnShowVisibilityFeatures;
+            @ShowVisibilityFeatures.canceled += instance.OnShowVisibilityFeatures;
         }
 
         /// <summary>
@@ -492,9 +492,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @PointerPosition.started -= instance.OnPointerPosition;
             @PointerPosition.performed -= instance.OnPointerPosition;
             @PointerPosition.canceled -= instance.OnPointerPosition;
-            @ShowVisionCones.started -= instance.OnShowVisionCones;
-            @ShowVisionCones.performed -= instance.OnShowVisionCones;
-            @ShowVisionCones.canceled -= instance.OnShowVisionCones;
+            @ShowVisibilityFeatures.started -= instance.OnShowVisibilityFeatures;
+            @ShowVisibilityFeatures.performed -= instance.OnShowVisibilityFeatures;
+            @ShowVisibilityFeatures.canceled -= instance.OnShowVisibilityFeatures;
         }
 
         /// <summary>
@@ -686,12 +686,12 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPointerPosition(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "ShowVisionCones" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "ShowVisibilityFeatures" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShowVisionCones(InputAction.CallbackContext context);
+        void OnShowVisibilityFeatures(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.

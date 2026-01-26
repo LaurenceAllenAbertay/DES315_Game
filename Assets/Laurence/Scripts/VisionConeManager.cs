@@ -16,7 +16,7 @@ public class VisionConeManager : MonoBehaviour
         if (inputActions != null)
         {
             var playerMap = inputActions.FindActionMap("Player");
-            showVisionConesAction = playerMap.FindAction("ShowVisionCones");
+            showVisionConesAction = playerMap.FindAction("ShowVisibilityFeatures");
         }
     }
 
@@ -52,7 +52,6 @@ public class VisionConeManager : MonoBehaviour
         }
     }
 
-    // Call this when new enemies spawn to refresh the list
     public void RefreshVisionCones()
     {
         visionCones = FindObjectsByType<EnemyVisionCone>(FindObjectsSortMode.None);

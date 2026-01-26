@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 
 /// <summary>
-/// Tracks all lights in the scene and provides their data to the shadow renderer.
-/// This is automatically created when the first LightSource registers.
+/// Tracks all lights in the scene and provides their data to the hard shadow renderer.
 /// </summary>
 public class HardShadowManager : MonoBehaviour
 {

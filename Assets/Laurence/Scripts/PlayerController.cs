@@ -52,7 +52,6 @@ public class PlayerController : MonoBehaviour
 
     private GameObject destinationIndicatorInstance;
 
-    // Stuck detection
     private float lowVelocityTimer = 0f;
 
     public delegate void LightStateChanged(bool inLight);
@@ -154,7 +153,6 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 targetPoint = hit.point;
 
-            // Ignore clicks outside max move distance
             Vector3 toTarget = targetPoint - transform.position;
             if (toTarget.magnitude > maxMoveDistance)
             {
@@ -212,15 +210,12 @@ public class PlayerController : MonoBehaviour
 
     private bool HasArrivedAtDestination()
     {
-        // No path means we've arrived or were never moving
         if (!agent.hasPath)
             return true;
 
-        // Check if close enough to destination
         if (agent.remainingDistance <= arrivalThreshold)
             return true;
 
-        // Check if stuck (low velocity for too long while having a path)
         if (agent.velocity.magnitude < stuckVelocityThreshold)
         {
             lowVelocityTimer += Time.deltaTime;
@@ -232,7 +227,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // Reset timer if moving normally
             lowVelocityTimer = 0f;
         }
 
@@ -243,7 +237,6 @@ public class PlayerController : MonoBehaviour
     {
         bool wasMoving = isMoving;
 
-        // Use our improved arrival check
         isMoving = agent.hasPath && !HasArrivedAtDestination();
 
         if (wasMoving != isMoving)
@@ -303,7 +296,6 @@ public class PlayerController : MonoBehaviour
                 Gizmos.DrawLine(corners[i], corners[i + 1]);
             }
 
-            // Draw arrival threshold
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agent.destination, arrivalThreshold);
         }

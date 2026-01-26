@@ -176,7 +176,6 @@ public class HardShadowPass : ScriptableRenderPass
 
         var temp = UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, "_TempShadow", false);
 
-        // Use UnsafePass for full CommandBuffer control
         using (var builder = renderGraph.AddUnsafePass<PassData>("Hard Shadow", out var passData))
         {
             passData.source = source;
@@ -215,10 +214,8 @@ public class HardShadowPass : ScriptableRenderPass
                     data.material.SetFloatArray(LightRangesID, data.lightRanges);
                 }
 
-                // Blit source -> temp with effect
                 Blitter.BlitCameraTexture(cmd, data.source, data.temp, data.material, 0);
 
-                // Blit temp -> source (copy back)
                 Blitter.BlitCameraTexture(cmd, data.temp, data.source);
             });
         }

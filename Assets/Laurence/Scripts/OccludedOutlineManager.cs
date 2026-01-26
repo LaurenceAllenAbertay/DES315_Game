@@ -3,8 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
-/// Toggles URP Render Objects features for occluded outline/silhouette effect.
-/// Works with ScriptableRendererFeatures in the Universal Renderer Data.
+/// Toggles URP Render Objects features for occluded outline effect
 /// </summary>
 public class OccludedOutlineManager : MonoBehaviour
 {
@@ -27,14 +26,12 @@ public class OccludedOutlineManager : MonoBehaviour
 
     private void Awake()
     {
-        // Find the target features
         FindTargetFeatures();
 
-        // Setup input
         if (inputActions != null)
         {
             var playerMap = inputActions.FindActionMap("Player");
-            showOutlinesAction = playerMap.FindAction("ShowVisionCones");
+            showOutlinesAction = playerMap.FindAction("ShowVisibilityFeatures");
         }
     }
 
@@ -45,7 +42,6 @@ public class OccludedOutlineManager : MonoBehaviour
             showOutlinesAction.Enable();
         }
 
-        // Start with outlines hidden
         SetFeaturesActive(false);
     }
 
@@ -56,7 +52,6 @@ public class OccludedOutlineManager : MonoBehaviour
             showOutlinesAction.Disable();
         }
 
-        // Restore features when disabled
         SetFeaturesActive(false);
     }
 
@@ -88,7 +83,6 @@ public class OccludedOutlineManager : MonoBehaviour
         {
             if (feature == null) continue;
 
-            // Check if this feature's name matches any of our target names
             foreach (string targetName in featureNames)
             {
                 if (feature.name.Contains(targetName))
@@ -121,9 +115,6 @@ public class OccludedOutlineManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Call this if you change the renderer data at runtime
-    /// </summary>
     public void RefreshFeatures()
     {
         FindTargetFeatures();

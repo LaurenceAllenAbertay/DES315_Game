@@ -153,7 +153,6 @@ public class CameraController : MonoBehaviour
 
         Vector3 newPosition = transform.position + moveDirection * speed * Time.deltaTime;
 
-        // Hard clamp to player
         if (player != null)
         {
             Vector3 offset = newPosition - player.position;
@@ -163,7 +162,7 @@ public class CameraController : MonoBehaviour
             {
                 offset = offset.normalized * maxDistanceFromPlayer;
                 newPosition = player.position + offset;
-                newPosition.y = transform.position.y; // Preserve camera height
+                newPosition.y = transform.position.y; 
             }
         }
 
