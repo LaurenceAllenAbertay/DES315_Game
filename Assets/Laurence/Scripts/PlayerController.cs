@@ -21,6 +21,18 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Height offset above the clicked point")]
     public float indicatorHeight = 0.05f;
 
+    [Header("NavMesh Validation")]
+    [Tooltip("Maximum distance to search for valid NavMesh position - keep small to avoid clicking through walls")]
+    public float navMeshSampleDistance = 0.3f;
+
+    [Header("Arrival Settings")]
+    [Tooltip("Distance threshold to consider the player has arrived (should be >= agent stopping distance)")]
+    public float arrivalThreshold = 0.5f;
+    [Tooltip("If velocity is below this for stuckTime seconds, consider arrived/stuck")]
+    public float stuckVelocityThreshold = 0.1f;
+    [Tooltip("Time in seconds of low velocity before considering stuck")]
+    public float stuckTime = 0.5f;
+
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
     [SerializeField] private float currentLightLevel;
@@ -35,6 +47,9 @@ public class PlayerController : MonoBehaviour
     private InputAction pointerPositionAction;
 
     private GameObject destinationIndicatorInstance;
+
+    // Stuck detection
+    private float lowVelocityTimer = 0f;
 
     public delegate void LightStateChanged(bool inLight, float lightLevel);
     public event LightStateChanged OnLightStateChanged;
@@ -133,18 +148,34 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
         {
-            agent.isStopped = false;
-            agent.SetDestination(hit.point);
+            // Only move if the clicked point is actually on the NavMesh
+            // Using a small sample distance to avoid finding NavMesh through walls
+            if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+            {
+                agent.isStopped = false;
+                agent.SetDestination(navHit.position);
 
-            ShowDestinationIndicator(hit.point);
+                // Reset stuck timer when starting new movement
+                lowVelocityTimer = 0f;
+
+                ShowDestinationIndicator(navHit.position);
+            }
+            // If not on NavMesh, do nothing (no movement, no indicator)
         }
     }
 
     //Input System On stop movement - EM//
     private void OnStopMovement(InputAction.CallbackContext context)
     {
+        StopMovement();
+    }
+
+    private void StopMovement()
+    {
         agent.isStopped = true;
+        agent.ResetPath();
         HideDestinationIndicator();
+        lowVelocityTimer = 0f;
     }
 
     private void ShowDestinationIndicator(Vector3 position)
@@ -166,17 +197,47 @@ public class PlayerController : MonoBehaviour
     {
         if (destinationIndicatorInstance == null || !destinationIndicatorInstance.activeSelf) return;
 
-        if (!agent.hasPath || agent.remainingDistance <= agent.stoppingDistance)
+        if (HasArrivedAtDestination())
         {
-            HideDestinationIndicator();
+            StopMovement();
         }
+    }
+
+    private bool HasArrivedAtDestination()
+    {
+        // No path means we've arrived or were never moving
+        if (!agent.hasPath)
+            return true;
+
+        // Check if close enough to destination
+        if (agent.remainingDistance <= arrivalThreshold)
+            return true;
+
+        // Check if stuck (low velocity for too long while having a path)
+        if (agent.velocity.magnitude < stuckVelocityThreshold)
+        {
+            lowVelocityTimer += Time.deltaTime;
+            if (lowVelocityTimer >= stuckTime)
+            {
+                Debug.Log("PlayerController: Detected stuck state, stopping movement");
+                return true;
+            }
+        }
+        else
+        {
+            // Reset timer if moving normally
+            lowVelocityTimer = 0f;
+        }
+
+        return false;
     }
 
     private void UpdateMovingState()
     {
         bool wasMoving = isMoving;
 
-        isMoving = agent.hasPath && agent.remainingDistance > agent.stoppingDistance;
+        // Use our improved arrival check
+        isMoving = agent.hasPath && !HasArrivedAtDestination();
 
         if (wasMoving != isMoving)
         {
@@ -234,6 +295,10 @@ public class PlayerController : MonoBehaviour
             {
                 Gizmos.DrawLine(corners[i], corners[i + 1]);
             }
+
+            // Draw arrival threshold
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(agent.destination, arrivalThreshold);
         }
     }
 }
