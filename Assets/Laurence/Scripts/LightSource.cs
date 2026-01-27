@@ -13,8 +13,42 @@ public class LightSource : MonoBehaviour
     [Tooltip("Layer mask for objects that block light")]
     public LayerMask occluderMask = ~0;
 
+    [Tooltip("Multiplier applied to the Unity Light range for shadow casting only")]
+    [Range(1.0f, 3.0f)]
+    public float shadowRangeMultiplier = 1.2f;
+
+    [Header("Shadow Properties")]
+    [Tooltip("Should this light cast real-time shadows?")]
+    public bool castShadows = true;
+
     [Header("Debug")]
     [SerializeField] private bool drawDebugRays = true;
+
+    private Light unityLight;
+
+    private void Awake()
+    {
+        unityLight = GetComponent<Light>();
+        if (unityLight == null)
+        {
+            unityLight = gameObject.AddComponent<Light>();
+            unityLight.type = LightType.Point;
+            unityLight.intensity = 1.0f;
+            unityLight.color = new Color(0.01f, 0.01f, 0.01f); // Dark enough to be almost invisible
+            unityLight.shadowStrength = 1.0f;
+        }
+    }
+
+    private void Update()
+    {
+        if (unityLight != null)
+        {
+            unityLight.range = strength * Mathf.Max(1.0f, shadowRangeMultiplier);
+            unityLight.shadows = castShadows ? LightShadows.Hard : LightShadows.None;
+        }
+    }
+
+    public Light GetLight() => unityLight;
 
     private void OnEnable()
     {

@@ -93,6 +93,7 @@ public class HardShadowPass : ScriptableRenderPass
     private static readonly int LightCountID = Shader.PropertyToID("_LightCount");
     private static readonly int LightPositionsID = Shader.PropertyToID("_LightPositions");
     private static readonly int LightRangesID = Shader.PropertyToID("_LightRanges");
+    private static readonly int LightIndicesID = Shader.PropertyToID("_LightIndices");
 
     private static readonly int WobbleAmountID = Shader.PropertyToID("_WobbleAmount");
     private static readonly int WobbleSpeedID = Shader.PropertyToID("_WobbleSpeed");
@@ -101,6 +102,7 @@ public class HardShadowPass : ScriptableRenderPass
 
     private Vector4[] lightPositions = new Vector4[16];
     private float[] lightRanges = new float[16];
+    private float[] lightIndices = new float[16];
 
     public HardShadowPass(Material material, HardShadowFeature.Settings settings)
     {
@@ -118,10 +120,11 @@ public class HardShadowPass : ScriptableRenderPass
         {
             lightPositions = new Vector4[settings.maxLights];
             lightRanges = new float[settings.maxLights];
+            lightIndices = new float[settings.maxLights];
         }
     }
 
-    private int GatherLightData()
+    private int GatherLightData(UniversalLightData universalLightData)
     {
         var controller = HardShadowManager.Instance;
         if (controller == null) return 0;
@@ -129,11 +132,38 @@ public class HardShadowPass : ScriptableRenderPass
         var lights = controller.GetTrackedLights();
         int count = Mathf.Min(lights.Count, settings.maxLights);
 
+        var visibleLights = universalLightData.visibleLights;
+
+        if (settings.debugMode && Time.frameCount % 180 == 0)
+            Debug.Log($"GatherLightData: lights.Count={lights.Count}, visibleLights.Length={visibleLights.Length}");
+
         for (int i = 0; i < count; i++)
         {
             var ld = lights[i];
             lightPositions[i] = new Vector4(ld.position.x, ld.position.y, ld.position.z, 1f);
             lightRanges[i] = ld.range;
+
+            int additionalLightIndex = -1;
+            if (ld.lightComponent != null)
+            {
+                int additionalCount = 0;
+                for (int j = 0; j < visibleLights.Length; j++)
+                {
+                    if (j == universalLightData.mainLightIndex)
+                        continue;
+
+                    if (visibleLights[j].light == ld.lightComponent)
+                    {
+                        additionalLightIndex = additionalCount;
+                        break;
+                    }
+                    additionalCount++;
+                }
+            }
+            lightIndices[i] = (float)additionalLightIndex;
+
+            if (settings.debugMode && Time.frameCount % 180 == 0)
+                Debug.Log($"Light {i}: additionalLightIndex={additionalLightIndex}");
         }
         return count;
     }
@@ -148,22 +178,27 @@ public class HardShadowPass : ScriptableRenderPass
         public Color lightColor;
         public Vector4[] lightPositions;
         public float[] lightRanges;
+        public float[] lightIndices;
 
         public float wobbleAmount;
         public float wobbleSpeed;
         public float wobbleFrequency;
         public float edgeSoftness;
+
+        public bool softShadows;
     }
 
     public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
     {
         var resourceData = frameData.Get<UniversalResourceData>();
         var cameraData = frameData.Get<UniversalCameraData>();
+        var lightData = frameData.Get<UniversalLightData>();
+        var shadowData = frameData.Get<UniversalShadowData>();
 
         if (resourceData.isActiveTargetBackBuffer)
             return;
 
-        int lightCount = GatherLightData();
+        int lightCount = GatherLightData(lightData);
 
         if (settings.debugMode && Time.frameCount % 180 == 0)
             Debug.Log($"HardShadowPass: {lightCount} lights");
@@ -184,20 +219,43 @@ public class HardShadowPass : ScriptableRenderPass
             passData.lightCount = lightCount;
             passData.shadowColor = settings.shadowColor;
             passData.lightColor = settings.lightColor;
-            passData.lightPositions = lightPositions;
-            passData.lightRanges = lightRanges;
+            passData.lightPositions = (Vector4[])lightPositions.Clone();
+            passData.lightRanges = (float[])lightRanges.Clone();
+            passData.lightIndices = (float[])lightIndices.Clone();
 
             passData.wobbleAmount = settings.wobbleAmount;
             passData.wobbleSpeed = settings.wobbleSpeed;
             passData.wobbleFrequency = settings.wobbleFrequency;
             passData.edgeSoftness = settings.edgeSoftness;
 
+            passData.softShadows = shadowData.supportsSoftShadows;
+
             builder.UseTexture(source, AccessFlags.ReadWrite);
             builder.UseTexture(temp, AccessFlags.ReadWrite);
+
+            if (resourceData.additionalShadowsTexture.IsValid())
+                builder.UseTexture(resourceData.additionalShadowsTexture, AccessFlags.Read);
 
             builder.SetRenderFunc((PassData data, UnsafeGraphContext ctx) =>
             {
                 CommandBuffer cmd = CommandBufferHelpers.GetNativeCommandBuffer(ctx.cmd);
+
+                if (data.lightCount > 0)
+                {
+                    data.material.EnableKeyword("_ADDITIONAL_LIGHTS");
+                    data.material.EnableKeyword("_ADDITIONAL_LIGHT_SHADOWS");
+                    
+                    if (data.softShadows)
+                        data.material.EnableKeyword("_SHADOWS_SOFT");
+                    else
+                        data.material.DisableKeyword("_SHADOWS_SOFT");
+                }
+                else
+                {
+                    data.material.DisableKeyword("_ADDITIONAL_LIGHTS");
+                    data.material.DisableKeyword("_ADDITIONAL_LIGHT_SHADOWS");
+                    data.material.DisableKeyword("_SHADOWS_SOFT");
+                }
 
                 data.material.SetColor(ShadowColorID, data.shadowColor);
                 data.material.SetColor(LightColorID, data.lightColor); 
@@ -212,6 +270,7 @@ public class HardShadowPass : ScriptableRenderPass
                 {
                     data.material.SetVectorArray(LightPositionsID, data.lightPositions);
                     data.material.SetFloatArray(LightRangesID, data.lightRanges);
+                    data.material.SetFloatArray(LightIndicesID, data.lightIndices);
                 }
 
                 Blitter.BlitCameraTexture(cmd, data.source, data.temp, data.material, 0);

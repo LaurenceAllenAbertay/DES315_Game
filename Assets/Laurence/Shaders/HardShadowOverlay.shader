@@ -1,4 +1,4 @@
-﻿Shader "Hidden/HardShadowOverlay"
+﻿﻿Shader "Hidden/HardShadowOverlay"
 {
     SubShader
     {
@@ -22,6 +22,11 @@
             
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT
             
             // Maximum lights
             #define MAX_LIGHTS 16
@@ -35,6 +40,7 @@
             int _LightCount;
             float4 _LightPositions[MAX_LIGHTS];
             float _LightRanges[MAX_LIGHTS];
+            float _LightIndices[MAX_LIGHTS];
             
             // Wobble parameters
             float _WobbleAmount;     // How much the edge wobbles (in world units)
@@ -52,6 +58,26 @@
                 float4 positionCS : SV_POSITION;
                 float2 texcoord : TEXCOORD0;
             };
+
+            Light GetAdditionalLightGlobal(int lightIndex, float3 positionWS)
+            {
+                Light light = GetAdditionalPerObjectLight(lightIndex, positionWS);
+
+                #if USE_STRUCTURED_BUFFER_FOR_LIGHT_DATA
+                    half4 occlusionProbeChannels = _AdditionalLightsBuffer[lightIndex].occlusionProbeChannels;
+                #else
+                    half4 occlusionProbeChannels = _AdditionalLightsOcclusionProbes[lightIndex];
+                #endif
+
+                light.shadowAttenuation = AdditionalLightShadow(lightIndex, positionWS, light.direction, half4(1, 1, 1, 1), occlusionProbeChannels);
+
+                #if defined(_LIGHT_COOKIES)
+                    real3 cookieColor = SampleAdditionalLightCookie(lightIndex, positionWS);
+                    light.color *= cookieColor;
+                #endif
+
+                return light;
+            }
 
             // Simple noise function using layered sine waves
             float WobbleNoise(float3 worldPos, float3 lightPos, float time)
@@ -127,16 +153,8 @@
                     if (depth > 0.9999) return sceneColor;
                 #endif
                 
-                // Reconstruct world position
-                #if UNITY_UV_STARTS_AT_TOP
-                    float2 ndcUV = float2(uv.x, 1.0 - uv.y);
-                #else
-                    float2 ndcUV = uv;
-                #endif
-                
-                float4 ndcPos = float4(ndcUV * 2.0 - 1.0, depth, 1.0);
-                float4 worldPos4 = mul(UNITY_MATRIX_I_VP, ndcPos);
-                float3 worldPos = worldPos4.xyz / worldPos4.w;
+                // Reconstruct world position using URP helper (handles platform differences)
+                float3 worldPos = ComputeWorldSpacePosition(uv, depth, UNITY_MATRIX_I_VP);
                 
                 // Check if pixel is within ANY light's range
                 float inLight = 0.0;
@@ -163,6 +181,17 @@
                     // smoothstep gives us a nice soft transition
                     float insideThisLight = 1.0 - smoothstep(innerEdge, outerEdge, dist);
                     
+                    // NEW: Sample URP Shadows
+                    int additionalLightIndex = (int)_LightIndices[i];
+                    if (additionalLightIndex >= 0)
+                    {
+                        // Use the global additional light index, not per-object indices
+                        Light light = GetAdditionalLightGlobal(additionalLightIndex, worldPos);
+                        float shadowSoftness = max(_EdgeSoftness, 0.001);
+                        float shadowAtten = smoothstep(0.5 - shadowSoftness * 0.5, 0.5 + shadowSoftness * 0.5, light.shadowAttenuation);
+                        insideThisLight *= shadowAtten;
+                    }
+
                     inLight = max(inLight, insideThisLight);
                 }
                 

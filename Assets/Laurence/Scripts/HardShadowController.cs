@@ -8,14 +8,11 @@ public class HardShadowManager : MonoBehaviour
 {
     public static HardShadowManager Instance { get; private set; }
 
-    [Header("Debug")]
-    [SerializeField] private bool debugMode = true;
-    [SerializeField] private int trackedLightCount = 0;
-
     public struct LightData
     {
         public Vector3 position;
         public float range;
+        public Light lightComponent;
     }
 
     private static HashSet<LightSource> registeredLights = new HashSet<LightSource>();
@@ -31,8 +28,6 @@ public class HardShadowManager : MonoBehaviour
         }
         Instance = this;
 
-        if (debugMode)
-            Debug.Log("HardShadowManager: Initialized");
     }
 
     private void OnDestroy()
@@ -43,19 +38,11 @@ public class HardShadowManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        trackedLightCount = registeredLights.Count;
-    }
-
     public static void RegisterLight(LightSource light)
     {
         if (light == null) return;
 
         registeredLights.Add(light);
-
-        if (Instance != null && Instance.debugMode)
-            Debug.Log($"HardShadowManager: Registered light '{light.name}' (total: {registeredLights.Count})");
     }
 
     public static void UnregisterLight(LightSource light)
@@ -63,9 +50,6 @@ public class HardShadowManager : MonoBehaviour
         if (light == null) return;
 
         registeredLights.Remove(light);
-
-        if (Instance != null && Instance.debugMode)
-            Debug.Log($"HardShadowManager: Unregistered light '{light.name}' (total: {registeredLights.Count})");
     }
 
     public List<LightData> GetTrackedLights()
@@ -82,7 +66,8 @@ public class HardShadowManager : MonoBehaviour
             lightDataCache.Add(new LightData
             {
                 position = light.transform.position,
-                range = light.GetRange()
+                range = light.GetRange(),
+                lightComponent = light.GetLight()
             });
         }
 
@@ -94,10 +79,8 @@ public class HardShadowManager : MonoBehaviour
         return registeredLights.Count;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        if (!debugMode) return;
-
         Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
 
         foreach (var light in registeredLights)
