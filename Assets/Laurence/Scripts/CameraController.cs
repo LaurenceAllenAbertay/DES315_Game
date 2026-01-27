@@ -10,6 +10,12 @@ public class CameraController : MonoBehaviour
     [Header("Rotation Settings")]
     public float rotateSpeed = 0.3f;
 
+    [Header("Player Tether")]
+    [Tooltip("The player transform to stay near")]
+    public Transform player;
+    [Tooltip("Maximum distance camera can be from player")]
+    public float maxDistanceFromPlayer = 25f;
+
     //Input actions update -EM//
     [Header("Input Actions")]
     public InputActionAsset inputActions;
@@ -135,7 +141,7 @@ public class CameraController : MonoBehaviour
 
         Vector3 right = transform.right;
         right.y = 0f;
-        right.Normalize(); 
+        right.Normalize();
 
         Vector3 moveDirection = (forward * input.y + right * input.x).normalized;
 
@@ -145,7 +151,22 @@ public class CameraController : MonoBehaviour
             speed *= fastMoveMultiplier;
         }
 
-        transform.position += moveDirection * speed * Time.deltaTime;
+        Vector3 newPosition = transform.position + moveDirection * speed * Time.deltaTime;
+
+        if (player != null)
+        {
+            Vector3 offset = newPosition - player.position;
+            offset.y = 0f;
+
+            if (offset.magnitude > maxDistanceFromPlayer)
+            {
+                offset = offset.normalized * maxDistanceFromPlayer;
+                newPosition = player.position + offset;
+                newPosition.y = transform.position.y; 
+            }
+        }
+
+        transform.position = newPosition;
     }
 
     //Handle rotation update -EM//

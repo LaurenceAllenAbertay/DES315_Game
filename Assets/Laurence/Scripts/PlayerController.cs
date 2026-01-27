@@ -11,15 +11,31 @@ public class PlayerController : MonoBehaviour
     [Header("Light Detection")]
     public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
 
+    [Header("Movement Range")]
+    [Tooltip("Maximum distance the player can move in a single click")]
+    public float maxMoveDistance = 20f;
+
     //Input system updated - EM//
     [Header("Input Actions")]
     public InputActionAsset inputActions;
 
-    [Header("Path Visualization")]
-    private LineRenderer pathLineRenderer;
-    public float pathLineHeight = 0.1f;
-    public Color pathLineColor = Color.green;
-    public float pathLineWidth = 0.1f;
+    [Header("Destination Indicator")]
+    [Tooltip("Prefab to spawn at the destination point")]
+    public GameObject destinationIndicatorPrefab;
+    [Tooltip("Height offset above the clicked point")]
+    public float indicatorHeight = 0.05f;
+
+    [Header("NavMesh Validation")]
+    [Tooltip("Maximum distance to search for valid NavMesh position - keep small to avoid clicking through walls")]
+    public float navMeshSampleDistance = 0.3f;
+
+    [Header("Arrival Settings")]
+    [Tooltip("Distance threshold to consider the player has arrived (should be >= agent stopping distance)")]
+    public float arrivalThreshold = 0.5f;
+    [Tooltip("If velocity is below this for stuckTime seconds, consider arrived/stuck")]
+    public float stuckVelocityThreshold = 0.1f;
+    [Tooltip("Time in seconds of low velocity before considering stuck")]
+    public float stuckTime = 0.5f;
 
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
@@ -34,8 +50,11 @@ public class PlayerController : MonoBehaviour
     private InputAction stopMovementAction;
     private InputAction pointerPositionAction;
 
+    private GameObject destinationIndicatorInstance;
 
-    public delegate void LightStateChanged(bool inLight, float lightLevel);
+    private float lowVelocityTimer = 0f;
+
+    public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
 
     public delegate void MovementStateChanged(bool moving);
@@ -59,19 +78,11 @@ public class PlayerController : MonoBehaviour
             pointerPositionAction = playerMap.FindAction("PointerPosition");
         }
 
-        // Setup LineRenderer
-        if (pathLineRenderer == null)
+        if (destinationIndicatorPrefab != null)
         {
-            pathLineRenderer = gameObject.AddComponent<LineRenderer>();
+            destinationIndicatorInstance = Instantiate(destinationIndicatorPrefab);
+            destinationIndicatorInstance.SetActive(false);
         }
-
-        // Configure LineRenderer
-        pathLineRenderer.startWidth = pathLineWidth;
-        pathLineRenderer.endWidth = pathLineWidth;
-        pathLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        pathLineRenderer.startColor = pathLineColor;
-        pathLineRenderer.endColor = pathLineColor;
-        pathLineRenderer.positionCount = 0;
     }
 
     //Movement System on Enable - EM//
@@ -125,14 +136,13 @@ public class PlayerController : MonoBehaviour
     {
         UpdateMovingState();
         UpdateLightState();
-        UpdatePathLine();
+        UpdateDestinationIndicator();
     }
 
     //Input system on move performed- EM//
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
         if (mainCamera == null) return;
-
 
         if (pointerPositionAction == null) return;
 
@@ -141,27 +151,102 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
         {
-            agent.isStopped = false;
-            agent.SetDestination(hit.point);
-        }
+            Vector3 targetPoint = hit.point;
 
+            Vector3 toTarget = targetPoint - transform.position;
+            if (toTarget.magnitude > maxMoveDistance)
+            {
+                return;
+            }
+
+            if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+            {
+                agent.isStopped = false;
+                agent.SetDestination(navHit.position);
+                lowVelocityTimer = 0f;
+                ShowDestinationIndicator(navHit.position);
+            }
+        }
     }
 
     //Input System On stop movement - EM//
     private void OnStopMovement(InputAction.CallbackContext context)
     {
+        StopMovement();
+    }
+
+    private void StopMovement()
+    {
         agent.isStopped = true;
+        agent.ResetPath();
+        HideDestinationIndicator();
+        lowVelocityTimer = 0f;
+    }
+
+    private void ShowDestinationIndicator(Vector3 position)
+    {
+        if (destinationIndicatorInstance == null) return;
+
+        destinationIndicatorInstance.transform.position = position + Vector3.up * indicatorHeight;
+        destinationIndicatorInstance.SetActive(true);
+    }
+
+    private void HideDestinationIndicator()
+    {
+        if (destinationIndicatorInstance == null) return;
+
+        destinationIndicatorInstance.SetActive(false);
+    }
+
+    private void UpdateDestinationIndicator()
+    {
+        if (destinationIndicatorInstance == null || !destinationIndicatorInstance.activeSelf) return;
+
+        if (HasArrivedAtDestination())
+        {
+            StopMovement();
+        }
+    }
+
+    private bool HasArrivedAtDestination()
+    {
+        if (!agent.hasPath)
+            return true;
+
+        if (agent.remainingDistance <= arrivalThreshold)
+            return true;
+
+        if (agent.velocity.magnitude < stuckVelocityThreshold)
+        {
+            lowVelocityTimer += Time.deltaTime;
+            if (lowVelocityTimer >= stuckTime)
+            {
+                Debug.Log("PlayerController: Detected stuck state, stopping movement");
+                return true;
+            }
+        }
+        else
+        {
+            lowVelocityTimer = 0f;
+        }
+
+        return false;
     }
 
     private void UpdateMovingState()
     {
         bool wasMoving = isMoving;
 
-        isMoving = agent.hasPath && agent.remainingDistance > agent.stoppingDistance;
+        isMoving = agent.hasPath && !HasArrivedAtDestination();
 
         if (wasMoving != isMoving)
         {
             OnMovementStateChanged?.Invoke(isMoving);
+
+            if (!isMoving)
+            {
+                HideDestinationIndicator();
+            }
         }
     }
 
@@ -179,38 +264,21 @@ public class PlayerController : MonoBehaviour
 
         if (previousState != isInLight)
         {
-            OnLightStateChanged?.Invoke(isInLight, currentLightLevel);
-        }
-    }
-
-    private void UpdatePathLine()
-    {
-        if (pathLineRenderer == null) return;
-
-        if (agent.hasPath && agent.remainingDistance > agent.stoppingDistance)
-        {
-            // Get the path corners
-            Vector3[] corners = agent.path.corners;
-
-            // Set the number of positions in the line renderer
-            pathLineRenderer.positionCount = corners.Length;
-
-            // Set each position
-            for (int i = 0; i < corners.Length; i++)
-            {
-                pathLineRenderer.SetPosition(i, corners[i] + Vector3.up * pathLineHeight);
-            }
-        }
-        else
-        {
-            // Clear the line when there's no path
-            pathLineRenderer.positionCount = 0;
+            OnLightStateChanged?.Invoke(isInLight);
         }
     }
 
     public Vector3 GetLightCheckPoint()
     {
         return transform.position + lightCheckOffset;
+    }
+
+    private void OnDestroy()
+    {
+        if (destinationIndicatorInstance != null)
+        {
+            Destroy(destinationIndicatorInstance);
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -227,6 +295,9 @@ public class PlayerController : MonoBehaviour
             {
                 Gizmos.DrawLine(corners[i], corners[i + 1]);
             }
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(agent.destination, arrivalThreshold);
         }
     }
 }

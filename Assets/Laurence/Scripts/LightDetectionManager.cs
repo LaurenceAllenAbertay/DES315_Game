@@ -41,8 +41,6 @@ public class LightDetectionManager : MonoBehaviour
     /// <summary>
     /// Check if a world point is in light or shadow
     /// </summary>
-    /// <param name="point">World position to check</param>
-    /// <returns>Light check result with detailed information</returns>
     public LightCheckResult CheckLightAtPoint(Vector3 point)
     {
         LightCheckResult result = LightCheckResult.Create();
@@ -95,11 +93,6 @@ public struct LightCheckResult
     public float totalLightContribution;
     public List<LightSource> contributingLights;
 
-    /// <summary>
-    /// Factory method to create a properly initialized result
-    /// Use this instead of 'new LightCheckResult()' because struct 
-    /// parameterless constructors don't initialize reference types
-    /// </summary>
     public static LightCheckResult Create()
     {
         return new LightCheckResult

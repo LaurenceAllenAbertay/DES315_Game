@@ -1,4 +1,4 @@
-﻿Shader "Hidden/StylizedShadowOverlay"
+﻿Shader "Hidden/HardShadowOverlay"
 {
     SubShader
     {
@@ -14,7 +14,7 @@
         
         Pass
         {
-            Name "StylizedShadowOverlay"
+            Name "HardShadowOverlay"
             
             HLSLPROGRAM
             #pragma vertex Vert
