@@ -2375,7 +2375,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &440151769
 Transform:
   m_ObjectHideFlags: 0
@@ -4509,11 +4509,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedAbilities:
   - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
-  - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
-  - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
+  - {fileID: 11400000, guid: c492c9c24143edb4796defa5805bc546, type: 2}
+  - {fileID: 11400000, guid: 00961e77624bb714093dbc191d7c3fa8, type: 2}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   player: {fileID: 740575474}
   targetingSystem: {fileID: 740575472}
+  debugMode: 0
   cooldownTimers:
   - 3
   - 3
@@ -9542,7 +9543,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682862676}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 5

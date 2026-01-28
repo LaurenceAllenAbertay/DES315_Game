@@ -8,11 +8,9 @@ using UnityEngine;
 public class AOECircleVisualizer : MonoBehaviour
 {
     [Header("Visual Settings")]
-    public Color circleColor = new Color(1f, 0.4f, 0.2f, 0.3f);
-    public Color edgeColor = new Color(1f, 0.6f, 0.3f, 0.8f);
+    public Color circleColor = new Color(0.2f, 0.6f, 1f, 0.3f);
     public int resolution = 32;
     public float groundOffset = 0.1f;
-    public float edgeWidth = 0.15f;
 
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
@@ -80,83 +78,44 @@ public class AOECircleVisualizer : MonoBehaviour
     public void UpdatePosition(Vector3 position)
     {
         currentPosition = position;
-        transform.position = new Vector3(position.x, position.y + groundOffset, position.z);
+        transform.position = position;
     }
 
     private void UpdateMesh()
     {
-        // Make this like ring thing I guess
-        int totalVerts = 1 + resolution + resolution; 
-        Vector3[] vertices = new Vector3[totalVerts];
-        Color[] colors = new Color[totalVerts];
-        
-        vertices[0] = Vector3.zero;
-        colors[0] = circleColor;
+        Vector3[] vertices = new Vector3[resolution + 1];
+        int[] triangles = new int[resolution * 3];
 
-        float innerRadius = currentRadius - edgeWidth;
-        if (innerRadius < 0) innerRadius = currentRadius * 0.8f;
-        
-        for (int i = 0; i < resolution; i++)
-        {
-            float angle = (i / (float)resolution) * Mathf.PI * 2f;
-            float x = Mathf.Cos(angle) * innerRadius;
-            float z = Mathf.Sin(angle) * innerRadius;
+        vertices[0] = new Vector3(0f, groundOffset, 0f);
 
-            vertices[1 + i] = new Vector3(x, 0, z);
-            colors[1 + i] = circleColor;
-        }
-        
         for (int i = 0; i < resolution; i++)
         {
             float angle = (i / (float)resolution) * Mathf.PI * 2f;
             float x = Mathf.Cos(angle) * currentRadius;
             float z = Mathf.Sin(angle) * currentRadius;
-
-            vertices[1 + resolution + i] = new Vector3(x, 0, z);
-            colors[1 + resolution + i] = edgeColor;
+            vertices[i + 1] = new Vector3(x, groundOffset, z);
         }
-        
-        int[] triangles = new int[resolution * 3 + resolution * 6];
-        int triIndex = 0;
-        
+
         for (int i = 0; i < resolution; i++)
         {
-            triangles[triIndex++] = 0;
-            triangles[triIndex++] = 1 + i;
-            triangles[triIndex++] = 1 + ((i + 1) % resolution);
-        }
-        
-        for (int i = 0; i < resolution; i++)
-        {
-            int innerCurrent = 1 + i;
-            int innerNext = 1 + ((i + 1) % resolution);
-            int outerCurrent = 1 + resolution + i;
-            int outerNext = 1 + resolution + ((i + 1) % resolution);
-            
-            triangles[triIndex++] = innerCurrent;
-            triangles[triIndex++] = outerCurrent;
-            triangles[triIndex++] = outerNext;
-
-            triangles[triIndex++] = innerCurrent;
-            triangles[triIndex++] = outerNext;
-            triangles[triIndex++] = innerNext;
+            triangles[i * 3] = 0;
+            triangles[i * 3 + 1] = ((i + 1) % resolution) + 1;
+            triangles[i * 3 + 2] = i + 1;
         }
 
         circleMesh.Clear();
         circleMesh.vertices = vertices;
         circleMesh.triangles = triangles;
-        circleMesh.colors = colors;
         circleMesh.RecalculateNormals();
     }
 
-    public void SetColor(Color fill, Color edge)
+    public void SetColor(Color color)
     {
-        circleColor = fill;
-        edgeColor = edge;
+        circleColor = color;
 
         if (instancedMaterial != null)
         {
-            instancedMaterial.SetColor("_BaseColor", fill);
+            instancedMaterial.SetColor("_BaseColor", color);
         }
 
         UpdateMesh();
