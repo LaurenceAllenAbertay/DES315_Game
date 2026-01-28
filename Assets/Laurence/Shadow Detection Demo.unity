@@ -1419,6 +1419,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &267603514
@@ -1471,6 +1475,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &268567361
@@ -1765,6 +1773,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &303244384
@@ -2177,6 +2189,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &424400423
@@ -2337,6 +2353,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &440151768
@@ -2389,6 +2409,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &451177855
@@ -3469,6 +3493,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &586158727
@@ -3881,6 +3909,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &676754172
@@ -3933,6 +3965,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &696271416
@@ -4305,6 +4341,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 740575467}
+  - component: {fileID: 740575474}
+  - component: {fileID: 740575473}
+  - component: {fileID: 740575472}
   - component: {fileID: 740575471}
   - component: {fileID: 740575469}
   - component: {fileID: 740575468}
@@ -4422,6 +4461,7 @@ MonoBehaviour:
   lightCheckOffset: {x: 0, y: 0.1, z: 0}
   maxMoveDistance: 12
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  targetingSystem: {fileID: 0}
   destinationIndicatorPrefab: {fileID: 686496462743916664, guid: fb557d0c6b58434468fc525fe04912d9, type: 3}
   indicatorHeight: 0.05
   navMeshSampleDistance: 1
@@ -4431,6 +4471,69 @@ MonoBehaviour:
   isInLight: 0
   currentLightLevel: 0
   isMoving: 0
+--- !u!114 &740575472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740575464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5eab1b8b5efe854ca725c5badd9e963, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  targetBlockerLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  debugMode: 0
+  isTargeting: 0
+--- !u!114 &740575473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740575464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa983115d009a74cbfdf96af0104e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equippedAbilities:
+  - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
+  - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
+  - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
+  inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  player: {fileID: 740575474}
+  targetingSystem: {fileID: 740575472}
+  cooldownTimers:
+  - 3
+  - 3
+  - 3
+--- !u!114 &740575474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740575464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc66a2964d04d8e4a8fc4d433acb0701, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 100
+  currentBlock: 0
+  isInCombat: 0
 --- !u!1 &748583985
 GameObject:
   m_ObjectHideFlags: 0
@@ -7439,7 +7542,7 @@ Transform:
   m_GameObject: {fileID: 1342652556}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: 2, z: -4}
+  m_LocalPosition: {x: -1.06, y: 2, z: -4}
   m_LocalScale: {x: 2, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8764,6 +8867,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!114 &1596103845
@@ -9401,6 +9508,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &1682862676
@@ -9504,15 +9615,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682862676}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.49250796, z: -0, w: -0.870308}
-  m_LocalPosition: {x: 8.3, y: 1, z: 9.14}
+  m_LocalRotation: {x: -0, y: -0.5000001, z: 0, w: -0.86602527}
+  m_LocalPosition: {x: 8.3, y: 0, z: 9.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 928232972}
   - {fileID: 1275361054}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -300.989, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -300, z: 0}
 --- !u!114 &1682862682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9527,6 +9638,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  currentBlock: 0
   visionCone: {fileID: 1275361055}
 --- !u!114 &1682862683
 MonoBehaviour:
@@ -9535,7 +9647,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1682862676}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50ee42fa0653acf4fb01e1f003ad9894, type: 3}
   m_Name: 
@@ -9547,7 +9659,7 @@ MonoBehaviour:
   fieldOfViewAngle: 120
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   detectionInterval: 0.5
   chaseStoppingDistance: 2
   maxChaseDistance: 25
@@ -9583,7 +9695,7 @@ Transform:
   m_GameObject: {fileID: 1683214192}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 2, z: 4}
+  m_LocalPosition: {x: 0.91, y: 2, z: 4}
   m_LocalScale: {x: 2, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9821,6 +9933,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &1752747674
@@ -9981,6 +10097,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &1800218819
@@ -10357,6 +10477,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &1855241025
@@ -11683,6 +11807,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   shadowRangeMultiplier: 1.2
+  shadowLightType: 2
+  shadowResolutionTier: 0
+  shadowSpotAngle: 170
+  shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
 --- !u!1 &2058310200

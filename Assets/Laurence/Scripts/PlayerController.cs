@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [Header("Input Actions")]
     public InputActionAsset inputActions;
 
+    [Header("Ability Targeting")]
+    [SerializeField] private AbilityTargeting targetingSystem;
+
     [Header("Destination Indicator")]
     [Tooltip("Prefab to spawn at the destination point")]
     public GameObject destinationIndicatorPrefab;
@@ -68,6 +71,10 @@ public class PlayerController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         mainCamera = Camera.main;
+        if (targetingSystem == null)
+        {
+            targetingSystem = GetComponent<AbilityTargeting>();
+        }
 
         //Setup input action - EM//
         if (inputActions != null)
@@ -134,6 +141,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (IsTargetingActive() && agent.hasPath)
+        {
+            StopMovement();
+        }
         UpdateMovingState();
         UpdateLightState();
         UpdateDestinationIndicator();
@@ -142,6 +153,7 @@ public class PlayerController : MonoBehaviour
     //Input system on move performed- EM//
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
+        if (IsTargetingActive()) return;
         if (mainCamera == null) return;
 
         if (pointerPositionAction == null) return;
@@ -181,6 +193,11 @@ public class PlayerController : MonoBehaviour
         agent.ResetPath();
         HideDestinationIndicator();
         lowVelocityTimer = 0f;
+    }
+
+    private bool IsTargetingActive()
+    {
+        return targetingSystem != null && targetingSystem.IsTargeting;
     }
 
     private void ShowDestinationIndicator(Vector3 position)
