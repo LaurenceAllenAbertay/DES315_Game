@@ -1,4 +1,4 @@
-﻿﻿Shader "Hidden/HardShadowOverlay"
+﻿Shader "Hidden/HardShadowOverlay"
 {
     SubShader
     {

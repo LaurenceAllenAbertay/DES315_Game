@@ -35,7 +35,7 @@ public class DamageEffect : AbilityEffect
             }
             else
             {
-                Debug.LogWarning("[DamageEffect] No target to damage!");
+                Debug.Log("[DamageEffect] No target to damage!");
             }
         }
     }
