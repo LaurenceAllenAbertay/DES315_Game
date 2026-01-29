@@ -28,7 +28,7 @@ public class EnemyAI : MonoBehaviour
     public float fieldOfViewAngle = 120f;
 
     [Tooltip("Layer mask for line of sight obstacles")]
-    public LayerMask obstacleMask = -0;
+    public LayerMask obstacleMask = ~0;
 
     [Tooltip("How often to check for the player (in seconds)")]
     public float detectionInterval = 0.5f;
@@ -46,6 +46,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Vector3 currentDestination;
     [SerializeField] private float idleTimer;
     [SerializeField] private bool playerDetected;
+    [SerializeField] private bool isInitialized = false;
 
     private NavMeshAgent agent;
     private Enemy enemy;
@@ -67,8 +68,29 @@ public class EnemyAI : MonoBehaviour
         enemy = GetComponent<Enemy>();
     }
 
+    
     private void Start()
     {
+        //Wait for NavMeshAgent to be properly initialised//
+        if (!ValidateAgent())
+        {
+            Debug.LogWarning($"{gameObject.name}: NavMeshAgent not on NavMesh! Retrying initialization...");
+            Invoke(nameof(InitializeAI), 0.1f);
+            return;
+        }
+
+        InitializeAI();
+    }
+
+    private void InitializeAI()
+    {
+        if(!ValidateAgent())
+        {
+            Debug.LogError($"{gameObject.name}: Cannot initialize AI - NavMehsAgent is not on a valid NavMesh!");
+            enabled = false;
+            return;
+        }
+
         //Find the player//
         PlayerController player = FindFirstObjectByType<PlayerController>();
         if (player != null)
@@ -84,10 +106,24 @@ public class EnemyAI : MonoBehaviour
         currentState = AIState.Idle;
         idleTimer = Random.Range(minIdleTime, maxIdleTime);
         detectionTimer = detectionInterval;
+        isInitialized = true;
+
+        Debug.Log($"{gameObject.name}: AI Initialized successfully");
     }
 
-    private void Update()
+    private bool ValidateAgent()
     {
+        if (agent == null) return false;
+        if (!agent.isOnNavMesh) return false;
+        if (!agent.enabled) return false;
+        return true;
+    }
+
+
+private void Update()
+    {
+        if (!isInitialized) return;
+
         //Periodically check for player detection//
         detectionTimer -= Time.deltaTime;
         if (detectionTimer <= 0)
@@ -121,8 +157,10 @@ public class EnemyAI : MonoBehaviour
 
     private void HandleRoamingState()
     {
+        if (!ValidateAgent()) return;
+
         //Check if we've reached our destination//
-        if(!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
             {
@@ -133,7 +171,9 @@ public class EnemyAI : MonoBehaviour
 
     private void HandleChasingState()
     {
-        if(playerTransform == null)
+        if (!ValidateAgent()) return;
+
+        if (playerTransform == null)
         {
             StartIdling();
             return;
@@ -153,6 +193,8 @@ public class EnemyAI : MonoBehaviour
 
     private void StartRoaming()
     {
+        if (!ValidateAgent()) return;
+
         Vector3 randomDestination = GetRandomNavMeshPoint();
 
         if(randomDestination != Vector3.zero)
@@ -172,6 +214,8 @@ public class EnemyAI : MonoBehaviour
 
     private void StartIdling()
     {
+        if (!ValidateAgent()) return;
+
         currentState = AIState.Idle;
         idleTimer = Random.Range(minIdleTime,maxIdleTime);
 
@@ -212,7 +256,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         //Can we see the player 9line of sight)//
-        Ray ray = new Ray(transform.position = Vector3.up, directionToPlayer);
+        Ray ray = new Ray(transform.position + Vector3.up, directionToPlayer);
         if(Physics.Raycast(ray, distanceToPlayer, obstacleMask))
         {
             playerDetected = false;
@@ -226,6 +270,7 @@ public class EnemyAI : MonoBehaviour
 
     private void StartChasing()
     {
+        if (!ValidateAgent()) return;
         if (currentState == AIState.Chasing) return;
 
         currentState = AIState.Chasing;
@@ -293,7 +338,7 @@ public class EnemyAI : MonoBehaviour
         if(playerDetected && playerTransform != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position = Vector3.up, playerTransform.position = Vector3.up);
+            Gizmos.DrawLine(transform.position + Vector3.up, playerTransform.position = Vector3.up);
         }
 
         //Draw current destination//
