@@ -21,7 +21,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
     private const float ABILITY_COOLDOWN = 3.0f;
 
-    [Header("Cooldown State (Read Only)")]
+    [Header("Debug")]
     [SerializeField] private bool debugMode = false;
     [SerializeField] private float[] cooldownTimers = new float[3];
 
