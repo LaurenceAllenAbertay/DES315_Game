@@ -68,6 +68,7 @@ public class TargetHighlighter : MonoBehaviour
         {
             // Skip non-mesh renderers
             if (renderer is ParticleSystemRenderer) continue;
+            if (renderer.GetComponentInParent<EnemyVisionCone>() != null) continue;
 
             // Store original materials
             originalMaterials[renderer] = renderer.materials;
