@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Range")]
     [Tooltip("Maximum distance the player can move in a single click")]
     public float maxMoveDistance = 20f;
+    [Tooltip("Minimum distance the player can move in a single click")]
+    public float minMoveDistance = 0.3f;
 
     //Input system updated - EM//
     [Header("Input Actions")]
@@ -21,6 +23,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Ability Targeting")]
     [SerializeField] private AbilityTargeting targetingSystem;
+
+    [Header("References")]
+    [SerializeField] private Player player;
 
     [Header("Destination Indicator")]
     [Tooltip("Prefab to spawn at the destination point")]
@@ -52,10 +57,15 @@ public class PlayerController : MonoBehaviour
     private InputAction moveAction;
     private InputAction stopMovementAction;
     private InputAction pointerPositionAction;
+    private InputAction endTurnAction;
 
     private GameObject destinationIndicatorInstance;
 
     private float lowVelocityTimer = 0f;
+    private Vector3 lastMovePosition;
+    private float moveDistanceAccumulator = 0f;
+    private bool trackingMovement = false;
+    private int movementPointsSpent = 0;
 
     public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
@@ -75,6 +85,10 @@ public class PlayerController : MonoBehaviour
         {
             targetingSystem = GetComponent<AbilityTargeting>();
         }
+        if (player == null)
+        {
+            player = GetComponent<Player>();
+        }
 
         //Setup input action - EM//
         if (inputActions != null)
@@ -83,6 +97,7 @@ public class PlayerController : MonoBehaviour
             moveAction = playerMap.FindAction("Move");
             stopMovementAction = playerMap.FindAction("StopMovement");
             pointerPositionAction = playerMap.FindAction("PointerPosition");
+            endTurnAction = playerMap.FindAction("EndTurn");
         }
 
         if (destinationIndicatorPrefab != null)
@@ -111,6 +126,12 @@ public class PlayerController : MonoBehaviour
         {
             pointerPositionAction.Enable();
         }
+
+        if (endTurnAction != null)
+        {
+            endTurnAction.performed += OnEndTurn;
+            endTurnAction.Enable();
+        }
     }
 
     //Movement System on Disable- EM//
@@ -132,6 +153,12 @@ public class PlayerController : MonoBehaviour
         {
             pointerPositionAction.Disable();
         }
+
+        if (endTurnAction != null)
+        {
+            endTurnAction.performed -= OnEndTurn;
+            endTurnAction.Disable();
+        }
     }
 
     private void Start()
@@ -145,7 +172,15 @@ public class PlayerController : MonoBehaviour
         {
             StopMovement();
         }
+        if (!CanPlayerAct() && agent.hasPath)
+        {
+            StopMovement();
+        }
         UpdateMovingState();
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat && isMoving)
+        {
+            UpdateMovementCost();
+        }
         UpdateLightState();
         UpdateDestinationIndicator();
     }
@@ -153,10 +188,17 @@ public class PlayerController : MonoBehaviour
     //Input system on move performed- EM//
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
+        if (!CanPlayerAct()) return;
         if (IsTargetingActive()) return;
         if (mainCamera == null) return;
 
         if (pointerPositionAction == null) return;
+
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            if (player == null) return;
+            if (!player.CanSpendActionPoints(1)) return;
+        }
 
         Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
@@ -170,6 +212,10 @@ public class PlayerController : MonoBehaviour
             {
                 return;
             }
+            if (toTarget.magnitude < minMoveDistance)
+            {
+                return;
+            }
 
             if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
             {
@@ -177,6 +223,7 @@ public class PlayerController : MonoBehaviour
                 agent.SetDestination(navHit.position);
                 lowVelocityTimer = 0f;
                 ShowDestinationIndicator(navHit.position);
+                StartMovementTracking();
             }
         }
     }
@@ -193,6 +240,82 @@ public class PlayerController : MonoBehaviour
         agent.ResetPath();
         HideDestinationIndicator();
         lowVelocityTimer = 0f;
+        StopMovementTracking();
+    }
+
+    private void OnEndTurn(InputAction.CallbackContext context)
+    {
+        if (CombatManager.Instance == null) return;
+        if (!CombatManager.Instance.InCombat) return;
+        if (!CombatManager.Instance.IsPlayerTurn) return;
+
+        StopMovement();
+        CombatManager.Instance.EndCurrentTurn();
+    }
+
+    private bool CanPlayerAct()
+    {
+        if (CombatManager.Instance == null) return true;
+        if (!CombatManager.Instance.InCombat) return true;
+        return CombatManager.Instance.IsPlayerTurn;
+    }
+
+    private void StartMovementTracking()
+    {
+        trackingMovement = true;
+        lastMovePosition = transform.position;
+        moveDistanceAccumulator = 0f;
+        movementPointsSpent = 0;
+
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            if (player == null)
+            {
+                StopMovement();
+                return;
+            }
+
+            if (!player.SpendActionPoints(1))
+            {
+                StopMovement();
+                return;
+            }
+
+            movementPointsSpent = 1;
+        }
+    }
+
+    private void StopMovementTracking()
+    {
+        trackingMovement = false;
+        moveDistanceAccumulator = 0f;
+        movementPointsSpent = 0;
+    }
+
+    private void UpdateMovementCost()
+    {
+        if (!trackingMovement) return;
+        if (player == null) return;
+        if (CombatManager.Instance == null || !CombatManager.Instance.InCombat) return;
+
+        Vector3 currentPosition = transform.position;
+        float deltaDistance = Vector3.Distance(currentPosition, lastMovePosition);
+        lastMovePosition = currentPosition;
+
+        if (deltaDistance <= 0f) return;
+
+        moveDistanceAccumulator += deltaDistance;
+
+        int requiredPoints = Mathf.Max(1, Mathf.CeilToInt(moveDistanceAccumulator));
+        while (movementPointsSpent < requiredPoints)
+        {
+            if (!player.SpendActionPoints(1))
+            {
+                StopMovement();
+                return;
+            }
+            movementPointsSpent += 1;
+        }
     }
 
     private bool IsTargetingActive()
@@ -263,6 +386,7 @@ public class PlayerController : MonoBehaviour
             if (!isMoving)
             {
                 HideDestinationIndicator();
+                StopMovementTracking();
             }
         }
     }

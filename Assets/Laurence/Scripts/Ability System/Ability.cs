@@ -135,8 +135,7 @@ public class Ability : ScriptableObject
     {
         Debug.Log($"[Ability] Combat triggered! Enemy hit: {enemy.name}");
         
-        // TODO: Implement turn-based combat trigger
-        // CombatManager.Instance?.StartCombat(enemies);?
+        CombatManager.Instance?.StartCombatFromEnemy(enemy);
     }
 
     /// <summary>

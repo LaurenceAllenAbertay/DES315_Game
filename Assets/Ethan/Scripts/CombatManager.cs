@@ -18,6 +18,10 @@ public class CombatManager : MonoBehaviour
     [Header("Refernces")]
     [SerializeField] private Player player;
 
+    [Header("Combat Join Range")]
+    [SerializeField] private float enemyJoinRadius = 8f;
+    [SerializeField] private LayerMask enemyLayer = 1 << 8;
+
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
 
@@ -113,11 +117,19 @@ public class CombatManager : MonoBehaviour
         StartNextTurn();
     }
 
+    public void StartCombatFromEnemy(Enemy initiatingEnemy)
+    {
+        if (initiatingEnemy == null) return;
+
+        List<Enemy> enemies = GetEnemiesInJoinRange(initiatingEnemy);
+        StartCombat(enemies);
+    }
+
     //Start combat with a single enemy - EM//
     private void StartCombat(Enemy enemy)
     {
         if (enemy == null) return;
-        StartCombat(new List<Enemy> { enemy });
+        StartCombatFromEnemy(enemy);
     }
 
     //Build the turn order based on initiative -EM//
@@ -125,9 +137,6 @@ public class CombatManager : MonoBehaviour
     private void BuildTurnOrder(List<Enemy> enemies)
     {
         turnOrder.Clear();
-
-        //Player goes first//
-        turnOrder.Add(player);
 
         //Add all enemies//
         foreach(Enemy enemy in enemies)
@@ -137,6 +146,9 @@ public class CombatManager : MonoBehaviour
                 turnOrder.Add(enemy);
             }
         }
+
+        //Player goes last//
+        turnOrder.Add(player);
 
         if(debugMode)
         {
@@ -192,12 +204,17 @@ public class CombatManager : MonoBehaviour
         //Determine action phase//
         if(currentUnit is Player)
         {
+            Player currentPlayer = currentUnit as Player;
+            if (currentPlayer != null)
+            {
+                currentPlayer.ResetActionPoints();
+            }
             SetPhase(CombatPhase.PlayerAction);
             //Player will act via input/UI//
         }
         else if (currentUnit is Enemy)
         {
-            SetPhase(CombatPhase.PlayerAction);
+            SetPhase(CombatPhase.EnemyAction);
             //Start enemy AI turn//
             StartEnemyTurn(currentUnit as Enemy);
         }
@@ -363,5 +380,50 @@ public class CombatManager : MonoBehaviour
         }
 
         return units;
+    }
+
+    private List<Enemy> GetEnemiesInJoinRange(Enemy initiatingEnemy)
+    {
+        List<Enemy> enemies = new List<Enemy>();
+
+        if (!initiatingEnemy.IsDead)
+        {
+            enemies.Add(initiatingEnemy);
+        }
+
+        if (enemyJoinRadius <= 0f)
+        {
+            return enemies;
+        }
+
+        if (enemyLayer.value != 0)
+        {
+            Collider[] colliders = Physics.OverlapSphere(initiatingEnemy.transform.position, enemyJoinRadius, enemyLayer);
+            foreach (Collider col in colliders)
+            {
+                Enemy enemy = col.GetComponentInParent<Enemy>();
+                if (enemy != null && !enemy.IsDead && !enemies.Contains(enemy))
+                {
+                    enemies.Add(enemy);
+                }
+            }
+        }
+        else
+        {
+            Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+            foreach (Enemy enemy in allEnemies)
+            {
+                if (enemy == null || enemy.IsDead) continue;
+                if (enemies.Contains(enemy)) continue;
+
+                float distance = Vector3.Distance(initiatingEnemy.transform.position, enemy.transform.position);
+                if (distance <= enemyJoinRadius)
+                {
+                    enemies.Add(enemy);
+                }
+            }
+        }
+
+        return enemies;
     }
 }

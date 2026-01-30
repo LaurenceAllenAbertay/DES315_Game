@@ -32,6 +32,7 @@ public class Enemy : Unit
     {
         // TODO: Add combat start logic here
         Debug.Log($"[Enemy] {gameObject.name} detected the player!");
+        CombatManager.Instance?.StartCombatFromEnemy(this);
     }
 
     protected override void Die()

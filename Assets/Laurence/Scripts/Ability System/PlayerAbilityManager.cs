@@ -161,6 +161,28 @@ public class PlayerAbilityManager : MonoBehaviour
             return;
         }
 
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            if (!CombatManager.Instance.IsPlayerTurn)
+            {
+                return;
+            }
+
+            if (player == null)
+            {
+                return;
+            }
+
+            if (!player.CanSpendActionPoints(ability.actionPointCost))
+            {
+                if (debugMode)
+                {
+                    Debug.Log($"[AbilityManager] Not enough action points for '{ability.abilityName}'");
+                }
+                return;
+            }
+        }
+
         // Start targeting
         activeAbilitySlot = slotIndex;
         targetingSystem.StartTargeting(ability, player);
@@ -216,6 +238,16 @@ public class PlayerAbilityManager : MonoBehaviour
     /// </summary>
     private void ExecuteAbility(Ability ability, TargetingResult result)
     {
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            if (player == null) return;
+
+            if (!player.SpendActionPoints(ability.actionPointCost))
+            {
+                return;
+            }
+        }
+
         switch (result.type)
         {
             case TargetingResultType.SingleTarget:
