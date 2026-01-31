@@ -35,7 +35,7 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     //Main dungeon generation entry point - EM//
-    private void GenerateDungeon()
+    public void GenerateDungeon()
     {
         InitialiseGrid();
         GrowDungeon();

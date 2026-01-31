@@ -10412,6 +10412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1829371480}
   - component: {fileID: 1829371479}
+  - component: {fileID: 1829371481}
   - component: {fileID: 1829371478}
   m_Layer: 0
   m_Name: DungeonGenerator
@@ -10481,6 +10482,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1829371481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829371477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b3fa7f847dd07049911548aaed5b3fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cellSize: 5
+  wallThickness: 0.2
+  wallHeight: 3
+  floorMaterial: {fileID: 0}
+  wallMaterial: {fileID: 0}
+  lobbyFloorMaterial: {fileID: 0}
+  doorwayWidth: 2
+  autoBakeNavMesh: 1
+  roomsParent: {fileID: 0}
+  showDebugLogs: 1
 --- !u!1 &1848758212
 GameObject:
   m_ObjectHideFlags: 0
