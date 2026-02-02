@@ -12,15 +12,18 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Start Game")]
     [SerializeField] private string playTriggerName = "Play";
-    private AudioSource startGameAudioSource;
+    private AudioSource gameAudioSource;
+    [SerializeField] private AudioClip titleClip;
     [SerializeField] private AudioClip startGameClip;
+    [SerializeField] private AudioSource backgroundMusicAudioSource;
+    [SerializeField] private float backgroundMusicFadeDuration = 1f;
 
     private bool hasTriggeredAnimation = false;
     private bool isStartingGame = false;
 
     private void Start()
     {
-        startGameAudioSource = GetComponent<AudioSource>();
+        gameAudioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -37,7 +40,12 @@ public class MainMenuManager : MonoBehaviour
     private void TriggerTitleAnimation()
     {
         hasTriggeredAnimation = true;
-        
+
+        if (gameAudioSource != null && titleClip != null)
+        {
+            gameAudioSource.PlayOneShot(titleClip);
+        }
+
         if (menuAnimator != null)
         {
             menuAnimator.SetTrigger(animationTriggerName);
@@ -58,18 +66,47 @@ public class MainMenuManager : MonoBehaviour
             menuAnimator.SetTrigger(playTriggerName);
         }
 
+        if (backgroundMusicAudioSource != null && backgroundMusicAudioSource.isPlaying)
+        {
+            StartCoroutine(FadeOutBackgroundMusic());
+        }
+
         StartCoroutine(PlayStartAudioThenLoad());
     }
 
     private IEnumerator PlayStartAudioThenLoad()
     {
-        if (startGameAudioSource != null && startGameClip != null)
+        if (gameAudioSource != null && startGameClip != null)
         {
-            startGameAudioSource.PlayOneShot(startGameClip);
-            yield return new WaitForSeconds(2);
+            gameAudioSource.PlayOneShot(startGameClip);
+            yield return new WaitForSeconds(3.5f);
         }
 
         SceneManager.LoadScene(1);
+    }
+
+    private IEnumerator FadeOutBackgroundMusic()
+    {
+        if (backgroundMusicFadeDuration <= 0f)
+        {
+            backgroundMusicAudioSource.Stop();
+            backgroundMusicAudioSource.volume = 0f;
+            yield break;
+        }
+
+        float startVolume = backgroundMusicAudioSource.volume;
+        float elapsed = 0f;
+
+        while (elapsed < backgroundMusicFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float normalizedTime = Mathf.Clamp01(elapsed / backgroundMusicFadeDuration);
+            backgroundMusicAudioSource.volume = Mathf.Lerp(startVolume, 0f, normalizedTime);
+            yield return null;
+        }
+
+        backgroundMusicAudioSource.Stop();
+        backgroundMusicAudioSource.volume = 0f;
     }
 
     public void OpenSettings()
