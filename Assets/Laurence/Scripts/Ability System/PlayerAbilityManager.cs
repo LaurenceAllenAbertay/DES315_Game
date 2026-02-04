@@ -282,6 +282,9 @@ public class PlayerAbilityManager : MonoBehaviour
             Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
         }
 
+        // Spawn visual effect if any
+        SpawnAbilityVFX(ability, result);
+
         // Execute the ability effects
         switch (result.type)
         {
@@ -297,6 +300,42 @@ public class PlayerAbilityManager : MonoBehaviour
                 ability.Execute(player, result.targetPoint);
                 break;
         }
+    }
+
+    /// <summary>
+    /// Spawns the visual effect for an ability at the appropriate location
+    /// </summary>
+    private void SpawnAbilityVFX(Ability ability, TargetingResult result)
+    {
+        if (ability.visualEffectPrefab == null) return;
+
+        Vector3 spawnPosition = Vector3.zero;
+
+        // Determine spawn position based on targeting type
+        switch (ability.targetingType)
+        {
+            case TargetingType.PointAndClick:
+                // Spawn on the enemy clicked on
+                spawnPosition = result.targetPoint; 
+                break;
+                
+            case TargetingType.Cone:
+                // Spawn on the center of the player
+                if (player != null)
+                    spawnPosition = player.transform.position;
+                break;
+                
+            case TargetingType.RangedAOE:
+                // Spawn at the centre of the aoe area
+                spawnPosition = result.targetPoint;
+                break;
+        }
+
+        GameObject vfx = Instantiate(ability.visualEffectPrefab, spawnPosition, Quaternion.identity);
+        
+        // Auto-destroy after some time (particle effects usually last a few seconds)
+        // This handles the user's question about needing code to destroy them.
+        Destroy(vfx, 5f);
     }
 
     /// <summary>

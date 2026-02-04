@@ -43,6 +43,9 @@ public class Ability : ScriptableObject
     public float aoeRadius = 3f;
 
     [Header("Effects")]
+    [Tooltip("Prefab to spawn when the ability is executed")]
+    public GameObject visualEffectPrefab;
+
     [Tooltip("Effects are executed in order. Modifiers affect subsequent effects.")]
     public List<AbilityEffect> effects = new List<AbilityEffect>();
     
