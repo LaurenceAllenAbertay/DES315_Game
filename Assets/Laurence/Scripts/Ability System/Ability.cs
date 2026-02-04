@@ -18,6 +18,7 @@ public enum TargetingType
 
 /// <summary>
 /// Defines an ability that can be equipped and used by the player
+/// All abilities cost 1 coin and require a coin flip to succeed
 /// </summary>
 [CreateAssetMenu(fileName = "NewAbility", menuName = "Abilities/Ability")]
 public class Ability : ScriptableObject
@@ -44,11 +45,7 @@ public class Ability : ScriptableObject
     [Header("Effects")]
     [Tooltip("Effects are executed in order. Modifiers affect subsequent effects.")]
     public List<AbilityEffect> effects = new List<AbilityEffect>();
-
-    [Header("Cost")]
-    [Tooltip("Action point cost during turn-based combat")]
-    public int actionPointCost = 1;
-
+    
     /// <summary>
     /// Execute this ability on a single target
     /// </summary>
@@ -96,7 +93,6 @@ public class Ability : ScriptableObject
         if (anyEnemyHit)
         {
             // Trigger combat with targets
-            // Later on trigger combat with all enemies in range of the targeted enemy
             foreach (var target in targets)
             {
                 TriggerCombat(target);   

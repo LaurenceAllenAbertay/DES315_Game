@@ -1,10 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 /// <summary>
-/// Manages the player's equipped abilities, handles input for casting,
-/// and coordinates with the targeting system
+/// Manages the player's equipped abilities, handles input for casting, and coordinates with the targeting system.
 /// </summary>
 public class PlayerAbilityManager : MonoBehaviour
 {
@@ -22,7 +20,7 @@ public class PlayerAbilityManager : MonoBehaviour
     private const float ABILITY_COOLDOWN = 3.0f;
 
     [Header("Debug")]
-    [SerializeField] private bool debugMode = false;
+    [SerializeField] private bool debugMode = true;
     [SerializeField] private float[] cooldownTimers = new float[3];
 
     // Input actions
@@ -148,23 +146,34 @@ public class PlayerAbilityManager : MonoBehaviour
         Ability ability = equippedAbilities[slotIndex];
 
         // Ability equipped?
-        if (ability == null && debugMode)
+        if (ability == null)
         {
-            Debug.Log($"[AbilityManager] No ability in slot {slotIndex + 1}");
+            if (debugMode)
+            {
+                Debug.Log($"[AbilityManager] No ability in slot {slotIndex + 1}");
+            }
             return;
         }
 
         // On cooldown?
-        if (cooldownTimers[slotIndex] > 0 && debugMode)
+        if (cooldownTimers[slotIndex] > 0)
         {
-            Debug.Log($"[AbilityManager] Ability '{ability.abilityName}' on cooldown ({cooldownTimers[slotIndex]:F1}s remaining)");
+            if (debugMode)
+            {
+                Debug.Log($"[AbilityManager] Ability '{ability.abilityName}' on cooldown ({cooldownTimers[slotIndex]:F1}s remaining)");
+            }
             return;
         }
 
+        // Check combat restrictions
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
         {
             if (!CombatManager.Instance.IsPlayerTurn)
             {
+                if (debugMode)
+                {
+                    Debug.Log("[AbilityManager] Not player's turn!");
+                }
                 return;
             }
 
@@ -173,11 +182,12 @@ public class PlayerAbilityManager : MonoBehaviour
                 return;
             }
 
-            if (!player.CanSpendActionPoints(ability.actionPointCost))
+            // Check if player has at least 1 coin
+            if (!player.CanSpendCoin())
             {
                 if (debugMode)
                 {
-                    Debug.Log($"[AbilityManager] Not enough action points for '{ability.abilityName}'");
+                    Debug.Log($"[AbilityManager] Not enough coins for '{ability.abilityName}' (need 1, have {player.CurrentCoins})");
                 }
                 return;
             }
@@ -186,7 +196,7 @@ public class PlayerAbilityManager : MonoBehaviour
         // Start targeting
         activeAbilitySlot = slotIndex;
         targetingSystem.StartTargeting(ability, player);
-        if(debugMode)
+        if (debugMode)
             Debug.Log($"[AbilityManager] Started targeting for '{ability.abilityName}'");
     }
 
@@ -199,7 +209,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
         targetingSystem.CancelTargeting();
         activeAbilitySlot = null;
-        if(debugMode)
+        if (debugMode)
             Debug.Log("[AbilityManager] Targeting cancelled");
     }
 
@@ -215,14 +225,18 @@ public class PlayerAbilityManager : MonoBehaviour
 
         if (ability == null)
         {
+            activeAbilitySlot = null;
             return;
         }
 
-        // Execute the ability
+        // Execute the ability with coin flip
         ExecuteAbility(ability, result);
 
-        // Start cooldown
+        // Start cooldown regardless of hit/miss
         cooldownTimers[slotIndex] = ABILITY_COOLDOWN;
+        
+        // Clear active slot
+        activeAbilitySlot = null;
     }
 
     /// <summary>
@@ -235,19 +249,40 @@ public class PlayerAbilityManager : MonoBehaviour
 
     /// <summary>
     /// Execute an ability with the given targeting result
+    /// Spends 1 coin and performs a coin flip to determine success
     /// </summary>
     private void ExecuteAbility(Ability ability, TargetingResult result)
     {
-        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+
+        if (inCombat)
         {
             if (player == null) return;
 
-            if (!player.SpendActionPoints(ability.actionPointCost))
+            // Spend 1 coin
+            if (!player.SpendCoin())
             {
+                if (debugMode)
+                {
+                    Debug.Log($"[AbilityManager] Failed to spend coin for '{ability.abilityName}'");
+                }
                 return;
             }
+
+            // Perform coin flip
+            bool flipSuccess = player.PerformCoinFlip();
+
+            if (!flipSuccess)
+            {
+                // Ability missed, coin spent but nothing happens
+                Debug.Log($"[AbilityManager] '{ability.abilityName}' MISSED! Coin spent, no effect.");
+                return;
+            }
+
+            Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
         }
 
+        // Execute the ability effects
         switch (result.type)
         {
             case TargetingResultType.SingleTarget:
@@ -312,7 +347,7 @@ public class PlayerAbilityManager : MonoBehaviour
         equippedAbilities[slotIndex] = ability;
         cooldownTimers[slotIndex] = 0;
 
-        if(debugMode)
+        if (debugMode)
             Debug.Log($"[AbilityManager] Equipped '{(ability != null ? ability.abilityName : "null")}' to slot {slotIndex + 1}");
     }
 }

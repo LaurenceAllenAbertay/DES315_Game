@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
 
     [Header("Movement Range")]
-    [Tooltip("Maximum distance the player can move in a single click")]
+    [Tooltip("Maximum distance the player can move in a single click (outside combat)")]
     public float maxMoveDistance = 20f;
     [Tooltip("Minimum distance the player can move in a single click")]
     public float minMoveDistance = 0.3f;
@@ -62,10 +62,7 @@ public class PlayerController : MonoBehaviour
     private GameObject destinationIndicatorInstance;
 
     private float lowVelocityTimer = 0f;
-    private Vector3 lastMovePosition;
-    private float moveDistanceAccumulator = 0f;
-    private bool trackingMovement = false;
-    private int movementPointsSpent = 0;
+    private Vector3 lastFramePosition;
 
     public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
@@ -164,6 +161,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         UpdateLightState();
+        lastFramePosition = transform.position;
     }
 
     private void Update()
@@ -176,13 +174,18 @@ public class PlayerController : MonoBehaviour
         {
             StopMovement();
         }
-        UpdateMovingState();
+        
+        // Track movement distance in combat
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat && isMoving)
         {
-            UpdateMovementCost();
+            TrackMovementDistance();
         }
+        
+        UpdateMovingState();
         UpdateLightState();
         UpdateDestinationIndicator();
+        
+        lastFramePosition = transform.position;
     }
 
     //Input system on move performed- EM//
@@ -191,14 +194,7 @@ public class PlayerController : MonoBehaviour
         if (!CanPlayerAct()) return;
         if (IsTargetingActive()) return;
         if (mainCamera == null) return;
-
         if (pointerPositionAction == null) return;
-
-        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
-        {
-            if (player == null) return;
-            if (!player.CanSpendActionPoints(1)) return;
-        }
 
         Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
@@ -206,25 +202,101 @@ public class PlayerController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
         {
             Vector3 targetPoint = hit.point;
-
             Vector3 toTarget = targetPoint - transform.position;
-            if (toTarget.magnitude > maxMoveDistance)
-            {
-                return;
-            }
-            if (toTarget.magnitude < minMoveDistance)
+            float requestedDistance = toTarget.magnitude;
+
+            // Check minimum distance
+            if (requestedDistance < minMoveDistance)
             {
                 return;
             }
 
+            bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+
+            if (inCombat)
+            {
+                // Combat movement rules
+                if (player == null) return;
+
+                // Check if player can move at all
+                if (!player.CanMove())
+                {
+                    Debug.Log("[PlayerController] Cannot move - no coins or distance exhausted");
+                    return;
+                }
+
+                // Get remaining allowed distance
+                float remainingDistance = player.RemainingMoveDistance;
+                
+                if (remainingDistance <= 0.01f)
+                {
+                    Debug.Log("[PlayerController] No movement distance remaining this turn");
+                    return;
+                }
+
+                // If clicking beyond remaining distance, ignore the click entirely
+                if (requestedDistance > remainingDistance)
+                {
+                    Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
+                    return;
+                }
+
+                // Spend movement coin if not already spent
+                if (!player.HasSpentMovementCoin)
+                {
+                    if (!player.SpendMovementCoin())
+                    {
+                        Debug.Log("[PlayerController] Failed to spend movement coin");
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                // Outside combat - use normal max distance
+                if (requestedDistance > maxMoveDistance)
+                {
+                    return;
+                }
+            }
+
+            // Validate NavMesh position
             if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
             {
                 agent.isStopped = false;
                 agent.SetDestination(navHit.position);
                 lowVelocityTimer = 0f;
                 ShowDestinationIndicator(navHit.position);
-                StartMovementTracking();
             }
+        }
+    }
+
+    /// <summary>
+    /// Track movement distance during combat
+    /// </summary>
+    private void TrackMovementDistance()
+    {
+        if (player == null) return;
+        if (CombatManager.Instance == null || !CombatManager.Instance.InCombat) return;
+
+        Vector3 currentPosition = transform.position;
+        float deltaDistance = Vector3.Distance(currentPosition, lastFramePosition);
+
+        if (deltaDistance > 0.001f)
+        {
+            // Check if this movement would exceed the limit
+            float newTotal = player.DistanceMovedThisTurn + deltaDistance;
+            
+            if (newTotal > player.MaxCombatMoveDistance)
+            {
+                // Stop movement, we've hit the limit
+                Debug.Log($"[PlayerController] Movement limit reached! Stopping at {player.DistanceMovedThisTurn:F2} units");
+                StopMovement();
+                return;
+            }
+
+            // Record the movement
+            player.AddMovementDistance(deltaDistance);
         }
     }
 
@@ -240,7 +312,6 @@ public class PlayerController : MonoBehaviour
         agent.ResetPath();
         HideDestinationIndicator();
         lowVelocityTimer = 0f;
-        StopMovementTracking();
     }
 
     private void OnEndTurn(InputAction.CallbackContext context)
@@ -258,64 +329,6 @@ public class PlayerController : MonoBehaviour
         if (CombatManager.Instance == null) return true;
         if (!CombatManager.Instance.InCombat) return true;
         return CombatManager.Instance.IsPlayerTurn;
-    }
-
-    private void StartMovementTracking()
-    {
-        trackingMovement = true;
-        lastMovePosition = transform.position;
-        moveDistanceAccumulator = 0f;
-        movementPointsSpent = 0;
-
-        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
-        {
-            if (player == null)
-            {
-                StopMovement();
-                return;
-            }
-
-            if (!player.SpendActionPoints(1))
-            {
-                StopMovement();
-                return;
-            }
-
-            movementPointsSpent = 1;
-        }
-    }
-
-    private void StopMovementTracking()
-    {
-        trackingMovement = false;
-        moveDistanceAccumulator = 0f;
-        movementPointsSpent = 0;
-    }
-
-    private void UpdateMovementCost()
-    {
-        if (!trackingMovement) return;
-        if (player == null) return;
-        if (CombatManager.Instance == null || !CombatManager.Instance.InCombat) return;
-
-        Vector3 currentPosition = transform.position;
-        float deltaDistance = Vector3.Distance(currentPosition, lastMovePosition);
-        lastMovePosition = currentPosition;
-
-        if (deltaDistance <= 0f) return;
-
-        moveDistanceAccumulator += deltaDistance;
-
-        int requiredPoints = Mathf.Max(1, Mathf.CeilToInt(moveDistanceAccumulator));
-        while (movementPointsSpent < requiredPoints)
-        {
-            if (!player.SpendActionPoints(1))
-            {
-                StopMovement();
-                return;
-            }
-            movementPointsSpent += 1;
-        }
     }
 
     private bool IsTargetingActive()
@@ -386,7 +399,6 @@ public class PlayerController : MonoBehaviour
             if (!isMoving)
             {
                 HideDestinationIndicator();
-                StopMovementTracking();
             }
         }
     }
@@ -439,6 +451,13 @@ public class PlayerController : MonoBehaviour
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(agent.destination, arrivalThreshold);
+        }
+
+        // Draw combat movement range
+        if (Application.isPlaying && CombatManager.Instance != null && CombatManager.Instance.InCombat && player != null)
+        {
+            Gizmos.color = new Color(0f, 1f, 0f, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, player.RemainingMoveDistance);
         }
     }
 }
