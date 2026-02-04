@@ -1,8 +1,8 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Simple UI that shows coin prefabs in a vertical layout.
-/// Instantiates coins at turn start, destroys them when spent.
+/// Simple UI that shows coins
 /// </summary>
 public class CoinUI : MonoBehaviour
 {
@@ -10,11 +10,16 @@ public class CoinUI : MonoBehaviour
     [Tooltip("The coin prefab to instantiate")]
     public GameObject coinPrefab;
     
-    [Tooltip("Parent transform with VerticalLayoutGroup")]
+    [Tooltip("Parent transform")]
     public Transform coinParent;
     
-    [Tooltip("Reference to the player (auto-finds if null)")]
+    [Tooltip("Reference to the player")]
     public Player player;
+
+    [Header("Animation")]
+    public float destroyDelay = 1f;
+
+    private int currentUICoins = 0;
 
     private void Start()
     {
@@ -46,9 +51,6 @@ public class CoinUI : MonoBehaviour
     {
         if (coinPrefab == null || coinParent == null) return;
 
-        // Get current coin count in UI
-        int currentUICoins = coinParent.childCount;
-
         // Add coins if we need more
         while (currentUICoins < count)
         {
@@ -56,11 +58,29 @@ public class CoinUI : MonoBehaviour
             currentUICoins++;
         }
 
-        // Remove coins if we have too many (destroy from end)
+        // Remove coins if we have too many
         while (currentUICoins > count)
         {
             currentUICoins--;
-            Destroy(coinParent.GetChild(currentUICoins).gameObject);
+            
+            if (coinParent.childCount > currentUICoins)
+            {
+                GameObject coin = coinParent.GetChild(currentUICoins).gameObject;
+                StartCoroutine(SpendCoin(coin));
+            }
         }
+    }
+
+    private IEnumerator SpendCoin(GameObject coin)
+    {
+        Animator animator = coin.GetComponent<Animator>();
+        
+        if (animator != null)
+        {
+            animator.SetTrigger("CoinSpent");
+            yield return new WaitForSeconds(destroyDelay);
+        }
+        
+        Destroy(coin);
     }
 }
