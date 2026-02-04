@@ -86,7 +86,6 @@ public class CombatManager : MonoBehaviour
     {
         if (inCombat)
         {
-            Debug.LogWarning("[CombatManager] Already in combat!");
             return;
         }
 
