@@ -13,7 +13,13 @@ public class DamageEffect : AbilityEffect
 
     public override void Execute(AbilityExecutionContext context)
     {
-        int finalDamage = Mathf.RoundToInt(baseDamage * context.AccumulatedMultiplier);
+        float modifiedBase = baseDamage;
+        if (StatsManager.Instance != null)
+        {
+            modifiedBase = StatsManager.Instance.ApplyDamage(baseDamage);
+        }
+
+        int finalDamage = Mathf.RoundToInt(modifiedBase * context.AccumulatedMultiplier);
 
         if (targetSelf)
         {

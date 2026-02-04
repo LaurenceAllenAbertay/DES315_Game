@@ -1255,12 +1255,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1776322602}
   - {fileID: 1549351977}
   - {fileID: 1622474059}
   - {fileID: 1305270802}
   - {fileID: 1912224226}
   - {fileID: 1373083698}
+  - {fileID: 599916411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &254905849
@@ -3609,6 +3609,64 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 586158727}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &599916410
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 599916411}
+  - component: {fileID: 599916412}
+  m_Layer: 0
+  m_Name: StatsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &599916411
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599916410}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 516.1966, y: 196.96202, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 245225323}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &599916412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599916410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ea23475e9e93441b0e84a64e668d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  baseCoins: 5
+  carryoverCoins: 1
+  maxCombatMoveDistance: 5
+  modifiers:
+    maxHealthFlat: 0
+    blockFlat: 0
+    healFlat: 0
+    baseCoinsFlat: 0
+    carryoverCoinsFlat: 0
+    abilityDamagePercent: 0
+    abilityRangePercent: 0
+    aoeSizePercent: 0
+    maxCombatMovePercent: 0
 --- !u!1 &620530824
 GameObject:
   m_ObjectHideFlags: 0
@@ -4543,9 +4601,11 @@ MonoBehaviour:
   baseCoins: 5
   currentCoins: 5
   bonusCoinsNextTurn: 0
+  baseCarryoverCoins: 1
   currentFlipChance: 60
   hasSpentMovementCoin: 0
   distanceMovedThisTurn: 0
+  baseCombatMoveDistance: 5
   debugMode: 1
 --- !u!1 &748583985
 GameObject:
@@ -6346,6 +6406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1252907755}
   - component: {fileID: 1252907756}
+  - component: {fileID: 1252907757}
   m_Layer: 5
   m_Name: Coins
   m_TagString: Untagged
@@ -6398,6 +6459,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 1
+--- !u!114 &1252907757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252907754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c02b35537fd15c2458539f1911572144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinPrefab: {fileID: 8230219826058003220, guid: fcdfbb6fa84427f4fbaa54ed2b7f32a5, type: 3}
+  coinParent: {fileID: 1252907755}
+  player: {fileID: 740575474}
+  destroyDelay: 1
 --- !u!1 &1262552775
 GameObject:
   m_ObjectHideFlags: 0
@@ -6734,7 +6811,8 @@ GameObject:
   - component: {fileID: 1275361057}
   - component: {fileID: 1275361056}
   - component: {fileID: 1275361055}
-  m_Layer: 8
+  - component: {fileID: 1275361058}
+  m_Layer: 0
   m_Name: Vision Cone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6779,6 +6857,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   visionColor: {r: 0.6431373, g: 0.09280091, b: 0.08235294, a: 0.2}
+  colliderUpdateInterval: 0.2
 --- !u!23 &1275361056
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6831,6 +6910,28 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1275361053}
+  m_Mesh: {fileID: 0}
+--- !u!64 &1275361058
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275361053}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &1275397911
 GameObject:
@@ -7865,8 +7966,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1373083697}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.68676, y: 0, z: 14.66827}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10255,54 +10356,6 @@ MonoBehaviour:
   shadowInnerSpotAngle: 120
   castShadows: 1
   drawDebugRays: 0
---- !u!1 &1776322601
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1776322602}
-  - component: {fileID: 1776322603}
-  m_Layer: 0
-  m_Name: CoinUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1776322602
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1776322601}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 516.1966, y: 196.96202, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 245225323}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1776322603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1776322601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c02b35537fd15c2458539f1911572144, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coinPrefab: {fileID: 8230219826058003220, guid: fcdfbb6fa84427f4fbaa54ed2b7f32a5, type: 3}
-  coinParent: {fileID: 1252907755}
-  player: {fileID: 740575474}
-  destroyDelay: 1
 --- !u!1 &1800218819
 GameObject:
   m_ObjectHideFlags: 0

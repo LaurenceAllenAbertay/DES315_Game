@@ -13,7 +13,13 @@ public class HealEffect : AbilityEffect
 
     public override void Execute(AbilityExecutionContext context)
     {
-        int finalHeal = Mathf.RoundToInt(baseHealAmount * context.AccumulatedMultiplier);
+        float modifiedBase = baseHealAmount;
+        if (StatsManager.Instance != null)
+        {
+            modifiedBase = StatsManager.Instance.ApplyHeal(baseHealAmount);
+        }
+
+        int finalHeal = Mathf.RoundToInt(modifiedBase * context.AccumulatedMultiplier);
 
         if (targetSelf)
         {

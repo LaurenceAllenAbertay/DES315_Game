@@ -15,8 +15,13 @@ public class BlockEffect : AbilityEffect
     public override void Execute(AbilityExecutionContext context)
     {
         // TODO: Check if in combat mode - block does nothing outside combat
-        
-        int finalBlock = Mathf.RoundToInt(baseBlockAmount * context.AccumulatedMultiplier);
+        float modifiedBase = baseBlockAmount;
+        if (StatsManager.Instance != null)
+        {
+            modifiedBase = StatsManager.Instance.ApplyBlock(baseBlockAmount);
+        }
+
+        int finalBlock = Mathf.RoundToInt(modifiedBase * context.AccumulatedMultiplier);
         
         if (context.Caster != null)
         {

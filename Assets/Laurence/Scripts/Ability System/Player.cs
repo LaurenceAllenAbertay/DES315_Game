@@ -12,6 +12,7 @@ public class Player : Unit
     [SerializeField] private int baseCoins = 5;
     [SerializeField] private int currentCoins = 5;
     [SerializeField] private int bonusCoinsNextTurn = 0;
+    [SerializeField] private int baseCarryoverCoins = 1;
 
     [Header("Coin Flip")]
     [Tooltip("Current chance to succeed on a coin flip (0-100)")]
@@ -25,7 +26,7 @@ public class Player : Unit
     [Header("Movement")]
     [SerializeField] private bool hasSpentMovementCoin = false;
     [SerializeField] private float distanceMovedThisTurn = 0f;
-    [SerializeField] private const float MAX_COMBAT_MOVE_DISTANCE = 5f;
+    [SerializeField] private float baseCombatMoveDistance = 5f;
 
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
@@ -45,18 +46,19 @@ public class Player : Unit
 
     // Properties
     public bool IsInCombat => isInCombat;
-    public int BaseCoins => baseCoins;
+    public int BaseCoins => GetBaseCoins();
     public int CurrentCoins => currentCoins;
     public float CurrentFlipChance => currentFlipChance;
     public bool HasSpentMovementCoin => hasSpentMovementCoin;
     public float DistanceMovedThisTurn => distanceMovedThisTurn;
-    public float RemainingMoveDistance => MAX_COMBAT_MOVE_DISTANCE - distanceMovedThisTurn;
-    public float MaxCombatMoveDistance => MAX_COMBAT_MOVE_DISTANCE;
+    public float RemainingMoveDistance => MaxCombatMoveDistance - distanceMovedThisTurn;
+    public float MaxCombatMoveDistance => GetMaxCombatMoveDistance();
 
     protected override void Awake()
     {
+        maxHealth = GetMaxHealth();
         base.Awake();
-        currentCoins = baseCoins;
+        currentCoins = GetBaseCoins();
         currentFlipChance = BASE_FLIP_CHANCE;
     }
 
@@ -115,12 +117,12 @@ public class Player : Unit
     public void StartTurn()
     {
         // Calculate coins for this turn (base + any bonus from last turn)
-        int coinsThisTurn = baseCoins + bonusCoinsNextTurn;
+        int coinsThisTurn = GetBaseCoins() + bonusCoinsNextTurn;
         currentCoins = coinsThisTurn;
         
         if (debugMode)
         {
-            Debug.Log($"[Player] Turn started with {currentCoins} coins (base: {baseCoins}, bonus: {bonusCoinsNextTurn})");
+            Debug.Log($"[Player] Turn started with {currentCoins} coins (base: {GetBaseCoins()}, bonus: {bonusCoinsNextTurn})");
         }
 
         // Reset bonus for next turn calculation
@@ -130,7 +132,7 @@ public class Player : Unit
         hasSpentMovementCoin = false;
         distanceMovedThisTurn = 0f;
 
-        OnCoinsChanged?.Invoke(currentCoins, baseCoins);
+        OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
     }
 
     /// <summary>
@@ -139,18 +141,15 @@ public class Player : Unit
     /// </summary>
     public void EndTurn()
     {
-        if (currentCoins >= 1)
+        int carryoverCap = GetCarryoverCoins();
+        bonusCoinsNextTurn = Mathf.Clamp(currentCoins, 0, carryoverCap);
+        if (debugMode)
         {
-            bonusCoinsNextTurn = 1;
-            if (debugMode)
+            if (bonusCoinsNextTurn > 0)
             {
-                Debug.Log($"[Player] Turn ended with {currentCoins} coins remaining. +1 bonus coin next turn!");
+                Debug.Log($"[Player] Turn ended with {currentCoins} coins remaining. +{bonusCoinsNextTurn} bonus coins next turn (cap: {carryoverCap}).");
             }
-        }
-        else
-        {
-            bonusCoinsNextTurn = 0;
-            if (debugMode)
+            else
             {
                 Debug.Log("[Player] Turn ended with no coins remaining. No bonus next turn.");
             }
@@ -177,7 +176,7 @@ public class Player : Unit
         {
             Debug.Log($"[Player] Spent 1 coin. Remaining: {currentCoins}");
         }
-        OnCoinsChanged?.Invoke(currentCoins, baseCoins);
+        OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
         return true;
     }
 
@@ -209,7 +208,7 @@ public class Player : Unit
             Debug.Log($"[Player] Spent movement coin. Remaining coins: {currentCoins}");
         }
         
-        OnCoinsChanged?.Invoke(currentCoins, baseCoins);
+        OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
         OnMovementCoinSpent?.Invoke();
         return true;
     }
@@ -228,7 +227,7 @@ public class Player : Unit
         }
 
         // Check if there's distance remaining
-        return distanceMovedThisTurn < MAX_COMBAT_MOVE_DISTANCE;
+        return distanceMovedThisTurn < MaxCombatMoveDistance;
     }
 
     /// <summary>
@@ -241,11 +240,11 @@ public class Player : Unit
 
         float newTotal = distanceMovedThisTurn + distance;
         
-        if (newTotal > MAX_COMBAT_MOVE_DISTANCE + 0.01f) 
+        if (newTotal > MaxCombatMoveDistance + 0.01f) 
         {
             if (debugMode)
             {
-                Debug.Log($"[Player] Movement would exceed limit! Current: {distanceMovedThisTurn:F2}, Adding: {distance:F2}, Max: {MAX_COMBAT_MOVE_DISTANCE}");
+                Debug.Log($"[Player] Movement would exceed limit! Current: {distanceMovedThisTurn:F2}, Adding: {distance:F2}, Max: {MaxCombatMoveDistance}");
             }
             return false;
         }
@@ -254,7 +253,7 @@ public class Player : Unit
         
         if (debugMode && distance > 0.1f)
         {
-            Debug.Log($"[Player] Moved {distance:F2} units. Total this turn: {distanceMovedThisTurn:F2}/{MAX_COMBAT_MOVE_DISTANCE}");
+            Debug.Log($"[Player] Moved {distance:F2} units. Total this turn: {distanceMovedThisTurn:F2}/{MaxCombatMoveDistance}");
         }
         
         return true;
@@ -268,7 +267,7 @@ public class Player : Unit
     {
         if (!isInCombat) return requestedDistance;
         
-        float remaining = MAX_COMBAT_MOVE_DISTANCE - distanceMovedThisTurn;
+        float remaining = MaxCombatMoveDistance - distanceMovedThisTurn;
         return Mathf.Min(requestedDistance, remaining);
     }
 
@@ -344,5 +343,45 @@ public class Player : Unit
     {
         base.Die();
         // TODO: Handle player death 
+    }
+
+    private int GetMaxHealth()
+    {
+        if (StatsManager.Instance == null)
+        {
+            return maxHealth;
+        }
+
+        return StatsManager.Instance.GetMaxHealth();
+    }
+
+    private int GetBaseCoins()
+    {
+        if (StatsManager.Instance == null)
+        {
+            return baseCoins;
+        }
+
+        return StatsManager.Instance.GetBaseCoins();
+    }
+
+    private int GetCarryoverCoins()
+    {
+        if (StatsManager.Instance == null)
+        {
+            return baseCarryoverCoins;
+        }
+
+        return StatsManager.Instance.GetCarryoverCoins();
+    }
+
+    private float GetMaxCombatMoveDistance()
+    {
+        if (StatsManager.Instance == null)
+        {
+            return baseCombatMoveDistance;
+        }
+
+        return StatsManager.Instance.GetMaxCombatMoveDistance();
     }
 }

@@ -64,6 +64,9 @@ public class AbilityTargeting : MonoBehaviour
     private Ability currentAbility;
     private Player currentCaster;
     private Camera mainCamera;
+    private float currentAbilityRange;
+    private float currentAbilityConeAngle;
+    private float currentAbilityAoeRadius;
 
     // Input
     private InputAction confirmAction;
@@ -168,6 +171,15 @@ public class AbilityTargeting : MonoBehaviour
         currentCaster = caster;
         isTargeting = true;
         currentAbilityName = ability.abilityName;
+        currentAbilityRange = StatsManager.Instance != null
+            ? StatsManager.Instance.ApplyAbilityRange(ability.range)
+            : ability.range;
+        currentAbilityConeAngle = StatsManager.Instance != null
+            ? StatsManager.Instance.ApplyAoeSize(ability.coneAngle)
+            : ability.coneAngle;
+        currentAbilityAoeRadius = StatsManager.Instance != null
+            ? StatsManager.Instance.ApplyAoeSize(ability.aoeRadius)
+            : ability.aoeRadius;
 
         // Show the appropriate visualizer based on targeting type
         switch (ability.targetingType)
@@ -178,14 +190,14 @@ public class AbilityTargeting : MonoBehaviour
             case TargetingType.Cone:
                 if (coneVisualizer != null)
                 {
-                    coneVisualizer.Show(ability.range, ability.coneAngle);
+                    coneVisualizer.Show(currentAbilityRange, currentAbilityConeAngle);
                 }
                 break;
 
             case TargetingType.RangedAOE:
                 if (aoeVisualizer != null)
                 {
-                    aoeVisualizer.Show(ability.aoeRadius, ability.range);
+                    aoeVisualizer.Show(currentAbilityAoeRadius, currentAbilityRange);
                 }
                 break;
         }
@@ -273,7 +285,7 @@ public class AbilityTargeting : MonoBehaviour
             {
                 // Check if in range
                 float distance = Vector3.Distance(currentCaster.transform.position, enemy.transform.position);
-                bool inRange = distance <= currentAbility.range;
+                bool inRange = distance <= currentAbilityRange;
 
                 // Check line of sight
                 bool hasLineOfSight = CheckLineOfSight(currentCaster.transform.position, enemy.transform.position);
@@ -370,9 +382,9 @@ public class AbilityTargeting : MonoBehaviour
             Vector3 offset = targetPoint - casterPos;
             offset.y = 0; // Horizontal distance only
 
-            if (offset.magnitude > currentAbility.range)
+            if (offset.magnitude > currentAbilityRange)
             {
-                offset = offset.normalized * currentAbility.range;
+                offset = offset.normalized * currentAbilityRange;
                 targetPoint = casterPos + offset;
                 targetPoint.y = hit.point.y; // Maintain ground height
             }
@@ -438,14 +450,14 @@ public class AbilityTargeting : MonoBehaviour
         Vector3 origin = currentCaster.transform.position;
         Vector3 direction = coneVisualizer.CurrentDirection;
 
-        List<Enemy> enemies = GetEnemiesInCone(origin, direction, currentAbility.range, currentAbility.coneAngle);
+        List<Enemy> enemies = GetEnemiesInCone(origin, direction, currentAbilityRange, currentAbilityConeAngle);
 
         TargetingResult result = new TargetingResult
         {
             type = TargetingResultType.MultipleTargets,
             singleTarget = null,
             multipleTargets = enemies,
-            targetPoint = origin + direction * currentAbility.range
+            targetPoint = origin + direction * currentAbilityRange
         };
 
         CompleteTargeting(result);
@@ -456,7 +468,7 @@ public class AbilityTargeting : MonoBehaviour
         if (aoeVisualizer == null) return;
 
         Vector3 center = aoeVisualizer.CurrentPosition;
-        List<Enemy> enemies = GetEnemiesInRadius(center, currentAbility.aoeRadius);
+        List<Enemy> enemies = GetEnemiesInRadius(center, currentAbilityAoeRadius);
 
         TargetingResult result = new TargetingResult
         {

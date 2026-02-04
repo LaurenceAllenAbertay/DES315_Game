@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class Unit : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] protected int maxHealth = 100;
+    [SerializeField] protected int maxHealth;
     [SerializeField] protected int currentHealth;
 
     [Header("Block")]
