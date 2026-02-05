@@ -31,7 +31,7 @@ public class Enemy : Unit
     private void OnPlayerEnteredVisionCone()
     {
         // TODO: Add combat start logic here
-        Debug.Log($"[Enemy] {gameObject.name} detected the player!");
+        if (debugMode) Debug.Log($"[Enemy] {gameObject.name} detected the player!");
         CombatManager.Instance?.StartCombatFromEnemy(this);
     }
 

@@ -28,9 +28,6 @@ public class Player : Unit
     [SerializeField] private float distanceMovedThisTurn = 0f;
     [SerializeField] private float baseCombatMoveDistance = 5f;
 
-    [Header("Debug")]
-    [SerializeField] private bool debugMode = true;
-
     // Events
     public delegate void CombatStateChanged(bool inCombat);
     public event CombatStateChanged OnCombatStateChanged;
@@ -87,7 +84,7 @@ public class Player : Unit
             isInCombat = true;
             currentFlipChance = BASE_FLIP_CHANCE;
             bonusCoinsNextTurn = 0;
-            Debug.Log("[Player] Entered combat!");
+            if (debugMode) Debug.Log("[Player] Entered combat!");
             OnCombatStateChanged?.Invoke(true);
         }
     }
@@ -105,7 +102,7 @@ public class Player : Unit
             bonusCoinsNextTurn = 0;
             hasSpentMovementCoin = false;
             distanceMovedThisTurn = 0f;
-            Debug.Log("[Player] Exited combat");
+            if (debugMode) Debug.Log("[Player] Exited combat");
             OnCombatStateChanged?.Invoke(false);
         }
     }

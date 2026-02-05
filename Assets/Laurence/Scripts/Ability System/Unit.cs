@@ -13,6 +13,9 @@ public abstract class Unit : MonoBehaviour
     [Header("Block")]
     [SerializeField] protected int currentBlock = 0;
 
+    [Header("Debug")]
+    [SerializeField] protected bool debugMode = true;
+
     // Events
     public delegate void HealthChanged(int current, int max);
     public event HealthChanged OnHealthChanged;
@@ -51,7 +54,7 @@ public abstract class Unit : MonoBehaviour
             currentBlock -= blockedDamage;
             remainingDamage -= blockedDamage;
 
-            Debug.Log($"[{GetType().Name}] {gameObject.name} blocked {blockedDamage} damage. Block remaining: {currentBlock}");
+            if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} blocked {blockedDamage} damage. Block remaining: {currentBlock}");
             OnBlockChanged?.Invoke(currentBlock);
         }
 
@@ -61,7 +64,7 @@ public abstract class Unit : MonoBehaviour
             currentHealth -= remainingDamage;
             currentHealth = Mathf.Max(0, currentHealth);
 
-            Debug.Log($"[{GetType().Name}] {gameObject.name} took {remainingDamage} damage. Health: {currentHealth}/{maxHealth}");
+            if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} took {remainingDamage} damage. Health: {currentHealth}/{maxHealth}");
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
             if (currentHealth <= 0)
@@ -85,7 +88,7 @@ public abstract class Unit : MonoBehaviour
 
         if (actualHeal > 0)
         {
-            Debug.Log($"[{GetType().Name}] {gameObject.name} healed for {actualHeal}. Health: {currentHealth}/{maxHealth}");
+            if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} healed for {actualHeal}. Health: {currentHealth}/{maxHealth}");
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
         }
     }
@@ -98,7 +101,7 @@ public abstract class Unit : MonoBehaviour
         if (amount <= 0) return;
 
         currentBlock += amount;
-        Debug.Log($"[{GetType().Name}] {gameObject.name} added {amount} block. Total block: {currentBlock}");
+        if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} added {amount} block. Total block: {currentBlock}");
         OnBlockChanged?.Invoke(currentBlock);
     }
 
@@ -109,7 +112,7 @@ public abstract class Unit : MonoBehaviour
     {
         if (currentBlock > 0)
         {
-            Debug.Log($"[{GetType().Name}] {gameObject.name} block cleared (was {currentBlock})");
+            if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} block cleared (was {currentBlock})");
             currentBlock = 0;
             OnBlockChanged?.Invoke(currentBlock);
         }
@@ -135,7 +138,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     protected virtual void Die()
     {
-        Debug.Log($"[{GetType().Name}] {gameObject.name} died!");
+        if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} died!");
         OnDied?.Invoke(this);
     }
 

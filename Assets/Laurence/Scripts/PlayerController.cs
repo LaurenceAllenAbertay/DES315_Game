@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Time in seconds of low velocity before considering stuck")]
     public float stuckTime = 0.5f;
 
+    [Header("Debug")]
+    public bool debugMode = true;
+
     [Header("Current State (Read Only)")]
     [SerializeField] private bool isInLight;
     [SerializeField] private float currentLightLevel;
@@ -221,7 +224,7 @@ public class PlayerController : MonoBehaviour
                 // Check if player can move at all
                 if (!player.CanMove())
                 {
-                    Debug.Log("[PlayerController] Cannot move - no coins or distance exhausted");
+                    if (debugMode) Debug.Log("[PlayerController] Cannot move - no coins or distance exhausted");
                     return;
                 }
 
@@ -230,14 +233,14 @@ public class PlayerController : MonoBehaviour
                 
                 if (remainingDistance <= 0.01f)
                 {
-                    Debug.Log("[PlayerController] No movement distance remaining this turn");
+                    if (debugMode) Debug.Log("[PlayerController] No movement distance remaining this turn");
                     return;
                 }
 
                 // If clicking beyond remaining distance, ignore the click entirely
                 if (requestedDistance > remainingDistance)
                 {
-                    Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
+                    if (debugMode) Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
                     return;
                 }
 
@@ -246,7 +249,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (!player.SpendMovementCoin())
                     {
-                        Debug.Log("[PlayerController] Failed to spend movement coin");
+                        if (debugMode) Debug.Log("[PlayerController] Failed to spend movement coin");
                         return;
                     }
                 }

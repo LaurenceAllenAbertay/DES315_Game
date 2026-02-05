@@ -27,20 +27,14 @@ public class HealEffect : AbilityEffect
             if (context.Caster != null)
             {
                 context.Caster.Heal(finalHeal);
-                Debug.Log($"[HealEffect] Healed self for {finalHeal} (base: {baseHealAmount}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }
         else
         {
-            // Healing an enemy
+            // Healing another target
             if (context.CurrentTarget != null)
             {
                 context.CurrentTarget.Heal(finalHeal);
-                Debug.Log($"[HealEffect] Healed {context.CurrentTarget.name} for {finalHeal}");
-            }
-            else
-            {
-                Debug.LogWarning("[HealEffect] No target to heal!");
             }
         }
     }

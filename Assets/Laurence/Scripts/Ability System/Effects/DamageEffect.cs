@@ -27,7 +27,6 @@ public class DamageEffect : AbilityEffect
             if (context.Caster != null)
             {
                 context.Caster.TakeDamage(finalDamage);
-                Debug.Log($"[DamageEffect] Self damage: {finalDamage} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }
         else
@@ -37,11 +36,7 @@ public class DamageEffect : AbilityEffect
             {
                 context.CurrentTarget.TakeDamage(finalDamage);
                 context.EnemyWasHit = true;
-                Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
-            }
-            else
-            {
-                Debug.Log("[DamageEffect] No target to damage!");
+                // Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }
     }

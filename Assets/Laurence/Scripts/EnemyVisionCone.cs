@@ -14,6 +14,9 @@ public class EnemyVisionCone : MonoBehaviour
     [Header("Visual Settings")]
     public Color visionColor = new Color(1f, 0f, 0f, 0.3f);
 
+    [Header("Debug")]
+    public bool debugMode = true;
+
     [Header("Detection Settings")]
     [Tooltip("How often to update the collider mesh (seconds). Lower = more accurate but more expensive")]
     public float colliderUpdateInterval = 0.2f;
@@ -245,7 +248,7 @@ public class EnemyVisionCone : MonoBehaviour
                 if (!playerDetected)
                 {
                     playerDetected = true;
-                    Debug.Log($"[EnemyVisionCone] Player detected by {transform.parent?.name ?? name}!");
+                    if (debugMode) Debug.Log($"[EnemyVisionCone] Player detected by {transform.parent?.name ?? name}!");
                     OnPlayerDetected?.Invoke();
                 }
                 return;

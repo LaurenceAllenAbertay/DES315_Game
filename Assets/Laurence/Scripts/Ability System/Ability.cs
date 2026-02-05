@@ -122,7 +122,6 @@ public class Ability : ScriptableObject
         {
             if (effect == null)
             {
-                Debug.LogWarning($"[Ability] Null effect in ability '{abilityName}'");
                 continue;
             }
 
@@ -132,7 +131,12 @@ public class Ability : ScriptableObject
 
     private void TriggerCombat(Enemy enemy)
     {
-        Debug.Log($"[Ability] Combat triggered! Enemy hit: {enemy.name}");
+        bool alreadyInCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+        
+        if (!alreadyInCombat) 
+        {
+            Debug.Log($"[Ability] Combat triggered! Enemy hit: {enemy.name}");
+        }
         
         CombatManager.Instance?.StartCombatFromEnemy(enemy);
     }

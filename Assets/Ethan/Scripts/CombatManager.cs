@@ -91,20 +91,20 @@ public class CombatManager : MonoBehaviour
 
         if (enemies == null || enemies.Count == 0)
         {
-            Debug.LogWarning("[CombatManager] Cannot start combat with no enemies!");
+            if (debugMode) Debug.LogWarning("[CombatManager] Cannot start combat with no enemies!");
             return;
         }
 
         if (player == null)
         {
-            Debug.LogError("[CombatManager] No Player found!");
+            if (debugMode) Debug.LogError("[CombatManager] No Player found!");
             return;
         }
 
         inCombat = true;
         SetPhase(CombatPhase.CombatStarting);
 
-        Debug.Log($"[CombatManager] Starting combat with {enemies.Count} enemies!");
+        if (debugMode) Debug.Log($"[CombatManager] Starting combat with {enemies.Count} enemies!");
 
         // Build turn order
         BuildTurnOrder(enemies);
@@ -342,7 +342,7 @@ public class CombatManager : MonoBehaviour
     {
         if (inCombat)
         {
-            Debug.Log("[CombatManager] Force ending combat");
+            if (debugMode) Debug.Log("[CombatManager] Force ending combat");
             EndCombat(false);
         }
     }

@@ -275,11 +275,11 @@ public class PlayerAbilityManager : MonoBehaviour
             if (!flipSuccess)
             {
                 // Ability missed, coin spent but nothing happens
-                Debug.Log($"[AbilityManager] '{ability.abilityName}' MISSED! Coin spent, no effect.");
+                if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' MISSED! Coin spent, no effect.");
                 return;
             }
 
-            Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
+            if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
         }
 
         // Spawn visual effect if any

@@ -163,7 +163,7 @@ public class AbilityTargeting : MonoBehaviour
     {
         if (ability == null || caster == null)
         {
-            Debug.LogWarning("[AbilityTargeting] Cannot start targeting with null ability or caster");
+            if (debugMode) Debug.LogWarning("[AbilityTargeting] Cannot start targeting with null ability or caster");
             return;
         }
 
@@ -234,7 +234,7 @@ public class AbilityTargeting : MonoBehaviour
         // Validate current ability exists
         if (currentAbility == null)
         {
-            Debug.LogWarning("[AbilityTargeting] Lost reference to current ability, cancelling");
+            if (debugMode) Debug.LogWarning("[AbilityTargeting] Lost reference to current ability, cancelling");
             CancelTargeting();
             return;
         }
@@ -245,7 +245,7 @@ public class AbilityTargeting : MonoBehaviour
             mainCamera = Camera.main;
             if (mainCamera == null)
             {
-                Debug.LogWarning("[AbilityTargeting] No main camera found");
+                if (debugMode) Debug.LogWarning("[AbilityTargeting] No main camera found");
                 return;
             }
         }

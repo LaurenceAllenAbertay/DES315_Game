@@ -4531,6 +4531,7 @@ MonoBehaviour:
   arrivalThreshold: 0.5
   stuckVelocityThreshold: 0.1
   stuckTime: 0.5
+  debugMode: 0
   isInLight: 0
   currentLightLevel: 0
   isMoving: 0
@@ -4597,6 +4598,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   currentBlock: 0
+  debugMode: 0
   isInCombat: 0
   baseCoins: 5
   currentCoins: 5
@@ -4606,7 +4608,6 @@ MonoBehaviour:
   hasSpentMovementCoin: 0
   distanceMovedThisTurn: 0
   baseCombatMoveDistance: 5
-  debugMode: 1
 --- !u!1 &748583985
 GameObject:
   m_ObjectHideFlags: 0
@@ -6808,9 +6809,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1275361054}
+  - component: {fileID: 1275361055}
   - component: {fileID: 1275361057}
   - component: {fileID: 1275361056}
-  - component: {fileID: 1275361055}
   - component: {fileID: 1275361058}
   m_Layer: 0
   m_Name: Vision Cone
@@ -6857,6 +6858,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   visionColor: {r: 0.6431373, g: 0.09280091, b: 0.08235294, a: 0.2}
+  debugMode: 0
   colliderUpdateInterval: 0.2
 --- !u!23 &1275361056
 MeshRenderer:
@@ -7995,7 +7997,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
-  debugMode: 1
+  debugMode: 0
 --- !u!1 &1394091011
 GameObject:
   m_ObjectHideFlags: 0
@@ -9358,6 +9360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71cad2bb3c4f352459d2cb915b58a75a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugMode: 1
 --- !u!1 &1626944410
 GameObject:
   m_ObjectHideFlags: 0
@@ -9891,6 +9894,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 0
   currentBlock: 0
+  debugMode: 0
   visionCone: {fileID: 1275361055}
 --- !u!114 &1682862683
 MonoBehaviour:
@@ -9915,6 +9919,7 @@ MonoBehaviour:
   detectionInterval: 0.5
   chaseStoppingDistance: 2
   maxChaseDistance: 25
+  debugMode: 1
   currentState: 0
   currentDestination: {x: 0, y: 0, z: 0}
   idleTimer: 0
