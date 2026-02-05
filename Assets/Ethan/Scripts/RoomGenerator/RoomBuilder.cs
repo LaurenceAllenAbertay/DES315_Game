@@ -80,7 +80,7 @@ public class RoomBuilder : MonoBehaviour
     {
         if(generator == null)
         {
-            Debug.LogError("[RoomBuilder] No DungeonGenerator found!");
+            if (showDebugLogs) Debug.LogError("[RoomBuilder] No DungeonGenerator found!");
             return;
         }
 
@@ -91,7 +91,7 @@ public class RoomBuilder : MonoBehaviour
         List<Room> rooms = generator.GetRooms();
         if(rooms == null || rooms.Count == 0)
         {
-            Debug.LogWarning("[RoomBuilder] No rooms to build! Generate dungeon first.");
+            if (showDebugLogs) Debug.LogWarning("[RoomBuilder] No rooms to build! Generate dungeon first.");
             return;
         }
 

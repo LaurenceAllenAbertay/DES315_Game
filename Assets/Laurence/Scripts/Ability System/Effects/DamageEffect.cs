@@ -9,11 +9,17 @@ public class DamageEffect : AbilityEffect
 {
     [Header("Damage Settings")]
     [Tooltip("Base damage before modifiers")]
-    public int baseDamage = 10;
+    public float baseDamage = 10f;
 
     public override void Execute(AbilityExecutionContext context)
     {
-        int finalDamage = Mathf.RoundToInt(baseDamage * context.AccumulatedMultiplier);
+        float modifiedBase = baseDamage;
+        if (StatsManager.Instance != null)
+        {
+            modifiedBase = StatsManager.Instance.ApplyDamage(baseDamage);
+        }
+
+        float finalDamage = modifiedBase * context.AccumulatedMultiplier;
 
         if (targetSelf)
         {
@@ -21,21 +27,19 @@ public class DamageEffect : AbilityEffect
             if (context.Caster != null)
             {
                 context.Caster.TakeDamage(finalDamage);
-                Debug.Log($"[DamageEffect] Self damage: {finalDamage} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }
         else
         {
-            // Damage the enemy target
+            // Damage the target
             if (context.CurrentTarget != null)
             {
                 context.CurrentTarget.TakeDamage(finalDamage);
-                context.EnemyWasHit = true;
-                Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
-            }
-            else
-            {
-                Debug.Log("[DamageEffect] No target to damage!");
+                if (context.CurrentTarget is Enemy)
+                {
+                    context.EnemyWasHit = true;
+                }
+                // Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }
     }

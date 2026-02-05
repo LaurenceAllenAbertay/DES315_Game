@@ -10,18 +10,23 @@ public class BlockEffect : AbilityEffect
 {
     [Header("Block Settings")]
     [Tooltip("Base block amount before modifiers")]
-    public int baseBlockAmount = 15;
+    public float baseBlockAmount = 15f;
 
     public override void Execute(AbilityExecutionContext context)
     {
         // TODO: Check if in combat mode - block does nothing outside combat
-        
-        int finalBlock = Mathf.RoundToInt(baseBlockAmount * context.AccumulatedMultiplier);
+        float modifiedBase = baseBlockAmount;
+        if (StatsManager.Instance != null)
+        {
+            modifiedBase = StatsManager.Instance.ApplyBlock(baseBlockAmount);
+        }
+
+        float finalBlock = modifiedBase * context.AccumulatedMultiplier;
         
         if (context.Caster != null)
         {
             context.Caster.AddBlock(finalBlock);
-            Debug.Log($"[BlockEffect] Added {finalBlock} block to self (base: {baseBlockAmount}, multiplier: {context.AccumulatedMultiplier:F2})");
+            // Debug.Log($"[BlockEffect] Added {finalBlock} block to self (base: {baseBlockAmount}, multiplier: {context.AccumulatedMultiplier:F2})");
         }
     }
 }

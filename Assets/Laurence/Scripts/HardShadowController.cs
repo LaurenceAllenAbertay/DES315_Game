@@ -7,6 +7,9 @@ using System.Collections.Generic;
 public class HardShadowManager : MonoBehaviour
 {
     public static HardShadowManager Instance { get; private set; }
+    
+    [Header("Debug")]
+    public bool debugMode = true;
 
     public struct LightData
     {
@@ -22,7 +25,7 @@ public class HardShadowManager : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("HardShadowManager: Duplicate instance destroyed");
+            if (debugMode) Debug.LogWarning("HardShadowManager: Duplicate instance destroyed");
             Destroy(gameObject);
             return;
         }

@@ -42,6 +42,7 @@ public class EnemyAI : MonoBehaviour
 
 
     [Header("Debug")]
+    [SerializeField] private bool debugMode = true;
     [SerializeField] private AIState currentState;
     [SerializeField] private Vector3 currentDestination;
     [SerializeField] private float idleTimer;
@@ -74,7 +75,7 @@ public class EnemyAI : MonoBehaviour
         //Wait for NavMeshAgent to be properly initialised//
         if (!ValidateAgent())
         {
-            Debug.LogWarning($"{gameObject.name}: NavMeshAgent not on NavMesh! Retrying initialization...");
+            if (debugMode) Debug.LogWarning($"{gameObject.name}: NavMeshAgent not on NavMesh! Retrying initialization...");
             Invoke(nameof(InitializeAI), 0.1f);
             return;
         }
@@ -86,7 +87,7 @@ public class EnemyAI : MonoBehaviour
     {
         if(!ValidateAgent())
         {
-            Debug.LogError($"{gameObject.name}: Cannot initialize AI - NavMehsAgent is not on a valid NavMesh!");
+            if (debugMode) Debug.LogError($"{gameObject.name}: Cannot initialize AI - NavMehsAgent is not on a valid NavMesh!");
             enabled = false;
             return;
         }
@@ -99,7 +100,7 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"{gameObject.name}: No PlayerController found in Scene!");
+            if (debugMode) Debug.LogWarning($"{gameObject.name}: No PlayerController found in Scene!");
         }
 
         originalStoppingDistance = agent.stoppingDistance;
@@ -108,7 +109,7 @@ public class EnemyAI : MonoBehaviour
         detectionTimer = detectionInterval;
         isInitialized = true;
 
-        Debug.Log($"{gameObject.name}: AI Initialized successfully");
+        if (debugMode) Debug.Log($"{gameObject.name}: AI Initialized successfully");
     }
 
     private bool ValidateAgent()
@@ -186,7 +187,7 @@ private void Update()
         float distanceToPlayer =  Vector3.Distance(transform.position, playerTransform.position);
         if(distanceToPlayer > maxChaseDistance)
         {
-            Debug.Log($"{gameObject.name} lost player - too far away");
+            if (debugMode) Debug.Log($"{gameObject.name} lost player - too far away");
             StartIdling();
         }
     }
@@ -203,7 +204,7 @@ private void Update()
             currentDestination = randomDestination;
             currentState = AIState.Roaming;
 
-            Debug.Log($"{gameObject.name} roaming to {randomDestination}");
+            if (debugMode) Debug.Log($"{gameObject.name} roaming to {randomDestination}");
         }
         else
         {
@@ -219,7 +220,7 @@ private void Update()
         currentState = AIState.Idle;
         idleTimer = Random.Range(minIdleTime,maxIdleTime);
 
-        Debug.Log($"{gameObject.name} idling for {idleTimer:F1} seconds");
+        if (debugMode) Debug.Log($"{gameObject.name} idling for {idleTimer:F1} seconds");
     }
 
     private void CheckForPlayer()
@@ -275,7 +276,7 @@ private void Update()
 
         currentState = AIState.Chasing;
         agent.stoppingDistance = chaseStoppingDistance;
-        Debug.Log($"{gameObject.name} detected player - starting chase!");
+        if (debugMode) Debug.Log($"{gameObject.name} detected player - starting chase!");
     }
 
     [ContextMenu("Force Stop Chasing")]
@@ -283,13 +284,13 @@ private void Update()
     {
         if(currentState == AIState.Chasing)
         {
-            Debug.Log($"{gameObject.name} forced to stop chasing - returning to idle");
+            if (debugMode) Debug.Log($"{gameObject.name} forced to stop chasing - returning to idle");
             playerDetected = false;
             StartIdling();
         }
         else
         {
-            Debug.Log($"{gameObject.name} is not currently chasing");
+            if (debugMode) Debug.Log($"{gameObject.name} is not currently chasing");
         }
     }
 
@@ -308,7 +309,7 @@ private void Update()
             }
         }
 
-        Debug.LogWarning($"{gameObject.name} couldn't find valid NavMesh point within {roamRadius} units");
+        if (debugMode) Debug.LogWarning($"{gameObject.name} couldn't find valid NavMesh point within {roamRadius} units");
         return Vector3.zero;
     }
 

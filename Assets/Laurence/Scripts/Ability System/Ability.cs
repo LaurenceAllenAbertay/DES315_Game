@@ -18,6 +18,7 @@ public enum TargetingType
 
 /// <summary>
 /// Defines an ability that can be equipped and used by the player
+/// All abilities cost 1 coin and require a coin flip to succeed
 /// </summary>
 [CreateAssetMenu(fileName = "NewAbility", menuName = "Abilities/Ability")]
 public class Ability : ScriptableObject
@@ -42,33 +43,32 @@ public class Ability : ScriptableObject
     public float aoeRadius = 3f;
 
     [Header("Effects")]
+    [Tooltip("Prefab to spawn when the ability is executed")]
+    public GameObject visualEffectPrefab;
+
     [Tooltip("Effects are executed in order. Modifiers affect subsequent effects.")]
     public List<AbilityEffect> effects = new List<AbilityEffect>();
-
-    [Header("Cost")]
-    [Tooltip("Action point cost during turn-based combat")]
-    public int actionPointCost = 1;
-
+    
     /// <summary>
     /// Execute this ability on a single target
     /// </summary>
-    public void Execute(Player caster, Enemy target)
+    public void Execute(Player caster, Unit target)
     {
         AbilityExecutionContext context = new AbilityExecutionContext(caster);
         context.CurrentTarget = target;
 
         ExecuteEffects(context);
 
-        if (context.EnemyWasHit)
+        if (context.EnemyWasHit && target is Enemy enemy)
         {
-            TriggerCombat(target);
+            TriggerCombat(enemy);
         }
     }
 
     /// <summary>
     /// Execute this ability on multiple targets
     /// </summary>
-    public void Execute(Player caster, List<Enemy> targets)
+    public void Execute(Player caster, List<Unit> targets)
     {
         if (targets == null || targets.Count == 0)
         {
@@ -80,14 +80,14 @@ public class Ability : ScriptableObject
 
         bool anyEnemyHit = false;
 
-        foreach (Enemy target in targets)
+        foreach (Unit target in targets)
         {
             AbilityExecutionContext context = new AbilityExecutionContext(caster);
             context.CurrentTarget = target;
             
             ExecuteEffects(context);
 
-            if (context.EnemyWasHit)
+            if (context.EnemyWasHit && target is Enemy)
             {
                 anyEnemyHit = true;
             }
@@ -96,10 +96,12 @@ public class Ability : ScriptableObject
         if (anyEnemyHit)
         {
             // Trigger combat with targets
-            // Later on trigger combat with all enemies in range of the targeted enemy
             foreach (var target in targets)
             {
-                TriggerCombat(target);   
+                if (target is Enemy enemy)
+                {
+                    TriggerCombat(enemy);
+                }
             }
         }
     }
@@ -123,7 +125,6 @@ public class Ability : ScriptableObject
         {
             if (effect == null)
             {
-                Debug.LogWarning($"[Ability] Null effect in ability '{abilityName}'");
                 continue;
             }
 
@@ -133,7 +134,12 @@ public class Ability : ScriptableObject
 
     private void TriggerCombat(Enemy enemy)
     {
-        Debug.Log($"[Ability] Combat triggered! Enemy hit: {enemy.name}");
+        bool alreadyInCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+        
+        if (!alreadyInCombat) 
+        {
+            Debug.Log($"[Ability] Combat triggered! Enemy hit: {enemy.name}");
+        }
         
         CombatManager.Instance?.StartCombatFromEnemy(enemy);
     }

@@ -9,11 +9,17 @@ public class HealEffect : AbilityEffect
 {
     [Header("Heal Settings")]
     [Tooltip("Base heal amount before modifiers")]
-    public int baseHealAmount = 20;
+    public float baseHealAmount = 20f;
 
     public override void Execute(AbilityExecutionContext context)
     {
-        int finalHeal = Mathf.RoundToInt(baseHealAmount * context.AccumulatedMultiplier);
+        float modifiedBase = baseHealAmount;
+        if (StatsManager.Instance != null)
+        {
+            modifiedBase = StatsManager.Instance.ApplyHeal(baseHealAmount);
+        }
+
+        float finalHeal = modifiedBase * context.AccumulatedMultiplier;
 
         if (targetSelf)
         {
@@ -21,20 +27,14 @@ public class HealEffect : AbilityEffect
             if (context.Caster != null)
             {
                 context.Caster.Heal(finalHeal);
-                Debug.Log($"[HealEffect] Healed self for {finalHeal} (base: {baseHealAmount}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }
         else
         {
-            // Healing an enemy
+            // Healing another target
             if (context.CurrentTarget != null)
             {
                 context.CurrentTarget.Heal(finalHeal);
-                Debug.Log($"[HealEffect] Healed {context.CurrentTarget.name} for {finalHeal}");
-            }
-            else
-            {
-                Debug.LogWarning("[HealEffect] No target to heal!");
             }
         }
     }

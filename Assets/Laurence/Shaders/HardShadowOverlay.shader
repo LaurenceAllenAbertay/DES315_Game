@@ -31,7 +31,7 @@
             // Maximum lights
             #define MAX_LIGHTS 16
             
-            // Blit texture (provided by URP's Blitter)
+            // Blit texture
             TEXTURE2D_X(_BlitTexture);
             
             // Parameters from C#
@@ -43,10 +43,10 @@
             float _LightIndices[MAX_LIGHTS];
             
             // Wobble parameters
-            float _WobbleAmount;     // How much the edge wobbles (in world units)
-            float _WobbleSpeed;      // Animation speed
-            float _WobbleFrequency;  // How many wobbles around the edge
-            float _EdgeSoftness;     // Width of the soft/blurry edge
+            float _WobbleAmount; 
+            float _WobbleSpeed;  
+            float _WobbleFrequency;
+            float _EdgeSoftness;
             
             struct Attributes
             {
@@ -82,29 +82,28 @@
             // Simple noise function using layered sine waves
             float WobbleNoise(float3 worldPos, float3 lightPos, float time)
             {
-                // Direction from light to point (for consistent wobble around the sphere)
+                // Direction from light to point for consistent wobble around the sphere
                 float3 dir = normalize(worldPos - lightPos);
     
                 // Create wobble based on spherical coordinates
                 float angle1 = atan2(dir.z, dir.x);
                 float angle2 = asin(dir.y);
-    
-                // IMPORTANT: Use INTEGER frequency multipliers to ensure seamless wrapping
-                // Non-integer values cause discontinuities at the atan2 wrap point (-π to π)
-                float baseFreq = floor(_WobbleFrequency); // Ensure base is integer
+                
+                // Ensure base is integer
+                float baseFreq = floor(_WobbleFrequency); 
     
                 // Layer multiple sine waves at different frequencies and phases
                 float wobble = 0.0;
     
-                // Primary wobble (integer multipliers: 1x, 1x)
+                // Primary wobble
                 wobble += sin(angle1 * baseFreq + time * _WobbleSpeed) * 0.5;
                 wobble += sin(angle2 * baseFreq + time * _WobbleSpeed * 1.3) * 0.3;
     
-                // Secondary detail (integer multipliers: 2x, 2x)
+                // Secondary detail
                 wobble += sin(angle1 * baseFreq * 2.0 - time * _WobbleSpeed * 0.8) * 0.15;
                 wobble += sin((angle1 + angle2) * baseFreq * 2.0 + time * _WobbleSpeed * 0.6) * 0.2;
     
-                // Tertiary fine detail (integer multiplier: 4x)
+                // Tertiary fine detail
                 wobble += sin(angle1 * baseFreq * 4.0 + time * _WobbleSpeed * 1.1) * 0.08;
     
                 // Normalize to roughly -1 to 1 range
@@ -136,8 +135,7 @@
                 
                 // Sample scene color using point sampler to avoid redefinition issues
                 float4 sceneColor = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, uv);
-                
-                // If no lights registered, return original
+
                 if (_LightCount <= 0)
                 {
                     return sceneColor;
@@ -153,7 +151,7 @@
                     if (depth > 0.9999) return sceneColor;
                 #endif
                 
-                // Reconstruct world position using URP helper (handles platform differences)
+                // Reconstruct world position using URP helper
                 float3 worldPos = ComputeWorldSpacePosition(uv, depth, UNITY_MATRIX_I_VP);
                 
                 // Check if pixel is within ANY light's range
@@ -174,18 +172,18 @@
                     
                     // Soft edge using smoothstep for blur effect
                     // Edge softness determines width of transition zone
-                    float softness = max(_EdgeSoftness, 0.01); // Prevent division issues
+                    float softness = max(_EdgeSoftness, 0.01);
                     float innerEdge = effectiveRange - softness * 0.5;
                     float outerEdge = effectiveRange + softness * 0.5;
                     
-                    // smoothstep gives us a nice soft transition
+                    // Smoothstep gives us a nice soft transition
                     float insideThisLight = 1.0 - smoothstep(innerEdge, outerEdge, dist);
                     
-                    // NEW: Sample URP Shadows
+                    // Sample URP Shadows
                     int additionalLightIndex = (int)_LightIndices[i];
                     if (additionalLightIndex >= 0)
                     {
-                        // Use the global additional light index, not per-object indices
+                        // Use the global additional light index, not per object indices
                         Light light = GetAdditionalLightGlobal(additionalLightIndex, worldPos);
                         float shadowSoftness = max(_EdgeSoftness, 0.001);
                         float shadowAtten = smoothstep(0.5 - shadowSoftness * 0.5, 0.5 + shadowSoftness * 0.5, light.shadowAttenuation);
@@ -195,7 +193,6 @@
                     inLight = max(inLight, insideThisLight);
                 }
                 
-                // Shadow = not in any light
                 float inShadow = 1.0 - inLight;
 
                 // Apply both light tint and shadow tint

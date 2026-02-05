@@ -34,10 +34,6 @@ public class ConditionalModifierEffect : AbilityEffect
             context.AccumulatedMultiplier *= multiplier;
             Debug.Log($"[ConditionalModifier] Condition '{condition}' met! Multiplier now: {context.AccumulatedMultiplier:F2}");
         }
-        else
-        {
-            Debug.Log($"[ConditionalModifier] Condition '{condition}' not met. Multiplier unchanged: {context.AccumulatedMultiplier:F2}");
-        }
     }
 
     private bool EvaluateCondition(AbilityExecutionContext context)
