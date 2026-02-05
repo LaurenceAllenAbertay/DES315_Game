@@ -4,23 +4,37 @@ using Unity.AI.Navigation;
 
 
 //Builds 3D room geometry from the abstract dungeon layout -EM//
-//Creates placeholder rooms using primitives for now, easily replacable with prefabs later -EM//
+//uses procedural walls (easy to texture) + prefab floors (artistic flexibility) -EM//
 
 [RequireComponent(typeof(DungeonGenerator))]
 public class RoomBuilder : MonoBehaviour
 {
     [Header("Room Settings")]
     [Tooltip("Size of each grid cell in world units (should match visualiser")]
-    public float cellSize = 5f;
+    public float cellSize = 10f;
     public float wallThickness = 0.2f;
 
     [Tooltip("Height of room walls")]
     public float wallHeight = 3f;
 
+    [Header("Floor Prefabs")]
+    [Tooltip("Floor prefab for the lobby (roomType 0)")]
+    public GameObject lobbyFloorPrefab;
+
+    [Tooltip("Floor prefab for room type 1")]
+    public GameObject roomType1FloorPrefab;
+
+    [Tooltip("Floor prefab for room type 2")]
+    public GameObject roomType2FloorPrefab;
+
+    [Tooltip("Floor prefab for room type 3")]
+    public GameObject roomType3FloorPrefab;
+
+    [Tooltip("Floor prefab for room type 4")]
+    public GameObject roomType4FloorPrefab;
+
     [Header("Materials")]
-    public Material floorMaterial;
     public Material wallMaterial;
-    public Material lobbyFloorMaterial;
 
     [Header("Doorway Settings")]
     [Tooltip("Width of doorways between connected rooms")]
@@ -98,11 +112,31 @@ public class RoomBuilder : MonoBehaviour
             BakeNavMesh();
         }
 
+        //Setup fog of war if available//
+        SetupFogOfWar();
+
         if(showDebugLogs)
         {
             Debug.Log($"[RoomBuilder] Room building complete!");
         }
     }
+
+    //Try to setup fog of war automatically after building -EM//
+    private void SetupFogOfWar()
+    {
+        //Try shader based fog first//
+        ShaderFogOfWar shaderFog = FindFirstObjectByType<ShaderFogOfWar>();
+        if(shaderFog != null)
+        {
+            shaderFog.SetupFogOfWar();
+            if(showDebugLogs)
+            {
+                Debug.Log("[RoomBuilder] Triggered shader fog of war setup");
+            }
+            return;
+        }
+    }
+
 
     //Build a single room's geomertry - EM//
     private void buildRoom(Room room)
@@ -117,50 +151,76 @@ public class RoomBuilder : MonoBehaviour
         //Calculate room world position (centered at origin)//
         Vector3 roomWorldPos = GridToWorldPosition(minX, minY);
 
-        //Build floor//
-        BuildFloor(roomObject, room, minX, minY, maxX, maxY, roomWorldPos);
+        //Build floor using prefab for this room type//
+        BuildFloorPrefab(roomObject, room, minX, minY, maxX, maxY, roomWorldPos);
 
         //Build walls//
-        BuildWalls(roomObject, room, minX, minY, maxX, maxY, roomWorldPos);
+        BuildWallsProcedural(roomObject, room);
     }
 
-    //Build the floor for a room - EM//
-    private void BuildFloor(GameObject roomObject, Room room, int minX, int minY, int maxX, int maxY, Vector3 basePos)
+    #region Floor Building (Prefab-Based)
+
+
+    //Build the floor for a room using prefab tiles - EM//
+    private void BuildFloorPrefab(GameObject roomObject, Room room, int minX, int minY, int maxX, int maxY, Vector3 basePos)
     {
+        //Choose correct prefab//
+        GameObject floorPrefab = GetFloorPrefabForRoomType(room);
+
+        if (floorPrefab == null)
+        {
+            Debug.LogWarning("[RoomBuilder] No floor tile prefab assigned for room type {room.roomType}! Skipping floor.");
+            return;
+        }
+
+        //Create floor container//
+        GameObject floorContainer = new GameObject("Floor");
+        floorContainer.transform.SetParent(roomObject.transform);
+
         //Calculate floor size//
         float width = (maxX - minX + 1) * cellSize;
         float depth = (maxY - minY + 1) * cellSize;
 
-        //Create floor//
-        GameObject floor = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        floor.name = "Floor";
-        floor.transform.SetParent(roomObject.transform);
+        //Calculate center position//
+        Vector3 floorCenter = basePos + new Vector3(width * 0.5f, 0f, depth * 0.5f);
 
-        //Position and Scale//
-        Vector3 floorCenter = basePos + new Vector3(width * 0.5f, -0.5f, depth * 0.5f);
-        floor.transform.position = floorCenter;
+        //Instantiate the floor prefab//
+        GameObject floor = Instantiate(floorPrefab, floorCenter, Quaternion.identity, floorContainer.transform);
+        floor.name = room.isLobby ? "Floor_Lobby" : $"Floor_Type{room.roomType}";
+
+        //Scale to match room size//
         floor.transform.localScale = new Vector3(width, 1f, depth);
 
-        //Apply material//
-        Renderer renderer = floor.GetComponent<Renderer>();
-        if(renderer != null )
+        if(showDebugLogs)
         {
-            if(room.isLobby && lobbyFloorMaterial != null)
-            {
-                renderer.material = lobbyFloorMaterial;
-            }
-            else if (floorMaterial != null)
-            {
-                renderer.material = floorMaterial;
-            }
+            Debug.Log($"[RoomBuilder] Created {(room.isLobby ? "lobby" : $"type {room.roomType}")} floor: {width}x{depth} units");
         }
 
-        //Add to NavMesh//
-        floor.layer = LayerMask.NameToLayer("Default");
     }
 
-    //Build walls around the perimeter of a room - EM//
-    private void BuildWalls(GameObject roomObject, Room room, int minX, int minY, int maxX, int maxY, Vector3 basePos)
+    //Get the appropriate floor prefab based on room type - EM//
+    private GameObject GetFloorPrefabForRoomType(Room room)
+    {
+        if(room.isLobby)
+        {
+            return lobbyFloorPrefab;
+        }
+        switch(room.roomType)
+        {
+            case 1: return roomType1FloorPrefab;
+            case 2: return roomType2FloorPrefab;
+            case 3: return roomType3FloorPrefab;
+            case 4: return roomType4FloorPrefab;
+            default:
+                Debug.LogWarning($"[RoomBuilder] Unknown room type: {room.roomType}");
+                return null;
+        }
+    }
+    #endregion
+
+    #region Wall Building (Procedural)
+    //Build walls around the perimeter of a room using procedural geometry - EM//
+    private void BuildWallsProcedural(GameObject roomObject, Room room)
     {
         //Create walls container//
         GameObject wallsContainer = new GameObject("Walls");
@@ -179,7 +239,7 @@ public class RoomBuilder : MonoBehaviour
         }
     }
 
-    //Build a wall segment if needed (edge of room or no connection) - EM//
+    //Build a wall segment if needed using procedural geomtry (edge of room or no connection) - EM//
     private void BuildWallIfNeeded(GameObject wallsContainer, Room room, Vector2Int cell, Vector2Int direction, Vector3 cellWorldPos)
     {
         Vector2Int neighbour = cell + direction;
@@ -235,23 +295,7 @@ public class RoomBuilder : MonoBehaviour
         }
     }
 
-    //Check if this room has a connection in the given direction from this cell - EM//
-    private bool HasConnectionInDirection(Room room, Vector2Int cell, Vector2Int direction)
-    {
-        Vector2Int neighbour = cell + direction;
-
-        //Find which room (if any) occupies the neighbour cell//
-        foreach(Room connectedRoom in room.connections)
-        {
-            if(connectedRoom.gridCells.Contains(neighbour))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //Build a solid wall segment -EM//
+    //Build a solid wall segment using procedural geometry -EM//
     private void BuildSolidWall(GameObject parent, Vector3 position, Vector3 scale, Quaternion rotation)
     {
         GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -262,13 +306,13 @@ public class RoomBuilder : MonoBehaviour
         wall.transform.rotation = rotation;
 
         //Apply material//
-        if(wallMaterial != null)
+        if (wallMaterial != null)
         {
             wall.GetComponent<Renderer>().material = wallMaterial;
         }
     }
 
-    //Build a wall with a doorway opening - EM//
+    //Build a wall with a doorway opening using procedural geometry - EM//
     private void BuildWallWithDoorway(GameObject parent, Vector3 position, Vector3 scale, Quaternion rotation, Vector2Int direction)
     {
         //For now, create two walls segments with a gap in the middle//
@@ -295,7 +339,7 @@ public class RoomBuilder : MonoBehaviour
         wall2.transform.SetParent(parent.transform);
         wall2.transform.rotation = rotation;
 
-        if(isVertical)
+        if (isVertical)
         {
             //East/West walls//
             float offset = (wallLength - sideWallLength) * 0.5f;
@@ -319,11 +363,31 @@ public class RoomBuilder : MonoBehaviour
         }
 
         //Apply materials//
-        if(wallMaterial != null)
+        if (wallMaterial != null)
         {
             wall1.GetComponent<Renderer>().material = wallMaterial;
             wall2.GetComponent<Renderer>().material = wallMaterial;
         }
+    }
+
+    #endregion
+
+    #region Utility Methods
+
+    //Check if this room has a connection in the given direction from this cell - EM//
+    private bool HasConnectionInDirection(Room room, Vector2Int cell, Vector2Int direction)
+    {
+        Vector2Int neighbour = cell + direction;
+
+        //Find which room (if any) occupies the neighbour cell//
+        foreach(Room connectedRoom in room.connections)
+        {
+            if(connectedRoom.gridCells.Contains(neighbour))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Convert grid coordinates to world positions - EM//
@@ -375,4 +439,6 @@ public class RoomBuilder : MonoBehaviour
         }
         BuildRooms();
     }
+
+    #endregion
 }

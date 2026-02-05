@@ -2956,6 +2956,56 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 471453938}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &484774878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 484774880}
+  - component: {fileID: 484774879}
+  m_Layer: 0
+  m_Name: DeleteAfterTest
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &484774879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484774878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da4b156005c7c1d44bd749b164e9ee81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floorPrefabToTest: {fileID: 6362005581660989287, guid: 5dd297793fff0524e87198bb046c3754, type: 3}
+  testCellSize: 5
+  test1x1: 1
+  test2x1: 1
+  test1x2: 1
+  test2x2: 1
+--- !u!4 &484774880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 484774878}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.81284, y: 0, z: 8.9792}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &494675846
 GameObject:
   m_ObjectHideFlags: 0
@@ -10413,6 +10463,7 @@ GameObject:
   - component: {fileID: 1829371480}
   - component: {fileID: 1829371479}
   - component: {fileID: 1829371481}
+  - component: {fileID: 1829371482}
   - component: {fileID: 1829371478}
   m_Layer: 0
   m_Name: DungeonGenerator
@@ -10497,13 +10548,29 @@ MonoBehaviour:
   cellSize: 5
   wallThickness: 0.2
   wallHeight: 3
-  floorMaterial: {fileID: 0}
+  lobbyFloorPrefab: {fileID: 6362005581660989287, guid: 5dd297793fff0524e87198bb046c3754, type: 3}
+  roomType1FloorPrefab: {fileID: 5824539409984162642, guid: 9343b636774543045b8371b26690d8ee, type: 3}
+  roomType2FloorPrefab: {fileID: 8886462752212042546, guid: 5bedc4af24a1a094e8f112b2dee01dd7, type: 3}
+  roomType3FloorPrefab: {fileID: 1116359164914012920, guid: 900b496289228df40aade1c42bd9efbe, type: 3}
+  roomType4FloorPrefab: {fileID: 9078663018514347753, guid: 85af632d45c40c24697eaaa28b050a7f, type: 3}
   wallMaterial: {fileID: 0}
-  lobbyFloorMaterial: {fileID: 0}
   doorwayWidth: 2
   autoBakeNavMesh: 1
   roomsParent: {fileID: 0}
   showDebugLogs: 1
+--- !u!114 &1829371482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829371477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39441f1261ee44c4da1664d3bec78ed9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  savePath: Assets/Ethan/Scripts/RoomGenerator/Prefab
 --- !u!1 &1848758212
 GameObject:
   m_ObjectHideFlags: 0
@@ -12273,3 +12340,4 @@ SceneRoots:
   - {fileID: 245225323}
   - {fileID: 1188591640688632801}
   - {fileID: 1829371480}
+  - {fileID: 484774880}
