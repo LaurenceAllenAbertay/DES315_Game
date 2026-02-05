@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class StatsManager : MonoBehaviour
@@ -6,9 +7,9 @@ public class StatsManager : MonoBehaviour
     public struct StatModifiers
     {
         [Header("Flat Mods")]
-        public int maxHealthFlat;
-        public int blockFlat;
-        public int healFlat;
+        public float maxHealthFlat;
+        public float blockFlat;
+        public float healFlat;
         public int baseCoinsFlat;
         public int carryoverCoinsFlat;
 
@@ -22,15 +23,20 @@ public class StatsManager : MonoBehaviour
     public static StatsManager Instance { get; private set; }
 
     [Header("Base Player Stats")]
-    public int maxHealth = 100;
+    public float maxHealth = 100f;
     public int baseCoins = 5;
     public int carryoverCoins = 1;
     public float maxCombatMoveDistance = 5f;
 
     [Header("Run Modifiers")]
     [SerializeField] private StatModifiers modifiers;
+    [SerializeField] private StatModifiers itemModifiers;
 
-    public StatModifiers Modifiers => modifiers;
+    public StatModifiers Modifiers => AddModifiers(modifiers, itemModifiers);
+    public StatModifiers RunModifiers => modifiers;
+    public StatModifiers ItemModifiers => itemModifiers;
+
+    public event Action OnModifiersChanged;
 
     private void Awake()
     {
@@ -46,56 +52,88 @@ public class StatsManager : MonoBehaviour
     public void ResetRunModifiers()
     {
         modifiers = default;
+        OnModifiersChanged?.Invoke();
     }
 
-    public int GetMaxHealth()
+    public void SetItemModifiers(StatModifiers newModifiers)
     {
-        int baseValue = maxHealth;
-        return Mathf.Max(1, baseValue + modifiers.maxHealthFlat);
+        itemModifiers = newModifiers;
+        OnModifiersChanged?.Invoke();
+    }
+
+    public float GetMaxHealth()
+    {
+        float baseValue = maxHealth;
+        StatModifiers total = Modifiers;
+        return Mathf.Max(1f, baseValue + total.maxHealthFlat);
     }
 
     public int GetBaseCoins()
     {
         int baseValue = baseCoins;
-        return Mathf.Max(0, baseValue + modifiers.baseCoinsFlat);
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0, baseValue + total.baseCoinsFlat);
     }
 
     public int GetCarryoverCoins()
     {
         int baseValue = carryoverCoins;
-        return Mathf.Max(0, baseValue + modifiers.carryoverCoinsFlat);
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0, baseValue + total.carryoverCoinsFlat);
     }
 
     public float GetMaxCombatMoveDistance()
     {
         float baseValue = maxCombatMoveDistance;
-        return Mathf.Max(0f, ApplyPercent(baseValue, modifiers.maxCombatMovePercent));
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0f, ApplyPercent(baseValue, total.maxCombatMovePercent));
     }
 
     public float ApplyDamage(float baseDamage)
     {
-        float scaled = ApplyPercent(baseDamage, modifiers.abilityDamagePercent);
+        StatModifiers total = Modifiers;
+        float scaled = ApplyPercent(baseDamage, total.abilityDamagePercent);
         return Mathf.Max(0f, scaled);
     }
 
     public float ApplyBlock(float baseBlock)
     {
-        return Mathf.Max(0f, baseBlock + modifiers.blockFlat);
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0f, baseBlock + total.blockFlat);
     }
 
     public float ApplyHeal(float baseHeal)
     {
-        return Mathf.Max(0f, baseHeal + modifiers.healFlat);
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0f, baseHeal + total.healFlat);
     }
 
     public float ApplyAbilityRange(float baseRange)
     {
-        return Mathf.Max(0f, ApplyPercent(baseRange, modifiers.abilityRangePercent));
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0f, ApplyPercent(baseRange, total.abilityRangePercent));
     }
 
     public float ApplyAoeSize(float baseValue)
     {
-        return Mathf.Max(0f, ApplyPercent(baseValue, modifiers.aoeSizePercent));
+        StatModifiers total = Modifiers;
+        return Mathf.Max(0f, ApplyPercent(baseValue, total.aoeSizePercent));
+    }
+
+    public static StatModifiers AddModifiers(StatModifiers a, StatModifiers b)
+    {
+        return new StatModifiers
+        {
+            maxHealthFlat = a.maxHealthFlat + b.maxHealthFlat,
+            blockFlat = a.blockFlat + b.blockFlat,
+            healFlat = a.healFlat + b.healFlat,
+            baseCoinsFlat = a.baseCoinsFlat + b.baseCoinsFlat,
+            carryoverCoinsFlat = a.carryoverCoinsFlat + b.carryoverCoinsFlat,
+            abilityDamagePercent = a.abilityDamagePercent + b.abilityDamagePercent,
+            abilityRangePercent = a.abilityRangePercent + b.abilityRangePercent,
+            aoeSizePercent = a.aoeSizePercent + b.aoeSizePercent,
+            maxCombatMovePercent = a.maxCombatMovePercent + b.maxCombatMovePercent
+        };
     }
 
     private static float ApplyPercent(float baseValue, float percent)

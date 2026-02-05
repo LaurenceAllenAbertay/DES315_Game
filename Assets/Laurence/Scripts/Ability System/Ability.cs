@@ -52,23 +52,23 @@ public class Ability : ScriptableObject
     /// <summary>
     /// Execute this ability on a single target
     /// </summary>
-    public void Execute(Player caster, Enemy target)
+    public void Execute(Player caster, Unit target)
     {
         AbilityExecutionContext context = new AbilityExecutionContext(caster);
         context.CurrentTarget = target;
 
         ExecuteEffects(context);
 
-        if (context.EnemyWasHit)
+        if (context.EnemyWasHit && target is Enemy enemy)
         {
-            TriggerCombat(target);
+            TriggerCombat(enemy);
         }
     }
 
     /// <summary>
     /// Execute this ability on multiple targets
     /// </summary>
-    public void Execute(Player caster, List<Enemy> targets)
+    public void Execute(Player caster, List<Unit> targets)
     {
         if (targets == null || targets.Count == 0)
         {
@@ -80,14 +80,14 @@ public class Ability : ScriptableObject
 
         bool anyEnemyHit = false;
 
-        foreach (Enemy target in targets)
+        foreach (Unit target in targets)
         {
             AbilityExecutionContext context = new AbilityExecutionContext(caster);
             context.CurrentTarget = target;
             
             ExecuteEffects(context);
 
-            if (context.EnemyWasHit)
+            if (context.EnemyWasHit && target is Enemy)
             {
                 anyEnemyHit = true;
             }
@@ -98,7 +98,10 @@ public class Ability : ScriptableObject
             // Trigger combat with targets
             foreach (var target in targets)
             {
-                TriggerCombat(target);   
+                if (target is Enemy enemy)
+                {
+                    TriggerCombat(enemy);
+                }
             }
         }
     }

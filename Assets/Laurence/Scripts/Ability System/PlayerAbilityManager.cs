@@ -17,7 +17,7 @@ public class PlayerAbilityManager : MonoBehaviour
     [SerializeField] private Player player;
     [SerializeField] private AbilityTargeting targetingSystem;
 
-    private const float ABILITY_COOLDOWN = 3.0f;
+    private const float ABILITY_COOLDOWN = 1.0f;
 
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
@@ -48,6 +48,11 @@ public class PlayerAbilityManager : MonoBehaviour
             ability2Action = playerMap.FindAction("Ability2");
             ability3Action = playerMap.FindAction("Ability3");
             cancelAction = playerMap.FindAction("CancelAbility");
+        }
+
+        for (int i = 0; i < cooldownTimers.Length; i++)
+        {
+            cooldownTimers[i] = 0f;
         }
     }
 

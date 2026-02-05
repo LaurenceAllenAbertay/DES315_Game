@@ -9,7 +9,7 @@ public class DamageEffect : AbilityEffect
 {
     [Header("Damage Settings")]
     [Tooltip("Base damage before modifiers")]
-    public int baseDamage = 10;
+    public float baseDamage = 10f;
 
     public override void Execute(AbilityExecutionContext context)
     {
@@ -19,7 +19,7 @@ public class DamageEffect : AbilityEffect
             modifiedBase = StatsManager.Instance.ApplyDamage(baseDamage);
         }
 
-        int finalDamage = Mathf.RoundToInt(modifiedBase * context.AccumulatedMultiplier);
+        float finalDamage = modifiedBase * context.AccumulatedMultiplier;
 
         if (targetSelf)
         {
@@ -31,11 +31,14 @@ public class DamageEffect : AbilityEffect
         }
         else
         {
-            // Damage the enemy target
+            // Damage the target
             if (context.CurrentTarget != null)
             {
                 context.CurrentTarget.TakeDamage(finalDamage);
-                context.EnemyWasHit = true;
+                if (context.CurrentTarget is Enemy)
+                {
+                    context.EnemyWasHit = true;
+                }
                 // Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }

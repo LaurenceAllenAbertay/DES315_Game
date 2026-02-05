@@ -7,30 +7,30 @@ using UnityEngine;
 public abstract class Unit : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] protected int maxHealth;
-    [SerializeField] protected int currentHealth;
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected float currentHealth;
 
     [Header("Block")]
-    [SerializeField] protected int currentBlock = 0;
+    [SerializeField] protected float currentBlock = 0f;
 
     [Header("Debug")]
     [SerializeField] protected bool debugMode = true;
 
     // Events
-    public delegate void HealthChanged(int current, int max);
+    public delegate void HealthChanged(float current, float max);
     public event HealthChanged OnHealthChanged;
 
-    public delegate void BlockChanged(int current);
+    public delegate void BlockChanged(float current);
     public event BlockChanged OnBlockChanged;
 
     public delegate void UnitDied(Unit unit);
     public event UnitDied OnDied;
 
     // Properties
-    public int MaxHealth => maxHealth;
-    public int CurrentHealth => currentHealth;
-    public int CurrentBlock => currentBlock;
-    public bool IsDead => currentHealth <= 0;
+    public float MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
+    public float CurrentBlock => currentBlock;
+    public bool IsDead => currentHealth <= 0f;
 
     protected virtual void Awake()
     {
@@ -41,16 +41,16 @@ public abstract class Unit : MonoBehaviour
     /// Deal damage to the unit
     /// Block absorbs damage first
     /// </summary>
-    public virtual void TakeDamage(int amount)
+    public virtual void TakeDamage(float amount)
     {
-        if (amount <= 0) return;
+        if (amount <= 0f) return;
 
-        int remainingDamage = amount;
+        float remainingDamage = amount;
 
         // Block absorbs damage first
-        if (currentBlock > 0)
+        if (currentBlock > 0f)
         {
-            int blockedDamage = Mathf.Min(currentBlock, remainingDamage);
+            float blockedDamage = Mathf.Min(currentBlock, remainingDamage);
             currentBlock -= blockedDamage;
             remainingDamage -= blockedDamage;
 
@@ -59,15 +59,15 @@ public abstract class Unit : MonoBehaviour
         }
 
         // Apply remaining damage to health
-        if (remainingDamage > 0)
+        if (remainingDamage > 0f)
         {
             currentHealth -= remainingDamage;
-            currentHealth = Mathf.Max(0, currentHealth);
+            currentHealth = Mathf.Max(0f, currentHealth);
 
             if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} took {remainingDamage} damage. Health: {currentHealth}/{maxHealth}");
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
-            if (currentHealth <= 0)
+            if (currentHealth <= 0f)
             {
                 Die();
             }
@@ -77,16 +77,16 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Heal the unit
     /// </summary>
-    public virtual void Heal(int amount)
+    public virtual void Heal(float amount)
     {
-        if (amount <= 0) return;
+        if (amount <= 0f) return;
 
-        int previousHealth = currentHealth;
+        float previousHealth = currentHealth;
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
 
-        int actualHeal = currentHealth - previousHealth;
+        float actualHeal = currentHealth - previousHealth;
 
-        if (actualHeal > 0)
+        if (actualHeal > 0f)
         {
             if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} healed for {actualHeal}. Health: {currentHealth}/{maxHealth}");
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
@@ -96,9 +96,9 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Add block to the unit
     /// </summary>
-    public virtual void AddBlock(int amount)
+    public virtual void AddBlock(float amount)
     {
-        if (amount <= 0) return;
+        if (amount <= 0f) return;
 
         currentBlock += amount;
         if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} added {amount} block. Total block: {currentBlock}");
@@ -110,10 +110,10 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void ClearBlock()
     {
-        if (currentBlock > 0)
+        if (currentBlock > 0f)
         {
             if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} block cleared (was {currentBlock})");
-            currentBlock = 0;
+            currentBlock = 0f;
             OnBlockChanged?.Invoke(currentBlock);
         }
     }
@@ -121,9 +121,9 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Set max health and optionally adjust current health
     /// </summary>
-    public virtual void SetMaxHealth(int newMax, bool adjustCurrentHealth = true)
+    public virtual void SetMaxHealth(float newMax, bool adjustCurrentHealth = true)
     {
-        maxHealth = Mathf.Max(1, newMax);
+        maxHealth = Mathf.Max(1f, newMax);
 
         if (adjustCurrentHealth)
         {
@@ -145,8 +145,8 @@ public abstract class Unit : MonoBehaviour
     protected virtual void OnValidate()
     {
         // Keep values within valid ranges in editor
-        maxHealth = Mathf.Max(1, maxHealth);
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        currentBlock = Mathf.Max(0, currentBlock);
+        maxHealth = Mathf.Max(1f, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        currentBlock = Mathf.Max(0f, currentBlock);
     }
 }

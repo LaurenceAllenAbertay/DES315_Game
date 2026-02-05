@@ -10,7 +10,7 @@ public class BlockEffect : AbilityEffect
 {
     [Header("Block Settings")]
     [Tooltip("Base block amount before modifiers")]
-    public int baseBlockAmount = 15;
+    public float baseBlockAmount = 15f;
 
     public override void Execute(AbilityExecutionContext context)
     {
@@ -21,7 +21,7 @@ public class BlockEffect : AbilityEffect
             modifiedBase = StatsManager.Instance.ApplyBlock(baseBlockAmount);
         }
 
-        int finalBlock = Mathf.RoundToInt(modifiedBase * context.AccumulatedMultiplier);
+        float finalBlock = modifiedBase * context.AccumulatedMultiplier;
         
         if (context.Caster != null)
         {

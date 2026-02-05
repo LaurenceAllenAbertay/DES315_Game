@@ -19,8 +19,8 @@ public enum TargetingResultType
 public struct TargetingResult
 {
     public TargetingResultType type;
-    public Enemy singleTarget;
-    public List<Enemy> multipleTargets;
+    public Unit singleTarget;
+    public List<Unit> multipleTargets;
     public Vector3 targetPoint;
 }
 
@@ -34,7 +34,7 @@ public class AbilityTargeting : MonoBehaviour
     public InputActionAsset inputActions;
 
     [Header("Targeting Settings")]
-    [Tooltip("Layer for enemies")]
+    [Tooltip("Layer for targetable units")]
     public LayerMask enemyLayer = 1 << 8;
     
     [Tooltip("Layer for ground for AOE placement")]
@@ -42,6 +42,9 @@ public class AbilityTargeting : MonoBehaviour
     
     [Tooltip("Layers that block point-and-click targeting (line of sight)")]
     public LayerMask targetBlockerLayer = ~0;
+
+    [Tooltip("Layer for props/destructibles")]
+    public LayerMask propLayer = 1 << 9;
     
     [Header("Visualizers")] 
     private ConeTargetingVisualizer coneVisualizer;
@@ -74,8 +77,8 @@ public class AbilityTargeting : MonoBehaviour
     private InputAction pointerPositionAction;
 
     // Tracking
-    private Enemy hoveredEnemy;
-    private bool hoveredEnemyInRange;
+    private Unit hoveredUnit;
+    private bool hoveredUnitInRange;
 
     public bool IsTargeting => isTargeting;
 
@@ -275,20 +278,22 @@ public class AbilityTargeting : MonoBehaviour
     {
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
-        // Raycast to find enemies, but use targetBlockerLayer to allow blocking
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, enemyLayer | targetBlockerLayer))
+        LayerMask targetMask = enemyLayer | propLayer;
+
+        // Raycast to find targets, but use targetBlockerLayer to allow blocking
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f, targetMask | targetBlockerLayer))
         {
             // Check if we hit an enemy
-            Enemy enemy = hit.collider.GetComponentInParent<Enemy>();
+            Unit unit = hit.collider.GetComponentInParent<Unit>();
 
-            if (enemy != null)
+            if (unit != null && unit.GetComponent<Player>() == null)
             {
                 // Check if in range
-                float distance = Vector3.Distance(currentCaster.transform.position, enemy.transform.position);
+                float distance = Vector3.Distance(currentCaster.transform.position, unit.transform.position);
                 bool inRange = distance <= currentAbilityRange;
 
                 // Check line of sight
-                bool hasLineOfSight = CheckLineOfSight(currentCaster.transform.position, enemy.transform.position);
+                bool hasLineOfSight = CheckLineOfSight(currentCaster.transform.position, unit.transform.position);
 
                 // Only consider valid if both in range and has line of sight
                 bool isValidTarget = inRange && hasLineOfSight;
@@ -296,37 +301,37 @@ public class AbilityTargeting : MonoBehaviour
                 if (isValidTarget)
                 {
                     // Valid target - highlight it
-                    if (hoveredEnemy != enemy)
+                    if (hoveredUnit != unit)
                     {
-                        hoveredEnemy = enemy;
-                        hoveredEnemyInRange = true;
-                        SetHighlight(enemy);
+                        hoveredUnit = unit;
+                        hoveredUnitInRange = true;
+                        SetHighlight(unit);
 
                         if (debugMode)
                         {
-                            Debug.Log($"[AbilityTargeting] Hovering valid target: {enemy.name} (distance: {distance:F1})");
+                            Debug.Log($"[AbilityTargeting] Hovering valid target: {unit.name} (distance: {distance:F1})");
                         }
                     }
                 }
                 else
                 {
                     // Out of range or no line of sight - clear highlight
-                    if (hoveredEnemy != null)
+                    if (hoveredUnit != null)
                     {
                         ClearHighlight();
 
                         if (debugMode)
                         {
                             string reason = !inRange ? "out of range" : "no line of sight";
-                            Debug.Log($"[AbilityTargeting] Target {enemy.name} is {reason}");
+                            Debug.Log($"[AbilityTargeting] Target {unit.name} is {reason}");
                         }
                     }
                 }
             }
             else
             {
-                // Hit something that's not an enemy - clear highlight
-                if (hoveredEnemy != null)
+                // Hit something that's not a unit - clear highlight
+                if (hoveredUnit != null)
                 {
                     ClearHighlight();
                 }
@@ -335,7 +340,7 @@ public class AbilityTargeting : MonoBehaviour
         else
         {
             // Hit nothing - clear highlight
-            if (hoveredEnemy != null)
+            if (hoveredUnit != null)
             {
                 ClearHighlight();
             }
@@ -346,17 +351,14 @@ public class AbilityTargeting : MonoBehaviour
     {
         if (currentCaster == null || coneVisualizer == null) return;
 
-        // Raycast to find world point under cursor
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundLayer | enemyLayer))
+        Vector3 casterPos = currentCaster.transform.position;
+        Plane plane = new Plane(Vector3.up, casterPos);
+        if (plane.Raycast(ray, out float distance))
         {
-            Vector3 casterPos = currentCaster.transform.position;
-            Vector3 targetPoint = hit.point;
-
-            // Calculate direction from caster to cursor point
+            Vector3 targetPoint = ray.GetPoint(distance);
             Vector3 direction = targetPoint - casterPos;
-            direction.y = 0; // Keep it horizontal
+            direction.y = 0;
             direction.Normalize();
 
             if (direction != Vector3.zero)
@@ -422,7 +424,7 @@ public class AbilityTargeting : MonoBehaviour
     private void ConfirmPointAndClick()
     {
         // Validate we have a valid target
-        if (hoveredEnemy == null || !hoveredEnemyInRange)
+        if (hoveredUnit == null || !hoveredUnitInRange)
         {
             if (debugMode)
             {
@@ -435,9 +437,9 @@ public class AbilityTargeting : MonoBehaviour
         TargetingResult result = new TargetingResult
         {
             type = TargetingResultType.SingleTarget,
-            singleTarget = hoveredEnemy,
+            singleTarget = hoveredUnit,
             multipleTargets = null,
-            targetPoint = hoveredEnemy.transform.position
+            targetPoint = hoveredUnit.transform.position
         };
 
         CompleteTargeting(result);
@@ -450,13 +452,13 @@ public class AbilityTargeting : MonoBehaviour
         Vector3 origin = currentCaster.transform.position;
         Vector3 direction = coneVisualizer.CurrentDirection;
 
-        List<Enemy> enemies = GetEnemiesInCone(origin, direction, currentAbilityRange, currentAbilityConeAngle);
+        List<Unit> targets = GetUnitsInCone(origin, direction, currentAbilityRange, currentAbilityConeAngle);
 
         TargetingResult result = new TargetingResult
         {
             type = TargetingResultType.MultipleTargets,
             singleTarget = null,
-            multipleTargets = enemies,
+            multipleTargets = targets,
             targetPoint = origin + direction * currentAbilityRange
         };
 
@@ -468,13 +470,13 @@ public class AbilityTargeting : MonoBehaviour
         if (aoeVisualizer == null) return;
 
         Vector3 center = aoeVisualizer.CurrentPosition;
-        List<Enemy> enemies = GetEnemiesInRadius(center, currentAbilityAoeRadius);
+        List<Unit> targets = GetUnitsInRadius(center, currentAbilityAoeRadius);
 
         TargetingResult result = new TargetingResult
         {
             type = TargetingResultType.MultipleTargets,
             singleTarget = null,
-            multipleTargets = enemies,
+            multipleTargets = targets,
             targetPoint = center
         };
 
@@ -525,10 +527,10 @@ public class AbilityTargeting : MonoBehaviour
         if (Physics.Raycast(startPos, direction.normalized, out RaycastHit hit, distance, targetBlockerLayer))
         {
             // Check if we hit something that isn't the target
-            Enemy hitEnemy = hit.collider.GetComponentInParent<Enemy>();
-            if (hitEnemy == null)
+            Unit hitUnit = hit.collider.GetComponentInParent<Unit>();
+            if (hitUnit == null)
             {
-                // Hit a blocker that's not the enemy - no line of sight
+                // Hit a blocker that's not the target - no line of sight
                 return false;
             }
         }
@@ -536,63 +538,65 @@ public class AbilityTargeting : MonoBehaviour
         return true;
     }
 
-    private List<Enemy> GetEnemiesInCone(Vector3 origin, Vector3 direction, float range, float angle)
+    private List<Unit> GetUnitsInCone(Vector3 origin, Vector3 direction, float range, float angle)
     {
-        List<Enemy> enemies = new List<Enemy>();
+        List<Unit> targets = new List<Unit>();
 
-        Collider[] colliders = Physics.OverlapSphere(origin, range, enemyLayer);
+        LayerMask targetMask = enemyLayer | propLayer;
+        Collider[] colliders = Physics.OverlapSphere(origin, range, targetMask);
 
         float halfAngle = angle * 0.5f;
 
         foreach (Collider col in colliders)
         {
-            Enemy enemy = col.GetComponentInParent<Enemy>();
-            if (enemy == null) continue;
+            Unit unit = col.GetComponentInParent<Unit>();
+            if (unit == null || unit.GetComponent<Player>() != null) continue;
 
-            Vector3 toEnemy = enemy.transform.position - origin;
-            toEnemy.y = 0;
+            Vector3 toUnit = unit.transform.position - origin;
+            toUnit.y = 0;
 
-            float enemyAngle = Vector3.Angle(direction, toEnemy.normalized);
+            float unitAngle = Vector3.Angle(direction, toUnit.normalized);
 
-            if (enemyAngle <= halfAngle)
+            if (unitAngle <= halfAngle)
             {
-                enemies.Add(enemy);
+                targets.Add(unit);
             }
         }
 
-        return enemies;
+        return targets;
     }
 
-    private List<Enemy> GetEnemiesInRadius(Vector3 center, float radius)
+    private List<Unit> GetUnitsInRadius(Vector3 center, float radius)
     {
-        List<Enemy> enemies = new List<Enemy>();
+        List<Unit> targets = new List<Unit>();
 
-        Collider[] colliders = Physics.OverlapSphere(center, radius, enemyLayer);
+        LayerMask targetMask = enemyLayer | propLayer;
+        Collider[] colliders = Physics.OverlapSphere(center, radius, targetMask);
 
         foreach (Collider col in colliders)
         {
-            Enemy enemy = col.GetComponentInParent<Enemy>();
-            if (enemy != null && !enemies.Contains(enemy))
+            Unit unit = col.GetComponentInParent<Unit>();
+            if (unit != null && unit.GetComponent<Player>() == null && !targets.Contains(unit))
             {
-                enemies.Add(enemy);
+                targets.Add(unit);
             }
         }
 
-        return enemies;
+        return targets;
     }
 
-    private void SetHighlight(Enemy enemy)
+    private void SetHighlight(Unit unit)
     {
         if (targetHighlighter != null)
         {
-            targetHighlighter.SetTarget(enemy.gameObject);
+            targetHighlighter.SetTarget(unit.gameObject);
         }
     }
 
     private void ClearHighlight()
     {
-        hoveredEnemy = null;
-        hoveredEnemyInRange = false;
+        hoveredUnit = null;
+        hoveredUnitInRange = false;
 
         if (targetHighlighter != null)
         {

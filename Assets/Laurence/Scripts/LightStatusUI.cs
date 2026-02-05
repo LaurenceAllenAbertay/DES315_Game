@@ -1,4 +1,4 @@
-﻿using TMPro;
+﻿ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +8,7 @@ public class LightStatusUI : MonoBehaviour
     public PlayerController player;
     public TextMeshProUGUI statusText;
     public Image statusIndicator;
+    public Image shadowOverlay;
 
     [Header("Colors")]
     public Color lightColor = new Color(1f, 0.9f, 0.5f); 
@@ -15,8 +16,11 @@ public class LightStatusUI : MonoBehaviour
 
     [Header("Animation")]
     public float colorTransitionSpeed = 5f;
+    public float overlayTransitionSpeed = 3f;
+    public float maxShadowAlpha = 0.7f;
 
     private Color targetColor;
+    private float targetOverlayAlpha;
 
     private void Start()
     {
@@ -50,6 +54,13 @@ public class LightStatusUI : MonoBehaviour
             statusIndicator.color = Color.Lerp(statusIndicator.color, targetColor,
                                                 colorTransitionSpeed * Time.deltaTime);
         }
+
+        if (shadowOverlay != null)
+        {
+            Color currentColor = shadowOverlay.color;
+            float newAlpha = Mathf.Lerp(currentColor.a, targetOverlayAlpha, overlayTransitionSpeed * Time.deltaTime);
+            shadowOverlay.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+        }
     }
 
     private void HandleLightStateChanged(bool inLight)
@@ -70,5 +81,6 @@ public class LightStatusUI : MonoBehaviour
         }
 
         targetColor = inLight ? lightColor : shadowColor;
+        targetOverlayAlpha = inLight ? 0f : maxShadowAlpha;
     }
 }

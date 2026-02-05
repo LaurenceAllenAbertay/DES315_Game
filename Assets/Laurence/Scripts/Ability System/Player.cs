@@ -59,12 +59,28 @@ public class Player : Unit
         currentFlipChance = BASE_FLIP_CHANCE;
     }
 
+    private void OnEnable()
+    {
+        if (StatsManager.Instance != null)
+        {
+            StatsManager.Instance.OnModifiersChanged += HandleModifiersChanged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (StatsManager.Instance != null)
+        {
+            StatsManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
+        }
+    }
+
     /// <summary>
     /// Override AddBlock to only work during combat
     /// </summary>
-    public override void AddBlock(int amount)
+    public override void AddBlock(float amount)
     {
-        if (amount <= 0) return;
+        if (amount <= 0f) return;
 
         if (!isInCombat)
         {
@@ -342,7 +358,12 @@ public class Player : Unit
         // TODO: Handle player death 
     }
 
-    private int GetMaxHealth()
+    private void HandleModifiersChanged()
+    {
+        SetMaxHealth(GetMaxHealth(), true);
+    }
+
+    private float GetMaxHealth()
     {
         if (StatsManager.Instance == null)
         {

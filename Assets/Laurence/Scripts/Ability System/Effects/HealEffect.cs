@@ -9,7 +9,7 @@ public class HealEffect : AbilityEffect
 {
     [Header("Heal Settings")]
     [Tooltip("Base heal amount before modifiers")]
-    public int baseHealAmount = 20;
+    public float baseHealAmount = 20f;
 
     public override void Execute(AbilityExecutionContext context)
     {
@@ -19,7 +19,7 @@ public class HealEffect : AbilityEffect
             modifiedBase = StatsManager.Instance.ApplyHeal(baseHealAmount);
         }
 
-        int finalHeal = Mathf.RoundToInt(modifiedBase * context.AccumulatedMultiplier);
+        float finalHeal = modifiedBase * context.AccumulatedMultiplier;
 
         if (targetSelf)
         {

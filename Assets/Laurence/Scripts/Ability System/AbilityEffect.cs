@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class AbilityEffect : ScriptableObject
 {
     [Header("Targeting")]
-    [Tooltip("If true, this effect targets the caster. Otherwise targets enemies.")]
+    [Tooltip("If true, this effect targets the caster. Otherwise targets units.")]
     public bool targetSelf = false;
     
     // Execute this effect within the given context
@@ -21,7 +21,7 @@ public abstract class AbilityEffect : ScriptableObject
 public class AbilityExecutionContext
 {
     public Player Caster { get; private set; }
-    public Enemy CurrentTarget { get; set; }
+    public Unit CurrentTarget { get; set; }
     public Vector3 TargetPoint { get; set; }
     
     /// <summary>
