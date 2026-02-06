@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -66,6 +67,7 @@ public class PlayerController : MonoBehaviour
 
     private float lowVelocityTimer = 0f;
     private Vector3 lastFramePosition;
+    private bool isPointerOverUI;
 
     public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
@@ -169,6 +171,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        UpdatePointerOverUI();
         if (IsTargetingActive() && agent.hasPath)
         {
             StopMovement();
@@ -194,6 +197,10 @@ public class PlayerController : MonoBehaviour
     //Input system on move performed- EM//
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
+        if (isPointerOverUI)
+        {
+            return;
+        }
         if (!CanPlayerAct()) return;
         if (IsTargetingActive()) return;
         if (mainCamera == null) return;
@@ -388,7 +395,28 @@ public class PlayerController : MonoBehaviour
 
         return false;
     }
+        private void UpdatePointerOverUI()
+    {
+        if (EventSystem.current == null)
+        {
+            isPointerOverUI = false;
+            return;
+        }
 
+        if (Mouse.current != null)
+        {
+            isPointerOverUI = EventSystem.current.IsPointerOverGameObject();
+            return;
+        }
+
+        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        {
+            isPointerOverUI = EventSystem.current.IsPointerOverGameObject(Touchscreen.current.primaryTouch.touchId.ReadValue());
+            return;
+        }
+
+        isPointerOverUI = false;
+    }
     private void UpdateMovingState()
     {
         bool wasMoving = isMoving;
@@ -464,3 +492,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 }
+
+
+

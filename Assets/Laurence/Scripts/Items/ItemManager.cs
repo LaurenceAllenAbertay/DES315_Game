@@ -3,13 +3,19 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour
 {
+    [Header("Inventory")]
+    [SerializeField] private List<ItemDefinition> inventoryItems = new List<ItemDefinition>();
+    [SerializeField] private int maxEquipped = 5;
+
     [Header("Equipped Items")]
     [SerializeField] private List<ItemDefinition> equippedItems = new List<ItemDefinition>();
 
     private StatsManager statsManager;
     private bool modifiersApplied;
 
+    public IReadOnlyList<ItemDefinition> InventoryItems => inventoryItems;
     public IReadOnlyList<ItemDefinition> EquippedItems => equippedItems;
+    public int MaxEquipped => maxEquipped;
 
     private void Awake()
     {
@@ -23,7 +29,12 @@ public class ItemManager : MonoBehaviour
 
     public bool Equip(ItemDefinition item)
     {
-        if (item == null || equippedItems.Contains(item))
+        if (item == null)
+        {
+            return false;
+        }
+
+        if (equippedItems.Count >= maxEquipped)
         {
             return false;
         }
@@ -58,6 +69,27 @@ public class ItemManager : MonoBehaviour
 
         equippedItems.Clear();
         ApplyEquippedModifiers();
+    }
+
+    public bool AddItem(ItemDefinition item)
+    {
+        if (item == null)
+        {
+            return false;
+        }
+
+        inventoryItems.Add(item);
+        return true;
+    }
+
+    public bool RemoveItem(ItemDefinition item)
+    {
+        if (item == null)
+        {
+            return false;
+        }
+
+        return inventoryItems.Remove(item);
     }
 
     private void ApplyEquippedModifiers()
