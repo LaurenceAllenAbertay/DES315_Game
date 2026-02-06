@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(SphereCollider))]
 public class EnemyVisionCone : MonoBehaviour
 {
     [Header("Vision Settings")]
@@ -17,18 +17,12 @@ public class EnemyVisionCone : MonoBehaviour
     [Header("Debug")]
     public bool debugMode = true;
 
-    [Header("Detection Settings")]
-    [Tooltip("How often to update the collider mesh (seconds). Lower = more accurate but more expensive")]
-    public float colliderUpdateInterval = 0.2f;
-
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
-    private MeshCollider meshCollider;
+    private SphereCollider visionTrigger;
     private Mesh visionMesh;
-    private Mesh colliderMesh;
     private bool playerDetected = false;
     private Material instancedMaterial;
-    private float lastColliderUpdateTime;
 
     // Cache for player detection
     private Transform detectedPlayerTransform;
@@ -40,27 +34,21 @@ public class EnemyVisionCone : MonoBehaviour
     {
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
-        meshCollider = GetComponent<MeshCollider>();
+        visionTrigger = GetComponent<SphereCollider>();
 
         // Visual mesh (updated every frame for obstacle occlusion visuals)
         visionMesh = new Mesh();
         visionMesh.name = "Vision Cone Visual";
         meshFilter.mesh = visionMesh;
 
-        // Collider mesh (updated less frequently, uses full range without obstacles)
-        colliderMesh = new Mesh();
-        colliderMesh.name = "Vision Cone Collider";
-
-        // Setup the mesh collider as a trigger
-        meshCollider.sharedMesh = colliderMesh;
-        meshCollider.convex = true;
-        meshCollider.isTrigger = true;
+        // Setup the trigger used for nearby detection only
+        visionTrigger.isTrigger = true;
+        visionTrigger.center = Vector3.zero;
+        visionTrigger.radius = visionRange;
 
         SetupMaterial();
         meshRenderer.enabled = false;
 
-        // Build initial collider
-        UpdateColliderMesh();
     }
 
     private void SetupMaterial()
@@ -105,13 +93,7 @@ public class EnemyVisionCone : MonoBehaviour
     {
         // Update visual mesh every frame (shows obstacle occlusion)
         UpdateVisualMesh();
-
-        // Update collider mesh less frequently
-        if (Time.time - lastColliderUpdateTime > colliderUpdateInterval)
-        {
-            UpdateColliderMesh();
-            lastColliderUpdateTime = Time.time;
-        }
+        UpdateTriggerRadius();
     }
 
     /// <summary>
@@ -157,43 +139,12 @@ public class EnemyVisionCone : MonoBehaviour
         visionMesh.RecalculateNormals();
     }
 
-    /// <summary>
-    /// Collider mesh uses full range (no obstacle checking) - updated infrequently
-    /// </summary>
-    private void UpdateColliderMesh()
+    private void UpdateTriggerRadius()
     {
-        Vector3[] vertices = new Vector3[visionResolution + 2];
-        int[] triangles = new int[visionResolution * 3];
-
-        vertices[0] = new Vector3(0, groundOffset, 0);
-
-        float angleStep = visionAngle / visionResolution;
-        float currentAngle = -visionAngle / 2f;
-
-        for (int i = 0; i <= visionResolution; i++)
+        if (visionTrigger != null)
         {
-            float rad = currentAngle * Mathf.Deg2Rad;
-            Vector3 direction = new Vector3(Mathf.Sin(rad), 0, Mathf.Cos(rad));
-            vertices[i + 1] = direction * visionRange + new Vector3(0, groundOffset, 0);
-            currentAngle += angleStep;
+            visionTrigger.radius = visionRange;
         }
-
-        for (int i = 0; i < visionResolution; i++)
-        {
-            triangles[i * 3] = 0;
-            triangles[i * 3 + 1] = i + 1;
-            triangles[i * 3 + 2] = i + 2;
-        }
-
-        colliderMesh.Clear();
-        colliderMesh.vertices = vertices;
-        colliderMesh.triangles = triangles;
-        colliderMesh.RecalculateNormals();
-        colliderMesh.RecalculateBounds();
-
-        // Reassign to trigger collider update
-        meshCollider.sharedMesh = null;
-        meshCollider.sharedMesh = colliderMesh;
     }
 
     /// <summary>
@@ -238,6 +189,20 @@ public class EnemyVisionCone : MonoBehaviour
 
         Vector3 directionToPlayer = detectedPlayerTransform.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
+        Vector3 directionFlat = new Vector3(directionToPlayer.x, 0f, directionToPlayer.z);
+
+        if (directionFlat.sqrMagnitude < 0.0001f)
+        {
+            playerDetected = false;
+            return;
+        }
+
+        float angleToPlayer = Vector3.Angle(transform.forward, directionFlat.normalized);
+        if (angleToPlayer > visionAngle * 0.5f)
+        {
+            playerDetected = false;
+            return;
+        }
 
         // Single raycast to check for obstacles between enemy and player
         if (Physics.Raycast(transform.position, directionToPlayer.normalized, out RaycastHit hit, distanceToPlayer, obstacleMask | playerLayer))
@@ -289,10 +254,6 @@ public class EnemyVisionCone : MonoBehaviour
             Destroy(visionMesh);
         }
 
-        if (colliderMesh != null)
-        {
-            Destroy(colliderMesh);
-        }
     }
 
     private void OnDrawGizmosSelected()

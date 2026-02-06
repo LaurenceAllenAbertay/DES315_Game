@@ -77,7 +77,7 @@ public class HealthUI : MonoBehaviour
         Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, unitLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance, unitLayer, QueryTriggerInteraction.Ignore))
         {
             Unit unit = hit.collider.GetComponentInParent<Unit>();
             if (unit != null && (!ignorePlayer || unit.GetComponent<Player>() == null))

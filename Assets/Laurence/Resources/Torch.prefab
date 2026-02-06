@@ -150,13 +150,16 @@ MonoBehaviour:
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 256
   shadowRangeMultiplier: 1.2
   shadowLightType: 2
   shadowResolutionTier: 2
   shadowSpotAngle: 170
   shadowInnerSpotAngle: 120
   castShadows: 1
-  drawDebugRays: 0
+  drawDebugRays: 1
 --- !u!1 &8376569782232312284
 GameObject:
   m_ObjectHideFlags: 0
