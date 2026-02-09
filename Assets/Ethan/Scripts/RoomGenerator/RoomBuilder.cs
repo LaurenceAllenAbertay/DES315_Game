@@ -112,13 +112,26 @@ public class RoomBuilder : MonoBehaviour
             BakeNavMesh();
         }
 
-        //Setup fog of war if available//
-        SetupFogOfWar();
+        //Spawn doors if available//
+        SpawnDoors();
+
+        //Setup fog of war if available after short delay//
+        StartCoroutine(DelayedFogOfWar());
 
         if(showDebugLogs)
         {
             Debug.Log($"[RoomBuilder] Room building complete!");
         }
+    }
+
+    //Delayed fog setup to ensure doors are fully created first -EM//
+    private System.Collections.IEnumerator DelayedFogOfWar()
+    {
+        //Wait for 2 frames for doors to finish//
+        yield return null;
+        yield return null;
+
+        SetupFogOfWar();
     }
 
     //Try to setup fog of war automatically after building -EM//
@@ -134,6 +147,20 @@ public class RoomBuilder : MonoBehaviour
                 Debug.Log("[RoomBuilder] Triggered shader fog of war setup");
             }
             return;
+        }
+    }
+
+    //Try to spawn doors automatically after building -EM//
+    private void SpawnDoors()
+    {
+        DoorSpawner doorSpawner = FindAnyObjectByType<DoorSpawner>();
+        if(doorSpawner != null)
+        {
+            doorSpawner.SpawnDoors();
+            if(showDebugLogs)
+            {
+                Debug.Log("[RoomBuilder] Triggered door spawning");
+            }
         }
     }
 

@@ -1474,7 +1474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &245225323
 Transform:
   m_ObjectHideFlags: 0
@@ -1980,7 +1980,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &285508514
 Transform:
   m_ObjectHideFlags: 0
@@ -4794,7 +4794,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &724920495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4906,7 +4906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &740575467
 Transform:
   m_ObjectHideFlags: 0
@@ -9499,7 +9499,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1512805849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10745,7 +10745,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!195 &1682862678
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -11611,13 +11611,15 @@ GameObject:
   - component: {fileID: 1829371481}
   - component: {fileID: 1829371482}
   - component: {fileID: 1829371478}
+  - component: {fileID: 1829371483}
+  - component: {fileID: 1829371484}
   m_Layer: 0
   m_Name: DungeonGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1829371478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11663,7 +11665,7 @@ MonoBehaviour:
   occupationPercentage: 0.6
   roomTypeCount: 4
   generateOnStart: 1
-  showDebugLogs: 1
+  showDebugLogs: 0
 --- !u!4 &1829371480
 Transform:
   m_ObjectHideFlags: 0
@@ -11703,7 +11705,7 @@ MonoBehaviour:
   doorwayWidth: 2
   autoBakeNavMesh: 1
   roomsParent: {fileID: 0}
-  showDebugLogs: 1
+  showDebugLogs: 0
 --- !u!114 &1829371482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11717,6 +11719,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   savePath: Assets/Ethan/Scripts/RoomGenerator/Prefab
+--- !u!114 &1829371483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829371477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1abd7b68a81c9a04ea2f5c57e016af76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  darknessColor: {r: 0.05, g: 0.05, b: 0.1, a: 1}
+  darknessStrength: 0.95
+  useParticleFog: 0
+  fogParticlePrefab: {fileID: 0}
+  particleDensity: 30
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  roomsParent: {fileID: 0}
+  autoSetupOnStart: 1
+  showDebugLogs: 0
+--- !u!114 &1829371484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1829371477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d8f3ccd3a16fe4408ff4838c6551dac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorPrefab: {fileID: 0}
+  doorWidth: 2
+  doorHeight: 3
+  doorThickness: 0.2
+  doorMaterial: {fileID: 2100000, guid: 2c9949cacea37ae4ab124619aec5730d, type: 2}
+  frameMaterial: {fileID: 2100000, guid: d9d2c59b12928b844a42657513ca9bf6, type: 2}
+  roomBuilder: {fileID: 0}
+  doorsParent: {fileID: 0}
+  showDebugLogs: 1
 --- !u!1 &1848758212
 GameObject:
   m_ObjectHideFlags: 0

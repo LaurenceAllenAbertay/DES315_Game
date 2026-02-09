@@ -25,7 +25,7 @@ public class DynamicFloorProps : MonoBehaviour
     public int maxDecorations = 8;
 
     [Header("Debug")]
-    public bool showDebuLogs = false;
+    public bool showDebugLogs = false;
 
     private bool hasSpawned = false;
 
@@ -67,7 +67,7 @@ public class DynamicFloorProps : MonoBehaviour
         }
         else
         {
-            if(showDebuLogs)
+            if(showDebugLogs)
             {
                 Debug.Log($"[DynamicFloorProps] {gameObject.name} - Scale too small, not spawning props");
             }
@@ -87,7 +87,7 @@ public class DynamicFloorProps : MonoBehaviour
         int pillarCount = Mathf.RoundToInt(Mathf.Lerp(minPillars,maxPillars, roomArea / 100f));
         pillarCount = Mathf.Clamp(pillarCount, minPillars, maxPillars);
 
-        if(showDebuLogs)
+        if(showDebugLogs)
         {
             Debug.Log($"[DynamicFloorProps] Spawning {pillarCount} pillars (area: {roomArea})");
         }
@@ -136,7 +136,7 @@ public class DynamicFloorProps : MonoBehaviour
                 GameObject pillar = Instantiate(pillarPrefab, raisedPos, Quaternion.identity, transform.parent);
                 pillar.name = $"Pillar_{pillarPositions.Count}_{gameObject.name}";
 
-                if (showDebuLogs)
+                if (showDebugLogs)
                 {
                     Debug.Log($"[DynamicFloorProps] Spawned pillar at world pos {worldPos}");
                 }
