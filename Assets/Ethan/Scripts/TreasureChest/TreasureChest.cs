@@ -258,6 +258,6 @@ public class TreasureChest : MonoBehaviour
 
         //Draw state indicator//
         Gizmos.color = hasBeenOpened ? Color.red : Color.green;
-        Gizmos.DrawWireCube(transform.position = Vector3.up * 2f, Vector3.one * 0.5f);
+        Gizmos.DrawWireCube(transform.position + Vector3.up * 2f, Vector3.one * 0.5f);
     }
 }
