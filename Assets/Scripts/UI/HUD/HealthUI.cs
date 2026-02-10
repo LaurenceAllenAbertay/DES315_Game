@@ -82,6 +82,12 @@ public class HealthUI : MonoBehaviour
             Unit unit = hit.collider.GetComponentInParent<Unit>();
             if (unit != null && (!ignorePlayer || unit.GetComponent<Player>() == null))
             {
+                if (IsUnitHiddenFromPlayer(unit))
+                {
+                    ClearHoveredUnit();
+                    return;
+                }
+
                 if (unit != hoveredUnit)
                 {
                     SetHoveredUnit(unit);
@@ -147,5 +153,12 @@ public class HealthUI : MonoBehaviour
         {
             root.SetActive(isActive);
         }
+    }
+
+    private bool IsUnitHiddenFromPlayer(Unit unit)
+    {
+        if (unit == null) return false;
+        Enemy enemy = unit.GetComponent<Enemy>();
+        return enemy != null && enemy.IsHiddenFromPlayer;
     }
 }

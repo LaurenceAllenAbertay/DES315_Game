@@ -288,6 +288,15 @@ public class AbilityTargeting : MonoBehaviour
 
             if (unit != null && unit.GetComponent<Player>() == null)
             {
+                if (IsUnitHiddenFromPlayer(unit))
+                {
+                    if (hoveredUnit != null)
+                    {
+                        ClearHighlight();
+                    }
+                    return;
+                }
+
                 // Check if in range
                 float distance = Vector3.Distance(currentCaster.transform.position, unit.transform.position);
                 bool inRange = distance <= currentAbilityRange;
@@ -431,6 +440,12 @@ public class AbilityTargeting : MonoBehaviour
                 Debug.Log("[AbilityTargeting] No valid target to confirm");
             }
             // Do nothing - don't cancel, just ignore the click
+            return;
+        }
+
+        if (IsUnitHiddenFromPlayer(hoveredUnit))
+        {
+            ClearHighlight();
             return;
         }
 
@@ -608,5 +623,12 @@ public class AbilityTargeting : MonoBehaviour
     {
         if (coneVisualizer != null) coneVisualizer.Hide();
         if (aoeVisualizer != null) aoeVisualizer.Hide();
+    }
+
+    private bool IsUnitHiddenFromPlayer(Unit unit)
+    {
+        if (unit == null) return false;
+        Enemy enemy = unit.GetComponent<Enemy>();
+        return enemy != null && enemy.IsHiddenFromPlayer;
     }
 }

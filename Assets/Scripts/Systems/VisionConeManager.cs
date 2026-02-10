@@ -46,7 +46,14 @@ public class VisionConeManager : MonoBehaviour
             {
                 if (cone != null)
                 {
-                    cone.SetVisible(isPressed);
+                    if (isPressed && IsConeAllowedToShow(cone))
+                    {
+                        cone.SetVisible(true);
+                    }
+                    else
+                    {
+                        cone.SetVisible(false);
+                    }
                 }
             }
         }
@@ -55,5 +62,11 @@ public class VisionConeManager : MonoBehaviour
     public void RefreshVisionCones()
     {
         visionCones = FindObjectsByType<EnemyVisionCone>(FindObjectsSortMode.None);
+    }
+
+    private bool IsConeAllowedToShow(EnemyVisionCone cone)
+    {
+        Enemy enemy = cone.GetComponentInParent<Enemy>();
+        return enemy == null || !enemy.IsHiddenFromPlayer;
     }
 }

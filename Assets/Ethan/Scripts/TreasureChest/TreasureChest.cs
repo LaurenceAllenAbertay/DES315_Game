@@ -35,8 +35,11 @@ public class TreasureChest : MonoBehaviour
     [Tooltip("Optional: Animator for chest opening animation")]
     public Animator chestAnimator;
 
+    [Header("Audio")]
     [Tooltip("Optional: AudioClip for chest opening sound")]
     public AudioClip openSound;
+    [Tooltip("Optional: AudioSource to play chest sounds")]
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -45,7 +48,6 @@ public class TreasureChest : MonoBehaviour
     public bool debugMode = true;
 
     private InputAction interactionAction;
-    private AudioSource audioSource;
     private bool playerInRange = false;
 
     private void Awake()
@@ -58,7 +60,11 @@ public class TreasureChest : MonoBehaviour
         }
 
         //Get or create audio source//
-        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
+
         if (audioSource == null && openSound != null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();

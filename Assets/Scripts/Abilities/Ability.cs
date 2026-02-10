@@ -46,6 +46,13 @@ public class Ability : ScriptableObject
     [Tooltip("Prefab to spawn when the ability is executed")]
     public GameObject visualEffectPrefab;
 
+    [Header("Audio")]
+    [Tooltip("Sound played instantly when the ability is cast")]
+    public AudioClip castSound;
+
+    [Tooltip("Delay before effects are applied after casting")]
+    public float effectDelay = 0f;
+
     [Tooltip("Effects are executed in order. Modifiers affect subsequent effects.")]
     public List<AbilityEffect> effects = new List<AbilityEffect>();
     

@@ -97,10 +97,15 @@ public class ItemManager : MonoBehaviour
         if (statsManager == null)
         {
             statsManager = StatsManager.Instance;
+            if (statsManager == null)
+            {
+                statsManager = FindFirstObjectByType<StatsManager>();
+            }
         }
 
         if (statsManager == null)
         {
+            Debug.LogWarning("[ItemManager] No StatsManager found; item modifiers not applied.");
             return;
         }
 
@@ -122,7 +127,7 @@ public class ItemManager : MonoBehaviour
 
     private void OnEnable()
     {
-        if (modifiersApplied)
+        if (modifiersApplied || equippedItems.Count > 0)
         {
             ApplyEquippedModifiers();
         }

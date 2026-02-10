@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// Enemy-specific functionality built on top of Unit base class
@@ -8,6 +10,22 @@ public class Enemy : Unit
 {
     [Header("Vision Cone")]
     public EnemyVisionCone visionCone;
+
+    [Header("Shadow Visibility")]
+    [Tooltip("Assign the visual model root (do not assign the enemy root).")]
+    [SerializeField] private GameObject modelRoot;
+    [SerializeField] private Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
+    [Tooltip("If the player is within this distance, the enemy is visible even in shadow.")]
+    [SerializeField] private float revealDistance = 3f;
+    [Tooltip("Seconds between visibility checks (0 = every frame).")]
+    [SerializeField] private float visibilityCheckInterval = 0.1f;
+
+    private PlayerController playerController;
+    private Renderer[] modelRenderers;
+    private bool isModelVisible = true;
+    private float visibilityTimer;
+
+    public bool IsHiddenFromPlayer => !isModelVisible;
 
     protected override void Awake()
     {
@@ -26,6 +44,32 @@ public class Enemy : Unit
 
         // Subscribe to player detection
         visionCone.OnPlayerDetected += OnPlayerEnteredVisionCone;
+
+        CacheModelRenderers();
+    }
+
+    private void Start()
+    {
+        if (playerController == null)
+        {
+            playerController = FindFirstObjectByType<PlayerController>();
+        }
+        UpdateModelVisibility();
+    }
+
+    private void Update()
+    {
+        if (visibilityCheckInterval > 0f)
+        {
+            visibilityTimer -= Time.deltaTime;
+            if (visibilityTimer > 0f)
+            {
+                return;
+            }
+            visibilityTimer = visibilityCheckInterval;
+        }
+
+        UpdateModelVisibility();
     }
 
     private void OnPlayerEnteredVisionCone()
@@ -46,6 +90,88 @@ public class Enemy : Unit
         if (visionCone != null)
         {
             visionCone.OnPlayerDetected -= OnPlayerEnteredVisionCone;
+        }
+    }
+
+    private void CacheModelRenderers()
+    {
+        if (modelRoot != null)
+        {
+            modelRenderers = modelRoot.GetComponentsInChildren<Renderer>(true);
+            return;
+        }
+
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+        List<Renderer> filtered = new List<Renderer>(renderers.Length);
+        foreach (Renderer renderer in renderers)
+        {
+            if (renderer == null) continue;
+            if (renderer.GetComponentInParent<EnemyVisionCone>() != null) continue;
+            filtered.Add(renderer);
+        }
+
+        modelRenderers = filtered.ToArray();
+    }
+
+    private void UpdateModelVisibility()
+    {
+        if (LightDetectionManager.Instance == null)
+        {
+            SetModelVisible(true);
+            UpdateVisionConeVisibility(true);
+            return;
+        }
+
+        bool playerClose = false;
+        bool playerInLight = true;
+        if (playerController != null && revealDistance > 0f)
+        {
+            playerClose = Vector3.Distance(transform.position, playerController.transform.position) <= revealDistance;
+            playerInLight = playerController.IsInLight;
+        }
+
+        Vector3 enemyCheckPoint = transform.position + lightCheckOffset;
+        bool enemyInLight = LightDetectionManager.Instance.IsPointInLight(enemyCheckPoint);
+        bool shouldBeVisible = enemyInLight || (playerClose && !playerInLight);
+        SetModelVisible(shouldBeVisible);
+        UpdateVisionConeVisibility(shouldBeVisible);
+    }
+
+    private void UpdateVisionConeVisibility(bool isVisible)
+    {
+        if (visionCone == null) return;
+        if (!isVisible)
+        {
+            visionCone.SetVisible(false);
+        }
+    }
+
+    private void SetModelVisible(bool visible)
+    {
+        if (isModelVisible == visible)
+        {
+            return;
+        }
+
+        isModelVisible = visible;
+
+        if (modelRoot != null)
+        {
+            modelRoot.SetActive(visible);
+            return;
+        }
+
+        if (modelRenderers == null || modelRenderers.Length == 0)
+        {
+            return;
+        }
+
+        foreach (Renderer renderer in modelRenderers)
+        {
+            if (renderer != null)
+            {
+                renderer.enabled = visible;
+            }
         }
     }
 }

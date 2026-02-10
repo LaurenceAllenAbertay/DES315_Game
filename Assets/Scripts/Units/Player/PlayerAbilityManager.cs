@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,9 @@ public class PlayerAbilityManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Player player;
     [SerializeField] private AbilityTargeting targetingSystem;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource abilityAudioSource;
 
     private const float ABILITY_COOLDOWN = 1.0f;
 
@@ -287,10 +291,36 @@ public class PlayerAbilityManager : MonoBehaviour
             if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
         }
 
+        PlayAbilityCastSound(ability);
+
         // Spawn visual effect if any
         SpawnAbilityVFX(ability, result);
 
-        // Execute the ability effects
+        ExecuteAbilityWithDelay(ability, result);
+    }
+
+    private void ExecuteAbilityWithDelay(Ability ability, TargetingResult result)
+    {
+        float delay = ability != null ? Mathf.Max(0f, ability.effectDelay) : 0f;
+        if (delay <= 0f)
+        {
+            ExecuteAbilityEffects(ability, result);
+            return;
+        }
+
+        StartCoroutine(ExecuteAbilityAfterDelay(ability, result, delay));
+    }
+
+    private IEnumerator ExecuteAbilityAfterDelay(Ability ability, TargetingResult result, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ExecuteAbilityEffects(ability, result);
+    }
+
+    private void ExecuteAbilityEffects(Ability ability, TargetingResult result)
+    {
+        if (ability == null) return;
+
         switch (result.type)
         {
             case TargetingResultType.SingleTarget:
@@ -305,6 +335,22 @@ public class PlayerAbilityManager : MonoBehaviour
                 ability.Execute(player, result.targetPoint);
                 break;
         }
+    }
+
+    private void PlayAbilityCastSound(Ability ability)
+    {
+        if (ability == null || ability.castSound == null) return;
+
+        if (abilityAudioSource == null)
+        {
+            abilityAudioSource = GetComponent<AudioSource>();
+            if (abilityAudioSource == null)
+            {
+                abilityAudioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
+        abilityAudioSource.PlayOneShot(ability.castSound);
     }
 
     /// <summary>
