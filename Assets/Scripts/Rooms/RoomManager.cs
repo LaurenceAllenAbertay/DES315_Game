@@ -27,11 +27,16 @@ public class RoomManager : MonoBehaviour
         RoomLA previousRoom = CurrentRoom;
         currentRoom = newRoom;
         RoomChanged?.Invoke(previousRoom, CurrentRoom);
+
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            CombatManager.Instance.ForceEndCombat(CombatManager.CombatOutcome.Draw);
+        }
     }
 
     public void RefreshRooms()
     {
-        rooms = FindObjectsOfType<RoomLA>(true);
+        rooms = FindObjectsByType<RoomLA>(FindObjectsSortMode.None);
     }
 
     private RoomLA FindRoomForPosition(Vector3 position)
@@ -56,4 +61,5 @@ public class RoomManager : MonoBehaviour
 
         return null;
     }
+
 }

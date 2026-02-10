@@ -41,12 +41,17 @@ public class VisionConeManager : MonoBehaviour
         if (showVisionConesAction != null)
         {
             bool isPressed = showVisionConesAction.IsPressed();
+            bool allowVisionCones = true;
+            if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+            {
+                allowVisionCones = false;
+            }
 
             foreach (var cone in visionCones)
             {
                 if (cone != null)
                 {
-                    if (isPressed && IsConeAllowedToShow(cone))
+                    if (allowVisionCones && isPressed && IsConeAllowedToShow(cone))
                     {
                         cone.SetVisible(true);
                     }

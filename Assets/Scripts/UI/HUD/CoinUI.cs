@@ -18,8 +18,11 @@ public class CoinUI : MonoBehaviour
 
     [Header("Animation")]
     public float destroyDelay = 1f;
+    [Tooltip("Seconds between coin fill steps.")]
+    public float fillStepDelay = 0.05f;
 
     private int currentUICoins = 0;
+    private Coroutine fillCoroutine;
 
     private void Start()
     {
@@ -31,6 +34,16 @@ public class CoinUI : MonoBehaviour
         if (player != null)
         {
             player.OnCoinsChanged += OnCoinsChanged;
+            player.OnCombatStateChanged += OnCombatStateChanged;
+            SetCoinUIVisible(player.IsInCombat);
+            if (player.IsInCombat)
+            {
+                RefreshCoins(player.CurrentCoins);
+            }
+            else
+            {
+                ClearCoins();
+            }
         }
     }
 
@@ -39,6 +52,7 @@ public class CoinUI : MonoBehaviour
         if (player != null)
         {
             player.OnCoinsChanged -= OnCoinsChanged;
+            player.OnCombatStateChanged -= OnCombatStateChanged;
         }
     }
 
@@ -47,15 +61,53 @@ public class CoinUI : MonoBehaviour
         RefreshCoins(current);
     }
 
+    private void OnCombatStateChanged(bool inCombat)
+    {
+        SetCoinUIVisible(inCombat);
+        if (inCombat)
+        {
+            RefreshCoins(player != null ? player.CurrentCoins : 0);
+        }
+        else
+        {
+            ClearCoins();
+        }
+    }
+
+    private void SetCoinUIVisible(bool visible)
+    {
+        if (coinParent != null)
+        {
+            coinParent.gameObject.SetActive(visible);
+        }
+    }
+
+    private void ClearCoins()
+    {
+        if (coinParent == null) return;
+        int childCount = coinParent.childCount;
+        for (int i = childCount - 1; i >= 0; i--)
+        {
+            Destroy(coinParent.GetChild(i).gameObject);
+        }
+
+        currentUICoins = 0;
+    }
+
     private void RefreshCoins(int count)
     {
         if (coinPrefab == null || coinParent == null) return;
 
-        // Add coins if we need more
-        while (currentUICoins < count)
+        if (fillCoroutine != null)
         {
-            Instantiate(coinPrefab, coinParent);
-            currentUICoins++;
+            StopCoroutine(fillCoroutine);
+            fillCoroutine = null;
+        }
+
+        // Add coins if we need more
+        if (currentUICoins < count)
+        {
+            fillCoroutine = StartCoroutine(FillCoins(currentUICoins, count));
         }
 
         // Remove coins if we have too many
@@ -82,5 +134,27 @@ public class CoinUI : MonoBehaviour
         }
         
         Destroy(coin);
+    }
+
+    private IEnumerator FillCoins(int startCount, int targetCount)
+    {
+        currentUICoins = startCount;
+
+        while (currentUICoins < targetCount)
+        {
+            Instantiate(coinPrefab, coinParent);
+            currentUICoins++;
+
+            if (fillStepDelay > 0f)
+            {
+                yield return new WaitForSeconds(fillStepDelay);
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+
+        fillCoroutine = null;
     }
 }

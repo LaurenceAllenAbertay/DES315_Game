@@ -100,6 +100,8 @@ public class Player : Unit
             isInCombat = true;
             currentFlipChance = BASE_FLIP_CHANCE;
             bonusCoinsNextTurn = 0;
+            currentCoins = 0;
+            OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
             if (debugMode) Debug.Log("[Player] Entered combat!");
             OnCombatStateChanged?.Invoke(true);
         }

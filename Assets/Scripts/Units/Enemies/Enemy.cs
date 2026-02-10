@@ -24,6 +24,8 @@ public class Enemy : Unit
     private Renderer[] modelRenderers;
     private bool isModelVisible = true;
     private float visibilityTimer;
+    private bool forceRevealUntilTurnEnd;
+    private bool combatCallbacksRegistered;
 
     public bool IsHiddenFromPlayer => !isModelVisible;
 
@@ -48,12 +50,23 @@ public class Enemy : Unit
         CacheModelRenderers();
     }
 
+    private void OnEnable()
+    {
+        RegisterCombatCallbacks();
+    }
+
+    private void OnDisable()
+    {
+        UnregisterCombatCallbacks();
+    }
+
     private void Start()
     {
         if (playerController == null)
         {
             playerController = FindFirstObjectByType<PlayerController>();
         }
+        RegisterCombatCallbacks();
         UpdateModelVisibility();
     }
 
@@ -74,6 +87,11 @@ public class Enemy : Unit
 
     private void OnPlayerEnteredVisionCone()
     {
+        if (IsInShadow())
+        {
+            RevealUntilTurnEnd();
+        }
+
         // TODO: Add combat start logic here
         if (debugMode) Debug.Log($"[Enemy] {gameObject.name} detected the player!");
         CombatManager.Instance?.StartCombatFromEnemy(this);
@@ -91,6 +109,7 @@ public class Enemy : Unit
         {
             visionCone.OnPlayerDetected -= OnPlayerEnteredVisionCone;
         }
+        UnregisterCombatCallbacks();
     }
 
     private void CacheModelRenderers()
@@ -115,6 +134,13 @@ public class Enemy : Unit
 
     private void UpdateModelVisibility()
     {
+        if (forceRevealUntilTurnEnd)
+        {
+            SetModelVisible(true);
+            UpdateVisionConeVisibility(true);
+            return;
+        }
+
         if (LightDetectionManager.Instance == null)
         {
             SetModelVisible(true);
@@ -173,5 +199,85 @@ public class Enemy : Unit
                 renderer.enabled = visible;
             }
         }
+    }
+
+    private bool IsInShadow()
+    {
+        if (LightDetectionManager.Instance == null)
+        {
+            return false;
+        }
+
+        Vector3 enemyCheckPoint = transform.position + lightCheckOffset;
+        return !LightDetectionManager.Instance.IsPointInLight(enemyCheckPoint);
+    }
+
+    private void RevealUntilTurnEnd()
+    {
+        if (forceRevealUntilTurnEnd)
+        {
+            return;
+        }
+
+        forceRevealUntilTurnEnd = true;
+        SetModelVisible(true);
+        UpdateVisionConeVisibility(true);
+    }
+
+    private void RegisterCombatCallbacks()
+    {
+        if (combatCallbacksRegistered)
+        {
+            return;
+        }
+
+        CombatManager combatManager = CombatManager.Instance;
+        if (combatManager == null)
+        {
+            return;
+        }
+
+        combatManager.OnTurnEnded += HandleTurnEnded;
+        combatManager.OnCombatEnded += HandleCombatEnded;
+        combatCallbacksRegistered = true;
+    }
+
+    private void UnregisterCombatCallbacks()
+    {
+        if (!combatCallbacksRegistered)
+        {
+            return;
+        }
+
+        CombatManager combatManager = CombatManager.Instance;
+        if (combatManager != null)
+        {
+            combatManager.OnTurnEnded -= HandleTurnEnded;
+            combatManager.OnCombatEnded -= HandleCombatEnded;
+        }
+
+        combatCallbacksRegistered = false;
+    }
+
+    private void HandleTurnEnded(Unit unit)
+    {
+        if (!forceRevealUntilTurnEnd || unit != this)
+        {
+            return;
+        }
+
+        forceRevealUntilTurnEnd = false;
+        UpdateModelVisibility();
+    }
+
+    private void HandleCombatEnded(CombatManager.CombatOutcome outcome)
+    {
+        if (!forceRevealUntilTurnEnd)
+        {
+            return;
+        }
+
+        forceRevealUntilTurnEnd = false;
+        UpdateModelVisibility();
     }
 }

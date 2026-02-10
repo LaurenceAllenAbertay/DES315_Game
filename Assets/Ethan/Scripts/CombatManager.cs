@@ -31,7 +31,7 @@ public class CombatManager : MonoBehaviour
     public delegate void CombatStarted(List<Enemy> enemies);
     public event CombatStarted OnCombatStarted;
 
-    public delegate void CombatEnded(bool playerWon);
+    public delegate void CombatEnded(CombatOutcome outcome);
     public event CombatEnded OnCombatEnded;
 
     public delegate void TurnStarted(Unit unit);
@@ -59,6 +59,13 @@ public class CombatManager : MonoBehaviour
         EnemyAction,
         TurnEnd,
         CombatEnding
+    }
+
+    public enum CombatOutcome
+    {
+        PlayerWon,
+        EnemiesWon,
+        Draw
     }
 
     private void Awake()
@@ -278,7 +285,7 @@ public class CombatManager : MonoBehaviour
         // Check if player is dead
         if (player.IsDead)
         {
-            EndCombat(false);
+            EndCombat(CombatOutcome.EnemiesWon);
             return true;
         }
 
@@ -295,7 +302,7 @@ public class CombatManager : MonoBehaviour
 
         if (allEnemiesDead)
         {
-            EndCombat(true);
+            EndCombat(CombatOutcome.PlayerWon);
             return true;
         }
 
@@ -305,7 +312,7 @@ public class CombatManager : MonoBehaviour
     /// <summary>
     /// End combat
     /// </summary>
-    private void EndCombat(bool playerWon)
+    private void EndCombat(CombatOutcome outcome)
     {
         if (!inCombat) return;
 
@@ -315,7 +322,13 @@ public class CombatManager : MonoBehaviour
 
         if (debugMode)
         {
-            Debug.Log($"[CombatManager] Combat ended! Player won: {playerWon}");
+            Debug.Log($"[CombatManager] Combat ended! Outcome: {outcome}");
+        }
+
+        if (outcome == CombatOutcome.EnemiesWon && player != null && !player.IsDead)
+        {
+            float lethalDamage = player.CurrentHealth + player.CurrentBlock + 1f;
+            player.TakeDamage(lethalDamage);
         }
 
         // Clean up
@@ -329,7 +342,7 @@ public class CombatManager : MonoBehaviour
             player.ExitCombat();
         }
 
-        OnCombatEnded?.Invoke(playerWon);
+        OnCombatEnded?.Invoke(outcome);
 
         SetPhase(CombatPhase.NotInCombat);
     }
@@ -338,12 +351,12 @@ public class CombatManager : MonoBehaviour
     /// Force end combat 
     /// </summary>
     [ContextMenu("Force End Combat")]
-    public void ForceEndCombat()
+    public void ForceEndCombat(CombatOutcome outcome = CombatOutcome.Draw)
     {
         if (inCombat)
         {
             if (debugMode) Debug.Log("[CombatManager] Force ending combat");
-            EndCombat(false);
+            EndCombat(outcome);
         }
     }
 
