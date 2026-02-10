@@ -16,11 +16,15 @@ public class LightStatusUI : MonoBehaviour
 
     [Header("Animation")]
     public float colorTransitionSpeed = 5f;
+    
     public float overlayTransitionSpeed = 3f;
     public float maxShadowAlpha = 0.7f;
+    public float initialOverlayFadeDuration = 2f;
 
     private Color targetColor;
     private float targetOverlayAlpha;
+    private bool isInitialOverlayFadeActive;
+    private float initialOverlayFadeElapsed;
 
     private void Start()
     {
@@ -34,7 +38,19 @@ public class LightStatusUI : MonoBehaviour
             player.OnLightStateChanged += HandleLightStateChanged;
         }
 
+        if (shadowOverlay != null)
+        {
+            shadowOverlay.enabled = true;
+        }
         UpdateUI();
+
+        if (shadowOverlay != null)
+        {
+            Color currentColor = shadowOverlay.color;
+            shadowOverlay.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
+            isInitialOverlayFadeActive = true;
+            initialOverlayFadeElapsed = 0f;
+        }
     }
 
     private void OnDestroy()
@@ -58,7 +74,21 @@ public class LightStatusUI : MonoBehaviour
         if (shadowOverlay != null)
         {
             Color currentColor = shadowOverlay.color;
-            float newAlpha = Mathf.Lerp(currentColor.a, targetOverlayAlpha, overlayTransitionSpeed * Time.deltaTime);
+            float newAlpha;
+            if (isInitialOverlayFadeActive)
+            {
+                initialOverlayFadeElapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(initialOverlayFadeElapsed / Mathf.Max(0.01f, initialOverlayFadeDuration));
+                newAlpha = Mathf.Lerp(1f, targetOverlayAlpha, t);
+                if (t >= 1f)
+                {
+                    isInitialOverlayFadeActive = false;
+                }
+            }
+            else
+            {
+                newAlpha = Mathf.Lerp(currentColor.a, targetOverlayAlpha, overlayTransitionSpeed * Time.deltaTime);
+            }
             shadowOverlay.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
         }
     }

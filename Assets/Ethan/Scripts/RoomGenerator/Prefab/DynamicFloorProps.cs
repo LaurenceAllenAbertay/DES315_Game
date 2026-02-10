@@ -1,4 +1,3 @@
-using UnityEditor.Compilation;
 using UnityEngine;
 
 //Attach to floor prefabs to dynamically place props based on actual room size -EM//
