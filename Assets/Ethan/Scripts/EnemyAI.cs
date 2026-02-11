@@ -1,11 +1,11 @@
-﻿using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Enemy))]
 
-//State machine like Ai for basic enemy movement to be scaled when combat side is ready - EM//
+//State machine like Ai for basic enemy movement - EM//
+//Disables itself when combat starts and re-enables when combat ends -EM//
 public class EnemyAI : MonoBehaviour
 {
     [Header("Roaming Settings")]
@@ -71,6 +71,13 @@ public class EnemyAI : MonoBehaviour
     
     private void Start()
     {
+        //Subsribe to combat events to pause/resume wandering//
+        if(CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted += HandleCombatStarted;
+            CombatManager.Instance.OnCombatEnded += HandleCombatEnded;
+        }
+
         //Wait for NavMeshAgent to be properly initialised//
         if (!ValidateAgent())
         {
@@ -81,6 +88,53 @@ public class EnemyAI : MonoBehaviour
 
         InitializeAI();
     }
+
+    private void OnDestroy()
+    {
+        if(CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted -= HandleCombatStarted;
+            CombatManager.Instance.OnCombatEnded -= HandleCombatEnded;
+        }
+    }
+
+    //Combat callbacks disable enable this component -EM//
+
+    private void HandleCombatStarted(System.Collections.Generic.List<Enemy> enemies)
+    {
+        //Disable wandering for all enemies in the scene when any combat begins//
+        //scoped room based wandering can be added when a room detector is built//
+        if(!enabled) return;
+
+        if (debugMode) Debug.Log($"[EnemyAI] {gameObject.name}: Combat started - disabling wandering AI");
+
+        //Stop in place before disabling//
+        if(ValidateAgent())
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+        }
+
+        enabled = false;
+    }
+
+    private void HandleCombatEnded(CombatManager.CombatOutcome outcome)
+    {
+        //Re-enable wandering when combat is over (regardless of outcome)//
+        if (enabled) return;
+
+        if (debugMode) Debug.Log($"[EnemyAI] {gameObject.name}: combat ended - re-enabling wandering AI");
+
+        enabled = true; 
+
+        //Resume from idle so the enemy doesn't immediately charge ooff//
+        if(isInitialized && ValidateAgent())
+        {
+            StartIdling();
+        }
+    }
+
+    //Initialisation -EM//
 
     private void InitializeAI()
     {
@@ -119,8 +173,9 @@ public class EnemyAI : MonoBehaviour
         return true;
     }
 
+    //Update Loop -EM//
 
-private void Update()
+    private void Update()
     {
         if (!isInitialized) return;
 
@@ -144,6 +199,8 @@ private void Update()
                 break;
         }
     }
+
+    //State handlers -EM//
 
     private void HandleIdleState()
     {
@@ -191,6 +248,7 @@ private void Update()
         }
     }
 
+    //State transitions -EM//
     private void StartRoaming()
     {
         if (!ValidateAgent()) return;
@@ -222,14 +280,23 @@ private void Update()
         if (debugMode) Debug.Log($"{gameObject.name} idling for {idleTimer:F1} seconds");
     }
 
+    private void StartChasing()
+    {
+        if (!ValidateAgent()) return;
+        if (currentState == AIState.Chasing) return;
+
+        currentState = AIState.Chasing;
+        agent.stoppingDistance = chaseStoppingDistance;
+        if (debugMode) Debug.Log($"{gameObject.name} detected player - chasing!");
+    }
+
+    //Detection -EM//
+
     private void CheckForPlayer()
     {
         //If already chasing, we're already tracking the player//
-        if(currentState == AIState.Chasing)
-        {
-            return;
-        }
-
+        if(currentState == AIState.Chasing) return;
+        
         if(playerTransform == null)
         {
             playerDetected = false;
@@ -268,14 +335,24 @@ private void Update()
         StartChasing();
     }
 
-    private void StartChasing()
+    //Utility -EM//
+    private Vector3 GetRandomNavMeshPoint()
     {
-        if (!ValidateAgent()) return;
-        if (currentState == AIState.Chasing) return;
+        //Try to find a random point on the NavMesh within roam radius//
+        for (int i = 0; i < 30; i++) //Try up to 30x//
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
+            randomDirection += transform.position;
 
-        currentState = AIState.Chasing;
-        agent.stoppingDistance = chaseStoppingDistance;
-        if (debugMode) Debug.Log($"{gameObject.name} detected player - starting chase!");
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
+            {
+                return hit.position;
+            }
+        }
+
+        if (debugMode) Debug.LogWarning($"{gameObject.name} couldn't find valid NavMesh point within {roamRadius} units");
+        return Vector3.zero;
     }
 
     [ContextMenu("Force Stop Chasing")]
@@ -293,24 +370,7 @@ private void Update()
         }
     }
 
-    private Vector3 GetRandomNavMeshPoint()
-    {
-        //Try to find a random point on the NavMesh within roam radius//
-        for(int i = 0; i < 30; i++) //Try up to 30x//
-        {
-            Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
-            randomDirection += transform.position;
-
-            NavMeshHit hit;
-            if(NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
-            {
-                return hit.position;
-            }
-        }
-
-        if (debugMode) Debug.LogWarning($"{gameObject.name} couldn't find valid NavMesh point within {roamRadius} units");
-        return Vector3.zero;
-    }
+    //Gizmos -EM//
 
     private void OnDrawGizmosSelected()
     {

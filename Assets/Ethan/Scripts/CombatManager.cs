@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Manages turn based combat flow, initiative order, and combat state
-/// </summary>
+//Manages turn based combat flow, initiative order, and combat state -EM//
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager Instance { get; private set; }
@@ -27,7 +25,7 @@ public class CombatManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
 
-    // Events
+    //Events//
     public delegate void CombatStarted(List<Enemy> enemies);
     public event CombatStarted OnCombatStarted;
 
@@ -43,7 +41,7 @@ public class CombatManager : MonoBehaviour
     public delegate void PhaseChanged(CombatPhase newPhase);
     public event PhaseChanged OnPhaseChanged;
 
-    // Properties
+    //Properties//
     public bool InCombat => inCombat;
     public CombatPhase CurrentPhase => currentPhase;
     public Unit CurrentUnit => currentUnit;
@@ -86,9 +84,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Start combat with a list of enemies
-    /// </summary>
+    //Start combat with a list of enemies -EM//
     public void StartCombat(List<Enemy> enemies)
     {
         if (inCombat)
@@ -113,23 +109,22 @@ public class CombatManager : MonoBehaviour
 
         if (debugMode) Debug.Log($"[CombatManager] Starting combat with {enemies.Count} enemies!");
 
-        // Build turn order
+        //Build turn order//
         BuildTurnOrder(enemies);
 
-        // Notify player they're in combat
+        //Notify player they're in combat//
         player.EnterCombat();
 
-        // Fire event
+        //Fire event//
         OnCombatStarted?.Invoke(enemies);
 
-        // Start first turn
+        //Start first turn//
         currentTurnIndex = 0;
         StartNextTurn();
     }
 
-    /// <summary>
-    /// Start combat from a single initiating enemy (pulls in nearby enemies)
-    /// </summary>
+
+    //Start combat from a single initiating enemy (pulls in nearby enemies)-EM//
     public void StartCombatFromEnemy(Enemy initiatingEnemy)
     {
         if (initiatingEnemy == null) return;
@@ -138,15 +133,13 @@ public class CombatManager : MonoBehaviour
         StartCombat(enemies);
     }
 
-    /// <summary>
-    /// Build the turn order based on initiative
-    /// For now player goes last, then enemies in order
-    /// </summary>
+
+    //Build the turn order based on initiative, For now player goes last, then enemies in order -EM//
     private void BuildTurnOrder(List<Enemy> enemies)
     {
         turnOrder.Clear();
 
-        // Add all enemies first
+        //Add all enemies first//
         foreach (Enemy enemy in enemies)
         {
             if (enemy != null)
@@ -155,7 +148,7 @@ public class CombatManager : MonoBehaviour
             }
         }
 
-        // Player goes last
+        //Player goes last//
         turnOrder.Add(player);
 
         if (debugMode)
@@ -164,23 +157,22 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Start next unit's turn
-    /// </summary>
+
+    //Start next unit's turn -EM//
     private void StartNextTurn()
     {
         if (!inCombat) return;
 
-        // Check for combat end conditions
+        //Check for combat end conditions//
         if (CheckCombatEnd())
         {
             return;
         }
 
-        // Get next unit in turn order
+        //Get next unit in turn order//
         currentUnit = turnOrder[currentTurnIndex];
 
-        // Skip dead units
+        //Skip dead units//
         int safetyCounter = turnOrder.Count;
         while (currentUnit.IsDead && safetyCounter > 0)
         {
@@ -188,17 +180,17 @@ public class CombatManager : MonoBehaviour
             currentUnit = turnOrder[currentTurnIndex];
             safetyCounter--;
 
-            // Safety check if we've looped through everyone
+            //Safety check if we've looped through everyone//
             if (CheckCombatEnd())
             {
                 return;
             }
         }
 
-        // Start turn
+        //Start turn//
         SetPhase(CombatPhase.TurnStart);
 
-        // Clear block at start of turn
+        //Clear block at start of turn//
         currentUnit.ClearBlock();
 
         if (debugMode)
@@ -224,25 +216,35 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Handle enemy turn (Enemy AI needs expanding)
-    /// </summary>
-    private void StartEnemyTurn(Enemy enemy)
-    {
-        // TODO: Implement enemy AI decision making
 
+    //Handle control to the enemy's EnemyCombatAI component, EnemyCombatAI calls EndCurrentTurn() when its coroutine finishes -EM//
+    //Falls back to ending the turn if component is missing -EM//
+    private void StartEnemyTurn(Enemy enemy)
+    { 
         if (debugMode)
         {
-            Debug.Log($"[CombatManager] {enemy.name} is thinking...");
+            Debug.Log($"[CombatManager] {enemy.name}'s turn starting...");
         }
 
-        // Simulate enemy action delay
-        Invoke(nameof(EndCurrentTurn), 1f);
+        EnemyCombatAI combatAI = enemy.GetComponent<EnemyCombatAI>();
+
+        if (combatAI != null && combatAI.TakeTurn(player))
+        {
+            //EnemyCombatAI coroutine is running, it calls EndCurrentTurn() itself//
+            return;
+        }
+
+        //Safely fallback no AI component or it declined to act//
+        if (debugMode)
+        {
+            Debug.LogWarning($"[CombatManager] {enemy.name} has no EnemyCombatAI or declined to act, ending turn in 0.5s");
+        }
+        //Simulate enemy action delay//
+        Invoke(nameof(EndCurrentTurn), 0.5f);
     }
 
-    /// <summary>
-    /// End the current unit's turn
-    /// </summary>
+
+    //End the current unit's turn -EM//
     public void EndCurrentTurn()
     {
         if (!inCombat) return;
@@ -250,7 +252,7 @@ public class CombatManager : MonoBehaviour
 
         SetPhase(CombatPhase.TurnEnd);
 
-        // If it's the player's turn ending, handle bonus coin logic
+        //If it's the player's turn ending, handle bonus coin logic//
         if (currentUnit is Player playerUnit)
         {
             playerUnit.EndTurn();
@@ -263,10 +265,10 @@ public class CombatManager : MonoBehaviour
 
         OnTurnEnded?.Invoke(currentUnit);
 
-        // Move to next turn
+        //Move to next turn//
         currentTurnIndex = (currentTurnIndex + 1) % turnOrder.Count;
 
-        // If we've completed a full round, log it
+        //If we've completed a full round, log it//
         if (currentTurnIndex == 0 && debugMode)
         {
             Debug.Log("[CombatManager] ==== Round Completed ====");
@@ -275,21 +277,20 @@ public class CombatManager : MonoBehaviour
         StartNextTurn();
     }
 
-    /// <summary>
-    /// Check if combat should end (all enemies are dead or player is dead)
-    /// </summary>
+
+    //Check if combat should end (all enemies are dead or player is dead) -EM//
     private bool CheckCombatEnd()
     {
         if (!inCombat) return true;
 
-        // Check if player is dead
+        //Check if player is dead//
         if (player.IsDead)
         {
             EndCombat(CombatOutcome.EnemiesWon);
             return true;
         }
 
-        // Check if all enemies are dead
+        //Check if all enemies are dead//
         bool allEnemiesDead = true;
         foreach (Unit unit in turnOrder)
         {
@@ -309,9 +310,8 @@ public class CombatManager : MonoBehaviour
         return false;
     }
 
-    /// <summary>
-    /// End combat
-    /// </summary>
+    
+    //End combat -EM//
     private void EndCombat(CombatOutcome outcome)
     {
         if (!inCombat) return;
@@ -331,12 +331,12 @@ public class CombatManager : MonoBehaviour
             player.TakeDamage(lethalDamage);
         }
 
-        // Clean up
+        //Clean up//
         turnOrder.Clear();
         currentUnit = null;
         currentTurnIndex = 0;
 
-        // Notify player
+        //Notify player//
         if (player != null)
         {
             player.ExitCombat();
@@ -347,9 +347,8 @@ public class CombatManager : MonoBehaviour
         SetPhase(CombatPhase.NotInCombat);
     }
 
-    /// <summary>
-    /// Force end combat 
-    /// </summary>
+
+    //Force end combat -EM//
     [ContextMenu("Force End Combat")]
     public void ForceEndCombat(CombatOutcome outcome = CombatOutcome.Draw)
     {
@@ -375,9 +374,8 @@ public class CombatManager : MonoBehaviour
         OnPhaseChanged?.Invoke(newPhase);
     }
 
-    /// <summary>
-    /// Get all living enemies in combat
-    /// </summary>
+
+    //Get all living enemies in combat -EM//
     public List<Enemy> GetLivingEnemies()
     {
         List<Enemy> enemies = new List<Enemy>();
@@ -393,9 +391,8 @@ public class CombatManager : MonoBehaviour
         return enemies;
     }
 
-    /// <summary>
-    /// Get all living units in combat
-    /// </summary>
+
+    //Get all living units in combat -EM//
     public List<Unit> GetLivingUnits()
     {
         List<Unit> units = new List<Unit>();
@@ -411,9 +408,8 @@ public class CombatManager : MonoBehaviour
         return units;
     }
 
-    /// <summary>
-    /// Get enemies within join range of the initiating enemy
-    /// </summary>
+ 
+    //Get enemies within join range of the initiating enemy -EM//
     private List<Enemy> GetEnemiesInJoinRange(Enemy initiatingEnemy)
     {
         List<Enemy> enemies = new List<Enemy>();
