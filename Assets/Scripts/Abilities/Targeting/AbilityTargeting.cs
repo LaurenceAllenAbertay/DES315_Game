@@ -70,6 +70,7 @@ public class AbilityTargeting : MonoBehaviour
     private float currentAbilityRange;
     private float currentAbilityConeAngle;
     private float currentAbilityAoeRadius;
+    private float currentAbilityAoeHeight;
 
     // Input
     private InputAction confirmAction;
@@ -183,6 +184,9 @@ public class AbilityTargeting : MonoBehaviour
         currentAbilityAoeRadius = StatsManager.Instance != null
             ? StatsManager.Instance.ApplyAoeSize(ability.aoeRadius)
             : ability.aoeRadius;
+        currentAbilityAoeHeight = StatsManager.Instance != null
+            ? StatsManager.Instance.ApplyAoeSize(ability.aoeHeight)
+            : ability.aoeHeight;
 
         // Show the appropriate visualizer based on targeting type
         switch (ability.targetingType)
@@ -485,7 +489,7 @@ public class AbilityTargeting : MonoBehaviour
         if (aoeVisualizer == null) return;
 
         Vector3 center = aoeVisualizer.CurrentPosition;
-        List<Unit> targets = GetUnitsInRadius(center, currentAbilityAoeRadius);
+        List<Unit> targets = GetUnitsInRadius(center, currentAbilityAoeRadius, currentAbilityAoeHeight);
 
         TargetingResult result = new TargetingResult
         {
@@ -581,7 +585,7 @@ public class AbilityTargeting : MonoBehaviour
         return targets;
     }
 
-    private List<Unit> GetUnitsInRadius(Vector3 center, float radius)
+    private List<Unit> GetUnitsInRadius(Vector3 center, float radius, float height)
     {
         List<Unit> targets = new List<Unit>();
 
@@ -591,7 +595,21 @@ public class AbilityTargeting : MonoBehaviour
         foreach (Collider col in colliders)
         {
             Unit unit = col.GetComponentInParent<Unit>();
-            if (unit != null && unit.GetComponent<Player>() == null && !targets.Contains(unit))
+            if (unit == null || unit.GetComponent<Player>() != null || targets.Contains(unit))
+            {
+                continue;
+            }
+
+            if (height > 0f)
+            {
+                float verticalDistance = Mathf.Abs(unit.transform.position.y - center.y);
+                if (verticalDistance > height)
+                {
+                    continue;
+                }
+            }
+
+            if (!targets.Contains(unit))
             {
                 targets.Add(unit);
             }

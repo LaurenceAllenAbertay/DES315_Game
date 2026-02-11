@@ -18,7 +18,7 @@ public class EnemyCombatAction : ScriptableObject
 {
     [Header("Identity")]
     public string actionName = "New Action";
-    [TextArea(1, 3)]
+    [TextArea(3, 3)]
     public string description = "";
     public EnemyActionType actionType = EnemyActionType.Attack;
 
@@ -28,6 +28,9 @@ public class EnemyCombatAction : ScriptableObject
 
     [Tooltip("For SpecialAttack only: multiplier applied on top of baseValue on a successful flip")]
     public float specialMultiplier = 1.5f;
+
+    [Tooltip("Required range to use this action against the player (0 = no range check)")]
+    public float range = 2f;
 
     [Header("Coin Flip")]
     [Tooltip("Starting flip chance (0-100). Adjusts each flip just like the player's system.")]

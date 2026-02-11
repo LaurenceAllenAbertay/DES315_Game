@@ -10,15 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e8f45edd040295418f823db2b63ccd4, type: 3}
-  m_Name: RainingBlood
+  m_Name: SneakySweep
   m_EditorClassIdentifier: 
-  abilityName: Raining Blood
+  abilityName: Sneaky Sweep
   description: 
   icon: {fileID: 0}
-  targetingType: 2
-  range: 20
-  coneAngle: 60
+  targetingType: 1
+  range: 3
+  coneAngle: 40
   aoeRadius: 3
-  visualEffectPrefab: {fileID: 6309483091079813192, guid: 166ce272e20354847ab5a0cbfb22058b, type: 3}
+  aoeHeight: 1
+  visualEffectPrefab: {fileID: 0}
+  castSound: {fileID: 0}
+  effectDelay: 0
   effects:
-  - {fileID: 11400000, guid: eeb469141b295cf48af4a3c7098e0c90, type: 2}
+  - {fileID: 11400000, guid: 31172f0171ab70c4fb054af344959f4c, type: 2}
+  - {fileID: 11400000, guid: d3265691360541d4ab121e292d3cb9d6, type: 2}

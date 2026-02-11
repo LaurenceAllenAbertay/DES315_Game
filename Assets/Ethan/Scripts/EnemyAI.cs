@@ -18,48 +18,21 @@ public class EnemyAI : MonoBehaviour
     [Tooltip("Maxiumum time to wait at each destination")]
     public float maxIdleTime = 5f;
 
-    [Header("Detection Settings")]
-    [Tooltip("How far from current position the enemy will roam")]
-    public float detectionRange = 15f;
-
-    [Tooltip("Field of view angle in degress (360 = See all around)")]
-    [Range(0f, 360f)]
-    public float fieldOfViewAngle = 120f;
-
-    [Tooltip("Layer mask for line of sight obstacles")]
-    public LayerMask obstacleMask = ~0;
-
-    [Tooltip("How often to check for the player (in seconds)")]
-    public float detectionInterval = 0.5f;
-
-    [Header("Chase Settings")]
-    [Tooltip("How close to get to the player when chasing")]
-    public float chaseStoppingDistance = 2f;
-
-    [Tooltip("if player gets this far away, stop chasing")]
-    public float maxChaseDistance = 25f;
-
-
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
     [SerializeField] private AIState currentState;
     [SerializeField] private Vector3 currentDestination;
     [SerializeField] private float idleTimer;
-    [SerializeField] private bool playerDetected;
     [SerializeField] private bool isInitialized = false;
 
     private NavMeshAgent agent;
     private Enemy enemy;
-    private Transform playerTransform;
-    private float detectionTimer;
-    private float originalStoppingDistance;
 
     //Can add more when combat is defined//
     private enum AIState
     {
         Idle,
-        Roaming,
-        Chasing
+        Roaming
     }
 
     private void Awake()
@@ -145,21 +118,8 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
-        //Find the player//
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player != null)
-        {
-            playerTransform = player.transform;
-        }
-        else
-        {
-            if (debugMode) Debug.LogWarning($"{gameObject.name}: No PlayerController found in Scene!");
-        }
-
-        originalStoppingDistance = agent.stoppingDistance;
         currentState = AIState.Idle;
         idleTimer = Random.Range(minIdleTime, maxIdleTime);
-        detectionTimer = detectionInterval;
         isInitialized = true;
 
         if (debugMode) Debug.Log($"{gameObject.name}: AI Initialized successfully");
@@ -179,13 +139,6 @@ public class EnemyAI : MonoBehaviour
     {
         if (!isInitialized) return;
 
-        //Periodically check for player detection//
-        detectionTimer -= Time.deltaTime;
-        if (detectionTimer <= 0)
-        {
-            CheckForPlayer();
-            detectionTimer = detectionInterval;
-        }
         switch (currentState)
         {
             case AIState.Idle:
@@ -193,9 +146,6 @@ public class EnemyAI : MonoBehaviour
                 break;
             case AIState.Roaming:
                 HandleRoamingState();
-                break;
-            case AIState.Chasing:
-                HandleChasingState();
                 break;
         }
     }
@@ -223,28 +173,6 @@ public class EnemyAI : MonoBehaviour
             {
                 StartIdling();
             }
-        }
-    }
-
-    private void HandleChasingState()
-    {
-        if (!ValidateAgent()) return;
-
-        if (playerTransform == null)
-        {
-            StartIdling();
-            return;
-        }
-
-        //Update destination to player's current position//
-        agent.SetDestination(playerTransform.position);
-
-        //Check if player is too far away//
-        float distanceToPlayer =  Vector3.Distance(transform.position, playerTransform.position);
-        if(distanceToPlayer > maxChaseDistance)
-        {
-            if (debugMode) Debug.Log($"{gameObject.name} lost player - too far away");
-            StartIdling();
         }
     }
 
@@ -280,61 +208,6 @@ public class EnemyAI : MonoBehaviour
         if (debugMode) Debug.Log($"{gameObject.name} idling for {idleTimer:F1} seconds");
     }
 
-    private void StartChasing()
-    {
-        if (!ValidateAgent()) return;
-        if (currentState == AIState.Chasing) return;
-
-        currentState = AIState.Chasing;
-        agent.stoppingDistance = chaseStoppingDistance;
-        if (debugMode) Debug.Log($"{gameObject.name} detected player - chasing!");
-    }
-
-    //Detection -EM//
-
-    private void CheckForPlayer()
-    {
-        //If already chasing, we're already tracking the player//
-        if(currentState == AIState.Chasing) return;
-        
-        if(playerTransform == null)
-        {
-            playerDetected = false;
-            return;
-        }
-
-        float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-
-        //Is player in range//
-        if(distanceToPlayer > detectionRange)
-        {
-            playerDetected = false;
-            return;
-        }
-
-        //is player in field of view//
-        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-        if(angleToPlayer > fieldOfViewAngle / 2f)
-        {
-            playerDetected = false;
-            return;
-        }
-
-        //Can we see the player 9line of sight)//
-        Ray ray = new Ray(transform.position + Vector3.up, directionToPlayer);
-        if(Physics.Raycast(ray, distanceToPlayer, obstacleMask))
-        {
-            playerDetected = false;
-            return;
-        }
-
-        //Player detected//
-        playerDetected = true;
-        StartChasing();
-    }
-
     //Utility -EM//
     private Vector3 GetRandomNavMeshPoint()
     {
@@ -355,21 +228,6 @@ public class EnemyAI : MonoBehaviour
         return Vector3.zero;
     }
 
-    [ContextMenu("Force Stop Chasing")]
-    public void ForceStopChasing()
-    {
-        if(currentState == AIState.Chasing)
-        {
-            if (debugMode) Debug.Log($"{gameObject.name} forced to stop chasing - returning to idle");
-            playerDetected = false;
-            StartIdling();
-        }
-        else
-        {
-            if (debugMode) Debug.Log($"{gameObject.name} is not currently chasing");
-        }
-    }
-
     //Gizmos -EM//
 
     private void OnDrawGizmosSelected()
@@ -377,29 +235,6 @@ public class EnemyAI : MonoBehaviour
         //Visualise roam radius//
         Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
         Gizmos.DrawWireSphere(transform.position, roamRadius);
-
-        //Visualise detection range//
-        Gizmos.color = playerDetected ? Color.red : new Color(1f, 1f, 0f, 0.3f);
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-
-        //Visualise field of view//
-        if(fieldOfViewAngle < 360f)
-        {
-            Vector3 forward = transform.forward * detectionRange;
-            Vector3 rightBoundary = Quaternion.Euler(0, fieldOfViewAngle / 2f, 0) * forward;
-            Vector3 leftBoundary = Quaternion.Euler(0, -fieldOfViewAngle / 2f, 0) * forward;
-
-            Gizmos.color = new Color(0f, 1f, 1f, 0.3f);
-            Gizmos.DrawLine(transform.position, transform.position + rightBoundary);
-            Gizmos.DrawLine(transform.position, transform.position + leftBoundary);
-        }
-
-        //Draw line to player if detected//
-        if(playerDetected && playerTransform != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position + Vector3.up, playerTransform.position = Vector3.up);
-        }
 
         //Draw current destination//
         if (currentState == AIState.Roaming && currentDestination != Vector3.zero)

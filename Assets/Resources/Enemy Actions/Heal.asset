@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc06004ff06ba4429524a70bf6daeab, type: 3}
+  m_Name: Heal
+  m_EditorClassIdentifier: 
+  actionName: Heal
+  description: bro heals
+  actionType: 2
+  baseValue: 5
+  specialMultiplier: 1.2
+  range: 4
+  startingFlipChance: 60
+  failBonus: 10
+  successPenalty: 5
+  healthThresholdMax: 0.5
+  healthThresholdMin: 0
+  selectionWeight: 1

@@ -42,6 +42,9 @@ public class Ability : ScriptableObject
     [Tooltip("Radius of the AOE circle (only for RangedAOE targeting)")]
     public float aoeRadius = 3f;
 
+    [Tooltip("Max vertical distance from the AOE center to hit targets (only for RangedAOE targeting)")]
+    public float aoeHeight = 3f;
+
     [Header("Effects")]
     [Tooltip("Prefab to spawn when the ability is executed")]
     public GameObject visualEffectPrefab;

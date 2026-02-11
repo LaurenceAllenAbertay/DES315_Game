@@ -41,6 +41,13 @@ public class EnemyCombatAI : MonoBehaviour
     [Tooltip("Short pause after acting before handing control back")]
     public float postActionDelay = 0.5f;
 
+    [Header("Combat Movement")]
+    [Tooltip("Max time spent moving into range for an action (seconds)")]
+    public float maxMoveTime = 2.5f;
+
+    [Tooltip("How close to the action range we accept before acting")]
+    public float rangeTolerance = 0.2f;
+
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
     [SerializeField] private string lastChosenAction = "None";
@@ -53,6 +60,7 @@ public class EnemyCombatAI : MonoBehaviour
     private Enemy enemy;
     private NavMeshAgent agent;
     private bool isTakingTurn = false;
+    private float originalStoppingDistance = 0f;
 
     private const float MIN_FLIP_CHANCE = 0f;
     private const float MAX_FLIP_CHANCE = 100f;
@@ -63,6 +71,10 @@ public class EnemyCombatAI : MonoBehaviour
     {
        enemy = GetComponent<Enemy>();
        agent = GetComponent<NavMeshAgent>();
+       if (agent != null)
+       {
+           originalStoppingDistance = agent.stoppingDistance;
+       }
     }
 
     private void Start()
@@ -106,6 +118,17 @@ public class EnemyCombatAI : MonoBehaviour
             lastChosenAction = chosen.actionName;
             if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} chose: {chosen.actionName}");
 
+            if (RequiresTarget(chosen) && !IsTargetInRange(chosen, player))
+            {
+                yield return MoveIntoRange(chosen, player);
+            }
+
+            if (RequiresTarget(chosen) && !IsTargetInRange(chosen, player))
+            {
+                if (debugMode) Debug.LogWarning($"[EnemyCombatAI] {gameObject.name} could not reach range for {chosen.actionName}");
+            }
+            else
+            {
             bool flipSuccess = PerformFlip(chosen);
             lastFlipresult = flipSuccess;
 
@@ -117,6 +140,7 @@ public class EnemyCombatAI : MonoBehaviour
             else
             {
                 if(debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} FLIP MISS - {chosen.actionName} failed");
+            }
             }
         }
         else
@@ -302,6 +326,51 @@ public class EnemyCombatAI : MonoBehaviour
             agent.isStopped = true;
             agent.ResetPath();
         }
+    }
+
+    private bool RequiresTarget(EnemyCombatAction action)
+    {
+        return action.actionType == EnemyActionType.Attack || action.actionType == EnemyActionType.SpecialAttack;
+    }
+
+    private bool IsTargetInRange(EnemyCombatAction action, Player player)
+    {
+        if (action.range <= 0f || player == null) return true;
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+        return distance <= action.range + rangeTolerance;
+    }
+
+    private IEnumerator MoveIntoRange(EnemyCombatAction action, Player player)
+    {
+        if (agent == null || player == null || !agent.isOnNavMesh || !agent.isActiveAndEnabled)
+        {
+            yield break;
+        }
+
+        agent.isStopped = false;
+        agent.stoppingDistance = Mathf.Max(0.1f, action.range);
+        agent.SetDestination(player.transform.position);
+
+        float timer = 0f;
+        while (timer < maxMoveTime)
+        {
+            if (IsTargetInRange(action, player))
+            {
+                break;
+            }
+
+            if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+            {
+                break;
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        agent.isStopped = true;
+        agent.ResetPath();
+        agent.stoppingDistance = originalStoppingDistance;
     }
 
     //Seed the flip chance dictionary from the action list so the inspector reflects starting values on the first turn -EM//

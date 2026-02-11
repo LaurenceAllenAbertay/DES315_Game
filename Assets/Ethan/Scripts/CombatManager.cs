@@ -18,10 +18,6 @@ public class CombatManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Player player;
 
-    [Header("Combat Join Range")]
-    [SerializeField] private float enemyJoinRadius = 8f;
-    [SerializeField] private LayerMask enemyLayer = 1 << 8;
-
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
 
@@ -85,7 +81,7 @@ public class CombatManager : MonoBehaviour
     }
 
     //Start combat with a list of enemies -EM//
-    public void StartCombat(List<Enemy> enemies)
+    public void StartCombat(List<Enemy> enemies, Enemy initiatingEnemy = null)
     {
         if (inCombat)
         {
@@ -110,7 +106,7 @@ public class CombatManager : MonoBehaviour
         if (debugMode) Debug.Log($"[CombatManager] Starting combat with {enemies.Count} enemies!");
 
         //Build turn order//
-        BuildTurnOrder(enemies);
+        BuildTurnOrder(enemies, initiatingEnemy);
 
         //Notify player they're in combat//
         player.EnterCombat();
@@ -129,27 +125,38 @@ public class CombatManager : MonoBehaviour
     {
         if (initiatingEnemy == null) return;
 
-        List<Enemy> enemies = GetEnemiesInJoinRange(initiatingEnemy);
-        StartCombat(enemies);
+        List<Enemy> enemies = GetEnemiesInCurrentRoom(initiatingEnemy);
+        StartCombat(enemies, initiatingEnemy);
     }
 
 
     //Build the turn order based on initiative, For now player goes last, then enemies in order -EM//
-    private void BuildTurnOrder(List<Enemy> enemies)
+    private void BuildTurnOrder(List<Enemy> enemies, Enemy initiatingEnemy)
     {
         turnOrder.Clear();
 
-        //Add all enemies first//
-        foreach (Enemy enemy in enemies)
+        //Initiating enemy always goes first//
+        if (initiatingEnemy != null && !initiatingEnemy.IsDead)
         {
-            if (enemy != null)
-            {
-                turnOrder.Add(enemy);
-            }
+            turnOrder.Add(initiatingEnemy);
         }
 
-        //Player goes last//
-        turnOrder.Add(player);
+        //Randomize the rest (other enemies + player)//
+        List<Unit> remainingUnits = new List<Unit>();
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy == null || enemy.IsDead) continue;
+            if (enemy == initiatingEnemy) continue;
+            remainingUnits.Add(enemy);
+        }
+
+        if (player != null && !player.IsDead)
+        {
+            remainingUnits.Add(player);
+        }
+
+        ShuffleUnits(remainingUnits);
+        turnOrder.AddRange(remainingUnits);
 
         if (debugMode)
         {
@@ -409,49 +416,43 @@ public class CombatManager : MonoBehaviour
     }
 
  
-    //Get enemies within join range of the initiating enemy -EM//
-    private List<Enemy> GetEnemiesInJoinRange(Enemy initiatingEnemy)
+    //Get all living enemies in the player's current room -EM//
+    private List<Enemy> GetEnemiesInCurrentRoom(Enemy initiatingEnemy)
     {
         List<Enemy> enemies = new List<Enemy>();
 
-        if (!initiatingEnemy.IsDead)
-        {
-            enemies.Add(initiatingEnemy);
-        }
+        RoomManager roomManager = FindFirstObjectByType<RoomManager>();
+        RoomLA currentRoom = roomManager != null ? roomManager.CurrentRoom : null;
 
-        if (enemyJoinRadius <= 0f)
+        if (currentRoom == null)
         {
+            if (debugMode) Debug.LogWarning("[CombatManager] No current room found, starting combat with initiating enemy only.");
+            if (initiatingEnemy != null && !initiatingEnemy.IsDead)
+            {
+                enemies.Add(initiatingEnemy);
+            }
             return enemies;
         }
 
-        if (enemyLayer.value != 0)
+        Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        foreach (Enemy enemy in allEnemies)
         {
-            Collider[] colliders = Physics.OverlapSphere(initiatingEnemy.transform.position, enemyJoinRadius, enemyLayer);
-            foreach (Collider col in colliders)
-            {
-                Enemy enemy = col.GetComponentInParent<Enemy>();
-                if (enemy != null && !enemy.IsDead && !enemies.Contains(enemy))
-                {
-                    enemies.Add(enemy);
-                }
-            }
-        }
-        else
-        {
-            Enemy[] allEnemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
-            foreach (Enemy enemy in allEnemies)
-            {
-                if (enemy == null || enemy.IsDead) continue;
-                if (enemies.Contains(enemy)) continue;
-
-                float distance = Vector3.Distance(initiatingEnemy.transform.position, enemy.transform.position);
-                if (distance <= enemyJoinRadius)
-                {
-                    enemies.Add(enemy);
-                }
-            }
+            if (enemy == null || enemy.IsDead) continue;
+            if (!currentRoom.Contains(enemy.transform.position)) continue;
+            enemies.Add(enemy);
         }
 
         return enemies;
+    }
+
+    private void ShuffleUnits(List<Unit> units)
+    {
+        for (int i = 0; i < units.Count - 1; i++)
+        {
+            int swapIndex = Random.Range(i, units.Count);
+            Unit temp = units[i];
+            units[i] = units[swapIndex];
+            units[swapIndex] = temp;
+        }
     }
 }
