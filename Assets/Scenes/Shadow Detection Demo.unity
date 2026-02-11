@@ -5292,6 +5292,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   lightCheckOffset: {x: 0, y: 0.1, z: 0}
+  lightCheckRadius: 0.3
   maxMoveDistance: 14
   minMoveDistance: 0.67
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
@@ -5353,6 +5354,7 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   player: {fileID: 740575474}
   targetingSystem: {fileID: 740575472}
+  abilityAudioSource: {fileID: 0}
   debugMode: 0
   cooldownTimers:
   - 3
@@ -6575,6 +6577,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Torch (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 483742366523942645, guid: 679fb9eef922be142bc5eda0c74fa389, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7647708163265304832, guid: 679fb9eef922be142bc5eda0c74fa389, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.35
@@ -7332,6 +7338,7 @@ MonoBehaviour:
   coinParent: {fileID: 1252907755}
   player: {fileID: 740575474}
   destroyDelay: 1
+  fillStepDelay: 0.05
 --- !u!1 &1262552775
 GameObject:
   m_ObjectHideFlags: 0
@@ -8662,6 +8669,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TreasureChest
       objectReference: {fileID: 0}
+    - target: {fileID: 3096557341229865874, guid: 314c5a4177764d04d97fd486a3cd5f60, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4941142002293631894, guid: 314c5a4177764d04d97fd486a3cd5f60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24.8
@@ -8900,10 +8911,6 @@ MonoBehaviour:
   currentTurnIndex: 0
   currentUnit: {fileID: 0}
   player: {fileID: 740575474}
-  enemyJoinRadius: 8
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 256
   debugMode: 1
 --- !u!1 &1394091011
 GameObject:
@@ -9670,7 +9677,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1512805849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13839,6 +13846,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Torch
       objectReference: {fileID: 0}
+    - target: {fileID: 483742366523942645, guid: 679fb9eef922be142bc5eda0c74fa389, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7647708163265304832, guid: 679fb9eef922be142bc5eda0c74fa389, type: 3}
       propertyPath: m_LocalPosition.x
       value: 10.633552
@@ -13936,11 +13947,72 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 5684884364317442628, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
+--- !u!1001 &7679828524266540408
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7102310171741552818, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_Name
+      value: PlayerClone
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.099
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 15.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.08646015
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.99625534
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -189.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 8991775213394430726, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bca445f7406f423488f9de7d447d45db, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -13948,6 +14020,7 @@ SceneRoots:
   - {fileID: 1437648970}
   - {fileID: 740575467}
   - {fileID: 2321884528050547022}
+  - {fileID: 7679828524266540408}
   - {fileID: 285508514}
   - {fileID: 724920498}
   - {fileID: 1512805851}
