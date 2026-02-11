@@ -68,6 +68,48 @@ public class LightDetectionManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Check if a world point is in light, sampling around a radius to avoid tiny false negatives.
+    /// </summary>
+    public LightCheckResult CheckLightAtPoint(Vector3 point, float radius)
+    {
+        if (radius <= 0f)
+        {
+            return CheckLightAtPoint(point);
+        }
+
+        LightCheckResult bestResult = CheckLightAtPoint(point);
+        if (bestResult.isInLight)
+        {
+            return bestResult;
+        }
+
+        Vector3[] offsets =
+        {
+            Vector3.right,
+            Vector3.left,
+            Vector3.forward,
+            Vector3.back,
+            Vector3.up,
+            Vector3.down
+        };
+
+        for (int i = 0; i < offsets.Length; i++)
+        {
+            LightCheckResult sampleResult = CheckLightAtPoint(point + offsets[i] * radius);
+            if (sampleResult.totalLightContribution > bestResult.totalLightContribution)
+            {
+                bestResult = sampleResult;
+            }
+            if (sampleResult.isInLight)
+            {
+                return sampleResult;
+            }
+        }
+
+        return bestResult;
+    }
+
+    /// <summary>
     /// A simple check, is this point in light?
     /// </summary>
     public bool IsPointInLight(Vector3 point)

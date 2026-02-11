@@ -67,6 +67,8 @@ public class AbilityTargeting : MonoBehaviour
     private Ability currentAbility;
     private Player currentCaster;
     private Camera mainCamera;
+    private RoomManager roomManager;
+    private RoomLA currentAoeRoom;
     private float currentAbilityRange;
     private float currentAbilityConeAngle;
     private float currentAbilityAoeRadius;
@@ -86,6 +88,7 @@ public class AbilityTargeting : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        roomManager = FindFirstObjectByType<RoomManager>();
 
         // Setup input
         if (inputActions != null)
@@ -171,6 +174,11 @@ public class AbilityTargeting : MonoBehaviour
             return;
         }
 
+        if (roomManager == null)
+        {
+            roomManager = FindFirstObjectByType<RoomManager>();
+        }
+
         currentAbility = ability;
         currentCaster = caster;
         isTargeting = true;
@@ -197,6 +205,7 @@ public class AbilityTargeting : MonoBehaviour
             case TargetingType.Cone:
                 if (coneVisualizer != null)
                 {
+                    coneVisualizer.SetObstacleMask(targetBlockerLayer);
                     coneVisualizer.Show(currentAbilityRange, currentAbilityConeAngle);
                 }
                 break;
@@ -204,6 +213,8 @@ public class AbilityTargeting : MonoBehaviour
             case TargetingType.RangedAOE:
                 if (aoeVisualizer != null)
                 {
+                    currentAoeRoom = roomManager != null ? roomManager.CurrentRoom : null;
+                    aoeVisualizer.SetRoom(currentAoeRoom);
                     aoeVisualizer.Show(currentAbilityAoeRadius, currentAbilityRange);
                 }
                 break;
@@ -292,6 +303,15 @@ public class AbilityTargeting : MonoBehaviour
 
             if (unit != null && unit.GetComponent<Player>() == null)
             {
+                if (!IsUnitInCurrentRoom(unit))
+                {
+                    if (hoveredUnit != null)
+                    {
+                        ClearHighlight();
+                    }
+                    return;
+                }
+
                 if (IsUnitHiddenFromPlayer(unit))
                 {
                     if (hoveredUnit != null)
@@ -384,6 +404,11 @@ public class AbilityTargeting : MonoBehaviour
     private void UpdateAOETargeting(Vector2 pointerPos)
     {
         if (currentCaster == null || aoeVisualizer == null) return;
+        if (roomManager != null && roomManager.CurrentRoom != currentAoeRoom)
+        {
+            currentAoeRoom = roomManager.CurrentRoom;
+            aoeVisualizer.SetRoom(currentAoeRoom);
+        }
 
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
@@ -408,6 +433,17 @@ public class AbilityTargeting : MonoBehaviour
             if (Physics.Raycast(targetPoint + Vector3.up * 10f, Vector3.down, out RaycastHit groundHit, 20f, groundLayer))
             {
                 targetPoint = groundHit.point;
+            }
+
+            if (!IsPointInCurrentRoom(targetPoint))
+            {
+                aoeVisualizer.Hide();
+                return;
+            }
+
+            if (!aoeVisualizer.IsVisible)
+            {
+                aoeVisualizer.Show(currentAbilityAoeRadius, currentAbilityRange);
             }
 
             aoeVisualizer.UpdatePosition(targetPoint);
@@ -471,7 +507,7 @@ public class AbilityTargeting : MonoBehaviour
         Vector3 origin = currentCaster.transform.position;
         Vector3 direction = coneVisualizer.CurrentDirection;
 
-        List<Unit> targets = GetUnitsInCone(origin, direction, currentAbilityRange, currentAbilityConeAngle);
+        List<Unit> targets = GetUnitsInCone(origin, direction, currentAbilityRange, currentAbilityConeAngle, currentAbilityAoeHeight);
 
         TargetingResult result = new TargetingResult
         {
@@ -486,9 +522,18 @@ public class AbilityTargeting : MonoBehaviour
 
     private void ConfirmAOE()
     {
-        if (aoeVisualizer == null) return;
+        if (aoeVisualizer == null || currentCaster == null) return;
 
         Vector3 center = aoeVisualizer.CurrentPosition;
+        if (!HasLineOfSightToPoint(currentCaster.transform.position, center))
+        {
+            if (debugMode)
+            {
+                Debug.Log("[AbilityTargeting] AOE cast blocked by line of sight");
+            }
+            return;
+        }
+
         List<Unit> targets = GetUnitsInRadius(center, currentAbilityAoeRadius, currentAbilityAoeHeight);
 
         TargetingResult result = new TargetingResult
@@ -557,7 +602,7 @@ public class AbilityTargeting : MonoBehaviour
         return true;
     }
 
-    private List<Unit> GetUnitsInCone(Vector3 origin, Vector3 direction, float range, float angle)
+    private List<Unit> GetUnitsInCone(Vector3 origin, Vector3 direction, float range, float angle, float height)
     {
         List<Unit> targets = new List<Unit>();
 
@@ -570,6 +615,7 @@ public class AbilityTargeting : MonoBehaviour
         {
             Unit unit = col.GetComponentInParent<Unit>();
             if (unit == null || unit.GetComponent<Player>() != null) continue;
+            if (!IsUnitInCurrentRoom(unit)) continue;
 
             Vector3 toUnit = unit.transform.position - origin;
             toUnit.y = 0;
@@ -578,6 +624,15 @@ public class AbilityTargeting : MonoBehaviour
 
             if (unitAngle <= halfAngle)
             {
+                if (height > 0f)
+                {
+                    float verticalDistance = Mathf.Abs(unit.transform.position.y - origin.y);
+                    if (verticalDistance > height)
+                    {
+                        continue;
+                    }
+                }
+
                 targets.Add(unit);
             }
         }
@@ -596,6 +651,11 @@ public class AbilityTargeting : MonoBehaviour
         {
             Unit unit = col.GetComponentInParent<Unit>();
             if (unit == null || unit.GetComponent<Player>() != null || targets.Contains(unit))
+            {
+                continue;
+            }
+
+            if (!IsUnitInCurrentRoom(unit))
             {
                 continue;
             }
@@ -648,5 +708,28 @@ public class AbilityTargeting : MonoBehaviour
         if (unit == null) return false;
         Enemy enemy = unit.GetComponent<Enemy>();
         return enemy != null && enemy.IsHiddenFromPlayer;
+    }
+
+    private bool IsUnitInCurrentRoom(Unit unit)
+    {
+        if (unit == null) return false;
+        if (roomManager == null || roomManager.CurrentRoom == null) return true;
+        return roomManager.CurrentRoom.Contains(unit.transform.position);
+    }
+
+    private bool IsPointInCurrentRoom(Vector3 point)
+    {
+        if (roomManager == null || roomManager.CurrentRoom == null) return true;
+        return roomManager.CurrentRoom.Contains(point);
+    }
+
+    private bool HasLineOfSightToPoint(Vector3 from, Vector3 targetPoint)
+    {
+        Vector3 startPos = from + Vector3.up * 0.5f;
+        Vector3 endPos = targetPoint + Vector3.up * 0.5f;
+        Vector3 direction = endPos - startPos;
+        float distance = direction.magnitude;
+
+        return !Physics.Raycast(startPos, direction.normalized, distance, targetBlockerLayer);
     }
 }

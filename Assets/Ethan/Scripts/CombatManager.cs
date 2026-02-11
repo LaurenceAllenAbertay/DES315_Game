@@ -21,6 +21,8 @@ public class CombatManager : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
 
+    private readonly List<Unit> subscribedUnits = new List<Unit>();
+
     //Events//
     public delegate void CombatStarted(List<Enemy> enemies);
     public event CombatStarted OnCombatStarted;
@@ -107,6 +109,7 @@ public class CombatManager : MonoBehaviour
 
         //Build turn order//
         BuildTurnOrder(enemies, initiatingEnemy);
+        RegisterDeathCallbacks(enemies);
 
         //Notify player they're in combat//
         player.EnterCombat();
@@ -339,6 +342,7 @@ public class CombatManager : MonoBehaviour
         }
 
         //Clean up//
+        UnregisterDeathCallbacks();
         turnOrder.Clear();
         currentUnit = null;
         currentTurnIndex = 0;
@@ -454,5 +458,40 @@ public class CombatManager : MonoBehaviour
             units[i] = units[swapIndex];
             units[swapIndex] = temp;
         }
+    }
+
+    private void RegisterDeathCallbacks(List<Enemy> enemies)
+    {
+        UnregisterDeathCallbacks();
+
+        foreach (Enemy enemy in enemies)
+        {
+            if (enemy == null) continue;
+            enemy.OnDied += HandleUnitDied;
+            subscribedUnits.Add(enemy);
+        }
+
+        if (player != null)
+        {
+            player.OnDied += HandleUnitDied;
+            subscribedUnits.Add(player);
+        }
+    }
+
+    private void UnregisterDeathCallbacks()
+    {
+        foreach (Unit unit in subscribedUnits)
+        {
+            if (unit == null) continue;
+            unit.OnDied -= HandleUnitDied;
+        }
+
+        subscribedUnits.Clear();
+    }
+
+    private void HandleUnitDied(Unit unit)
+    {
+        if (!inCombat) return;
+        CheckCombatEnd();
     }
 }

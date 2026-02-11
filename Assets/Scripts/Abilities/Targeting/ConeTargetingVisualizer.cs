@@ -10,6 +10,7 @@ public class ConeTargetingVisualizer : MonoBehaviour
     public Color coneColor = new Color(0.2f, 0.6f, 1f, 0.3f);
     public int resolution = 20;
     public float groundOffset = 0.1f;
+    public LayerMask obstacleMask = ~0;
 
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
@@ -104,7 +105,15 @@ public class ConeTargetingVisualizer : MonoBehaviour
             float rad = angle * Mathf.Deg2Rad;
             
             Vector3 localDir = new Vector3(Mathf.Sin(rad), 0, Mathf.Cos(rad));
-            vertices[i + 1] = localDir * currentRange + new Vector3(0, groundOffset, 0);
+            float distance = currentRange;
+            Vector3 worldDir = transform.TransformDirection(localDir);
+
+            if (Physics.Raycast(transform.position, worldDir, out RaycastHit hit, currentRange, obstacleMask))
+            {
+                distance = hit.distance;
+            }
+
+            vertices[i + 1] = localDir * distance + new Vector3(0, groundOffset, 0);
         }
         
         for (int i = 0; i < resolution; i++)
@@ -127,6 +136,11 @@ public class ConeTargetingVisualizer : MonoBehaviour
         {
             instancedMaterial.SetColor("_BaseColor", color);
         }
+    }
+
+    public void SetObstacleMask(LayerMask mask)
+    {
+        obstacleMask = mask;
     }
 
     private void OnDestroy()

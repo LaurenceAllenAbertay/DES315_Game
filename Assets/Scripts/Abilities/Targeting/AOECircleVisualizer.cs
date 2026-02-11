@@ -20,8 +20,10 @@ public class AOECircleVisualizer : MonoBehaviour
     private float currentRadius;
     private float maxRange;
     private Vector3 currentPosition;
+    private RoomLA currentRoom;
 
     public Vector3 CurrentPosition => currentPosition;
+    public bool IsVisible => meshRenderer != null && meshRenderer.enabled;
 
     private void Awake()
     {
@@ -79,6 +81,13 @@ public class AOECircleVisualizer : MonoBehaviour
     {
         currentPosition = position;
         transform.position = position;
+        UpdateMesh();
+    }
+
+    public void SetRoom(RoomLA room)
+    {
+        currentRoom = room;
+        UpdateMesh();
     }
 
     private void UpdateMesh()
@@ -93,7 +102,8 @@ public class AOECircleVisualizer : MonoBehaviour
             float angle = (i / (float)resolution) * Mathf.PI * 2f;
             float x = Mathf.Cos(angle) * currentRadius;
             float z = Mathf.Sin(angle) * currentRadius;
-            vertices[i + 1] = new Vector3(x, groundOffset, z);
+            Vector3 localVertex = new Vector3(x, groundOffset, z);
+            vertices[i + 1] = ClipVertexToRoom(localVertex);
         }
 
         for (int i = 0; i < resolution; i++)
@@ -107,6 +117,51 @@ public class AOECircleVisualizer : MonoBehaviour
         circleMesh.vertices = vertices;
         circleMesh.triangles = triangles;
         circleMesh.RecalculateNormals();
+    }
+
+    private Vector3 ClipVertexToRoom(Vector3 localVertex)
+    {
+        if (currentRoom == null)
+        {
+            return localVertex;
+        }
+
+        Vector3 worldPos = transform.TransformPoint(localVertex);
+        if (currentRoom.Contains(worldPos))
+        {
+            return localVertex;
+        }
+
+        Vector3 closest = GetClosestPointOnRoom(worldPos);
+        Vector3 localClosest = transform.InverseTransformPoint(closest);
+        localClosest.y = groundOffset;
+        return localClosest;
+    }
+
+    private Vector3 GetClosestPointOnRoom(Vector3 worldPos)
+    {
+        Collider[] colliders = currentRoom.BoundaryColliders;
+        if (colliders == null || colliders.Length == 0)
+        {
+            return worldPos;
+        }
+
+        float bestSqrDistance = float.MaxValue;
+        Vector3 bestPoint = worldPos;
+
+        foreach (Collider collider in colliders)
+        {
+            if (collider == null) continue;
+            Vector3 point = collider.ClosestPoint(worldPos);
+            float sqrDistance = (point - worldPos).sqrMagnitude;
+            if (sqrDistance < bestSqrDistance)
+            {
+                bestSqrDistance = sqrDistance;
+                bestPoint = point;
+            }
+        }
+
+        return bestPoint;
     }
 
     public void SetColor(Color color)

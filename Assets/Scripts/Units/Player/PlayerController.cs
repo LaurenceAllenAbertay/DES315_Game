@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Light Detection")]
     public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
+    [Tooltip("Radius around the light check point used to avoid tiny false shadow checks")]
+    public float lightCheckRadius = 0.3f;
 
     [Header("Movement Range")]
     [Tooltip("Maximum distance the player can move in a single click (outside combat)")]
@@ -439,7 +441,7 @@ public class PlayerController : MonoBehaviour
         if (LightDetectionManager.Instance == null) return;
 
         Vector3 checkPoint = transform.position + lightCheckOffset;
-        LightCheckResult result = LightDetectionManager.Instance.CheckLightAtPoint(checkPoint);
+        LightCheckResult result = LightDetectionManager.Instance.CheckLightAtPoint(checkPoint, lightCheckRadius);
 
         bool previousState = isInLight;
 
@@ -469,7 +471,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 checkPoint = transform.position + lightCheckOffset;
         Gizmos.color = isInLight ? Color.yellow : Color.blue;
-        Gizmos.DrawWireSphere(checkPoint, 0.2f);
+        Gizmos.DrawWireSphere(checkPoint, Mathf.Max(0.01f, lightCheckRadius));
 
         if (agent != null && agent.hasPath)
         {
