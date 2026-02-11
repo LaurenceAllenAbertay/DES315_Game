@@ -21,6 +21,7 @@ public abstract class AbilityEffect : ScriptableObject
 public class AbilityExecutionContext
 {
     public Player Caster { get; private set; }
+    public string AbilityName { get; private set; }
     public Unit CurrentTarget { get; set; }
     public Vector3 TargetPoint { get; set; }
     
@@ -35,9 +36,10 @@ public class AbilityExecutionContext
     /// </summary>
     public bool EnemyWasHit { get; set; } = false;
 
-    public AbilityExecutionContext(Player caster)
+    public AbilityExecutionContext(Player caster, string abilityName)
     {
         Caster = caster;
+        AbilityName = abilityName;
         AccumulatedMultiplier = 1f;
     }
 

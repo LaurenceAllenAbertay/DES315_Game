@@ -140,6 +140,7 @@ public class EnemyCombatAI : MonoBehaviour
             else
             {
                 if(debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} FLIP MISS - {chosen.actionName} failed");
+                MessageUI.Instance?.EnqueueMessage($"{gameObject.name} missed {chosen.actionName}.");
             }
             }
         }
@@ -296,22 +297,30 @@ public class EnemyCombatAI : MonoBehaviour
             case EnemyActionType.Attack:
                 float damage = action.baseValue;
                 player.TakeDamage(damage);
+                MessageUI.Instance?.EnqueueMessage(
+                    $"{gameObject.name} cast {action.actionName} and dealt {damage:0.#} damage to you.");
                 if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} attacked player for {damage}");
                 break;
 
             case EnemyActionType.SpecialAttack:
                 float specialDamage = action.baseValue * action.specialMultiplier;
                 player.TakeDamage(specialDamage);
+                MessageUI.Instance?.EnqueueMessage(
+                    $"{gameObject.name} cast {action.actionName} and dealt {specialDamage:0.#} damage to you.");
                 if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} used special attack on player for {specialDamage}");
                 break;
 
             case EnemyActionType.Defend:
                 enemy.AddBlock(action.baseValue);
+                MessageUI.Instance?.EnqueueMessage(
+                    $"{gameObject.name} cast {action.actionName} and gained {action.baseValue:0.#} block.");
                 if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} added {action.baseValue} block");
                 break;
 
             case EnemyActionType.Heal:
                 enemy.Heal(action.baseValue);
+                MessageUI.Instance?.EnqueueMessage(
+                    $"{gameObject.name} cast {action.actionName} and healed for {action.baseValue:0.#}.");
                 if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} healed for {action.baseValue}");
                 break;
         }

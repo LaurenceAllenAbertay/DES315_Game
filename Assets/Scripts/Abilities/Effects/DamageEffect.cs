@@ -39,6 +39,12 @@ public class DamageEffect : AbilityEffect
                 {
                     context.EnemyWasHit = true;
                 }
+                if (context.Caster is Player && context.CurrentTarget is Enemy enemyTarget)
+                {
+                    string abilityLabel = string.IsNullOrWhiteSpace(context.AbilityName) ? "ability" : context.AbilityName;
+                    MessageUI.Instance?.EnqueueMessage(
+                        $"You cast {abilityLabel} for {finalDamage:0.#} damage to {enemyTarget.name}.");
+                }
                 // Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }
         }

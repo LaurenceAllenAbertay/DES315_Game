@@ -27,6 +27,10 @@ public class HealEffect : AbilityEffect
             if (context.Caster != null)
             {
                 context.Caster.Heal(finalHeal);
+                if (context.Caster is Player)
+                {
+                    MessageUI.Instance?.EnqueueMessage($"You healed for {finalHeal:0.#}.");
+                }
             }
         }
         else
@@ -35,6 +39,10 @@ public class HealEffect : AbilityEffect
             if (context.CurrentTarget != null)
             {
                 context.CurrentTarget.Heal(finalHeal);
+                if (context.Caster is Player && context.CurrentTarget == context.Caster)
+                {
+                    MessageUI.Instance?.EnqueueMessage($"You healed for {finalHeal:0.#}.");
+                }
             }
         }
     }

@@ -49,6 +49,9 @@ public class Ability : ScriptableObject
     [Tooltip("Prefab to spawn when the ability is executed")]
     public GameObject visualEffectPrefab;
 
+    [Tooltip("How long the spawned VFX should live before auto-destroy (seconds)")]
+    public float visualEffectDuration = 5f;
+
     [Header("Audio")]
     [Tooltip("Sound played instantly when the ability is cast")]
     public AudioClip castSound;
@@ -64,7 +67,7 @@ public class Ability : ScriptableObject
     /// </summary>
     public void Execute(Player caster, Unit target)
     {
-        AbilityExecutionContext context = new AbilityExecutionContext(caster);
+        AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
         context.CurrentTarget = target;
 
         ExecuteEffects(context);
@@ -83,7 +86,7 @@ public class Ability : ScriptableObject
         if (targets == null || targets.Count == 0)
         {
             // No targets, might be a self-only ability
-            AbilityExecutionContext context = new AbilityExecutionContext(caster);
+            AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
             ExecuteEffects(context);
             return;
         }
@@ -92,7 +95,7 @@ public class Ability : ScriptableObject
 
         foreach (Unit target in targets)
         {
-            AbilityExecutionContext context = new AbilityExecutionContext(caster);
+            AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
             context.CurrentTarget = target;
             
             ExecuteEffects(context);
@@ -121,7 +124,7 @@ public class Ability : ScriptableObject
     /// </summary>
     public void Execute(Player caster, Vector3 targetPoint)
     {
-        AbilityExecutionContext context = new AbilityExecutionContext(caster);
+        AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
         context.TargetPoint = targetPoint;
 
         ExecuteEffects(context);

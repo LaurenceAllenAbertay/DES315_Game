@@ -285,10 +285,16 @@ public class PlayerAbilityManager : MonoBehaviour
             {
                 // Ability missed, coin spent but nothing happens
                 if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' MISSED! Coin spent, no effect.");
+                MessageUI.Instance?.EnqueueMessage($"You missed {ability.abilityName}.");
                 return;
             }
 
             if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
+        }
+
+        if (!HasFeedbackEffects(ability))
+        {
+            MessageUI.Instance?.EnqueueMessage($"You cast {ability.abilityName}.");
         }
 
         PlayAbilityCastSound(ability);
@@ -386,7 +392,8 @@ public class PlayerAbilityManager : MonoBehaviour
         
         // Auto-destroy after some time (particle effects usually last a few seconds)
         // This handles the user's question about needing code to destroy them.
-        Destroy(vfx, 5f);
+        float vfxDuration = ability != null ? Mathf.Max(0.1f, ability.visualEffectDuration) : 5f;
+        Destroy(vfx, vfxDuration);
     }
 
     /// <summary>
@@ -439,5 +446,24 @@ public class PlayerAbilityManager : MonoBehaviour
 
         if (debugMode)
             Debug.Log($"[AbilityManager] Equipped '{(ability != null ? ability.abilityName : "null")}' to slot {slotIndex + 1}");
+    }
+
+    private static bool HasFeedbackEffects(Ability ability)
+    {
+        if (ability == null || ability.effects == null)
+        {
+            return false;
+        }
+
+        foreach (AbilityEffect effect in ability.effects)
+        {
+            if (effect == null) continue;
+            if (effect is DamageEffect || effect is HealEffect || effect is BlockEffect)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

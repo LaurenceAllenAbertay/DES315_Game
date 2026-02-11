@@ -114,6 +114,8 @@ public class CombatManager : MonoBehaviour
         //Notify player they're in combat//
         player.EnterCombat();
 
+        MessageUI.Instance?.EnqueueMessage("Combat Start!");
+
         //Fire event//
         OnCombatStarted?.Invoke(enemies);
 
@@ -207,6 +209,8 @@ public class CombatManager : MonoBehaviour
         {
             Debug.Log($"[CombatManager] Starting turn: {currentUnit.name}");
         }
+
+        MessageUI.Instance?.EnqueueMessage($"{currentUnit.name}'s turn.");
 
         OnTurnStarted?.Invoke(currentUnit);
 
@@ -340,6 +344,8 @@ public class CombatManager : MonoBehaviour
             float lethalDamage = player.CurrentHealth + player.CurrentBlock + 1f;
             player.TakeDamage(lethalDamage);
         }
+
+        MessageUI.Instance?.EnqueueMessage("Combat Ended!");
 
         //Clean up//
         UnregisterDeathCallbacks();
