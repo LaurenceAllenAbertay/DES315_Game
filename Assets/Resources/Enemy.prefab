@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4891497393395036189}
   - component: {fileID: 6999377108200252519}
   - component: {fileID: 1495230120648841922}
+  - component: {fileID: 7482744618502037130}
+  - component: {fileID: 7848320058116713370}
   - component: {fileID: 5074557219477594191}
   - component: {fileID: 1273277966033234974}
   - component: {fileID: 8436641855460968059}
@@ -83,6 +85,60 @@ MonoBehaviour:
   lightCheckOffset: {x: 0, y: 1, z: 0}
   revealDistance: 3.14159
   visibilityCheckInterval: 0.1
+--- !u!114 &7482744618502037130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684884364317442628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b489009ec3227ea4895a587f82fde52f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions:
+  - {fileID: 11400000, guid: 0008a0bfaf1d2144f9e6b10cd1288d63, type: 2}
+  - {fileID: 11400000, guid: d55d3f7f2b2381a42bac37a96e3f2c13, type: 2}
+  - {fileID: 11400000, guid: f917b80da881cee4ea36a6973280ceac, type: 2}
+  healThreshold: 0.4
+  defendThreshold: 0.6
+  specialHealthMin: 0.5
+  thinkTime: 0.6
+  postActionDelay: 0.5
+  maxMoveTime: 2.5
+  rangeTolerance: 0.2
+  debugMode: 0
+  lastChosenAction: None
+  lastFlipresult: 0
+  lastFlipChance: 0
+--- !u!114 &7848320058116713370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684884364317442628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b489009ec3227ea4895a587f82fde52f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableActions:
+  - {fileID: 11400000, guid: 0008a0bfaf1d2144f9e6b10cd1288d63, type: 2}
+  - {fileID: 11400000, guid: d55d3f7f2b2381a42bac37a96e3f2c13, type: 2}
+  - {fileID: 11400000, guid: f917b80da881cee4ea36a6973280ceac, type: 2}
+  healThreshold: 0.4
+  defendThreshold: 0.6
+  specialHealthMin: 0.5
+  thinkTime: 0.6
+  postActionDelay: 0.5
+  maxMoveTime: 2.5
+  rangeTolerance: 0.2
+  debugMode: 0
+  lastChosenAction: None
+  lastFlipresult: 0
+  lastFlipChance: 0
 --- !u!114 &5074557219477594191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,15 +173,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5684884364317442628}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50ee42fa0653acf4fb01e1f003ad9894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roamRadius: 10
-  minIdleTime: 2
-  maxIdleTime: 5
-  debugMode: 1
+  roamRadius: 0
+  minIdleTime: 99
+  maxIdleTime: 99
+  debugMode: 0
   currentState: 0
   currentDestination: {x: 0, y: 0, z: 0}
   idleTimer: 0

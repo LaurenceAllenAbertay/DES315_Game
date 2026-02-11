@@ -963,38 +963,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lightThreshold: 0.1
   logLightChecks: 0
---- !u!1 &175204158 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5684884364317442628, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
-  m_PrefabInstance: {fileID: 1320859511}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &175204165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 175204158}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b489009ec3227ea4895a587f82fde52f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availableActions:
-  - {fileID: 11400000, guid: 0008a0bfaf1d2144f9e6b10cd1288d63, type: 2}
-  - {fileID: 11400000, guid: d55d3f7f2b2381a42bac37a96e3f2c13, type: 2}
-  - {fileID: 11400000, guid: f917b80da881cee4ea36a6973280ceac, type: 2}
-  healThreshold: 0.4
-  defendThreshold: 0.6
-  specialHealthMin: 0.5
-  thinkTime: 0.6
-  postActionDelay: 0.5
-  maxMoveTime: 2.5
-  rangeTolerance: 0.2
-  debugMode: 0
-  lastChosenAction: None
-  lastFlipresult: 0
-  lastFlipChance: 0
 --- !u!1 &211357959
 GameObject:
   m_ObjectHideFlags: 0
@@ -2600,6 +2568,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   lightCheckOffset: {x: 0, y: 0.1, z: 0}
+  lightCheckRadius: 0.3
   maxMoveDistance: 14
   minMoveDistance: 0.67
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
@@ -7994,10 +7963,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1495230120648841922, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
-      propertyPath: maxHealth
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 4891497393395036189, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.02
@@ -8045,10 +8010,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5684884364317442628, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 175204165}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
 --- !u!1 &1336363953
 GameObject:
@@ -9522,10 +9484,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1495230120648841922, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
-      propertyPath: maxHealth
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 2946588047650188184, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
       propertyPath: visionRange
       value: 4.5
@@ -9577,10 +9535,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5684884364317442628, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1634808130}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
 --- !u!1 &1576034296
 GameObject:
@@ -10371,38 +10326,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1223149727}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1634808123 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5684884364317442628, guid: 0f81b1227b2e5d74b972d3bff3f0c910, type: 3}
-  m_PrefabInstance: {fileID: 1575934167}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1634808130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1634808123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b489009ec3227ea4895a587f82fde52f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  availableActions:
-  - {fileID: 11400000, guid: 0008a0bfaf1d2144f9e6b10cd1288d63, type: 2}
-  - {fileID: 11400000, guid: d55d3f7f2b2381a42bac37a96e3f2c13, type: 2}
-  - {fileID: 11400000, guid: f917b80da881cee4ea36a6973280ceac, type: 2}
-  healThreshold: 0.4
-  defendThreshold: 0.6
-  specialHealthMin: 0.5
-  thinkTime: 0.6
-  postActionDelay: 0.5
-  maxMoveTime: 2.5
-  rangeTolerance: 0.2
-  debugMode: 0
-  lastChosenAction: None
-  lastFlipresult: 0
-  lastFlipChance: 0
 --- !u!1 &1645017273
 GameObject:
   m_ObjectHideFlags: 0

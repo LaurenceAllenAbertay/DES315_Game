@@ -27,12 +27,16 @@ public class EnemyAI : MonoBehaviour
 
     private NavMeshAgent agent;
     private Enemy enemy;
+    private Vector3 combatStartPosition;
+    private Quaternion combatStartRotation;
+    private bool hasCombatStartTransform;
 
     //Can add more when combat is defined//
     private enum AIState
     {
         Idle,
-        Roaming
+        Roaming,
+        Returning
     }
 
     private void Awake()
@@ -79,6 +83,17 @@ public class EnemyAI : MonoBehaviour
         //scoped room based wandering can be added when a room detector is built//
         if(!enabled) return;
 
+        if (enemies != null && enemies.Contains(enemy))
+        {
+            combatStartPosition = transform.position;
+            combatStartRotation = transform.rotation;
+            hasCombatStartTransform = true;
+        }
+        else
+        {
+            hasCombatStartTransform = false;
+        }
+
         if (debugMode) Debug.Log($"[EnemyAI] {gameObject.name}: Combat started - disabling wandering AI");
 
         //Stop in place before disabling//
@@ -98,10 +113,21 @@ public class EnemyAI : MonoBehaviour
 
         if (debugMode) Debug.Log($"[EnemyAI] {gameObject.name}: combat ended - re-enabling wandering AI");
 
-        enabled = true; 
+        enabled = true;
+
+        if (hasCombatStartTransform)
+        {
+            if (ValidateAgent())
+            {
+                StartReturning();
+                return;
+            }
+
+            SnapToCombatStartTransform();
+        }
 
         //Resume from idle so the enemy doesn't immediately charge ooff//
-        if(isInitialized && ValidateAgent())
+        if (isInitialized && ValidateAgent())
         {
             StartIdling();
         }
@@ -147,6 +173,9 @@ public class EnemyAI : MonoBehaviour
             case AIState.Roaming:
                 HandleRoamingState();
                 break;
+            case AIState.Returning:
+                HandleReturningState();
+                break;
         }
     }
 
@@ -172,6 +201,19 @@ public class EnemyAI : MonoBehaviour
             if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
             {
                 StartIdling();
+            }
+        }
+    }
+
+    private void HandleReturningState()
+    {
+        if (!ValidateAgent()) return;
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+            {
+                FinishReturning();
             }
         }
     }
@@ -206,6 +248,31 @@ public class EnemyAI : MonoBehaviour
         idleTimer = Random.Range(minIdleTime,maxIdleTime);
 
         if (debugMode) Debug.Log($"{gameObject.name} idling for {idleTimer:F1} seconds");
+    }
+
+    private void StartReturning()
+    {
+        agent.isStopped = false;
+        agent.ResetPath();
+        agent.SetDestination(combatStartPosition);
+        currentDestination = combatStartPosition;
+        currentState = AIState.Returning;
+    }
+
+    private void SnapToCombatStartTransform()
+    {
+        transform.position = combatStartPosition;
+        transform.rotation = combatStartRotation;
+        currentDestination = Vector3.zero;
+        hasCombatStartTransform = false;
+    }
+
+    private void FinishReturning()
+    {
+        transform.rotation = combatStartRotation;
+        currentDestination = Vector3.zero;
+        hasCombatStartTransform = false;
+        StartIdling();
     }
 
     //Utility -EM//
