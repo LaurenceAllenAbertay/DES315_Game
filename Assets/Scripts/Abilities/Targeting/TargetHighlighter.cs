@@ -15,9 +15,11 @@ public class TargetHighlighter : MonoBehaviour
     [Tooltip("Leave null to auto-find 'Custom/OccludedOutline'")]
     public Shader outlineShader;
 
-    private GameObject currentTarget;
+    private HashSet<GameObject> currentTargets = new HashSet<GameObject>();
+    private Dictionary<GameObject, Renderer[]> targetRenderers = new Dictionary<GameObject, Renderer[]>();
     private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
-    private List<Material> outlineMaterials = new List<Material>();
+    private Dictionary<Renderer, Material> outlineMaterials = new Dictionary<Renderer, Material>();
+    private Dictionary<Renderer, int> rendererRefCounts = new Dictionary<Renderer, int>();
 
     private void Awake()
     {
@@ -37,32 +39,82 @@ public class TargetHighlighter : MonoBehaviour
     /// </summary>
     public void SetTarget(GameObject target)
     {
-        if (target == currentTarget) return;
-        
-        ClearTarget();
+        if (target == null)
+        {
+            ClearTargets();
+            return;
+        }
 
-        if (target == null) return;
-
-        currentTarget = target;
-        ApplyHighlight(target);
+        SetTargets(new List<GameObject> { target });
     }
 
     /// <summary>
     /// Clear any current highlight
     /// </summary>
-    public void ClearTarget()
+    public void ClearTargets()
     {
-        if (currentTarget != null)
+        if (currentTargets.Count == 0)
         {
-            RemoveHighlight();
+            return;
         }
 
-        currentTarget = null;
+        var targetsToRemove = new List<GameObject>(currentTargets);
+        for (int i = 0; i < targetsToRemove.Count; i++)
+        {
+            RemoveHighlight(targetsToRemove[i]);
+        }
+    }
+
+    public void SetTargets(List<GameObject> targets)
+    {
+        if (targets == null || targets.Count == 0)
+        {
+            ClearTargets();
+            return;
+        }
+
+        HashSet<GameObject> newTargets = new HashSet<GameObject>();
+        for (int i = 0; i < targets.Count; i++)
+        {
+            if (targets[i] != null)
+            {
+                newTargets.Add(targets[i]);
+            }
+        }
+
+        if (newTargets.Count == 0)
+        {
+            ClearTargets();
+            return;
+        }
+
+        var toRemove = new List<GameObject>();
+        foreach (GameObject existing in currentTargets)
+        {
+            if (!newTargets.Contains(existing))
+            {
+                toRemove.Add(existing);
+            }
+        }
+
+        for (int i = 0; i < toRemove.Count; i++)
+        {
+            RemoveHighlight(toRemove[i]);
+        }
+
+        foreach (GameObject target in newTargets)
+        {
+            if (!currentTargets.Contains(target))
+            {
+                ApplyHighlight(target);
+            }
+        }
     }
 
     private void ApplyHighlight(GameObject target)
     {
         Renderer[] renderers = target.GetComponentsInChildren<Renderer>();
+        List<Renderer> appliedRenderers = new List<Renderer>();
 
         foreach (Renderer renderer in renderers)
         {
@@ -70,50 +122,83 @@ public class TargetHighlighter : MonoBehaviour
             if (renderer is ParticleSystemRenderer) continue;
             if (renderer.GetComponentInParent<EnemyVisionCone>() != null) continue;
 
-            // Store original materials
-            originalMaterials[renderer] = renderer.materials;
+            appliedRenderers.Add(renderer);
 
-            // Create a new material array with outline materials added
-            Material[] newMaterials = new Material[renderer.materials.Length + 1];
-
-            // Copy original materials
-            for (int i = 0; i < renderer.materials.Length; i++)
+            if (!rendererRefCounts.TryGetValue(renderer, out int refCount))
             {
-                newMaterials[i] = renderer.materials[i];
+                originalMaterials[renderer] = renderer.materials;
+
+                // Create a new material array with outline materials added
+                Material[] newMaterials = new Material[renderer.materials.Length + 1];
+
+                // Copy original materials
+                for (int i = 0; i < renderer.materials.Length; i++)
+                {
+                    newMaterials[i] = renderer.materials[i];
+                }
+
+                // Add outline material
+                Material outlineMat = CreateOutlineMaterial();
+                outlineMaterials[renderer] = outlineMat;
+                newMaterials[newMaterials.Length - 1] = outlineMat;
+
+                renderer.materials = newMaterials;
+                rendererRefCounts[renderer] = 1;
             }
-
-            // Add outline material
-            Material outlineMat = CreateOutlineMaterial();
-            outlineMaterials.Add(outlineMat);
-            newMaterials[newMaterials.Length - 1] = outlineMat;
-
-            renderer.materials = newMaterials;
+            else
+            {
+                rendererRefCounts[renderer] = refCount + 1;
+            }
         }
+
+        targetRenderers[target] = appliedRenderers.ToArray();
+        currentTargets.Add(target);
     }
 
-    private void RemoveHighlight()
+    private void RemoveHighlight(GameObject target)
     {
-        // Restore original materials
-        foreach (var kvp in originalMaterials)
+        if (!targetRenderers.TryGetValue(target, out Renderer[] renderers))
         {
-            if (kvp.Key != null)
+            currentTargets.Remove(target);
+            return;
+        }
+
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            Renderer renderer = renderers[i];
+            if (renderer == null) continue;
+
+            if (rendererRefCounts.TryGetValue(renderer, out int refCount))
             {
-                kvp.Key.materials = kvp.Value;
+                refCount--;
+                if (refCount <= 0)
+                {
+                    if (originalMaterials.TryGetValue(renderer, out Material[] original))
+                    {
+                        renderer.materials = original;
+                    }
+
+                    if (outlineMaterials.TryGetValue(renderer, out Material outline))
+                    {
+                        if (outline != null)
+                        {
+                            Destroy(outline);
+                        }
+                    }
+
+                    originalMaterials.Remove(renderer);
+                    outlineMaterials.Remove(renderer);
+                    rendererRefCounts.Remove(renderer);
+                }
+                else
+                {
+                    rendererRefCounts[renderer] = refCount;
+                }
             }
         }
 
-        originalMaterials.Clear();
-
-        // Destroy outline materials
-        foreach (Material mat in outlineMaterials)
-        {
-            if (mat != null)
-            {
-                Destroy(mat);
-            }
-        }
-
-        outlineMaterials.Clear();
+        targetRenderers.Remove(target);
+        currentTargets.Remove(target);
     }
 
     private Material CreateOutlineMaterial()
@@ -153,7 +238,7 @@ public class TargetHighlighter : MonoBehaviour
     {
         highlightColor = color;
 
-        foreach (Material mat in outlineMaterials)
+        foreach (Material mat in outlineMaterials.Values)
         {
             if (mat != null)
             {
@@ -171,6 +256,6 @@ public class TargetHighlighter : MonoBehaviour
 
     private void OnDestroy()
     {
-        ClearTarget();
+        ClearTargets();
     }
 }

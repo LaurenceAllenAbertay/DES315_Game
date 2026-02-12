@@ -397,7 +397,18 @@ public class AbilityTargeting : MonoBehaviour
             if (direction != Vector3.zero)
             {
                 coneVisualizer.UpdateDirection(casterPos, direction);
+
+                List<Unit> targets = GetUnitsInCone(casterPos, direction, currentAbilityRange, currentAbilityConeAngle, currentAbilityAoeHeight);
+                SetHighlightsForUnits(targets);
             }
+            else
+            {
+                ClearHighlight();
+            }
+        }
+        else
+        {
+            ClearHighlight();
         }
     }
 
@@ -438,6 +449,7 @@ public class AbilityTargeting : MonoBehaviour
             if (!IsPointInCurrentRoom(targetPoint))
             {
                 aoeVisualizer.Hide();
+                ClearHighlight();
                 return;
             }
 
@@ -447,6 +459,19 @@ public class AbilityTargeting : MonoBehaviour
             }
 
             aoeVisualizer.UpdatePosition(targetPoint);
+
+            if (!HasLineOfSightToPoint(currentCaster.transform.position, targetPoint))
+            {
+                ClearHighlight();
+                return;
+            }
+
+            List<Unit> targets = GetUnitsInRadius(targetPoint, currentAbilityAoeRadius, currentAbilityAoeHeight);
+            SetHighlightsForUnits(targets);
+        }
+        else
+        {
+            ClearHighlight();
         }
     }
 
@@ -686,6 +711,37 @@ public class AbilityTargeting : MonoBehaviour
         }
     }
 
+    private void SetHighlightsForUnits(List<Unit> units)
+    {
+        if (targetHighlighter == null)
+        {
+            return;
+        }
+
+        if (units == null || units.Count == 0)
+        {
+            targetHighlighter.ClearTargets();
+            return;
+        }
+
+        List<GameObject> targets = new List<GameObject>(units.Count);
+        for (int i = 0; i < units.Count; i++)
+        {
+            Unit unit = units[i];
+            if (unit == null) continue;
+            if (IsUnitHiddenFromPlayer(unit)) continue;
+            targets.Add(unit.gameObject);
+        }
+
+        if (targets.Count == 0)
+        {
+            targetHighlighter.ClearTargets();
+            return;
+        }
+
+        targetHighlighter.SetTargets(targets);
+    }
+
     private void ClearHighlight()
     {
         hoveredUnit = null;
@@ -693,7 +749,7 @@ public class AbilityTargeting : MonoBehaviour
 
         if (targetHighlighter != null)
         {
-            targetHighlighter.ClearTarget();
+            targetHighlighter.ClearTargets();
         }
     }
 
