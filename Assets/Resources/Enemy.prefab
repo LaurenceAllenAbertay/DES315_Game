@@ -294,6 +294,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   visionColor: {r: 0.6431373, g: 0.09280091, b: 0.08235294, a: 0.2}
+  visionMaterial: {fileID: 2100000, guid: 5127fe231942a5548bf8543a9895ff01, type: 2}
   debugMode: 0
 --- !u!33 &5205819413134763653
 MeshFilter:
@@ -455,7 +456,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 25d3368d6f9590643a2bdb4414b72ea1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e8f45edd040295418f823db2b63ccd4, type: 3}
   m_Name: RifleShot
   m_EditorClassIdentifier: 
-  abilityName: Flintlock
+  abilityName: Rifle Shot
   description: 
   icon: {fileID: 0}
   targetingType: 0
@@ -21,6 +21,7 @@ MonoBehaviour:
   aoeRadius: 3
   aoeHeight: 3
   visualEffectPrefab: {fileID: 0}
+  visualEffectDuration: 5
   castSound: {fileID: 8300000, guid: 76067ebb8a1d0414d82d89dd3e66e6e8, type: 3}
   effectDelay: 1.75
   effects:

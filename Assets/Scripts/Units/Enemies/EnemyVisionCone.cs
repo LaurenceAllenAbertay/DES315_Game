@@ -13,6 +13,8 @@ public class EnemyVisionCone : MonoBehaviour
 
     [Header("Visual Settings")]
     public Color visionColor = new Color(1f, 0f, 0f, 0.3f);
+    [Tooltip("Optional material asset to use for the vision cone (prevents shader stripping in builds).")]
+    [SerializeField] private Material visionMaterial;
 
     [Header("Debug")]
     public bool debugMode = true;
@@ -53,14 +55,33 @@ public class EnemyVisionCone : MonoBehaviour
 
     private void SetupMaterial()
     {
-        instancedMaterial = CreateTransparentMaterial();
-        meshRenderer.material = instancedMaterial;
-        SetColor(visionColor);
+        if (visionMaterial != null)
+        {
+            instancedMaterial = new Material(visionMaterial);
+        }
+        else
+        {
+            instancedMaterial = CreateTransparentMaterial();
+        }
+
+        if (instancedMaterial != null)
+        {
+            meshRenderer.material = instancedMaterial;
+            SetColor(visionColor);
+        }
     }
 
     private Material CreateTransparentMaterial()
     {
         Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+        if (shader == null)
+        {
+            if (debugMode)
+            {
+                Debug.LogWarning("[EnemyVisionCone] URP/Unlit shader not found. Assign a material in the inspector.");
+            }
+            return null;
+        }
         Material mat = new Material(shader);
 
         mat.SetFloat("_Surface", 1);
