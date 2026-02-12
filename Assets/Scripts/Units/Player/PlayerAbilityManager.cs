@@ -286,16 +286,13 @@ public class PlayerAbilityManager : MonoBehaviour
                 // Ability missed, coin spent but nothing happens
                 if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' MISSED! Coin spent, no effect.");
                 MessageUI.Instance?.EnqueueMessage($"You missed {ability.abilityName}.");
-                return;
-            }
-
-            if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
+            return;
         }
 
-        if (!HasFeedbackEffects(ability))
-        {
-            MessageUI.Instance?.EnqueueMessage($"You cast {ability.abilityName}.");
+        if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
         }
+
+        TryEnqueueAbilityCastMessage(ability, result);
 
         PlayAbilityCastSound(ability);
 
@@ -465,5 +462,57 @@ public class PlayerAbilityManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void TryEnqueueAbilityCastMessage(Ability ability, TargetingResult result)
+    {
+        if (ability == null)
+        {
+            return;
+        }
+
+        string message = null;
+
+        if (result.type == TargetingResultType.SingleTarget
+            && ability.targetingType == TargetingType.PointAndClick
+            && IsTorchTarget(result.singleTarget))
+        {
+            message = $"You casted {ability.abilityName} on a torch.";
+        }
+        else if (result.type == TargetingResultType.MultipleTargets
+                 && (ability.targetingType == TargetingType.RangedAOE || ability.targetingType == TargetingType.Cone)
+                 && (result.multipleTargets == null || result.multipleTargets.Count == 0))
+        {
+            message = $"You casted {ability.abilityName}.";
+        }
+        else if (!HasFeedbackEffects(ability))
+        {
+            message = $"You cast {ability.abilityName}.";
+        }
+
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            MessageUI.Instance?.EnqueueMessage(message);
+        }
+    }
+
+    private static bool IsTorchTarget(Unit target)
+    {
+        if (target == null)
+        {
+            return false;
+        }
+
+        if (target.GetComponentInParent<LightSource>() != null)
+        {
+            return true;
+        }
+
+        if (target.CompareTag("Torch"))
+        {
+            return true;
+        }
+
+        return target.gameObject.name.IndexOf("torch", System.StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }

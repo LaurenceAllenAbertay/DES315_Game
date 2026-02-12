@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour
     [Header("Input Actions")]
     public InputActionAsset inputActions;
 
+    [Header("Startup Movement Lock")]
+    [Tooltip("Seconds to block player movement input at the start of the game")]
+    [SerializeField] private float movementLockSeconds = 2f;
+
     [Header("Ability Targeting")]
     [SerializeField] private AbilityTargeting targetingSystem;
 
@@ -70,6 +74,7 @@ public class PlayerController : MonoBehaviour
     private float lowVelocityTimer = 0f;
     private Vector3 lastFramePosition;
     private bool isPointerOverUI;
+    private float movementUnlockTime;
 
     public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
@@ -169,6 +174,7 @@ public class PlayerController : MonoBehaviour
     {
         UpdateLightState();
         lastFramePosition = transform.position;
+        movementUnlockTime = Time.unscaledTime + movementLockSeconds;
     }
 
     private void Update()
@@ -200,6 +206,10 @@ public class PlayerController : MonoBehaviour
     private void OnMovePerformed(InputAction.CallbackContext context)
     {
         if (isPointerOverUI)
+        {
+            return;
+        }
+        if (Time.unscaledTime < movementUnlockTime)
         {
             return;
         }

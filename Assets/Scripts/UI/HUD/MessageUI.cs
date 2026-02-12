@@ -11,7 +11,7 @@ public class MessageUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI messageText;
 
     [Header("Timing")]
-    [SerializeField] private float messageDuration = 2.5f;
+    [SerializeField] private float messageDuration;
 
     private readonly Queue<string> messageQueue = new Queue<string>();
     private Coroutine displayCoroutine;
