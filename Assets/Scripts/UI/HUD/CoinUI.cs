@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -16,6 +17,9 @@ public class CoinUI : MonoBehaviour
     [Tooltip("Reference to the player")]
     public Player player;
 
+    [Tooltip("Text to show when the player has no coins left")]
+    [SerializeField] private TextMeshProUGUI outOfCoinsText;
+
     [Header("Animation")]
     public float destroyDelay = 1f;
     [Tooltip("Seconds between coin fill steps.")]
@@ -23,6 +27,7 @@ public class CoinUI : MonoBehaviour
 
     private int currentUICoins = 0;
     private Coroutine fillCoroutine;
+    private bool hasReceivedCoinsThisTurn = false;
 
     private void Start()
     {
@@ -39,6 +44,7 @@ public class CoinUI : MonoBehaviour
             if (player.IsInCombat)
             {
                 RefreshCoins(player.CurrentCoins);
+                UpdateOutOfCoinsText(player.CurrentCoins);
             }
             else
             {
@@ -59,6 +65,7 @@ public class CoinUI : MonoBehaviour
     private void OnCoinsChanged(int current, int max)
     {
         RefreshCoins(current);
+        UpdateOutOfCoinsText(current);
     }
 
     private void OnCombatStateChanged(bool inCombat)
@@ -67,6 +74,7 @@ public class CoinUI : MonoBehaviour
         if (inCombat)
         {
             RefreshCoins(player != null ? player.CurrentCoins : 0);
+            UpdateOutOfCoinsText(player != null ? player.CurrentCoins : 0);
         }
         else
         {
@@ -79,6 +87,15 @@ public class CoinUI : MonoBehaviour
         if (coinParent != null)
         {
             coinParent.gameObject.SetActive(visible);
+        }
+
+        if (!visible)
+        {
+            hasReceivedCoinsThisTurn = false;
+            if (outOfCoinsText != null)
+            {
+                outOfCoinsText.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -156,5 +173,22 @@ public class CoinUI : MonoBehaviour
         }
 
         fillCoroutine = null;
+    }
+
+    private void UpdateOutOfCoinsText(int current)
+    {
+        if (outOfCoinsText == null) return;
+
+        if (current > 0)
+        {
+            hasReceivedCoinsThisTurn = true;
+        }
+
+        bool shouldShow = player != null
+            && player.IsInCombat
+            && hasReceivedCoinsThisTurn
+            && current <= 0;
+
+        outOfCoinsText.gameObject.SetActive(shouldShow);
     }
 }
