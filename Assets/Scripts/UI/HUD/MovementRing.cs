@@ -50,11 +50,13 @@ public class MovementRing : MonoBehaviour
     {
         if (!ShouldShow())
         {
+            UpdateVisibility();
             return;
         }
 
         UpdateTargetRadius();
         UpdateScale();
+        UpdateVisibility();
     }
 
     private void ResolveReferences()
@@ -143,7 +145,7 @@ public class MovementRing : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        sr.enabled = ShouldShow();
+        sr.enabled = ShouldShow() && transform.localScale.x >= minRadius;
     }
 
     private void UpdateTargetRadius()
@@ -178,9 +180,10 @@ public class MovementRing : MonoBehaviour
     {
         if (player == null || combatManager == null)
         {
+            sr.enabled = false;
             return false;
         }
 
-        return combatManager.InCombat && combatManager.IsPlayerTurn && transform.localScale.x > minRadius;
+        return combatManager.InCombat && combatManager.IsPlayerTurn;
     }
 }

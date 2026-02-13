@@ -126,8 +126,6 @@ public class EnemyCombatAI : MonoBehaviour
             if (RequiresTarget(chosen) && !IsTargetInRange(chosen, player))
             {
                 if (debugMode) Debug.LogWarning($"[EnemyCombatAI] {gameObject.name} could not reach range for {chosen.actionName}");
-                MessageUI.Instance?.EnqueueMessage(
-                    $"{gameObject.name} couldn't reach you in time and missed {chosen.actionName}.");
             }
             else
             {
