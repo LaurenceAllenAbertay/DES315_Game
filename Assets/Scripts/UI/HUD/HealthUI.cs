@@ -10,6 +10,8 @@ public class HealthUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI unitNameText;
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private Slider healthSlider;
+    [SerializeField] private Slider blockSlider;
+    [SerializeField] private TextMeshProUGUI blockAmountText;
 
     [Header("Raycast")]
     [SerializeField] private LayerMask unitLayer = ~0;
@@ -106,7 +108,9 @@ public class HealthUI : MonoBehaviour
         hoveredUnit = unit;
 
         hoveredUnit.OnHealthChanged += HandleHealthChanged;
+        hoveredUnit.OnBlockChanged += HandleBlockChanged;
         UpdateUI(hoveredUnit.CurrentHealth, hoveredUnit.MaxHealth);
+        UpdateBlockUI(hoveredUnit.CurrentBlock, hoveredUnit.MaxHealth);
         SetUIActive(true);
     }
 
@@ -115,6 +119,7 @@ public class HealthUI : MonoBehaviour
         if (hoveredUnit != null)
         {
             hoveredUnit.OnHealthChanged -= HandleHealthChanged;
+            hoveredUnit.OnBlockChanged -= HandleBlockChanged;
         }
 
         hoveredUnit = null;
@@ -124,6 +129,20 @@ public class HealthUI : MonoBehaviour
     private void HandleHealthChanged(float current, float max)
     {
         UpdateUI(current, max);
+        if (hoveredUnit != null)
+        {
+            UpdateBlockUI(hoveredUnit.CurrentBlock, max);
+        }
+    }
+
+    private void HandleBlockChanged(float current)
+    {
+        if (hoveredUnit == null)
+        {
+            return;
+        }
+
+        UpdateBlockUI(current, hoveredUnit.MaxHealth);
     }
 
     private void UpdateUI(float current, float max)
@@ -144,6 +163,27 @@ public class HealthUI : MonoBehaviour
         {
             healthSlider.maxValue = max;
             healthSlider.value = current;
+        }
+    }
+
+    private void UpdateBlockUI(float current, float max)
+    {
+        if (blockSlider != null)
+        {
+            blockSlider.maxValue = max;
+            blockSlider.value = current;
+        }
+
+        if (blockAmountText != null)
+        {
+            int currentValue = Mathf.RoundToInt(current);
+            blockAmountText.text = $"{currentValue}";
+        }
+
+        bool hasBlock = current > 0f;
+        if (blockSlider != null)
+        {
+            blockSlider.gameObject.SetActive(hasBlock);
         }
     }
 
