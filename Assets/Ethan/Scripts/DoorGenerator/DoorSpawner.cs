@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 //Spawns doors at all room connection points -EM//
-//Doors block NavMesh and line of sight between rooms -EM//
+//Doors are now static archways for room transitions -EM//
 public class DoorSpawner : MonoBehaviour
 {
     [Header("Door Settings")]
@@ -22,6 +22,7 @@ public class DoorSpawner : MonoBehaviour
     [Header("Materials")]
     public Material doorMaterial;
     public Material frameMaterial;
+    public Material archwayMaterial;
 
     [Header("References")]
     [Tooltip("The RoomBuilder component")]
@@ -171,7 +172,7 @@ public class DoorSpawner : MonoBehaviour
         }
         else
         {
-            doorObject = CreateDefaultDoor();
+            doorObject = CreateDefaultArchway();
         }
 
         doorObject.name = $"Door_{roomA.GetHashCode()}_{roomB.GetHashCode()}";
@@ -205,6 +206,74 @@ public class DoorSpawner : MonoBehaviour
         }
     }
 
+    private GameObject CreateDefaultArchway()
+    {
+        GameObject archwayObject = new GameObject("Archway");
+
+        //Create archway instead of door//
+        CreateArchwayFrame(archwayObject);
+
+        //Add collider for clicking//
+        BoxCollider collider = archwayObject.AddComponent <BoxCollider>();
+        collider.size = new Vector3(doorWidth, doorHeight, doorThickness);
+        collider.center = new Vector3(0f, doorHeight * 0.5f, 0f);
+
+        return archwayObject;
+    }
+
+    private void CreateArchwayFrame(GameObject parent)
+    {
+        //Left Post//
+        GameObject leftPost = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        leftPost.name = "LeftPost";
+        leftPost.transform.SetParent(parent.transform);
+        leftPost.transform.localPosition = new Vector3(-doorWidth * 0.5f - 0.15f, doorHeight * 0.5f, 0f);
+        leftPost.transform.localScale = new Vector3(0.3f, doorHeight, doorThickness * 2f);
+        ApplyMaterial(leftPost, archwayMaterial ?? frameMaterial);
+
+        //Right Post//
+        GameObject rightPost = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        rightPost.name = "RightPost";
+        rightPost.transform.SetParent(parent.transform);
+        rightPost.transform.localPosition = new Vector3(doorWidth * 0.5f + 0.15f, doorHeight * 0.5f, 0f);
+        rightPost.transform.localScale = new Vector3(0.3f, doorHeight, doorThickness * 2f);
+        ApplyMaterial(rightPost, archwayMaterial ?? frameMaterial);
+
+        //Top arch//
+        GameObject topArch = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        topArch.name = "TopArch";
+        topArch.transform.SetParent(parent.transform);
+        topArch.transform.localPosition = new Vector3(0f, doorHeight + 0.15f, 0f);
+        topArch.transform.localScale = new Vector3(doorWidth + 0.6f, 0.3f, doorThickness * 2f);
+        ApplyMaterial(topArch, archwayMaterial ?? frameMaterial);
+
+        //decorative arch curve using smaller cubes//
+        CreateArchCurve(parent);
+    }
+
+    //Create curved top for archway -EM//
+    private void CreateArchCurve(GameObject parent)
+    {
+        int curveSegments = 8;
+        float radius = doorWidth * 0.6f;
+
+        for (int i = 0; i < curveSegments; i++)
+        {
+            float angle = Mathf.PI * (i / (float)(curveSegments - 1));
+            float x = Mathf.Cos(angle) * radius;
+            float y = Mathf.Sin(angle) * radius * 0.5f;
+
+            GameObject segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            segment.name = $"ArchSegment_{i}";
+            segment.transform.SetParent(parent.transform);
+            segment.transform.localPosition = new Vector3(x, doorHeight + y, 0f);
+            segment.transform.localScale = new Vector3(0.2f, 0.2f, doorThickness * 2f);
+            segment.transform.localRotation = Quaternion.Euler(0f, 0f, -angle * Mathf.Rad2Deg);
+            ApplyMaterial(segment, archwayMaterial ?? frameMaterial);
+        }
+    }
+
+    //Keep old door creation method for switching back -EM//
     private GameObject CreateDefaultDoor()
     {
         GameObject doorObject = new GameObject("Door");
@@ -212,23 +281,14 @@ public class DoorSpawner : MonoBehaviour
         //Create doorframe//
         CreateDoorFrame(doorObject);
 
-        //Create left door//
-        GameObject leftDoor = CreateDoorPanel("LeftDoor", new Vector3(-doorWidth * 0.25f, doorHeight * 0.5f, 0f));
-        leftDoor.transform.SetParent(doorObject.transform);
+        //Create door panels (static, not animated) -EM//
+        GameObject doorPanel = CreateDoorPanel("DoorPanel", new Vector3(0f, doorHeight * 0.5f, 0f));
+        doorPanel.transform.SetParent(doorObject.transform);
 
-        //Create right door//
-        GameObject rightDoor = CreateDoorPanel("RightDoor", new Vector3(doorWidth * 0.25f, doorHeight * 0.5f, 0f));
-        rightDoor.transform.SetParent(doorObject.transform);
-
-        //Setup Dungeon Door component references//
-        DungeonDoor doorScript = doorObject.AddComponent<DungeonDoor>();
-
-        //use reflection component references//
-        var leftDoorField = typeof(DungeonDoor).GetField("leftDoor", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        var rightDoorField = typeof(DungeonDoor).GetField("rightDoor", System.Reflection.BindingFlags.NonPublic |System.Reflection.BindingFlags.Instance);
-
-        leftDoorField?.SetValue(doorScript, leftDoor);
-        rightDoorField?.SetValue(doorScript, rightDoor);
+        //Add collider for clicking -EM//
+        BoxCollider collider = doorObject.AddComponent<BoxCollider>();
+        collider.size = new Vector3(doorWidth, doorHeight, doorThickness);
+        collider.center = new Vector3(0f, doorHeight * 0.5f, 0f);
 
         return doorObject;
     }
@@ -256,10 +316,9 @@ public class DoorSpawner : MonoBehaviour
         topBeam.name = "TopBeam";
         topBeam.transform.SetParent(parent.transform);
         topBeam.transform.localPosition = new Vector3(0f, doorHeight + 0.15f, 0f);
-        topBeam.transform.localScale = new Vector3(doorWidth + 0.6f, 0.3f,doorThickness * 2f);
+        topBeam.transform.localScale = new Vector3(doorWidth + 0.6f, 0.3f, doorThickness * 2f);
         ApplyMaterial(topBeam, frameMaterial);
     }
-
     private GameObject CreateDoorPanel(string name, Vector3 localPosition)
     {
         GameObject door = GameObject.CreatePrimitive(PrimitiveType.Cube);
