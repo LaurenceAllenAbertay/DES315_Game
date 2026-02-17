@@ -144,7 +144,13 @@ public class PlayerAbilityManager : MonoBehaviour
             }
             else
             {
-                return;
+                if (activeAbilitySlot.Value == slotIndex)
+                {
+                    CancelTargeting();
+                    return;
+                }
+
+                CancelTargeting();
             }
         }
 
