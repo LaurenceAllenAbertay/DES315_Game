@@ -2224,7 +2224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &285508514
 Transform:
   m_ObjectHideFlags: 0
@@ -5296,6 +5296,7 @@ MonoBehaviour:
   maxMoveDistance: 14
   minMoveDistance: 0.67
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  movementLockSeconds: 2
   targetingSystem: {fileID: 0}
   player: {fileID: 740575474}
   destinationIndicatorPrefab: {fileID: 686496462743916664, guid: fb557d0c6b58434468fc525fe04912d9, type: 3}
@@ -7337,6 +7338,7 @@ MonoBehaviour:
   coinPrefab: {fileID: 8230219826058003220, guid: fcdfbb6fa84427f4fbaa54ed2b7f32a5, type: 3}
   coinParent: {fileID: 1252907755}
   player: {fileID: 740575474}
+  outOfCoinsText: {fileID: 0}
   destroyDelay: 1
   fillStepDelay: 0.05
 --- !u!1 &1262552775
@@ -9419,6 +9421,11 @@ MonoBehaviour:
   rotateSpeed: 0.3
   player: {fileID: 740575467}
   maxDistanceFromPlayer: 15
+  collisionRadius: 0.5
+  collisionSkin: 0.05
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
 --- !u!1 &1472588647
 GameObject:
@@ -11399,6 +11406,8 @@ MonoBehaviour:
   unitNameText: {fileID: 1409264082}
   healthText: {fileID: 1905534899}
   healthSlider: {fileID: 382471522}
+  blockSlider: {fileID: 0}
+  blockAmountText: {fileID: 0}
   unitLayer:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -11642,7 +11651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1829371478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11783,6 +11792,7 @@ MonoBehaviour:
   doorThickness: 0.2
   doorMaterial: {fileID: 2100000, guid: 2c9949cacea37ae4ab124619aec5730d, type: 2}
   frameMaterial: {fileID: 2100000, guid: d9d2c59b12928b844a42657513ca9bf6, type: 2}
+  archwayMaterial: {fileID: 0}
   roomBuilder: {fileID: 0}
   doorsParent: {fileID: 0}
   showDebugLogs: 1

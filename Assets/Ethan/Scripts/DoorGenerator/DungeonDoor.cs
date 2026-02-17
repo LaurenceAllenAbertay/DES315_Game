@@ -44,7 +44,7 @@ public class DungeonDoor : MonoBehaviour
 
     private Transform playerTransform;
     private bool playerInRange = false;
-    private bool IsTransitioning = false;
+    private bool isTransitioning = false;
 
     //Events//
     public delegate void DoorTransition(DungeonDoor door, Room targetRoom);
@@ -285,7 +285,7 @@ public class DungeonDoor : MonoBehaviour
 
     //Properties -EM//
     public bool IsLocked => isLocked;
-    public bool ISTransitioning => IsTransitioning;
+    public bool IsTransitioning => isTransitioning;
     public Room ConnectedRoomA => connectedRoomA;
     public Room ConnectedRoomB => connectedRoomB;
 
