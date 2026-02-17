@@ -386,7 +386,7 @@
             "id": "c207a19d-7dac-43ed-8bb0-85c12676fb4e",
             "actions": [
                 {
-                    "name": "ToggleMenu",
+                    "name": "TogglePauseMenu",
                     "type": "Button",
                     "id": "7708a87d-1519-4e7d-bb19-a814b9b97028",
                     "expectedControlType": "",
@@ -399,11 +399,11 @@
                 {
                     "name": "",
                     "id": "aa2e2403-888f-44f1-99cb-325c1df11ddb",
-                    "path": "",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleMenu",
+                    "action": "TogglePauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

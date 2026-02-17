@@ -472,7 +472,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             ""id"": ""c207a19d-7dac-43ed-8bb0-85c12676fb4e"",
             ""actions"": [
                 {
-                    ""name"": ""ToggleMenu"",
+                    ""name"": ""TogglePauseMenu"",
                     ""type"": ""Button"",
                     ""id"": ""7708a87d-1519-4e7d-bb19-a814b9b97028"",
                     ""expectedControlType"": """",
@@ -485,11 +485,11 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""aa2e2403-888f-44f1-99cb-325c1df11ddb"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ToggleMenu"",
+                    ""action"": ""TogglePauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -520,7 +520,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Camera_RotateDelta = m_Camera.FindAction("RotateDelta", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_ToggleMenu = m_Menu.FindAction("ToggleMenu", throwIfNotFound: true);
+        m_Menu_TogglePauseMenu = m_Menu.FindAction("TogglePauseMenu", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -949,7 +949,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     // Menu
     private readonly InputActionMap m_Menu;
     private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
-    private readonly InputAction m_Menu_ToggleMenu;
+    private readonly InputAction m_Menu_TogglePauseMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "Menu".
     /// </summary>
@@ -962,9 +962,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public MenuActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Menu/ToggleMenu".
+        /// Provides access to the underlying input action "Menu/TogglePauseMenu".
         /// </summary>
-        public InputAction @ToggleMenu => m_Wrapper.m_Menu_ToggleMenu;
+        public InputAction @TogglePauseMenu => m_Wrapper.m_Menu_TogglePauseMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -991,9 +991,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
-            @ToggleMenu.started += instance.OnToggleMenu;
-            @ToggleMenu.performed += instance.OnToggleMenu;
-            @ToggleMenu.canceled += instance.OnToggleMenu;
+            @TogglePauseMenu.started += instance.OnTogglePauseMenu;
+            @TogglePauseMenu.performed += instance.OnTogglePauseMenu;
+            @TogglePauseMenu.canceled += instance.OnTogglePauseMenu;
         }
 
         /// <summary>
@@ -1005,9 +1005,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="MenuActions" />
         private void UnregisterCallbacks(IMenuActions instance)
         {
-            @ToggleMenu.started -= instance.OnToggleMenu;
-            @ToggleMenu.performed -= instance.OnToggleMenu;
-            @ToggleMenu.canceled -= instance.OnToggleMenu;
+            @TogglePauseMenu.started -= instance.OnTogglePauseMenu;
+            @TogglePauseMenu.performed -= instance.OnTogglePauseMenu;
+            @TogglePauseMenu.canceled -= instance.OnTogglePauseMenu;
         }
 
         /// <summary>
@@ -1177,11 +1177,11 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     public interface IMenuActions
     {
         /// <summary>
-        /// Method invoked when associated input action "ToggleMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "TogglePauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnToggleMenu(InputAction.CallbackContext context);
+        void OnTogglePauseMenu(InputAction.CallbackContext context);
     }
 }
