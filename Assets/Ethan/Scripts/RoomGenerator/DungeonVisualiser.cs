@@ -8,7 +8,7 @@ public class DungeonVisualizer : MonoBehaviour
 {
     [Header("Visualization Settings")]
     [Tooltip("Size of each grid cell in world units")]
-    public float cellSize = 24f;
+    public float cellSize = 1.8f;
 
     [Header("Display Options")]
     public bool showGrid = true;

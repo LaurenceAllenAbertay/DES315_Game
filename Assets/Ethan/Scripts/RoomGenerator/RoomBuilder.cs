@@ -12,7 +12,7 @@ public class RoomBuilder : MonoBehaviour
 {
     [Header("Room Settings")]
     [Tooltip("Size of each grid cell in world units (should match visualiser")]
-    public float cellSize = 16f;
+    public float cellSize = 1.8f;
 
     [Header("Lobby Prefabs")]
     [Tooltip("Prefab for the 1x1 lobby (cellSize x cellSize)")]
