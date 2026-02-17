@@ -56,6 +56,10 @@ public class AbilityTargeting : MonoBehaviour
     [SerializeField] private bool isTargeting = false;
     private string currentAbilityName = "";
 
+    [Header("Flip Visuals")]
+    [SerializeField] private Color flipVisualizerColor = new Color(0.6f, 0.2f, 1f, 0.3f);
+    [SerializeField] private Color flipHighlightColor = new Color(0.6f, 0.2f, 1f, 1f);
+
     // Events
     public delegate void TargetConfirmed(TargetingResult result);
     public event TargetConfirmed OnTargetConfirmed;
@@ -82,6 +86,9 @@ public class AbilityTargeting : MonoBehaviour
     // Tracking
     private Unit hoveredUnit;
     private bool hoveredUnitInRange;
+    private Color defaultConeColor;
+    private Color defaultAoeColor;
+    private Color defaultHighlightColor;
 
     public bool IsTargeting => isTargeting;
 
@@ -119,6 +126,21 @@ public class AbilityTargeting : MonoBehaviour
             GameObject highlightGO = new GameObject("TargetHighlighter");
             highlightGO.transform.SetParent(transform);
             targetHighlighter = highlightGO.AddComponent<TargetHighlighter>();
+        }
+
+        if (coneVisualizer != null)
+        {
+            defaultConeColor = coneVisualizer.coneColor;
+        }
+
+        if (aoeVisualizer != null)
+        {
+            defaultAoeColor = aoeVisualizer.circleColor;
+        }
+
+        if (targetHighlighter != null)
+        {
+            defaultHighlightColor = targetHighlighter.highlightColor;
         }
     }
 
@@ -195,6 +217,22 @@ public class AbilityTargeting : MonoBehaviour
         currentAbilityAoeHeight = StatsManager.Instance != null
             ? StatsManager.Instance.ApplyAoeSize(ability.aoeHeight)
             : ability.aoeHeight;
+        if (coneVisualizer != null)
+        {
+            defaultConeColor = coneVisualizer.coneColor;
+        }
+
+        if (aoeVisualizer != null)
+        {
+            defaultAoeColor = aoeVisualizer.circleColor;
+        }
+
+        if (targetHighlighter != null)
+        {
+            defaultHighlightColor = targetHighlighter.highlightColor;
+        }
+
+        SetFlipVisuals(false);
 
         // Show the appropriate visualizer based on targeting type
         switch (ability.targetingType)
@@ -233,6 +271,7 @@ public class AbilityTargeting : MonoBehaviour
     {
         HideAllVisualizers();
         ClearHighlight();
+        SetFlipVisuals(false);
 
         currentAbility = null;
         currentCaster = null;
@@ -599,6 +638,28 @@ public class AbilityTargeting : MonoBehaviour
         OnTargetConfirmed?.Invoke(result);
     }
 
+    public void SetFlipVisuals(bool enabled)
+    {
+        Color coneColor = enabled ? flipVisualizerColor : defaultConeColor;
+        Color aoeColor = enabled ? flipVisualizerColor : defaultAoeColor;
+        Color highlightColor = enabled ? flipHighlightColor : defaultHighlightColor;
+
+        if (coneVisualizer != null)
+        {
+            coneVisualizer.SetColor(coneColor);
+        }
+
+        if (aoeVisualizer != null)
+        {
+            aoeVisualizer.SetColor(aoeColor);
+        }
+
+        if (targetHighlighter != null)
+        {
+            targetHighlighter.SetHighlightColor(highlightColor);
+        }
+    }
+
     /// <summary>
     /// Check if there is line of sight between two points
     /// </summary>
@@ -630,36 +691,32 @@ public class AbilityTargeting : MonoBehaviour
     private List<Unit> GetUnitsInCone(Vector3 origin, Vector3 direction, float range, float angle, float height)
     {
         List<Unit> targets = new List<Unit>();
+        HashSet<Unit> seenUnits = new HashSet<Unit>();
 
         LayerMask targetMask = enemyLayer | propLayer;
         Collider[] colliders = Physics.OverlapSphere(origin, range, targetMask);
 
         float halfAngle = angle * 0.5f;
+        Vector3 flatDirection = new Vector3(direction.x, 0f, direction.z);
+        if (flatDirection.sqrMagnitude > 0.0001f)
+        {
+            flatDirection.Normalize();
+        }
 
         foreach (Collider col in colliders)
         {
             Unit unit = col.GetComponentInParent<Unit>();
             if (unit == null || unit.GetComponent<Player>() != null) continue;
+            if (seenUnits.Contains(unit)) continue;
             if (!IsUnitInCurrentRoom(unit)) continue;
 
-            Vector3 toUnit = unit.transform.position - origin;
-            toUnit.y = 0;
-
-            float unitAngle = Vector3.Angle(direction, toUnit.normalized);
-
-            if (unitAngle <= halfAngle)
+            if (!IsColliderWithinCone(col, origin, flatDirection, range, halfAngle, height))
             {
-                if (height > 0f)
-                {
-                    float verticalDistance = Mathf.Abs(unit.transform.position.y - origin.y);
-                    if (verticalDistance > height)
-                    {
-                        continue;
-                    }
-                }
-
-                targets.Add(unit);
+                continue;
             }
+
+            seenUnits.Add(unit);
+            targets.Add(unit);
         }
 
         return targets;
@@ -668,6 +725,7 @@ public class AbilityTargeting : MonoBehaviour
     private List<Unit> GetUnitsInRadius(Vector3 center, float radius, float height)
     {
         List<Unit> targets = new List<Unit>();
+        HashSet<Unit> seenUnits = new HashSet<Unit>();
 
         LayerMask targetMask = enemyLayer | propLayer;
         Collider[] colliders = Physics.OverlapSphere(center, radius, targetMask);
@@ -675,7 +733,7 @@ public class AbilityTargeting : MonoBehaviour
         foreach (Collider col in colliders)
         {
             Unit unit = col.GetComponentInParent<Unit>();
-            if (unit == null || unit.GetComponent<Player>() != null || targets.Contains(unit))
+            if (unit == null || unit.GetComponent<Player>() != null || seenUnits.Contains(unit))
             {
                 continue;
             }
@@ -685,19 +743,13 @@ public class AbilityTargeting : MonoBehaviour
                 continue;
             }
 
-            if (height > 0f)
+            if (!IsColliderWithinRadius(col, center, radius, height))
             {
-                float verticalDistance = Mathf.Abs(unit.transform.position.y - center.y);
-                if (verticalDistance > height)
-                {
-                    continue;
-                }
+                continue;
             }
 
-            if (!targets.Contains(unit))
-            {
-                targets.Add(unit);
-            }
+            seenUnits.Add(unit);
+            targets.Add(unit);
         }
 
         return targets;
@@ -787,5 +839,67 @@ public class AbilityTargeting : MonoBehaviour
         float distance = direction.magnitude;
 
         return !Physics.Raycast(startPos, direction.normalized, distance, targetBlockerLayer);
+    }
+
+    private bool IsColliderWithinRadius(Collider col, Vector3 center, float radius, float height)
+    {
+        Vector3 closestPoint = col.ClosestPoint(center);
+        Vector3 flatOffset = closestPoint - center;
+        flatOffset.y = 0f;
+
+        if (flatOffset.magnitude > radius)
+        {
+            return false;
+        }
+
+        if (height > 0f)
+        {
+            float verticalDistance = Mathf.Abs(closestPoint.y - center.y);
+            if (verticalDistance > height)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsColliderWithinCone(Collider col, Vector3 origin, Vector3 flatDirection, float range, float halfAngle, float height)
+    {
+        Vector3 toBoundsCenter = col.bounds.center - origin;
+        float projected = Vector3.Dot(toBoundsCenter, flatDirection);
+        projected = Mathf.Clamp(projected, 0f, range);
+        Vector3 axisPoint = origin + flatDirection * projected;
+        Vector3 closestPoint = col.ClosestPoint(axisPoint);
+
+        Vector3 toPoint = closestPoint - origin;
+        Vector3 toPointFlat = new Vector3(toPoint.x, 0f, toPoint.z);
+
+        if (toPointFlat.sqrMagnitude <= 0.0001f)
+        {
+            return true;
+        }
+
+        float angleToPoint = Vector3.Angle(flatDirection, toPointFlat.normalized);
+        if (angleToPoint > halfAngle)
+        {
+            return false;
+        }
+
+        if (toPointFlat.magnitude > range)
+        {
+            return false;
+        }
+
+        if (height > 0f)
+        {
+            float verticalDistance = Mathf.Abs(closestPoint.y - origin.y);
+            if (verticalDistance > height)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

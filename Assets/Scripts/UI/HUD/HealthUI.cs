@@ -24,6 +24,9 @@ public class HealthUI : MonoBehaviour
     private InputAction pointerPositionAction;
     private Camera mainCamera;
     private Unit hoveredUnit;
+    private Unit lockedUnit;
+    private bool lockToTurnUnit;
+    private CombatManager combatManager;
 
     private void Awake()
     {
@@ -44,6 +47,18 @@ public class HealthUI : MonoBehaviour
 
     private void OnEnable()
     {
+        combatManager = CombatManager.Instance;
+        if (combatManager != null)
+        {
+            combatManager.OnTurnStarted += HandleTurnStarted;
+            combatManager.OnCombatEnded += HandleCombatEnded;
+
+            if (combatManager.InCombat && combatManager.CurrentUnit is Enemy)
+            {
+                LockToTurnUnit(combatManager.CurrentUnit);
+            }
+        }
+
         if (pointerPositionAction != null)
         {
             pointerPositionAction.Enable();
@@ -52,6 +67,12 @@ public class HealthUI : MonoBehaviour
 
     private void OnDisable()
     {
+        if (combatManager != null)
+        {
+            combatManager.OnTurnStarted -= HandleTurnStarted;
+            combatManager.OnCombatEnded -= HandleCombatEnded;
+        }
+
         if (pointerPositionAction != null)
         {
             pointerPositionAction.Disable();
@@ -65,6 +86,22 @@ public class HealthUI : MonoBehaviour
         if (pointerPositionAction == null)
         {
             return;
+        }
+
+        if (lockToTurnUnit)
+        {
+            if (lockedUnit == null || lockedUnit.IsDead)
+            {
+                UnlockTurnUnit();
+            }
+            else
+            {
+                if (hoveredUnit != lockedUnit)
+                {
+                    SetHoveredUnit(lockedUnit);
+                }
+                return;
+            }
         }
 
         if (mainCamera == null)
@@ -124,6 +161,42 @@ public class HealthUI : MonoBehaviour
 
         hoveredUnit = null;
         SetUIActive(false);
+    }
+
+    private void LockToTurnUnit(Unit unit)
+    {
+        if (unit == null)
+        {
+            return;
+        }
+
+        lockToTurnUnit = true;
+        lockedUnit = unit;
+        SetHoveredUnit(unit);
+    }
+
+    private void UnlockTurnUnit()
+    {
+        lockToTurnUnit = false;
+        lockedUnit = null;
+        ClearHoveredUnit();
+    }
+
+    private void HandleTurnStarted(Unit unit)
+    {
+        if (unit is Enemy)
+        {
+            LockToTurnUnit(unit);
+        }
+        else
+        {
+            UnlockTurnUnit();
+        }
+    }
+
+    private void HandleCombatEnded(CombatManager.CombatOutcome outcome)
+    {
+        UnlockTurnUnit();
     }
 
     private void HandleHealthChanged(float current, float max)

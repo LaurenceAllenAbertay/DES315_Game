@@ -32,8 +32,10 @@ public class PlayerAbilityManager : MonoBehaviour
     private InputAction ability2Action;
     private InputAction ability3Action;
     private InputAction cancelAction;
+    private InputAction flipAction;
 
     private int? activeAbilitySlot = null;
+    private bool flipSelected = false;
 
     public bool IsTargeting => activeAbilitySlot.HasValue;
 
@@ -52,6 +54,7 @@ public class PlayerAbilityManager : MonoBehaviour
             ability2Action = playerMap.FindAction("Ability2");
             ability3Action = playerMap.FindAction("Ability3");
             cancelAction = playerMap.FindAction("CancelAbility");
+            flipAction = playerMap.FindAction("FlipCoinForAction");
         }
 
         for (int i = 0; i < cooldownTimers.Length; i++)
@@ -85,6 +88,12 @@ public class PlayerAbilityManager : MonoBehaviour
             cancelAction.performed += ctx => CancelTargeting();
             cancelAction.Enable();
         }
+
+        if (flipAction != null)
+        {
+            flipAction.performed += OnFlipPerformed;
+            flipAction.Enable();
+        }
         
         if (targetingSystem != null)
         {
@@ -99,6 +108,11 @@ public class PlayerAbilityManager : MonoBehaviour
         if (ability2Action != null) ability2Action.Disable();
         if (ability3Action != null) ability3Action.Disable();
         if (cancelAction != null) cancelAction.Disable();
+        if (flipAction != null)
+        {
+            flipAction.performed -= OnFlipPerformed;
+            flipAction.Disable();
+        }
 
         if (targetingSystem != null)
         {
@@ -144,7 +158,13 @@ public class PlayerAbilityManager : MonoBehaviour
             }
             else
             {
-                return;
+                if (activeAbilitySlot.Value == slotIndex)
+                {
+                    CancelTargeting();
+                    return;
+                }
+
+                CancelTargeting();
             }
         }
 
@@ -204,6 +224,11 @@ public class PlayerAbilityManager : MonoBehaviour
 
         // Start targeting
         activeAbilitySlot = slotIndex;
+        flipSelected = false;
+        if (targetingSystem != null)
+        {
+            targetingSystem.SetFlipVisuals(false);
+        }
         targetingSystem.StartTargeting(ability, player);
         if (debugMode)
             Debug.Log($"[AbilityManager] Started targeting for '{ability.abilityName}'");
@@ -218,6 +243,8 @@ public class PlayerAbilityManager : MonoBehaviour
 
         targetingSystem.CancelTargeting();
         activeAbilitySlot = null;
+        flipSelected = false;
+        targetingSystem.SetFlipVisuals(false);
         if (debugMode)
             Debug.Log("[AbilityManager] Targeting cancelled");
     }
@@ -246,6 +273,8 @@ public class PlayerAbilityManager : MonoBehaviour
         
         // Clear active slot
         activeAbilitySlot = null;
+        flipSelected = false;
+        targetingSystem.SetFlipVisuals(false);
     }
 
     /// <summary>
@@ -254,15 +283,21 @@ public class PlayerAbilityManager : MonoBehaviour
     private void OnTargetingCancelled()
     {
         activeAbilitySlot = null;
+        flipSelected = false;
+        if (targetingSystem != null)
+        {
+            targetingSystem.SetFlipVisuals(false);
+        }
     }
 
     /// <summary>
     /// Execute an ability with the given targeting result
-    /// Spends 1 coin and performs a coin flip to determine success
+    /// Spends 1 coin in combat and optionally performs a coin flip to scale the outcome
     /// </summary>
     private void ExecuteAbility(Ability ability, TargetingResult result)
     {
         bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+        float flipMultiplier = 1f;
 
         if (inCombat)
         {
@@ -278,18 +313,11 @@ public class PlayerAbilityManager : MonoBehaviour
                 return;
             }
 
-            // Perform coin flip
-            bool flipSuccess = player.PerformCoinFlip();
-
-            if (!flipSuccess)
+            if (flipSelected)
             {
-                // Ability missed, coin spent but nothing happens
-                if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' MISSED! Coin spent, no effect.");
-                MessageUI.Instance?.EnqueueMessage($"You missed {ability.abilityName}.");
-            return;
-        }
-
-        if (debugMode) Debug.Log($"[AbilityManager] '{ability.abilityName}' HIT! Executing effects...");
+                bool flipSuccess = player.PerformCoinFlip();
+                flipMultiplier = flipSuccess ? 1.5f : 0.5f;
+            }
         }
 
         TryEnqueueAbilityCastMessage(ability, result);
@@ -299,45 +327,61 @@ public class PlayerAbilityManager : MonoBehaviour
         // Spawn visual effect if any
         SpawnAbilityVFX(ability, result);
 
-        ExecuteAbilityWithDelay(ability, result);
+        ExecuteAbilityWithDelay(ability, result, flipMultiplier);
     }
 
-    private void ExecuteAbilityWithDelay(Ability ability, TargetingResult result)
+    private void ExecuteAbilityWithDelay(Ability ability, TargetingResult result, float baseMultiplier)
     {
         float delay = ability != null ? Mathf.Max(0f, ability.effectDelay) : 0f;
         if (delay <= 0f)
         {
-            ExecuteAbilityEffects(ability, result);
+            ExecuteAbilityEffects(ability, result, baseMultiplier);
             return;
         }
 
-        StartCoroutine(ExecuteAbilityAfterDelay(ability, result, delay));
+        StartCoroutine(ExecuteAbilityAfterDelay(ability, result, delay, baseMultiplier));
     }
 
-    private IEnumerator ExecuteAbilityAfterDelay(Ability ability, TargetingResult result, float delay)
+    private IEnumerator ExecuteAbilityAfterDelay(Ability ability, TargetingResult result, float delay, float baseMultiplier)
     {
         yield return new WaitForSeconds(delay);
-        ExecuteAbilityEffects(ability, result);
+        ExecuteAbilityEffects(ability, result, baseMultiplier);
     }
 
-    private void ExecuteAbilityEffects(Ability ability, TargetingResult result)
+    private void ExecuteAbilityEffects(Ability ability, TargetingResult result, float baseMultiplier)
     {
         if (ability == null) return;
 
         switch (result.type)
         {
             case TargetingResultType.SingleTarget:
-                ability.Execute(player, result.singleTarget);
+                ability.Execute(player, result.singleTarget, baseMultiplier);
                 break;
 
             case TargetingResultType.MultipleTargets:
-                ability.Execute(player, result.multipleTargets);
+                ability.Execute(player, result.multipleTargets, baseMultiplier);
                 break;
 
             case TargetingResultType.Point:
-                ability.Execute(player, result.targetPoint);
+                ability.Execute(player, result.targetPoint, baseMultiplier);
                 break;
         }
+    }
+
+    private void OnFlipPerformed(InputAction.CallbackContext context)
+    {
+        if (!activeAbilitySlot.HasValue || targetingSystem == null || !targetingSystem.IsTargeting)
+        {
+            return;
+        }
+
+        if (CombatManager.Instance == null || !CombatManager.Instance.InCombat || !CombatManager.Instance.IsPlayerTurn)
+        {
+            return;
+        }
+
+        flipSelected = !flipSelected;
+        targetingSystem.SetFlipVisuals(flipSelected);
     }
 
     private void PlayAbilityCastSound(Ability ability)

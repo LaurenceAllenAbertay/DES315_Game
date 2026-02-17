@@ -112,6 +112,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "FlipCoinForAction",
+                    "type": "Button",
+                    "id": "9a01759d-71a5-4616-aa97-9b8757973e93",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -129,7 +138,7 @@
                 {
                     "name": "",
                     "id": "c3c39914-3f50-4a95-8682-3932a168a850",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -206,7 +215,7 @@
                 {
                     "name": "",
                     "id": "474d5272-2a58-4a43-a18f-f678cb484fba",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -244,6 +253,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c02acaa2-209e-4cd9-bc15-75bd81712169",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "FlipCoinForAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -360,7 +380,7 @@
                 {
                     "name": "",
                     "id": "9d334edc-87c8-4780-bfd4-286ea30998fe",
-                    "path": "<Mouse>/middleButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -386,7 +406,7 @@
             "id": "c207a19d-7dac-43ed-8bb0-85c12676fb4e",
             "actions": [
                 {
-                    "name": "ToggleMenu",
+                    "name": "TogglePauseMenu",
                     "type": "Button",
                     "id": "7708a87d-1519-4e7d-bb19-a814b9b97028",
                     "expectedControlType": "",
@@ -399,11 +419,11 @@
                 {
                     "name": "",
                     "id": "aa2e2403-888f-44f1-99cb-325c1df11ddb",
-                    "path": "",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ToggleMenu",
+                    "action": "TogglePauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

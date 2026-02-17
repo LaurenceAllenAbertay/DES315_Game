@@ -18,7 +18,7 @@ public enum TargetingType
 
 /// <summary>
 /// Defines an ability that can be equipped and used by the player
-/// All abilities cost 1 coin and require a coin flip to succeed
+/// All abilities cost 1 coin in combat and can optionally use a coin flip
 /// </summary>
 [CreateAssetMenu(fileName = "NewAbility", menuName = "Abilities/Ability")]
 public class Ability : ScriptableObject
@@ -65,9 +65,9 @@ public class Ability : ScriptableObject
     /// <summary>
     /// Execute this ability on a single target
     /// </summary>
-    public void Execute(Player caster, Unit target)
+    public void Execute(Player caster, Unit target, float baseMultiplier = 1f)
     {
-        AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
+        AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName, baseMultiplier);
         context.CurrentTarget = target;
 
         ExecuteEffects(context);
@@ -81,12 +81,12 @@ public class Ability : ScriptableObject
     /// <summary>
     /// Execute this ability on multiple targets
     /// </summary>
-    public void Execute(Player caster, List<Unit> targets)
+    public void Execute(Player caster, List<Unit> targets, float baseMultiplier = 1f)
     {
         if (targets == null || targets.Count == 0)
         {
             // No targets, might be a self-only ability
-            AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
+            AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName, baseMultiplier);
             ExecuteEffects(context);
             return;
         }
@@ -95,7 +95,7 @@ public class Ability : ScriptableObject
 
         foreach (Unit target in targets)
         {
-            AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
+            AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName, baseMultiplier);
             context.CurrentTarget = target;
             
             ExecuteEffects(context);
@@ -122,9 +122,9 @@ public class Ability : ScriptableObject
     /// <summary>
     /// Execute this ability at a point
     /// </summary>
-    public void Execute(Player caster, Vector3 targetPoint)
+    public void Execute(Player caster, Vector3 targetPoint, float baseMultiplier = 1f)
     {
-        AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName);
+        AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName, baseMultiplier);
         context.TargetPoint = targetPoint;
 
         ExecuteEffects(context);

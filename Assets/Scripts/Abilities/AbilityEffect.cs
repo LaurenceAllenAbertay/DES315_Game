@@ -24,6 +24,8 @@ public class AbilityExecutionContext
     public string AbilityName { get; private set; }
     public Unit CurrentTarget { get; set; }
     public Vector3 TargetPoint { get; set; }
+    public bool FlipUsed { get; private set; }
+    public bool FlipSuccess { get; private set; }
     
     /// <summary>
     /// Accumulated damage/heal multiplier from conditional modifiers
@@ -36,11 +38,26 @@ public class AbilityExecutionContext
     /// </summary>
     public bool EnemyWasHit { get; set; } = false;
 
-    public AbilityExecutionContext(Player caster, string abilityName)
+    public AbilityExecutionContext(Player caster, string abilityName, float baseMultiplier = 1f)
     {
         Caster = caster;
         AbilityName = abilityName;
-        AccumulatedMultiplier = 1f;
+        AccumulatedMultiplier = baseMultiplier;
+        if (Mathf.Approximately(baseMultiplier, 1.5f))
+        {
+            FlipUsed = true;
+            FlipSuccess = true;
+        }
+        else if (Mathf.Approximately(baseMultiplier, 0.5f))
+        {
+            FlipUsed = true;
+            FlipSuccess = false;
+        }
+        else
+        {
+            FlipUsed = false;
+            FlipSuccess = false;
+        }
     }
 
     /// <summary>

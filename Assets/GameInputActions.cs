@@ -198,6 +198,15 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""FlipCoinForAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""9a01759d-71a5-4616-aa97-9b8757973e93"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -215,7 +224,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""c3c39914-3f50-4a95-8682-3932a168a850"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -292,7 +301,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""474d5272-2a58-4a43-a18f-f678cb484fba"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -330,6 +339,17 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c02acaa2-209e-4cd9-bc15-75bd81712169"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FlipCoinForAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -446,7 +466,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""9d334edc-87c8-4780-bfd4-286ea30998fe"",
-                    ""path"": ""<Mouse>/middleButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -472,7 +492,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             ""id"": ""c207a19d-7dac-43ed-8bb0-85c12676fb4e"",
             ""actions"": [
                 {
-                    ""name"": ""ToggleMenu"",
+                    ""name"": ""TogglePauseMenu"",
                     ""type"": ""Button"",
                     ""id"": ""7708a87d-1519-4e7d-bb19-a814b9b97028"",
                     ""expectedControlType"": """",
@@ -485,11 +505,11 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""aa2e2403-888f-44f1-99cb-325c1df11ddb"",
-                    ""path"": """",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ToggleMenu"",
+                    ""action"": ""TogglePauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -512,6 +532,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_EndTurn = m_Player.FindAction("EndTurn", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_FlipCoinForAction = m_Player.FindAction("FlipCoinForAction", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Movement = m_Camera.FindAction("Movement", throwIfNotFound: true);
@@ -520,7 +541,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Camera_RotateDelta = m_Camera.FindAction("RotateDelta", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
-        m_Menu_ToggleMenu = m_Menu.FindAction("ToggleMenu", throwIfNotFound: true);
+        m_Menu_TogglePauseMenu = m_Menu.FindAction("TogglePauseMenu", throwIfNotFound: true);
     }
 
     ~@GameInputActions()
@@ -615,6 +636,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_EndTurn;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_FlipCoinForAction;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -674,6 +696,10 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Interact".
         /// </summary>
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/FlipCoinForAction".
+        /// </summary>
+        public InputAction @FlipCoinForAction => m_Wrapper.m_Player_FlipCoinForAction;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -736,6 +762,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @FlipCoinForAction.started += instance.OnFlipCoinForAction;
+            @FlipCoinForAction.performed += instance.OnFlipCoinForAction;
+            @FlipCoinForAction.canceled += instance.OnFlipCoinForAction;
         }
 
         /// <summary>
@@ -783,6 +812,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @FlipCoinForAction.started -= instance.OnFlipCoinForAction;
+            @FlipCoinForAction.performed -= instance.OnFlipCoinForAction;
+            @FlipCoinForAction.canceled -= instance.OnFlipCoinForAction;
         }
 
         /// <summary>
@@ -949,7 +981,7 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     // Menu
     private readonly InputActionMap m_Menu;
     private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
-    private readonly InputAction m_Menu_ToggleMenu;
+    private readonly InputAction m_Menu_TogglePauseMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "Menu".
     /// </summary>
@@ -962,9 +994,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public MenuActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "Menu/ToggleMenu".
+        /// Provides access to the underlying input action "Menu/TogglePauseMenu".
         /// </summary>
-        public InputAction @ToggleMenu => m_Wrapper.m_Menu_ToggleMenu;
+        public InputAction @TogglePauseMenu => m_Wrapper.m_Menu_TogglePauseMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -991,9 +1023,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
-            @ToggleMenu.started += instance.OnToggleMenu;
-            @ToggleMenu.performed += instance.OnToggleMenu;
-            @ToggleMenu.canceled += instance.OnToggleMenu;
+            @TogglePauseMenu.started += instance.OnTogglePauseMenu;
+            @TogglePauseMenu.performed += instance.OnTogglePauseMenu;
+            @TogglePauseMenu.canceled += instance.OnTogglePauseMenu;
         }
 
         /// <summary>
@@ -1005,9 +1037,9 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="MenuActions" />
         private void UnregisterCallbacks(IMenuActions instance)
         {
-            @ToggleMenu.started -= instance.OnToggleMenu;
-            @ToggleMenu.performed -= instance.OnToggleMenu;
-            @ToggleMenu.canceled -= instance.OnToggleMenu;
+            @TogglePauseMenu.started -= instance.OnTogglePauseMenu;
+            @TogglePauseMenu.performed -= instance.OnTogglePauseMenu;
+            @TogglePauseMenu.canceled -= instance.OnTogglePauseMenu;
         }
 
         /// <summary>
@@ -1132,6 +1164,13 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "FlipCoinForAction" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnFlipCoinForAction(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.
@@ -1177,11 +1216,11 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     public interface IMenuActions
     {
         /// <summary>
-        /// Method invoked when associated input action "ToggleMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "TogglePauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnToggleMenu(InputAction.CallbackContext context);
+        void OnTogglePauseMenu(InputAction.CallbackContext context);
     }
 }

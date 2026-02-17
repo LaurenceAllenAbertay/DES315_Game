@@ -30,11 +30,30 @@ public class MainMenuManager : MonoBehaviour
     {
         if (!hasTriggeredAnimation)
         {
-            if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+            if (IsAnyTitleAdvanceInputPressed())
             {
                 TriggerTitleAnimation();
             }
         }
+    }
+
+    private bool IsAnyTitleAdvanceInputPressed()
+    {
+        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            return true;
+        }
+
+        if (Mouse.current == null)
+        {
+            return false;
+        }
+
+        return Mouse.current.leftButton.wasPressedThisFrame
+            || Mouse.current.rightButton.wasPressedThisFrame
+            || Mouse.current.middleButton.wasPressedThisFrame
+            || Mouse.current.forwardButton.wasPressedThisFrame
+            || Mouse.current.backButton.wasPressedThisFrame;
     }
 
     private void TriggerTitleAnimation()
