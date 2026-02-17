@@ -1,4 +1,4 @@
-﻿﻿using UnityEngine;
+﻿﻿﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -16,13 +16,10 @@ public class CameraController : MonoBehaviour
     [Tooltip("Maximum distance camera can be from player")]
     public float maxDistanceFromPlayer = 25f;
 
-    [Header("Collision")]
-    [Tooltip("Radius used for camera collision checks")]
-    public float collisionRadius = 0.5f;
-    [Tooltip("Extra distance kept from walls to prevent jitter")]
-    public float collisionSkin = 0.05f;
-    [Tooltip("Layers considered for camera collision")]
-    public LayerMask collisionMask = ~0;
+    [Header("Room Clamp")]
+    [SerializeField] private RoomManager roomManager;
+    [Tooltip("Extra inward padding from the room boundary (units).")]
+    [SerializeField] private float roomClampPadding = 1f;
 
     //Input actions update -EM//
     [Header("Input Actions")]
@@ -36,8 +33,6 @@ public class CameraController : MonoBehaviour
 
     private bool isRotating;
     private bool isFastMoving;
-    private Rigidbody rb;
-
     private Vector3 desiredMoveDirection;
     private float desiredMoveSpeed;
     private float pendingYaw;
@@ -45,6 +40,11 @@ public class CameraController : MonoBehaviour
     //Input actions awake -EM//
     private void Awake()
     {
+        if (roomManager == null)
+        {
+            roomManager = FindFirstObjectByType<RoomManager>();
+        }
+
         //Setup input actions//
         if(inputActions != null)
         {
@@ -55,7 +55,6 @@ public class CameraController : MonoBehaviour
             rotateDeltaAction = cameraMap.FindAction("RotateDelta");
         }
 
-        rb = GetComponent<Rigidbody>();
     }
 
     //Input action on Enable -EM//
@@ -117,13 +116,6 @@ public class CameraController : MonoBehaviour
     {
         CachePanInput();
         CacheRotationInput();
-        
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-    }
-
-    private void FixedUpdate()
-    {
         ApplyPan();
         ApplyRotation();
     }
@@ -190,11 +182,10 @@ public class CameraController : MonoBehaviour
 
     private void ApplyPan()
     {
-        if (rb == null || desiredMoveDirection == Vector3.zero || desiredMoveSpeed <= 0f) return;
+        if (desiredMoveDirection == Vector3.zero || desiredMoveSpeed <= 0f) return;
 
-        Vector3 delta = desiredMoveDirection * desiredMoveSpeed * Time.fixedDeltaTime;
-        Vector3 newPosition = rb.position + delta;
-        newPosition = ResolveCameraCollision(rb.position, newPosition);
+        Vector3 delta = desiredMoveDirection * desiredMoveSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + delta;
 
         if (player != null)
         {
@@ -205,11 +196,12 @@ public class CameraController : MonoBehaviour
             {
                 offset = offset.normalized * maxDistanceFromPlayer;
                 newPosition = player.position + offset;
-                newPosition.y = rb.position.y;
+                newPosition.y = transform.position.y;
             }
         }
 
-        rb.MovePosition(newPosition);
+        newPosition = ClampToCurrentRoom(newPosition);
+        transform.position = newPosition;
     }
 
     //Handle rotation update -EM//
@@ -225,26 +217,152 @@ public class CameraController : MonoBehaviour
 
     private void ApplyRotation()
     {
-        if (rb == null || pendingYaw == 0f) return;
+        if (pendingYaw == 0f) return;
 
-        Quaternion rotation = Quaternion.Euler(0f, pendingYaw, 0f) * rb.rotation;
-        rb.MoveRotation(rotation);
+        Quaternion rotation = Quaternion.Euler(0f, pendingYaw, 0f) * transform.rotation;
+        transform.rotation = rotation;
         pendingYaw = 0f;
     }
 
-    private Vector3 ResolveCameraCollision(Vector3 from, Vector3 to)
+    private Vector3 ClampToCurrentRoom(Vector3 position)
     {
-        Vector3 delta = to - from;
-        float distance = delta.magnitude;
-        if (distance <= Mathf.Epsilon) return to;
-
-        Vector3 direction = delta / distance;
-        if (Physics.SphereCast(from, collisionRadius, direction, out RaycastHit hit, distance, collisionMask, QueryTriggerInteraction.Ignore))
+        RoomLA currentRoom = roomManager != null ? roomManager.CurrentRoom : null;
+        if (currentRoom == null)
         {
-            float safeDistance = Mathf.Max(0f, hit.distance - collisionSkin);
-            return from + direction * safeDistance;
+            return position;
         }
 
-        return to;
+        Collider[] colliders = currentRoom.BoundaryColliders;
+        if (colliders == null || colliders.Length == 0)
+        {
+            return position;
+        }
+
+        if (IsInsideRoomXZ(position, colliders))
+        {
+            if (roomClampPadding <= 0f)
+            {
+                return position;
+            }
+
+            if (TryGetContainingCollider(position, colliders, out Collider containingCollider))
+            {
+                return ClampPositionXZToBounds(position, containingCollider.bounds, roomClampPadding);
+            }
+
+            return position;
+        }
+
+        Vector2 positionXZ = new Vector2(position.x, position.z);
+        float bestSqrDistance = float.PositiveInfinity;
+        Vector3 bestPosition = position;
+
+        Collider bestCollider = null;
+
+        foreach (var collider in colliders)
+        {
+            if (collider == null)
+            {
+                continue;
+            }
+
+            Vector3 probe = position;
+            probe.y = collider.bounds.center.y;
+            Vector3 closest = collider.ClosestPoint(probe);
+            Vector2 closestXZ = new Vector2(closest.x, closest.z);
+            float sqrDistance = (closestXZ - positionXZ).sqrMagnitude;
+
+            if (sqrDistance < bestSqrDistance)
+            {
+                bestSqrDistance = sqrDistance;
+                bestPosition = new Vector3(closest.x, position.y, closest.z);
+                bestCollider = collider;
+            }
+        }
+
+        if (bestCollider != null && roomClampPadding > 0f)
+        {
+            return ClampPositionXZToBounds(bestPosition, bestCollider.bounds, roomClampPadding);
+        }
+
+        return bestPosition;
+    }
+
+    private static bool IsInsideRoomXZ(Vector3 position, Collider[] colliders)
+    {
+        Vector2 positionXZ = new Vector2(position.x, position.z);
+
+        foreach (var collider in colliders)
+        {
+            if (collider == null)
+            {
+                continue;
+            }
+
+            Vector3 probe = position;
+            probe.y = collider.bounds.center.y;
+            Vector3 closest = collider.ClosestPoint(probe);
+            Vector2 closestXZ = new Vector2(closest.x, closest.z);
+
+            if ((closestXZ - positionXZ).sqrMagnitude <= 0.0001f)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool TryGetContainingCollider(Vector3 position, Collider[] colliders, out Collider containing)
+    {
+        foreach (var collider in colliders)
+        {
+            if (collider == null)
+            {
+                continue;
+            }
+
+            Vector3 probe = position;
+            probe.y = collider.bounds.center.y;
+            Vector3 closest = collider.ClosestPoint(probe);
+            Vector2 closestXZ = new Vector2(closest.x, closest.z);
+            Vector2 positionXZ = new Vector2(position.x, position.z);
+
+            if ((closestXZ - positionXZ).sqrMagnitude <= 0.0001f)
+            {
+                containing = collider;
+                return true;
+            }
+        }
+
+        containing = null;
+        return false;
+    }
+
+    private static Vector3 ClampPositionXZToBounds(Vector3 position, Bounds bounds, float padding)
+    {
+        float minX = bounds.min.x + padding;
+        float maxX = bounds.max.x - padding;
+        float minZ = bounds.min.z + padding;
+        float maxZ = bounds.max.z - padding;
+
+        if (minX > maxX)
+        {
+            float centerX = bounds.center.x;
+            minX = centerX;
+            maxX = centerX;
+        }
+
+        if (minZ > maxZ)
+        {
+            float centerZ = bounds.center.z;
+            minZ = centerZ;
+            maxZ = centerZ;
+        }
+
+        float clampedX = Mathf.Clamp(position.x, minX, maxX);
+        float clampedZ = Mathf.Clamp(position.z, minZ, maxZ);
+
+        return new Vector3(clampedX, position.y, clampedZ);
     }
 }
