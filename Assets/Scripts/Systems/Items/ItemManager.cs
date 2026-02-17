@@ -79,6 +79,10 @@ public class ItemManager : MonoBehaviour
         }
 
         inventoryItems.Add(item);
+        if (equippedItems.Count < maxEquipped)
+        {
+            Equip(item);
+        }
         return true;
     }
 
