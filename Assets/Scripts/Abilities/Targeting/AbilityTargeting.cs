@@ -56,6 +56,10 @@ public class AbilityTargeting : MonoBehaviour
     [SerializeField] private bool isTargeting = false;
     private string currentAbilityName = "";
 
+    [Header("Flip Visuals")]
+    [SerializeField] private Color flipVisualizerColor = new Color(0.6f, 0.2f, 1f, 0.3f);
+    [SerializeField] private Color flipHighlightColor = new Color(0.6f, 0.2f, 1f, 1f);
+
     // Events
     public delegate void TargetConfirmed(TargetingResult result);
     public event TargetConfirmed OnTargetConfirmed;
@@ -82,6 +86,9 @@ public class AbilityTargeting : MonoBehaviour
     // Tracking
     private Unit hoveredUnit;
     private bool hoveredUnitInRange;
+    private Color defaultConeColor;
+    private Color defaultAoeColor;
+    private Color defaultHighlightColor;
 
     public bool IsTargeting => isTargeting;
 
@@ -119,6 +126,21 @@ public class AbilityTargeting : MonoBehaviour
             GameObject highlightGO = new GameObject("TargetHighlighter");
             highlightGO.transform.SetParent(transform);
             targetHighlighter = highlightGO.AddComponent<TargetHighlighter>();
+        }
+
+        if (coneVisualizer != null)
+        {
+            defaultConeColor = coneVisualizer.coneColor;
+        }
+
+        if (aoeVisualizer != null)
+        {
+            defaultAoeColor = aoeVisualizer.circleColor;
+        }
+
+        if (targetHighlighter != null)
+        {
+            defaultHighlightColor = targetHighlighter.highlightColor;
         }
     }
 
@@ -195,6 +217,22 @@ public class AbilityTargeting : MonoBehaviour
         currentAbilityAoeHeight = StatsManager.Instance != null
             ? StatsManager.Instance.ApplyAoeSize(ability.aoeHeight)
             : ability.aoeHeight;
+        if (coneVisualizer != null)
+        {
+            defaultConeColor = coneVisualizer.coneColor;
+        }
+
+        if (aoeVisualizer != null)
+        {
+            defaultAoeColor = aoeVisualizer.circleColor;
+        }
+
+        if (targetHighlighter != null)
+        {
+            defaultHighlightColor = targetHighlighter.highlightColor;
+        }
+
+        SetFlipVisuals(false);
 
         // Show the appropriate visualizer based on targeting type
         switch (ability.targetingType)
@@ -233,6 +271,7 @@ public class AbilityTargeting : MonoBehaviour
     {
         HideAllVisualizers();
         ClearHighlight();
+        SetFlipVisuals(false);
 
         currentAbility = null;
         currentCaster = null;
@@ -597,6 +636,28 @@ public class AbilityTargeting : MonoBehaviour
         }
 
         OnTargetConfirmed?.Invoke(result);
+    }
+
+    public void SetFlipVisuals(bool enabled)
+    {
+        Color coneColor = enabled ? flipVisualizerColor : defaultConeColor;
+        Color aoeColor = enabled ? flipVisualizerColor : defaultAoeColor;
+        Color highlightColor = enabled ? flipHighlightColor : defaultHighlightColor;
+
+        if (coneVisualizer != null)
+        {
+            coneVisualizer.SetColor(coneColor);
+        }
+
+        if (aoeVisualizer != null)
+        {
+            aoeVisualizer.SetColor(aoeColor);
+        }
+
+        if (targetHighlighter != null)
+        {
+            targetHighlighter.SetHighlightColor(highlightColor);
+        }
     }
 
     /// <summary>
