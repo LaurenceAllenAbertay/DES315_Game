@@ -43,9 +43,10 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void TakeDamage(float amount)
     {
-        if (amount <= 0f) return;
+        float roundedAmount = Mathf.Ceil(amount);
+        if (roundedAmount <= 0f) return;
 
-        float remainingDamage = amount;
+        float remainingDamage = roundedAmount;
 
         // Block absorbs damage first
         if (currentBlock > 0f)
@@ -79,10 +80,11 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void Heal(float amount)
     {
-        if (amount <= 0f) return;
+        float roundedAmount = Mathf.Ceil(amount);
+        if (roundedAmount <= 0f) return;
 
         float previousHealth = currentHealth;
-        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+        currentHealth = Mathf.Min(currentHealth + roundedAmount, maxHealth);
 
         float actualHeal = currentHealth - previousHealth;
 
@@ -98,10 +100,11 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void AddBlock(float amount)
     {
-        if (amount <= 0f) return;
+        float roundedAmount = Mathf.Ceil(amount);
+        if (roundedAmount <= 0f) return;
 
-        currentBlock += amount;
-        if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} added {amount} block. Total block: {currentBlock}");
+        currentBlock += roundedAmount;
+        if (debugMode) Debug.Log($"[{GetType().Name}] {gameObject.name} added {roundedAmount} block. Total block: {currentBlock}");
         OnBlockChanged?.Invoke(currentBlock);
     }
 

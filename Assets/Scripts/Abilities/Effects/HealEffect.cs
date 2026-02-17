@@ -20,16 +20,17 @@ public class HealEffect : AbilityEffect
         }
 
         float finalHeal = modifiedBase * context.AccumulatedMultiplier;
+        float roundedHeal = Mathf.Ceil(finalHeal);
 
         if (targetSelf)
         {
             // Healing self
             if (context.Caster != null)
             {
-                context.Caster.Heal(finalHeal);
+                context.Caster.Heal(roundedHeal);
                 if (context.Caster is Player)
                 {
-                    MessageUI.Instance?.EnqueueMessage($"You healed for {finalHeal:0.#}.");
+                    MessageUI.Instance?.EnqueueMessage($"You healed for {roundedHeal:0}.");
                 }
             }
         }
@@ -38,10 +39,10 @@ public class HealEffect : AbilityEffect
             // Healing another target
             if (context.CurrentTarget != null)
             {
-                context.CurrentTarget.Heal(finalHeal);
+                context.CurrentTarget.Heal(roundedHeal);
                 if (context.Caster is Player && context.CurrentTarget == context.Caster)
                 {
-                    MessageUI.Instance?.EnqueueMessage($"You healed for {finalHeal:0.#}.");
+                    MessageUI.Instance?.EnqueueMessage($"You healed for {roundedHeal:0}.");
                 }
             }
         }

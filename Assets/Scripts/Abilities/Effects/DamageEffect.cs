@@ -20,6 +20,7 @@ public class DamageEffect : AbilityEffect
         }
 
         float finalDamage = modifiedBase * context.AccumulatedMultiplier;
+        finalDamage = Mathf.Ceil(finalDamage);
 
         if (targetSelf)
         {
@@ -43,7 +44,7 @@ public class DamageEffect : AbilityEffect
                 {
                     string abilityLabel = string.IsNullOrWhiteSpace(context.AbilityName) ? "ability" : context.AbilityName;
                     MessageUI.Instance?.EnqueueMessage(
-                        $"You cast {abilityLabel} for {finalDamage:0.#} damage to {enemyTarget.name}.");
+                        $"You cast {abilityLabel} for {finalDamage:0} damage to {enemyTarget.name}.");
                 }
                 // Debug.Log($"[DamageEffect] Dealt {finalDamage} damage to {context.CurrentTarget.name} (base: {baseDamage}, multiplier: {context.AccumulatedMultiplier:F2})");
             }

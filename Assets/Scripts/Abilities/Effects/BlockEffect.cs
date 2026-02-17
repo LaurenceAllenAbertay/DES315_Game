@@ -22,13 +22,14 @@ public class BlockEffect : AbilityEffect
         }
 
         float finalBlock = modifiedBase * context.AccumulatedMultiplier;
+        float roundedBlock = Mathf.Ceil(finalBlock);
         
         if (context.Caster != null)
         {
-            context.Caster.AddBlock(finalBlock);
+            context.Caster.AddBlock(roundedBlock);
             if (context.Caster is Player)
             {
-                MessageUI.Instance?.EnqueueMessage($"You gained {finalBlock:0.#} block.");
+                MessageUI.Instance?.EnqueueMessage($"You gained {roundedBlock:0} block.");
             }
             // Debug.Log($"[BlockEffect] Added {finalBlock} block to self (base: {baseBlockAmount}, multiplier: {context.AccumulatedMultiplier:F2})");
         }
