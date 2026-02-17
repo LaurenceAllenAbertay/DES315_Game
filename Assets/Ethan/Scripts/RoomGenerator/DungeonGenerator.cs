@@ -17,6 +17,11 @@ public class DungeonGenerator : MonoBehaviour
     [Tooltip("Number of different room types available")]
     public int roomTypeCount = 4;
 
+    [Tooltip("Chance (0-1) a new cell inherits a neighbour's type instead of rolling randomly - higher values cluster same-type cells together producing more 2x2 merges")]
+    [Range(0f, 1f)]
+    //0.0 fully random, 0.65 default increase in 2x2, 0.85 heavy clustering, 1.0 every cell inherits a neighbour//
+    public float typeClusterChance = 0.65f;
+
     [Header("Debug")]
     public bool generateOnStart = true;
     public bool showDebugLogs = true;
@@ -44,7 +49,7 @@ public class DungeonGenerator : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"Dungeon generated: {rooms.Count} rooms created");
+            Debug.Log($"[DungeonGenerator] Dungeon generated: {rooms.Count} rooms created");
         }
     }
 
@@ -80,6 +85,7 @@ public class DungeonGenerator : MonoBehaviour
 
         //Add initial neighbours of lobby to frontier//
         AddNeighboursToFrontier(startPosition, frontier);
+
         int safetyCounter = 0;
         //Prevent infinite loops//
         int maxIterations = gridSize * gridSize * 10;
@@ -100,7 +106,7 @@ public class DungeonGenerator : MonoBehaviour
 
             //Occupy this cell with a random room type (1 - 4, 0 reserved for starting room/lobby)//
             grid[cell.x, cell.y].isOccupied = true;
-            grid[cell.x, cell.y].roomType = Random.Range(1, roomTypeCount + 1);
+            grid[cell.x, cell.y].roomType = PickRoomType(cell);
             currentCells++;
 
             //Add this cell's neighbour to frontier//
@@ -109,7 +115,7 @@ public class DungeonGenerator : MonoBehaviour
 
         if (showDebugLogs)
         {
-            Debug.Log($"Grid growth complete: {currentCells}/{targetCells} cells occupied (iterations: {safetyCounter})");
+            Debug.Log($"[DungeonGenerator] Grid growth complete: {currentCells}/{targetCells} cells occupied (iterations: {safetyCounter})");
         }
     }
 
@@ -139,78 +145,108 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
+    //Pick a room type for a newly occupied cell -EM//
+    //Rolls against typeClusterChance to inherit a neighbour's type, otherwise picks randomly -EM//
+    private int PickRoomType(Vector2Int cell)
+    {
+        if(Random.value < typeClusterChance)
+        {
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                new Vector2Int(0,1),
+                new Vector2Int(1,0),
+                new Vector2Int(0,-1),
+                new Vector2Int(-1,0)
+            };
+
+            //Collect occupied neighbour types, ignoring lobby (type 0) -EM//
+            List<int> neighbourTypes = new List<int>();
+            foreach(Vector2Int dir in directions)
+            {
+                Vector2Int neighbour = cell + dir;
+                if(neighbour.x < 0 || neighbour.x >= gridSize || neighbour.y < 0 || neighbour.y >= gridSize) continue;
+                if (!grid[neighbour.x, neighbour.y].isOccupied) continue;
+                int nType = grid[neighbour.x, neighbour.y].roomType;
+                if(nType > 0) neighbourTypes.Add(nType);
+            }
+
+            if(neighbourTypes.Count > 0)
+            {
+                return neighbourTypes[Random.Range(0, neighbourTypes.Count)];
+            }
+        }
+        //Fall back to fully random type//
+        return Random.Range(1, roomTypeCount + 1);
+    }
+
     //Detect and merge adjacent cells of the same type into rooms (max 2 x 2) - EM//
+    //Two pass approach: claim all possible 2x2's first then fill remaining cells as 1x1's -EM//
+    //This prevents 1x1's being consumed before a valid 2x2 can claim them -EM//
     private void MergeRooms()
     {
         bool[,] proccessed = new bool[gridSize, gridSize];
 
+        //Pass 1: find and claim all valid 2x2 merges//
         for (int x = 0; x < gridSize; x++)
         {
             for (int y = 0; y < gridSize; y++)
             {
                 if (!grid[x, y].isOccupied || proccessed[x, y]) continue;
 
-                //Try to create largest possible room starting from this cell//
-                Room room = CreateRoomFromCell(x, y, proccessed);
-                rooms.Add(room);
+                int roomType = grid[x, y].roomType;
+
+                //Only try 2x2 - skip lobbies, the stay 1x1//
+                if (!grid[x,y].isLobby && CanMerge(x,y,2,2,roomType, proccessed))
+                {
+                    List<Vector2Int> cells = new List<Vector2Int>
+                    {
+                        new Vector2Int(x,y),
+                        new Vector2Int(x+1,y),
+                        new Vector2Int(x,y+1),
+                        new Vector2Int(x+1,y+1)
+                    };
+
+                    foreach(Vector2Int cell in cells)
+                    {
+                        proccessed[cell.x, cell.y] = true;
+                    }
+
+                    rooms.Add(new Room(cells, roomType, false));
+                }
+            }
+        }
+
+        //Pass 2: any cell not yet claimed becomes a 1x1//
+        for(int x = 0; x < gridSize; x++)
+        {
+            for(int y = 0;y < gridSize; y++)
+            {
+                if (!grid[x,y].isOccupied || proccessed[x,y]) continue;
+
+                proccessed[x, y] = true;
+                rooms.Add(new Room(new List<Vector2Int> { new Vector2Int(x, y) }, grid[x, y].roomType, grid[x, y].isLobby));
             }
         }
 
         if (showDebugLogs)
         {
-            Debug.Log($"Room merging complete: {rooms.Count} rooms from grid cells");
-        }
-    }
+            int count1x1 = 0;
+            int count2x2 = 0;
 
-    //Create a room by merging cells starting from position (x,y), Tries to create 2x2, then 2x1/1x2, then 1x1 - EM//
-    private Room CreateRoomFromCell(int x, int y, bool[,] processed)
-    {
-        int roomType = grid[x, y].roomType;
-        bool isLobby = grid[x, y].isLobby;
-        List<Vector2Int> cells = new List<Vector2Int>();
-
-        //Try to create 2x2//
-        if (CanMerge(x, y, 2, 2, roomType, processed))
-        {
-            cells.Add(new Vector2Int(x, y));
-            cells.Add(new Vector2Int(x + 1, y));
-            cells.Add(new Vector2Int(x, y + 1));
-            cells.Add(new Vector2Int(x + 1, y + 1));
+            foreach (Room r in rooms)
+            {
+                if (r.gridCells.Count == 1) count1x1++;
+                else if (r.gridCells.Count == 4) count2x2++;
+            }
+        Debug.Log($"[DungeonGenerator ]Room merging complete: {rooms.Count} rooms ({count2x2} x 2x2, {count1x1} x 1x1)");
         }
-
-        //Try to create a 2x1 (horizontal)//
-        else if (CanMerge(x, y, 2, 1, roomType, processed))
-        {
-            cells.Add(new Vector2Int(x, y));
-            cells.Add(new Vector2Int(x + 1, y));
-        }
-
-        //Try to create a 1x2 (vertical)//
-        else if (CanMerge(x, y, 1, 2, roomType, processed))
-        {
-            cells.Add(new Vector2Int(x, y));
-            cells.Add(new Vector2Int(x, y + 1));
-        }
-        //Juse 1x1//
-        else
-        {
-            cells.Add(new Vector2Int(x, y));
-        }
-
-        //Mark all as processed//
-        foreach (Vector2Int cell in cells)
-        {
-            processed[cell.x, cell.y] = true;
-        }
-
-        return new Room(cells, roomType, isLobby);
     }
 
     //Check if we can merge a width x height block starting at (x,y) - EM//
     private bool CanMerge(int x, int y, int width, int height, int roomType, bool[,] processed)
     {
         //Check bounds//
-        if (x + width > gridSize || y + height > gridSize) return false;
+        if (x < 0 || y < 0 || x + width > gridSize || y + height > gridSize) return false;
 
         //Check all cells in the rectangle//
         for (int dx = 0; dx < width; dx++)
@@ -249,7 +285,7 @@ public class DungeonGenerator : MonoBehaviour
         }
     }
 
-    //Check if neighbour is a s different room and add connections -EM//
+    //Check if neighbour is a different room and add connections -EM//
     private void CheckAndAddConnections(Room room, Vector2Int cell, Vector2Int direction)
     {
         Vector2Int neighbour = cell + direction;
