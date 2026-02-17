@@ -630,36 +630,32 @@ public class AbilityTargeting : MonoBehaviour
     private List<Unit> GetUnitsInCone(Vector3 origin, Vector3 direction, float range, float angle, float height)
     {
         List<Unit> targets = new List<Unit>();
+        HashSet<Unit> seenUnits = new HashSet<Unit>();
 
         LayerMask targetMask = enemyLayer | propLayer;
         Collider[] colliders = Physics.OverlapSphere(origin, range, targetMask);
 
         float halfAngle = angle * 0.5f;
+        Vector3 flatDirection = new Vector3(direction.x, 0f, direction.z);
+        if (flatDirection.sqrMagnitude > 0.0001f)
+        {
+            flatDirection.Normalize();
+        }
 
         foreach (Collider col in colliders)
         {
             Unit unit = col.GetComponentInParent<Unit>();
             if (unit == null || unit.GetComponent<Player>() != null) continue;
+            if (seenUnits.Contains(unit)) continue;
             if (!IsUnitInCurrentRoom(unit)) continue;
 
-            Vector3 toUnit = unit.transform.position - origin;
-            toUnit.y = 0;
-
-            float unitAngle = Vector3.Angle(direction, toUnit.normalized);
-
-            if (unitAngle <= halfAngle)
+            if (!IsColliderWithinCone(col, origin, flatDirection, range, halfAngle, height))
             {
-                if (height > 0f)
-                {
-                    float verticalDistance = Mathf.Abs(unit.transform.position.y - origin.y);
-                    if (verticalDistance > height)
-                    {
-                        continue;
-                    }
-                }
-
-                targets.Add(unit);
+                continue;
             }
+
+            seenUnits.Add(unit);
+            targets.Add(unit);
         }
 
         return targets;
@@ -668,6 +664,7 @@ public class AbilityTargeting : MonoBehaviour
     private List<Unit> GetUnitsInRadius(Vector3 center, float radius, float height)
     {
         List<Unit> targets = new List<Unit>();
+        HashSet<Unit> seenUnits = new HashSet<Unit>();
 
         LayerMask targetMask = enemyLayer | propLayer;
         Collider[] colliders = Physics.OverlapSphere(center, radius, targetMask);
@@ -675,7 +672,7 @@ public class AbilityTargeting : MonoBehaviour
         foreach (Collider col in colliders)
         {
             Unit unit = col.GetComponentInParent<Unit>();
-            if (unit == null || unit.GetComponent<Player>() != null || targets.Contains(unit))
+            if (unit == null || unit.GetComponent<Player>() != null || seenUnits.Contains(unit))
             {
                 continue;
             }
@@ -685,19 +682,13 @@ public class AbilityTargeting : MonoBehaviour
                 continue;
             }
 
-            if (height > 0f)
+            if (!IsColliderWithinRadius(col, center, radius, height))
             {
-                float verticalDistance = Mathf.Abs(unit.transform.position.y - center.y);
-                if (verticalDistance > height)
-                {
-                    continue;
-                }
+                continue;
             }
 
-            if (!targets.Contains(unit))
-            {
-                targets.Add(unit);
-            }
+            seenUnits.Add(unit);
+            targets.Add(unit);
         }
 
         return targets;
@@ -787,5 +778,67 @@ public class AbilityTargeting : MonoBehaviour
         float distance = direction.magnitude;
 
         return !Physics.Raycast(startPos, direction.normalized, distance, targetBlockerLayer);
+    }
+
+    private bool IsColliderWithinRadius(Collider col, Vector3 center, float radius, float height)
+    {
+        Vector3 closestPoint = col.ClosestPoint(center);
+        Vector3 flatOffset = closestPoint - center;
+        flatOffset.y = 0f;
+
+        if (flatOffset.magnitude > radius)
+        {
+            return false;
+        }
+
+        if (height > 0f)
+        {
+            float verticalDistance = Mathf.Abs(closestPoint.y - center.y);
+            if (verticalDistance > height)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private bool IsColliderWithinCone(Collider col, Vector3 origin, Vector3 flatDirection, float range, float halfAngle, float height)
+    {
+        Vector3 toBoundsCenter = col.bounds.center - origin;
+        float projected = Vector3.Dot(toBoundsCenter, flatDirection);
+        projected = Mathf.Clamp(projected, 0f, range);
+        Vector3 axisPoint = origin + flatDirection * projected;
+        Vector3 closestPoint = col.ClosestPoint(axisPoint);
+
+        Vector3 toPoint = closestPoint - origin;
+        Vector3 toPointFlat = new Vector3(toPoint.x, 0f, toPoint.z);
+
+        if (toPointFlat.sqrMagnitude <= 0.0001f)
+        {
+            return true;
+        }
+
+        float angleToPoint = Vector3.Angle(flatDirection, toPointFlat.normalized);
+        if (angleToPoint > halfAngle)
+        {
+            return false;
+        }
+
+        if (toPointFlat.magnitude > range)
+        {
+            return false;
+        }
+
+        if (height > 0f)
+        {
+            float verticalDistance = Mathf.Abs(closestPoint.y - origin.y);
+            if (verticalDistance > height)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
