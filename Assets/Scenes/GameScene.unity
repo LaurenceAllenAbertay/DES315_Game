@@ -2665,10 +2665,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11d51fb6a12d874b96953a48fe25936, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: 11
+  gridSize: 6
   occupationPercentage: 0.6
   roomTypeCount: 4
-  typeClusterChance: 0.65
+  typeClusterChance: 0.5
   generateOnStart: 1
   showDebugLogs: 0
 --- !u!4 &1829371480
@@ -2698,7 +2698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3fa7f847dd07049911548aaed5b3fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSize: 15
+  cellSize: 18
   lobby1x1Prefab: {fileID: 5187754965267167289, guid: bc5884341cfe6d5458ecbf9742e299c0, type: 3}
   lobby2x2Prefab: {fileID: 4923247229184233194, guid: bfc819eb2202a524c8290983357ef8a7, type: 3}
   roomType1_1x1Prefab: {fileID: 3931157789060816880, guid: a3895c425e4d54d48afd93a6397c59b0, type: 3}
