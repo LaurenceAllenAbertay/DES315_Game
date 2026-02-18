@@ -25,6 +25,8 @@ public class HealthUI : MonoBehaviour
     private Camera mainCamera;
     private Unit hoveredUnit;
     private Unit lockedUnit;
+    private Unit externalUnit;
+    private bool hasExternalOverride;
     private bool lockToTurnUnit;
     private CombatManager combatManager;
 
@@ -86,6 +88,22 @@ public class HealthUI : MonoBehaviour
         if (pointerPositionAction == null)
         {
             return;
+        }
+
+        if (hasExternalOverride)
+        {
+            if (externalUnit == null || externalUnit.IsDead)
+            {
+                ClearExternalOverrideInternal();
+            }
+            else
+            {
+                if (hoveredUnit != externalUnit)
+                {
+                    SetHoveredUnit(externalUnit);
+                }
+                return;
+            }
         }
 
         if (lockToTurnUnit)
@@ -161,6 +179,43 @@ public class HealthUI : MonoBehaviour
 
         hoveredUnit = null;
         SetUIActive(false);
+    }
+
+    public void SetExternalOverride(Unit unit)
+    {
+        if (unit == null)
+        {
+            ClearExternalOverride();
+            return;
+        }
+
+        hasExternalOverride = true;
+        externalUnit = unit;
+        SetHoveredUnit(unit);
+    }
+
+    public void ClearExternalOverride(Unit unit = null)
+    {
+        if (!hasExternalOverride)
+        {
+            return;
+        }
+
+        if (unit != null && externalUnit != unit)
+        {
+            return;
+        }
+
+        hasExternalOverride = false;
+        externalUnit = null;
+        ClearHoveredUnit();
+    }
+
+    private void ClearExternalOverrideInternal()
+    {
+        hasExternalOverride = false;
+        externalUnit = null;
+        ClearHoveredUnit();
     }
 
     private void LockToTurnUnit(Unit unit)

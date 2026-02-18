@@ -5,6 +5,9 @@ using UnityEngine;
 /// </summary>
 public class Player : Unit
 {
+    [Header("UI")]
+    [SerializeField] private Sprite icon;
+
     [Header("Combat State")]
     [SerializeField] private bool isInCombat = false;
 
@@ -43,6 +46,7 @@ public class Player : Unit
 
     // Properties
     public bool IsInCombat => isInCombat;
+    public Sprite Icon => icon;
     public int BaseCoins => GetBaseCoins();
     public int CurrentCoins => currentCoins;
     public float CurrentFlipChance => currentFlipChance;

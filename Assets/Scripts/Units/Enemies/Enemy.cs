@@ -8,6 +8,9 @@ using UnityEngine.Serialization;
 /// </summary>
 public class Enemy : Unit
 {
+    [Header("UI")]
+    [SerializeField] private Sprite icon;
+
     [Header("Vision Cone")]
     public EnemyVisionCone visionCone;
 
@@ -28,6 +31,7 @@ public class Enemy : Unit
     private bool combatCallbacksRegistered;
 
     public bool IsHiddenFromPlayer => !isModelVisible;
+    public Sprite Icon => icon;
 
     protected override void Awake()
     {
