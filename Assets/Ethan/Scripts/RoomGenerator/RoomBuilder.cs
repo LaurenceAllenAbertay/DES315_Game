@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.AI.Navigation;
+using UnityEngine.AI;
 using System.Runtime.CompilerServices;
 
 
@@ -48,15 +49,44 @@ public class RoomBuilder : MonoBehaviour
     [Tooltip("Automatically bake NavMesh after building rooms")]
     public bool autoBakeNavMesh = true;
 
+    [Header("NavMesh Agents")]
+    [Tooltip("Try to re-link agents to the baked NavMesh after runtime generation")]
+    public bool rebindAgentsAfterBake = true;
+    [Tooltip("Search radius used to snap agents onto the baked NavMesh")]
+    public float agentRebindRadius = 2f;
+    [Tooltip("Disable agents before baking to avoid invalid NavMesh warnings")]
+    public bool disableAgentsDuringBake = true;
+    [Tooltip("Enable agents after baking (useful if prefabs start disabled)")]
+    public bool enableAgentsAfterBake = true;
+    [Tooltip("Which layers of agents should be enabled after baking")]
+    public LayerMask agentEnableMask;
+
+    [Header("NavMesh Build Filters")]
+    [Tooltip("Base layer mask used for NavMesh building")]
+    public LayerMask navMeshLayerMask = ~0;
+    [Tooltip("Exclude Player and Enemy layers from NavMesh build")]
+    public bool excludePlayerAndEnemyLayers = true;
+
+    [Header("Auto Generation")]
+    [Tooltip("Automatically generate and build rooms on Start")]
+    public bool autoGenerateAndBuildOnStart = true;
+    [Tooltip("Automatically spawn doors after rooms are built")]
+    public bool autoSpawnDoorsOnStart = true;
+
     [Header("Organisation")]
     [Tooltip("Parent object for all room geometry")]
     public Transform roomsParent;
+
+    [Header("References")]
+    [Tooltip("Optional DoorSpawner to auto-spawn doors after build")]
+    public DoorSpawner doorSpawner;
 
     [Header("Debug")]
     public bool showDebugLogs = true;
 
     private DungeonGenerator generator;
     private NavMeshSurface navMeshSurface;
+    private readonly List<NavMeshAgent> disabledAgents = new List<NavMeshAgent>();
 
     private void Awake()
     {
@@ -75,6 +105,40 @@ public class RoomBuilder : MonoBehaviour
         if(navMeshSurface == null)
         {
             navMeshSurface = gameObject.AddComponent<NavMeshSurface>();
+        }
+
+        ConfigureNavMeshSurface();
+
+        if(agentEnableMask == 0)
+        {
+            int playerLayer = LayerMask.NameToLayer("Player");
+            int enemyLayer = LayerMask.NameToLayer("Enemy");
+            int mask = 0;
+            if(playerLayer >= 0) mask |= 1 << playerLayer;
+            if(enemyLayer >= 0) mask |= 1 << enemyLayer;
+            agentEnableMask = mask != 0 ? mask : ~0;
+        }
+
+        if(doorSpawner == null)
+        {
+            doorSpawner = GetComponent<DoorSpawner>();
+        }
+
+        if(autoGenerateAndBuildOnStart && generator != null)
+        {
+            generator.generateOnStart = false;
+        }
+    }
+
+    private void Start()
+    {
+        if(autoGenerateAndBuildOnStart)
+        {
+            GenerateAndBuild();
+            if(autoSpawnDoorsOnStart && doorSpawner != null)
+            {
+                doorSpawner.SpawnDoors();
+            }
         }
     }
 
@@ -214,11 +278,36 @@ public class RoomBuilder : MonoBehaviour
     {
         if(navMeshSurface == null) return;
 
+        ConfigureNavMeshSurface();
         navMeshSurface.BuildNavMesh();
+
+        if(disableAgentsDuringBake)
+        {
+            ReenableAgentsAfterBake();
+        }
+        else if(rebindAgentsAfterBake)
+        {
+            RebindAgentsToNavMesh();
+        }
 
         if(showDebugLogs)
         {
             Debug.Log("[RoomBuilder] NavMesh Baked!");
+        }
+    }
+
+    private void RebindAgentsToNavMesh()
+    {
+        NavMeshAgent[] agents = FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None);
+        foreach (NavMeshAgent agent in agents)
+        {
+            if(agent == null || !agent.isActiveAndEnabled) continue;
+            if(agent.isOnNavMesh) continue;
+
+            if(NavMesh.SamplePosition(agent.transform.position, out NavMeshHit hit, agentRebindRadius, NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+            }
         }
     }
 
@@ -228,10 +317,71 @@ public class RoomBuilder : MonoBehaviour
     {
         if(generator != null)
         {
+            if(disableAgentsDuringBake)
+            {
+                DisableAgentsForBake();
+            }
             generator.GenerateDungeon();
         }
         BuildRooms();
     }
 
     #endregion
+
+    private void ConfigureNavMeshSurface()
+    {
+        if(navMeshSurface == null) return;
+
+        int mask = navMeshLayerMask;
+        if(excludePlayerAndEnemyLayers)
+        {
+            int playerLayer = LayerMask.NameToLayer("Player");
+            if(playerLayer >= 0) mask &= ~(1 << playerLayer);
+
+            int enemyLayer = LayerMask.NameToLayer("Enemy");
+            if(enemyLayer >= 0) mask &= ~(1 << enemyLayer);
+        }
+
+        navMeshSurface.layerMask = mask;
+    }
+
+    private void DisableAgentsForBake()
+    {
+        disabledAgents.Clear();
+        NavMeshAgent[] agents = FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None);
+        foreach (NavMeshAgent agent in agents)
+        {
+            if(agent == null || !agent.enabled) continue;
+            agent.enabled = false;
+            disabledAgents.Add(agent);
+        }
+    }
+
+    private void ReenableAgentsAfterBake()
+    {
+        foreach (NavMeshAgent agent in disabledAgents)
+        {
+            if(agent == null) continue;
+            agent.enabled = true;
+        }
+
+        if(enableAgentsAfterBake)
+        {
+            NavMeshAgent[] agents = FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None);
+            foreach (NavMeshAgent agent in agents)
+            {
+                if(agent == null) continue;
+                if(agent.enabled) continue;
+                if(((1 << agent.gameObject.layer) & agentEnableMask) == 0) continue;
+                agent.enabled = true;
+            }
+        }
+
+        if(rebindAgentsAfterBake)
+        {
+            RebindAgentsToNavMesh();
+        }
+
+        disabledAgents.Clear();
+    }
 }

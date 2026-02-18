@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3024681544484243268}
   - component: {fileID: 450954410850956006}
   - component: {fileID: 6605269676554374672}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 7314059198427848611}
   - component: {fileID: 4340469936343721020}
   - component: {fileID: 7634805438035757250}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   - component: {fileID: 1129579222107945842}
   - component: {fileID: 7390693155759414936}
   - component: {fileID: 7470323125276582049}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 2805579275488697591}
   - component: {fileID: 5160629453644365094}
   - component: {fileID: 327295945111415215}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -512,7 +512,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4423030840649663727}
-  m_Layer: 0
+  - component: {fileID: 1003702586510889181}
+  m_Layer: 3
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,6 +539,26 @@ Transform:
   - {fileID: 7167317629645470878}
   m_Father: {fileID: 9127742434098901611}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1003702586510889181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6530030430447202339}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &6999339489453617932
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,7 +571,7 @@ GameObject:
   - component: {fileID: 4692142873111968617}
   - component: {fileID: 3623804290108693714}
   - component: {fileID: 8718349127602950995}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

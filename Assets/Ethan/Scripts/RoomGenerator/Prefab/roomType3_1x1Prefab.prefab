@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2808490173437918929}
-  m_Layer: 0
+  - component: {fileID: 7878358048303500935}
+  m_Layer: 3
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35,6 +36,26 @@ Transform:
   - {fileID: 4750752335204841265}
   m_Father: {fileID: 3999025974539565275}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7878358048303500935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 40963259512052025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_OverrideArea: 1
+  m_Area: 1
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 0
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &1185297565700816771
 GameObject:
   m_ObjectHideFlags: 0
@@ -47,7 +68,7 @@ GameObject:
   - component: {fileID: 5200116295761313753}
   - component: {fileID: 1914256640100976048}
   - component: {fileID: 4513042828559880432}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +177,7 @@ GameObject:
   - component: {fileID: 2167245224028443287}
   - component: {fileID: 5097866829328490822}
   - component: {fileID: 2314319126427457093}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +285,7 @@ GameObject:
   - component: {fileID: 2094868825463041078}
   - component: {fileID: 1816495753800534822}
   - component: {fileID: 258174292157175422}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -372,7 +393,7 @@ GameObject:
   - component: {fileID: 8690680731999879404}
   - component: {fileID: 3930823036579934884}
   - component: {fileID: 1619993876376212955}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -480,7 +501,7 @@ GameObject:
   - component: {fileID: 5927767765458603005}
   - component: {fileID: 636624200154620042}
   - component: {fileID: 496953379039010677}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
