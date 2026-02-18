@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 //Spawns doors at all room connection points -EM//
 //Doors are now static archways for room transitions -EM//
@@ -21,6 +22,9 @@ public class DoorSpawner : MonoBehaviour
 
     [Tooltip("Parent for all doors")]
     public Transform doorsParent;
+
+    [Header("Input")]
+    public InputActionAsset inputActions;
 
     [Header("Debug")]
     public bool showDebugLogs = false;
@@ -42,6 +46,15 @@ public class DoorSpawner : MonoBehaviour
             GameObject parent = new GameObject("Doors");
             parent.transform.SetParent(transform);
             doorsParent = parent.transform;
+        }
+
+        if(inputActions == null)
+        {
+            PlayerController playerController = FindAnyObjectByType<PlayerController>();
+            if(playerController != null)
+            {
+                inputActions = playerController.inputActions;
+            }
         }
     }
 
@@ -222,6 +235,7 @@ public class DoorSpawner : MonoBehaviour
 
         //Setup teleportation data//
         doorScript.SetupTeleportDoor(connection.doorPosition, connection.doorPosition + connection.teleportOffsetA, connection.doorPosition + connection.teleportOffsetB, roomA, roomB);
+        doorScript.ConfigureInput(inputActions);
 
         spawnedDoors.Add(doorScript);
 

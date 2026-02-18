@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 //Static door/archway that transitions player to connected room -EM//
 //Player can click door or press button when nearby to transitions -EM//
@@ -19,7 +20,10 @@ public class DungeonDoor : MonoBehaviour
 
     [Header("Player Detection")]
     [Tooltip("Layer for the player")]
-    public LayerMask playerLayer = 1 << 7;
+    public LayerMask playerLayer = 1 << 6;
+
+    [Header("Input")]
+    public InputActionAsset inputActions;
 
     [Header("UI")]
     [Tooltip("Offset for UI prompt above door")]
@@ -28,6 +32,7 @@ public class DungeonDoor : MonoBehaviour
     private Transform playerTransform;
     private bool playerInRange = false;
     private bool showPrompt = false;
+    private InputAction interactionAction;
 
     
     public void SetupTeleportDoor(Vector3 doorPos, Vector3 destA, Vector3 destB, Room rA, Room bB)
@@ -38,17 +43,52 @@ public class DungeonDoor : MonoBehaviour
         roomA = rA;
         roomB = bB;
     }
+
+    private void Awake()
+    {
+        SetupInteractionAction();
+    }
+
+    private void OnEnable()
+    {
+        if(interactionAction != null)
+        {
+            interactionAction.performed += OnInteract;
+            interactionAction.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if(interactionAction != null)
+        {
+            interactionAction.performed -= OnInteract;
+            interactionAction.Disable();
+        }
+    }
+
+    public void ConfigureInput(InputActionAsset actions)
+    {
+        if(interactionAction != null)
+        {
+            interactionAction.performed -= OnInteract;
+            interactionAction.Disable();
+        }
+
+        inputActions = actions;
+        SetupInteractionAction();
+
+        if(isActiveAndEnabled && interactionAction != null)
+        {
+            interactionAction.performed += OnInteract;
+            interactionAction.Enable();
+        }
+    }
    
     private void Update()
     {
         //check for player in range//
         CheckPlayerProximity();
-
-        //Check for E key press when in range//
-        if (playerInRange && Input.GetKeyDown(KeyCode.E))
-        {
-            TeleportPlayer();
-        }
     }
 
     //Check if player is within interaction range -EM//
@@ -105,6 +145,20 @@ public class DungeonDoor : MonoBehaviour
         playerTransform.position = destinationPos;
 
         Debug.Log($"[DungeonDoor] Player teleport to {destinationPos}");
+    }
+
+    private void OnInteract(InputAction.CallbackContext context)
+    {
+        if (!playerInRange) return;
+        TeleportPlayer();
+    }
+
+    private void SetupInteractionAction()
+    {
+        if(inputActions == null) return;
+
+        var playerMap = inputActions.FindActionMap("Player");
+        interactionAction = playerMap?.FindAction("Interact");
     }
 
     //Draw UI prompt when player is in range//
