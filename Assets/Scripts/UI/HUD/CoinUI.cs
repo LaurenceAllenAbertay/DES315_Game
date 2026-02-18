@@ -25,9 +25,11 @@ public class CoinUI : MonoBehaviour
     [Tooltip("Seconds between coin fill steps.")]
     public float fillStepDelay = 0.05f;
 
+    private const string CoinSpendingParam = "CoinSpending";
     private int currentUICoins = 0;
     private Coroutine fillCoroutine;
     private bool hasReceivedCoinsThisTurn = false;
+    private int spendingCoinCount = 0;
 
     private void Start()
     {
@@ -92,6 +94,7 @@ public class CoinUI : MonoBehaviour
         if (!visible)
         {
             hasReceivedCoinsThisTurn = false;
+            spendingCoinCount = 0;
             if (outOfCoinsText != null)
             {
                 outOfCoinsText.gameObject.SetActive(false);
@@ -138,6 +141,8 @@ public class CoinUI : MonoBehaviour
                 StartCoroutine(SpendCoin(coin));
             }
         }
+
+        ApplyCoinSpending();
     }
 
     private IEnumerator SpendCoin(GameObject coin)
@@ -159,8 +164,9 @@ public class CoinUI : MonoBehaviour
 
         while (currentUICoins < targetCount)
         {
-            Instantiate(coinPrefab, coinParent);
+            GameObject coin = Instantiate(coinPrefab, coinParent);
             currentUICoins++;
+            ApplyCoinSpendingToCoin(coin, coinParent.childCount - 1, coinParent.childCount);
 
             if (fillStepDelay > 0f)
             {
@@ -173,6 +179,35 @@ public class CoinUI : MonoBehaviour
         }
 
         fillCoroutine = null;
+        ApplyCoinSpending();
+    }
+
+    public void SetCoinSpendingCount(int count)
+    {
+        spendingCoinCount = Mathf.Max(0, count);
+
+        ApplyCoinSpending();
+    }
+
+    private void ApplyCoinSpending()
+    {
+        if (coinParent == null) return;
+
+        int childCount = coinParent.childCount;
+        for (int i = 0; i < childCount; i++)
+        {
+            ApplyCoinSpendingToCoin(coinParent.GetChild(i).gameObject, i, childCount);
+        }
+    }
+
+    private void ApplyCoinSpendingToCoin(GameObject coin, int index, int totalCoins)
+    {
+        Animator animator = coin.GetComponent<Animator>();
+        if (animator == null) return;
+
+        int activeCount = Mathf.Min(spendingCoinCount, totalCoins);
+        bool isSpending = index >= totalCoins - activeCount;
+        animator.SetBool(CoinSpendingParam, isSpending);
     }
 
     private void UpdateOutOfCoinsText(int current)

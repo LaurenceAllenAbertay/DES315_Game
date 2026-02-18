@@ -17,6 +17,7 @@ public class PlayerAbilityManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private Player player;
     [SerializeField] private AbilityTargeting targetingSystem;
+    [SerializeField] private CoinUI coinUI;
 
     [Header("Audio")]
     [SerializeField] private AudioSource abilityAudioSource;
@@ -46,6 +47,9 @@ public class PlayerAbilityManager : MonoBehaviour
 
         if (targetingSystem == null)
             targetingSystem = GetComponent<AbilityTargeting>();
+        
+        if (coinUI == null)
+            coinUI = FindFirstObjectByType<CoinUI>();
         
         if (inputActions != null)
         {
@@ -126,6 +130,7 @@ public class PlayerAbilityManager : MonoBehaviour
         }
         
         activeAbilitySlot = null;
+        SetCoinSpendingCount(0);
     }
 
     private void Update()
@@ -230,6 +235,10 @@ public class PlayerAbilityManager : MonoBehaviour
             targetingSystem.SetFlipVisuals(false);
         }
         targetingSystem.StartTargeting(ability, player);
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            SetCoinSpendingCount(1);
+        }
         if (debugMode)
             Debug.Log($"[AbilityManager] Started targeting for '{ability.abilityName}'");
     }
@@ -245,6 +254,7 @@ public class PlayerAbilityManager : MonoBehaviour
         activeAbilitySlot = null;
         flipSelected = false;
         targetingSystem.SetFlipVisuals(false);
+        SetCoinSpendingCount(0);
         if (debugMode)
             Debug.Log("[AbilityManager] Targeting cancelled");
     }
@@ -275,6 +285,7 @@ public class PlayerAbilityManager : MonoBehaviour
         activeAbilitySlot = null;
         flipSelected = false;
         targetingSystem.SetFlipVisuals(false);
+        SetCoinSpendingCount(0);
     }
 
     /// <summary>
@@ -288,6 +299,7 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             targetingSystem.SetFlipVisuals(false);
         }
+        SetCoinSpendingCount(0);
     }
 
     /// <summary>
@@ -540,6 +552,14 @@ public class PlayerAbilityManager : MonoBehaviour
         }
     }
 
+    private void SetCoinSpendingCount(int count)
+    {
+        if (coinUI != null)
+        {
+            coinUI.SetCoinSpendingCount(count);
+        }
+    }
+
     private static bool IsTorchTarget(Unit target)
     {
         if (target == null)
@@ -551,12 +571,7 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             return true;
         }
-
-        if (target.CompareTag("Torch"))
-        {
-            return true;
-        }
-
+        
         return target.gameObject.name.IndexOf("torch", System.StringComparison.OrdinalIgnoreCase) >= 0;
     }
 }
