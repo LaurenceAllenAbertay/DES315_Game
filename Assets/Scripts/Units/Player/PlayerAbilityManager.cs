@@ -199,6 +199,8 @@ public class PlayerAbilityManager : MonoBehaviour
             return;
         }
 
+        int abilityCoinCost = Mathf.Max(0, ability.coinCost);
+
         // Check combat restrictions
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
         {
@@ -216,12 +218,12 @@ public class PlayerAbilityManager : MonoBehaviour
                 return;
             }
 
-            // Check if player has at least 1 coin
-            if (!player.CanSpendCoin())
+            // Check if player has enough coins
+            if (!player.CanSpendCoins(abilityCoinCost))
             {
                 if (debugMode)
                 {
-                    Debug.Log($"[AbilityManager] Not enough coins for '{ability.abilityName}' (need 1, have {player.CurrentCoins})");
+                    Debug.Log($"[AbilityManager] Not enough coins for '{ability.abilityName}' (need {abilityCoinCost}, have {player.CurrentCoins})");
                 }
                 return;
             }
@@ -237,7 +239,7 @@ public class PlayerAbilityManager : MonoBehaviour
         targetingSystem.StartTargeting(ability, player);
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
         {
-            SetCoinSpendingCount(1);
+            SetCoinSpendingCount(abilityCoinCost);
         }
         if (debugMode)
             Debug.Log($"[AbilityManager] Started targeting for '{ability.abilityName}'");
@@ -304,7 +306,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
     /// <summary>
     /// Execute an ability with the given targeting result
-    /// Spends 1 coin in combat and optionally performs a coin flip to scale the outcome
+    /// Spends ability coin cost in combat and optionally performs a coin flip to scale the outcome
     /// </summary>
     private void ExecuteAbility(Ability ability, TargetingResult result)
     {
@@ -315,12 +317,14 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             if (player == null) return;
 
-            // Spend 1 coin
-            if (!player.SpendCoin())
+            int abilityCoinCost = Mathf.Max(0, ability.coinCost);
+
+            // Spend coins for ability
+            if (!player.SpendCoins(abilityCoinCost))
             {
                 if (debugMode)
                 {
-                    Debug.Log($"[AbilityManager] Failed to spend coin for '{ability.abilityName}'");
+                    Debug.Log($"[AbilityManager] Failed to spend {abilityCoinCost} coin(s) for '{ability.abilityName}'");
                 }
                 return;
             }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// How this ability selects its targets
@@ -18,7 +19,7 @@ public enum TargetingType
 
 /// <summary>
 /// Defines an ability that can be equipped and used by the player
-/// All abilities cost 1 coin in combat and can optionally use a coin flip
+/// Abilities have a coin cost in combat and can optionally use a coin flip
 /// </summary>
 [CreateAssetMenu(fileName = "NewAbility", menuName = "Abilities/Ability")]
 public class Ability : ScriptableObject
@@ -28,6 +29,9 @@ public class Ability : ScriptableObject
     [TextArea(2, 4)]
     public string description = "";
     public Sprite icon;
+    [FormerlySerializedAs("coinCount")]
+    [Tooltip("Coins required to cast this ability in combat (0 = free)")]
+    public int coinCost = 1;
 
     [Header("Targeting")]
     public TargetingType targetingType = TargetingType.PointAndClick;

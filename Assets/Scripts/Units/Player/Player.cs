@@ -176,7 +176,7 @@ public class Player : Unit
     /// </summary>
     public bool CanSpendCoin()
     {
-        return currentCoins >= 1;
+        return CanSpendCoins(1);
     }
 
     /// <summary>
@@ -184,12 +184,30 @@ public class Player : Unit
     /// </summary>
     public bool SpendCoin()
     {
-        if (currentCoins < 1) return false;
+        return SpendCoins(1);
+    }
 
-        currentCoins--;
+    /// <summary>
+    /// Check if player can spend a number of coins (0 = free)
+    /// </summary>
+    public bool CanSpendCoins(int cost)
+    {
+        if (cost <= 0) return true;
+        return currentCoins >= cost;
+    }
+
+    /// <summary>
+    /// Spend a number of coins (0 = free)
+    /// </summary>
+    public bool SpendCoins(int cost)
+    {
+        if (cost <= 0) return true;
+        if (currentCoins < cost) return false;
+
+        currentCoins -= cost;
         if (debugMode)
         {
-            Debug.Log($"[Player] Spent 1 coin. Remaining: {currentCoins}");
+            Debug.Log($"[Player] Spent {cost} coin(s). Remaining: {currentCoins}");
         }
         OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
         return true;
