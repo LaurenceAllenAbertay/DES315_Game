@@ -1,5 +1,7 @@
+using Mono.Cecil;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 
 //Spawns doors at all room connection points -EM//
@@ -7,22 +9,11 @@ using UnityEngine;
 public class DoorSpawner : MonoBehaviour
 {
     [Header("Door Settings")]
-    [Tooltip("Prefab for door (Leave empty to create simple doors)")]
+    [Tooltip("Prefab for door (Leave empty for yellow cube)")]
     public GameObject doorPrefab;
 
-    [Tooltip("Width of door opening")]
-    public float doorWidth = 2f;
-
-    [Tooltip("Height of door")]
-    public float doorHeight = 3f;
-
-    [Tooltip("Thickness of door")]
-    public float doorThickness = 0.2f;
-
-    [Header("Materials")]
-    public Material doorMaterial;
-    public Material frameMaterial;
-    public Material archwayMaterial;
+    [Tooltip("Size of door marker cube")]
+    public float doorMarkerSize = 0.5f;
 
     [Header("References")]
     [Tooltip("The RoomBuilder component")]
@@ -88,7 +79,7 @@ public class DoorSpawner : MonoBehaviour
                 foreach (ConnectionPoint cp in connectionPoints)
                 {
                     //Create unique key for THIS specific door location//
-                    string doorKey = GetDoorKey(cp.position);
+                    string doorKey = GetDoorKey(cp.doorPosition);
 
                     if (processedConnections.Contains(doorKey))
                     {
@@ -96,7 +87,7 @@ public class DoorSpawner : MonoBehaviour
                     }
 
                     processedConnections.Add(doorKey);
-                    SpawnDoor(cp.position, cp.direction, room, connectedRoom);
+                    SpawnDoor(cp, room, connectedRoom);
                     doorsSpawned++;
                 }
             }
@@ -111,8 +102,10 @@ public class DoorSpawner : MonoBehaviour
     //Simple struct to hold connection point data -EM//
     private struct ConnectionPoint
     {
-        public Vector3 position;
-        public Vector2Int direction;
+        public Vector3 doorPosition; //World position of door marker//
+        public Vector2Int direction; //Direction from roomA to roomB//
+        public Vector3 teleportOffsetA; //Offset for teleporting To roomA//
+        public Vector3 teleportOffsetB; //Offset for teleporting To roomB//
     }
     private string GetDoorKey(Vector3 position)
     {
@@ -126,6 +119,7 @@ public class DoorSpawner : MonoBehaviour
     {
 
         List<ConnectionPoint> connections = new List<ConnectionPoint>();
+        float cellSize = roomBuilder.cellSize;
 
         //Find adjacent cells between the two rooms//
         foreach(Vector2Int cellA in roomA.gridCells)
@@ -140,20 +134,51 @@ public class DoorSpawner : MonoBehaviour
 
             foreach(Vector2Int dir in directions)
             {
-                Vector2Int neighbour = cellA + dir;
+                Vector2Int cellB = cellA + dir;
 
                 //If this neighbour belongs to roomB, it's a connection point//
-                if (roomB.gridCells.Contains(neighbour))
+                if (roomB.gridCells.Contains(cellB))
                 {
-                    Vector3 cellWorldPos = GridToWorldPosition(cellA);
-                    float cellSize = roomBuilder.cellSize;
-                    Vector3 doorOffset = new Vector3(dir.x * cellSize * 0.5f, 0f, dir.y * cellSize * 0.5f);
+                    ConnectionPoint cp = new ConnectionPoint();
+                    cp.direction = dir;
 
-                    ConnectionPoint cp = new ConnectionPoint
+                    //Get world position of cellA's bottom-left corner//
+                    Vector3 cellAWorld = GridToWorldPosition(cellA);
+
+                    //Calculate door position at the center of the shared edge//
+                    //For a cell at (0,0) with cellSize 18//
+                    //North edge center: (0.9, 0, 1.8)//
+                    //East edge center: (1.8,0,0.9)//
+                    //South edge center: (0.9, 0, 0)//
+                    //West edge center: (0,0,0.9)//
+
+                    //How far to pull door inward from wall edge//
+                    float doorInset = 1f;
+
+                    if(dir == new Vector2Int(0,1)) //North//
                     {
-                        position = cellWorldPos + doorOffset,
-                        direction = dir
-                    };
+                        cp.doorPosition = cellAWorld + new Vector3(cellSize * 0.5f, 0.5f, cellSize - doorInset);
+                        cp.teleportOffsetA = new Vector3(0, 0, -0.5f); //Step back into roomA//
+                        cp.teleportOffsetB = new Vector3(0, 0, 0.5f); //Step forward into roomB//
+                    }
+                    else if (dir == new Vector2Int(1, 0)) //East//
+                    {
+                        cp.doorPosition = cellAWorld + new Vector3(cellSize - doorInset, 0.5f, cellSize * 0.5f);
+                        cp.teleportOffsetA = new Vector3(-0.5f, 0, 0f); //Step back into roomA//
+                        cp.teleportOffsetB = new Vector3(0.5f, 0, 0); //Step forward into roomB//
+                    }
+                    else if (dir == new Vector2Int(0, -1)) //South//
+                    {
+                        cp.doorPosition = cellAWorld + new Vector3(cellSize * 0.5f, 0.5f, doorInset);
+                        cp.teleportOffsetA = new Vector3(-0.5f, 0, 0f); //Step back into roomA//
+                        cp.teleportOffsetB = new Vector3(0.5f, 0, 0); //Step forward into roomB//
+                    }
+                    else //West//
+                    {
+                        cp.doorPosition = cellAWorld + new Vector3(doorInset, 0.5f, cellSize * 0.5f);
+                        cp.teleportOffsetA = new Vector3(-0.5f, 0, 0f); //Step back into roomA//
+                        cp.teleportOffsetB = new Vector3(0.5f, 0, 0); //Step forward into roomB//
+                    }
 
                     connections.Add(cp);
                 }
@@ -162,7 +187,7 @@ public class DoorSpawner : MonoBehaviour
         return connections;
     }
 
-    private void SpawnDoor(Vector3 position, Vector2Int direction, Room roomA, Room roomB)
+    private void SpawnDoor(ConnectionPoint connection, Room roomA, Room roomB)
     {
         GameObject doorObject;
 
@@ -172,170 +197,37 @@ public class DoorSpawner : MonoBehaviour
         }
         else
         {
-            doorObject = CreateDefaultArchway();
+            //Create default yellow cube marker//
+            doorObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            doorObject.transform.SetParent(doorsParent);
+
+            //Make it yellow and visible//
+            Renderer renderer = doorObject.GetComponent<Renderer>();
+            renderer.material = new Material(Shader.Find("Standard"));
+            renderer.material.color = Color.yellow;
+
+            //Scale it//
+            doorObject.transform.localScale = Vector3.one * doorMarkerSize;
         }
 
         doorObject.name = $"Door_{roomA.GetHashCode()}_{roomB.GetHashCode()}";
-        doorObject.transform.position = position;
+        doorObject.transform.position = connection.doorPosition;
 
-        //Orient door based on connection direction//
-        //Door faces perpendicular to the wall//
-        if(direction.x != 0)
-        {
-            //Door faces North - South//
-            doorObject.transform.rotation = Quaternion.Euler(0f, 90f, 0f);
-        }
-        else
-        {
-            //Door faces East - West//
-            doorObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        }
-
-        //Add DungeonDoor component if not present//
+        //Add DungeonDoor component//
         DungeonDoor doorScript = doorObject.GetComponent<DungeonDoor>();
         if(doorScript == null)
         {
             doorScript = doorObject.AddComponent<DungeonDoor>();
         }
 
+        //Setup teleportation data//
+        doorScript.SetupTeleportDoor(connection.doorPosition, connection.doorPosition + connection.teleportOffsetA, connection.doorPosition + connection.teleportOffsetB, roomA, roomB);
+
         spawnedDoors.Add(doorScript);
 
-        if (showDebugLogs)
+        if(showDebugLogs)
         {
-            Debug.Log($"[DoorSpawner] Spawned door at {position}, direction {direction}");
-        }
-    }
-
-    private GameObject CreateDefaultArchway()
-    {
-        GameObject archwayObject = new GameObject("Archway");
-
-        //Create archway instead of door//
-        CreateArchwayFrame(archwayObject);
-
-        //Add collider for clicking//
-        BoxCollider collider = archwayObject.AddComponent <BoxCollider>();
-        collider.size = new Vector3(doorWidth, doorHeight, doorThickness);
-        collider.center = new Vector3(0f, doorHeight * 0.5f, 0f);
-
-        return archwayObject;
-    }
-
-    private void CreateArchwayFrame(GameObject parent)
-    {
-        //Left Post//
-        GameObject leftPost = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        leftPost.name = "LeftPost";
-        leftPost.transform.SetParent(parent.transform);
-        leftPost.transform.localPosition = new Vector3(-doorWidth * 0.5f - 0.15f, doorHeight * 0.5f, 0f);
-        leftPost.transform.localScale = new Vector3(0.3f, doorHeight, doorThickness * 2f);
-        ApplyMaterial(leftPost, archwayMaterial ?? frameMaterial);
-
-        //Right Post//
-        GameObject rightPost = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        rightPost.name = "RightPost";
-        rightPost.transform.SetParent(parent.transform);
-        rightPost.transform.localPosition = new Vector3(doorWidth * 0.5f + 0.15f, doorHeight * 0.5f, 0f);
-        rightPost.transform.localScale = new Vector3(0.3f, doorHeight, doorThickness * 2f);
-        ApplyMaterial(rightPost, archwayMaterial ?? frameMaterial);
-
-        //Top arch//
-        GameObject topArch = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        topArch.name = "TopArch";
-        topArch.transform.SetParent(parent.transform);
-        topArch.transform.localPosition = new Vector3(0f, doorHeight + 0.15f, 0f);
-        topArch.transform.localScale = new Vector3(doorWidth + 0.6f, 0.3f, doorThickness * 2f);
-        ApplyMaterial(topArch, archwayMaterial ?? frameMaterial);
-
-        //decorative arch curve using smaller cubes//
-        CreateArchCurve(parent);
-    }
-
-    //Create curved top for archway -EM//
-    private void CreateArchCurve(GameObject parent)
-    {
-        int curveSegments = 8;
-        float radius = doorWidth * 0.6f;
-
-        for (int i = 0; i < curveSegments; i++)
-        {
-            float angle = Mathf.PI * (i / (float)(curveSegments - 1));
-            float x = Mathf.Cos(angle) * radius;
-            float y = Mathf.Sin(angle) * radius * 0.5f;
-
-            GameObject segment = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            segment.name = $"ArchSegment_{i}";
-            segment.transform.SetParent(parent.transform);
-            segment.transform.localPosition = new Vector3(x, doorHeight + y, 0f);
-            segment.transform.localScale = new Vector3(0.2f, 0.2f, doorThickness * 2f);
-            segment.transform.localRotation = Quaternion.Euler(0f, 0f, -angle * Mathf.Rad2Deg);
-            ApplyMaterial(segment, archwayMaterial ?? frameMaterial);
-        }
-    }
-
-    //Keep old door creation method for switching back -EM//
-    private GameObject CreateDefaultDoor()
-    {
-        GameObject doorObject = new GameObject("Door");
-
-        //Create doorframe//
-        CreateDoorFrame(doorObject);
-
-        //Create door panels (static, not animated) -EM//
-        GameObject doorPanel = CreateDoorPanel("DoorPanel", new Vector3(0f, doorHeight * 0.5f, 0f));
-        doorPanel.transform.SetParent(doorObject.transform);
-
-        //Add collider for clicking -EM//
-        BoxCollider collider = doorObject.AddComponent<BoxCollider>();
-        collider.size = new Vector3(doorWidth, doorHeight, doorThickness);
-        collider.center = new Vector3(0f, doorHeight * 0.5f, 0f);
-
-        return doorObject;
-    }
-
-    private void CreateDoorFrame(GameObject parent)
-    {
-        //Left Post//
-        GameObject leftPost = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        leftPost.name = "LeftPost";
-        leftPost.transform.SetParent(parent.transform);
-        leftPost.transform.localPosition = new Vector3(-doorWidth * 0.5f - 0.15f, doorHeight * 0.5f, 0f);
-        leftPost.transform.localScale = new Vector3(0.3f, doorHeight, doorThickness * 2f);
-        ApplyMaterial(leftPost, frameMaterial);
-
-        //Right Post//
-        GameObject rightPost = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        rightPost.name = "RightPost";
-        rightPost.transform.SetParent(parent.transform);
-        rightPost.transform.localPosition = new Vector3(doorWidth * 0.5f + 0.15f, doorHeight * 0.5f, 0f);
-        rightPost.transform.localScale = new Vector3(0.3f, doorHeight, doorThickness * 2f);
-        ApplyMaterial(rightPost, frameMaterial);
-
-        //Top beam//
-        GameObject topBeam = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        topBeam.name = "TopBeam";
-        topBeam.transform.SetParent(parent.transform);
-        topBeam.transform.localPosition = new Vector3(0f, doorHeight + 0.15f, 0f);
-        topBeam.transform.localScale = new Vector3(doorWidth + 0.6f, 0.3f, doorThickness * 2f);
-        ApplyMaterial(topBeam, frameMaterial);
-    }
-    private GameObject CreateDoorPanel(string name, Vector3 localPosition)
-    {
-        GameObject door = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        door.name = name;
-        door.transform.localPosition = localPosition;
-        door.transform.localScale = new Vector3(doorWidth * 0.5f, doorHeight, doorThickness);
-
-        ApplyMaterial (door, doorMaterial);
-
-        return door;
-    }
-
-    private void ApplyMaterial(GameObject obj, Material mat)
-    {
-        if(mat != null)
-        {
-            obj.GetComponent<Renderer>().material = mat;
+            Debug.Log($"[DoorSpawner] Spawned door at {connection.doorPosition}, direction {connection.direction}");
         }
     }
 
@@ -347,7 +239,7 @@ public class DoorSpawner : MonoBehaviour
         float cellSize = roomBuilder.cellSize;
         Vector3 offset = new Vector3(-gridSize * cellSize * 0.5f, 0f, -gridSize * cellSize * 0.5f);
 
-        return offset + new Vector3(gridPos.x * cellSize + cellSize * 0.5f, 0f, gridPos.y * cellSize + cellSize * 0.5f);
+        return offset + new Vector3(gridPos.x * cellSize, 0f, gridPos.y * cellSize);
     }
 
     [ContextMenu("Clear Doors")]
