@@ -1,87 +1,53 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.UI;
-using System.Collections;
 
 //Static door/archway that transitions player to connected room -EM//
 //Player can click door or press button when nearby to transitions -EM//
-
-[RequireComponent(typeof(NavMeshObstacle))]
 public class DungeonDoor : MonoBehaviour
 {
-    [Header("Door State")]
-    [SerializeField] private bool isLocked = false;
-    //Toggle between archway and door visuals -EM//
-    [SerializeField] private bool useArchway = true;
+    [Header("Teleportation")]
+    [SerializeField] private Vector3 doorPosition;
+    [SerializeField] private Vector3 destinationA; //TP position for going to room A//
+    [SerializeField] private Vector3 destinationB; //TP position for going to room B//
 
-    [Header("Room References")]
-    public Room connectedRoomA; //One side of the door//
-    public Room connectedRoomB; //Other side of the door//
+    [Header("Interaction Settings")]
+    [Tooltip("Distance player must be to interact with door")]
+    public float interactionRange = 3f;
 
-    [Header("Visual References")]
-    [SerializeField] private GameObject doorVisuals; //Parent Object for door/ archway mesh//
-    [SerializeField] private GameObject archwayVisuals; //Archway mesh (if using archway)//
+    [Header("References")]
+    public Room roomA; //One side of the door//
+    public Room roomB; //Other side of the door//
 
     [Header("Player Detection")]
     [Tooltip("Layer for the player")]
     public LayerMask playerLayer = 1 << 7;
 
-    [Tooltip("Distance player must be to interact with door")]
-    public float interactionRange = 3f;
-
     [Header("UI")]
-    [SerializeField] private Canvas interactionCanvas;
-    [SerializeField] private Button interactionButton;
-    [SerializeField] private GameObject interactionPrompt;
-
-    [Header("Transition Settings")]
-    [Tooltip("Duration of fade to black (in seconds)")]
-    public float fadeDuration = 0.5f;
-
-    [Tooltip("How long to stay black before fading back in")]
-    public float blackScreenDuration = 0.2f;
+    [Tooltip("Offset for UI prompt above door")]
+    public Vector3 promptOffset = new Vector3(0, 1.5f, 0);
 
     private Transform playerTransform;
     private bool playerInRange = false;
-    private bool isTransitioning = false;
+    private bool showPrompt = false;
 
-    //Events//
-    public delegate void DoorTransition(DungeonDoor door, Room targetRoom);
-    public static event DoorTransition OnDoorTransition;
-
-    private void Start()
+    
+    public void SetupTeleportDoor(Vector3 doorPos, Vector3 destA, Vector3 destB, Room rA, Room bB)
     {
-       //Setup UI interaction button//
-       if(interactionButton != null)
-        {
-            interactionButton.onClick.AddListener(OnInteractionButtonClicked);
-        }
-
-        //Hide UI initially//
-        SetUIVisibility(false);
-
-        //Set visual style based on useArchway flag//
-        UpdateVisualStyle();
+        doorPosition = doorPos;
+        destinationA = destA;
+        destinationB = destB;
+        roomA = rA;
+        roomB = bB;
     }
-
+   
     private void Update()
     {
         //check for player in range//
         CheckPlayerProximity();
 
         //Check for E key press when in range//
-        if (playerInRange && !isTransitioning && Input.GetKeyDown(KeyCode.E))
+        if (playerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            TriggerTransition();
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (interactionButton != null)
-        {
-            interactionButton.onClick.RemoveListener(OnInteractionButtonClicked);
+            TeleportPlayer();
         }
     }
 
@@ -89,205 +55,90 @@ public class DungeonDoor : MonoBehaviour
     private void CheckPlayerProximity()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, interactionRange, playerLayer);
+
         bool wasInRange = playerInRange;
         playerInRange = colliders.Length > 0;
 
+        if(playerInRange && colliders.Length > 0)
+        {
+            playerTransform = colliders[0].transform;
+            showPrompt = true;
+        }
+        else 
+        {
+            showPrompt = false;
+            playerTransform = null;
+        }
+
+        //Log for debugging//
         if(playerInRange && !wasInRange)
         {
-            //Player entered range//
-            if(colliders.Length > 0)
-            {
-                playerTransform = colliders[0].transform;
-            }
-            SetUIVisibility(true);
-        }
-        else if (!playerInRange && wasInRange)
-        {
-            //Player left range//
-            playerTransform = null;
-            SetUIVisibility(false);
+            Debug.Log($"[DungeonDoor] Player in range of door at {transform.position}");
         }
     }
 
-    //Handle UI button click -EM//
-    private void OnInteractionButtonClicked()
+    private void TeleportPlayer()
     {
-        if(!isTransitioning && !isLocked)
-        {
-            TriggerTransition();
-        }
-    }
+        if (playerTransform == null) return;
 
-    //handle clicking directily on the door object -EM//
-    private void OnMouseDown()
-    {
-        if(playerInRange && !isTransitioning &&  !isLocked)
-        {
-            TriggerTransition();
-        }
-    }
-
-    //Start the room transition process -EM//
-    private void TriggerTransition()
-    {
-        if(isLocked)
-        {
-            Debug.Log($"[DungeonDoor] Door is locked!");
-            return;
-        }
-
-        if(playerTransform == null)
-        {
-            Debug.LogWarning("[DungeonDoor] No player found for transition!");
-            return;
-        }
-
-        //Determine which room thye player is transitioning to -EM//
-        Room targetRoom = GetTargetRoom();
-
-        if(targetRoom == null)
-        {
-            Debug.LogError("[DungeonDoor] No Connected room found!");
-            return;
-        }
-
-        //Start transition coroutine//
-        StartCoroutine(TransitionToRoom(targetRoom));
-    }
-
-    //Determine which room the player should transition to -EM//
-    private Room GetTargetRoom()
-    {
-        if(connectedRoomA == null || connectedRoomB == null)
-        {
-            Debug.LogWarning("[DungeonDoor] Door missing room connections!");
-            //return whichever is not null//
-            return connectedRoomA ?? connectedRoomB;
-        }
-
-        //Check which room the player is currently in -EM//
+        //Determine which room player is currently in//
         Vector3 playerPos = playerTransform.position;
+        Vector3 destinationPos;
 
-        float distToA = Vector3.Distance(playerPos, GetRoomCenter(connectedRoomA));
-        float distToB = Vector3.Distance(playerPos, GetRoomCenter(connectedRoomB));
+        //Calculate which destination to use based on player's current position//
+        float distToA = Vector3.Distance(playerPos, destinationA);
+        float distToB = Vector3.Distance(playerPos, destinationB);
 
-        //Return the room the player is Not currently in -EM//
-        return distToA < distToB ? connectedRoomB : connectedRoomA;
-    }
-
-    //Get approximate center of a room -EM//
-    private Vector3 GetRoomCenter(Room room)
-    {
-        if(room == null || room.gridCells.Count == 0) return Vector3.zero;
-
-        Vector2Int centerCell = room.gridCells[room.gridCells.Count / 2];
-
-        //Convert to world position//
-        DungeonGenerator generator = FindAnyObjectByType<DungeonGenerator>();
-        if(generator != null)
+        //If player is closer to destA, they're in roomA, so teleport to roomB//
+        if(distToA < distToB)
         {
-            RoomBuilder builder = generator.GetComponent<RoomBuilder>();
-            if(builder != null)
-            {
-                float cellSize = builder.cellSize;
-                int gridSize = generator.gridSize;
-                Vector3 offset = new Vector3(-gridSize * cellSize * 0.5f, 0f, -gridSize * cellSize * 0.5f);
-                return offset + new Vector3(centerCell.x * cellSize + cellSize * 0.5f, 1f, centerCell.y * cellSize + cellSize * 0.5f);
-            }
-        }
-        return Vector3.zero;
-    }
-
-    //Coroutine to handle fade and room transition -EM//
-    private IEnumerator TransitionToRoom(Room targetRoom)
-    {
-        isTransitioning = true;
-        SetUIVisibility(false);
-
-        //Get fade panel//
-        DoorTransitionManager transitionManager = FindAnyObjectByType<DoorTransitionManager>();
-
-        if(transitionManager != null)
-        {
-            //Fade to black//
-            yield return StartCoroutine(transitionManager.FadeToBlack(fadeDuration));
-
-            //Move player to target room//
-            Vector3 targetPosition = GetRoomCenter(targetRoom);
-            playerTransform.position = targetPosition;
-
-            //Notify systems about room change//
-            OnDoorTransition?.Invoke(this, targetRoom);
-
-            //Stay black briefly//
-            yield return new WaitForSeconds(blackScreenDuration);
-
-            //Fade back in//
-            yield return StartCoroutine(transitionManager.FadeFromBlack(fadeDuration));
+            destinationPos = destinationB;
+            Debug.Log($"[DungeonDoor] Teleporting from Room {roomA.GetHashCode()} to Room {roomB.GetHashCode()}");
         }
         else
         {
-            //Fall back if no transition manager exists//
-            Debug.LogWarning("[DungeonDoor] No DoorTransitionManager found! Instant teleport.");
-            Vector3 targetPosition = GetRoomCenter(targetRoom);
-            playerTransform.position = targetPosition;
-            OnDoorTransition?.Invoke(this, targetRoom);
+            destinationPos = destinationA;
+            Debug.Log($"[DungeonDoor] Teleporting from Room {roomB.GetHashCode()} to Room {roomA.GetHashCode()}");
         }
 
-        isTransitioning = false;
+        //Teleport the player//
+        playerTransform.position = destinationPos;
+
+        Debug.Log($"[DungeonDoor] Player teleport to {destinationPos}");
     }
 
-    //Show or hide interaction UI -EM//
-    private void SetUIVisibility(bool visible)
+    //Draw UI prompt when player is in range//
+    private void OnGUI()
     {
-        if(interactionCanvas != null)
+        if(!showPrompt || playerTransform == null) return;
+
+        //Convert world position to screen position//
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + promptOffset);
+
+        //Only show if in front of camera//
+        if(screenPos.z > 0)
         {
-            interactionCanvas.gameObject.SetActive(visible && !isLocked);
+            //Flip y coordinate (GUI Uses top-left origin)//
+            screenPos.y = Screen.height - screenPos.y;
+
+            //Draw prompt backgorund//
+            float width = 100f;
+            float height = 40f;
+            Rect bgRect = new Rect(screenPos.x - width/2, screenPos.y - height/2, width, height);
+
+            GUI.backgroundColor = new Color(0, 0, 0, 0.7f);
+            GUI.Box(bgRect, "");
+
+            //Draw "Press E" text//
+            GUI.contentColor = Color.yellow;
+            GUIStyle style = new GUIStyle(GUI.skin.label);
+            style.alignment = TextAnchor.MiddleCenter;
+            style.fontSize = 16;
+            style.fontStyle = FontStyle.Bold;
+
+            GUI.Label(bgRect, "Press E", style);
         }
-
-        if(interactionPrompt != null)
-        {
-            interactionPrompt.SetActive(visible && !isLocked);
-        }
     }
-
-    //update visual appearance based on UseArchway setting -EM//
-    private void UpdateVisualStyle()
-    {
-        if(doorVisuals != null)
-        {
-            doorVisuals.SetActive(!useArchway);
-        }
-
-        if(archwayVisuals != null)
-        {
-            archwayVisuals.SetActive(useArchway);
-        }
-    }
-
-    //Lock the door (prevents opening) -EM//
-    public void Lock()
-    {
-        isLocked = true;
-    }
-
-    public void Unlock()
-    {
-        isLocked = false;
-    }
-
-    //Switch between door and archway visuals -EM//
-   public void SetVisualStyle(bool archway)
-    {
-        useArchway = archway;
-        UpdateVisualStyle();
-    }
-
-    //Properties -EM//
-    public bool IsLocked => isLocked;
-    public bool IsTransitioning => isTransitioning;
-    public Room ConnectedRoomA => connectedRoomA;
-    public Room ConnectedRoomB => connectedRoomB;
 
     private void OnDrawGizmosSelected()
     {
@@ -295,21 +146,14 @@ public class DungeonDoor : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, interactionRange);
 
-        //Draw door state//
-        Gizmos.color = isLocked ? Color.red : Color.green;
-        Gizmos.DrawWireCube(transform.position, Vector3.one * 0.5f);
+        //Draw teleport destinations//
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(destinationA, 0.3f);
+        Gizmos.DrawLine(transform.position, destinationA);
 
-        //Draw connections ro rooms//
-        if(connectedRoomA != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(transform.position, GetRoomCenter(connectedRoomA));
-        }
-        if (connectedRoomB != null)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, GetRoomCenter(connectedRoomB));
-        }
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(destinationB, 0.3f);
+        Gizmos.DrawLine(transform.position, destinationB);
     }
 
 }
