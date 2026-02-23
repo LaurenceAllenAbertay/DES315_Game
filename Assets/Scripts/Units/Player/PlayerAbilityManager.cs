@@ -39,6 +39,7 @@ public class PlayerAbilityManager : MonoBehaviour
     private bool flipSelected = false;
 
     public bool IsTargeting => activeAbilitySlot.HasValue;
+    public void ActivateAbilitySlot(int slotIndex) => TryStartAbility(slotIndex);
 
     private void Awake()
     {
