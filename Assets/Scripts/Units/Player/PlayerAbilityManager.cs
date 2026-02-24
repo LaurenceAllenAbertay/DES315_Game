@@ -28,6 +28,9 @@ public class PlayerAbilityManager : MonoBehaviour
     [SerializeField] private bool debugMode = true;
     [SerializeField] private float[] cooldownTimers = new float[3];
 
+    //Matty addition , needed the animation script to detect ability casts 
+    public event System.Action<int> OnAbilityCast;
+
     // Input actions
     private InputAction ability1Action;
     private InputAction ability2Action;
@@ -283,7 +286,10 @@ public class PlayerAbilityManager : MonoBehaviour
 
         // Start cooldown regardless of hit/miss
         cooldownTimers[slotIndex] = ABILITY_COOLDOWN;
-        
+
+        //matty addition - invoke the event so the animation controller can react to the cast
+        OnAbilityCast?.Invoke(slotIndex);
+
         // Clear active slot
         activeAbilitySlot = null;
         flipSelected = false;
