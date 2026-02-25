@@ -336,6 +336,8 @@ public class PlayerController : MonoBehaviour
         lowVelocityTimer = 0f;
     }
 
+    public void ForceStopMovement() => StopMovement();
+
     private void OnEndTurn(InputAction.CallbackContext context)
     {
         if (CombatManager.Instance == null) return;
