@@ -23,6 +23,8 @@ public class RoomManager : MonoBehaviour
             return;
         }
         Instance = this;
+        
+        player = GameObject.FindFirstObjectByType<Player>().transform;
     }
 
     private void Start()

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RoomLA : MonoBehaviour
@@ -7,6 +6,8 @@ public class RoomLA : MonoBehaviour
     [SerializeField] private Collider[] boundaryColliders;
 
     public Collider[] BoundaryColliders => boundaryColliders;
+
+    private LightSource[] roomLights;
 
     public bool Contains(Vector3 position)
     {
@@ -33,14 +34,45 @@ public class RoomLA : MonoBehaviour
 
     private void Awake()
     {
+        roomLights = GetComponentsInChildren<LightSource>(true);
+
         if (RoomManager.Instance != null)
             RoomManager.Instance.Register(this);
+    }
+
+    private void Start()
+    {
+        if (RoomManager.Instance != null)
+            RoomManager.Instance.RoomChanged += OnRoomChanged;
+
+        bool isCurrentRoom = RoomManager.Instance != null && RoomManager.Instance.CurrentRoom == this;
+        SetLightsActive(isCurrentRoom);
     }
 
     private void OnDestroy()
     {
         if (RoomManager.Instance != null)
+        {
             RoomManager.Instance.Unregister(this);
+            RoomManager.Instance.RoomChanged -= OnRoomChanged;
+        }
+    }
+
+    private void OnRoomChanged(RoomLA previous, RoomLA current)
+    {
+        if (current == this)
+            SetLightsActive(true);
+        else if (previous == this)
+            SetLightsActive(false);
+    }
+
+    private void SetLightsActive(bool active)
+    {
+        foreach (var light in roomLights)
+        {
+            if (light != null)
+                light.transform.parent.gameObject.SetActive(active);
+        }
     }
 
     private void Reset()
@@ -63,7 +95,6 @@ public class RoomLA : MonoBehaviour
 
     private static bool IsPointInsideCollider(Collider collider, Vector3 position)
     {
-        // ClosestPoint returns the same position when the point is inside the collider.
         Vector3 closest = collider.ClosestPoint(position);
         return (closest - position).sqrMagnitude <= 0.0001f;
     }

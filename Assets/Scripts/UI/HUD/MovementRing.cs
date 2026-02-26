@@ -32,6 +32,8 @@ public class MovementRing : MonoBehaviour
         {
             baseRadius = 1f;
         }
+        
+        combatManager = FindFirstObjectByType<CombatManager>();
     }
 
     private void OnEnable()
