@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31b2bbf3fada98249b2f2339557b2ead, type: 3}
-  m_Name: TeleportEffect_ShadowStep
+  m_Name: ShadowStep
   m_EditorClassIdentifier: 
-  targetSelf: 1
-  clonePrefab: {fileID: 7102310171741552818, guid: bca445f7406f423488f9de7d447d45db, type: 3}
+  targetSelf: 0
+  clonePrefab: {fileID: 0}
   cloneLifetime: 10
+  maxSearchAttempts: 50
+  navMeshSampleDistance: 5
+  minTeleportDistance: 2
+  raycastStartHeight: 10
   requireCasterInLight: 1
-  requireTargetInShadow: 1

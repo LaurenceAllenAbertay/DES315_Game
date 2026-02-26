@@ -31,6 +31,18 @@ public class RoomLA : MonoBehaviour
         return false;
     }
 
+    private void Awake()
+    {
+        if (RoomManager.Instance != null)
+            RoomManager.Instance.Register(this);
+    }
+
+    private void OnDestroy()
+    {
+        if (RoomManager.Instance != null)
+            RoomManager.Instance.Unregister(this);
+    }
+
     private void Reset()
     {
         TryAutoCollect();

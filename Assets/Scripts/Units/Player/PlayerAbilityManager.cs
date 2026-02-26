@@ -585,4 +585,12 @@ public class PlayerAbilityManager : MonoBehaviour
         
         return target.gameObject.name.IndexOf("torch", System.StringComparison.OrdinalIgnoreCase) >= 0;
     }
+
+    //Test the Abilities -EM//
+    [ContextMenu("Test Ability")]
+    private void DebugTestAbility()
+    {
+        equippedAbilities[3].Execute(player, player.transform.position);
+    }
+
 }

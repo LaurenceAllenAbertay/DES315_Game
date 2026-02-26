@@ -1,15 +1,34 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class RoomManager : MonoBehaviour
 {
+    public static RoomManager Instance { get; private set; }
+
     [Header("Room Tracking")]
     [SerializeField] private RoomLA currentRoom;
     public RoomLA CurrentRoom => currentRoom;
     [SerializeField] private Transform player;
-    [SerializeField] private RoomLA[] rooms;
+
+    private readonly List<RoomLA> rooms = new List<RoomLA>();
 
     public event Action<RoomLA, RoomLA> RoomChanged;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        RefreshRooms();
+    }
 
     private void Update()
     {
@@ -34,32 +53,30 @@ public class RoomManager : MonoBehaviour
         }
     }
 
+    public void Register(RoomLA room)
+    {
+        if (room != null && !rooms.Contains(room))
+            rooms.Add(room);
+    }
+
+    public void Unregister(RoomLA room)
+    {
+        rooms.Remove(room);
+    }
+
     public void RefreshRooms()
     {
-        rooms = FindObjectsByType<RoomLA>(FindObjectsSortMode.None);
+        rooms.Clear();
+        rooms.AddRange(FindObjectsByType<RoomLA>(FindObjectsSortMode.None));
     }
 
     private RoomLA FindRoomForPosition(Vector3 position)
     {
-        if (rooms == null)
-        {
-            return null;
-        }
-
         foreach (var room in rooms)
         {
-            if (room == null)
-            {
-                continue;
-            }
-
-            if (room.Contains(position))
-            {
-                return room;
-            }
+            if (room == null) continue;
+            if (room.Contains(position)) return room;
         }
-
         return null;
     }
-
 }
