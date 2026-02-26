@@ -1397,12 +1397,12 @@ RectTransform:
   - {fileID: 1314563511}
   - {fileID: 735488060}
   - {fileID: 951882370}
+  - {fileID: 1408837566}
   - {fileID: 25083595}
   - {fileID: 729964324}
   - {fileID: 135675870}
   - {fileID: 676108163}
   - {fileID: 1966103688}
-  - {fileID: 1408837566}
   - {fileID: 472336753}
   - {fileID: 1643991289}
   - {fileID: 1160706522}
@@ -4416,7 +4416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a663e8c4a567754e9c923a53c8170cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 1779377415}
   statusText: {fileID: 735488061}
   statusIndicator: {fileID: 951882371}
   shadowOverlay: {fileID: 1408837567}
@@ -4424,7 +4424,7 @@ MonoBehaviour:
   shadowColor: {r: 0.2, g: 0.2, b: 0.4, a: 1}
   colorTransitionSpeed: 5
   overlayTransitionSpeed: 2
-  maxShadowAlpha: 0.55
+  maxShadowAlpha: 0.75
   initialOverlayFadeDuration: 3
 --- !u!1 &1352316603
 GameObject:
@@ -6381,6 +6381,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716682518}
   m_CullTransparentMesh: 1
+--- !u!114 &1779377415 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5730069245732350810, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
+  m_PrefabInstance: {fileID: 233694641}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae980fe209b34b49bfecf141a8b522d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1779377417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8598696227221657001, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
@@ -8418,7 +8429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86753977960205f4391b943820a3d3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 6
+  strength: 4.5
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
@@ -8528,7 +8539,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86753977960205f4391b943820a3d3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 6
+  strength: 4.5
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
@@ -8762,7 +8773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86753977960205f4391b943820a3d3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 6
+  strength: 4.5
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
@@ -8848,7 +8859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86753977960205f4391b943820a3d3bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  strength: 6
+  strength: 4.5
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
@@ -10892,7 +10903,7 @@ SceneRoots:
   - {fileID: 1437648970}
   - {fileID: 285508514}
   - {fileID: 438069189}
-  - {fileID: 1512805851}
   - {fileID: 160797749}
+  - {fileID: 1512805851}
   - {fileID: 1565509335}
   - {fileID: 233694641}
