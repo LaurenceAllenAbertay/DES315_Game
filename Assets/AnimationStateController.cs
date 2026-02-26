@@ -83,6 +83,7 @@ public class AnimationStateController : MonoBehaviour
         // Stop movement when casting
         if (agent != null)
         {
+            Debug.Log("HandleAbilityCast fired! Slot:" + slotIndex);
             agent.isStopped = true;
             agent.ResetPath();
         }
@@ -92,6 +93,7 @@ public class AnimationStateController : MonoBehaviour
         // Set which ability slot (0, 1, or 2) so the Animator can pick the right animation
         animator.SetInteger(AbilitySlotHash, slotIndex);
         animator.SetTrigger(CastHash);
+        animator.SetBool(IsCastingHash, true);
 
         isCasting = true;
     }
