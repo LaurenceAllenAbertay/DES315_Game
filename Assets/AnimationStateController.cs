@@ -1,6 +1,4 @@
 using UnityEngine;
-using UnityEngine.AI;
-
 public class AnimationStateController : MonoBehaviour
 {
     [Header("References")]
@@ -12,7 +10,7 @@ public class AnimationStateController : MonoBehaviour
     [Tooltip("How quickly the player blends into/out of crouch")]
     [SerializeField] private float crouchBlendSpeed = 3f;
 
-    private NavMeshAgent agent;
+    private UnityEngine.AI.NavMeshAgent agent;
 
     //Animator parameter hashes for optimization
     private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
@@ -34,7 +32,7 @@ public class AnimationStateController : MonoBehaviour
         if (abilityHandler == null)
             abilityHandler = GetComponent<PlayerAbilityManager>();
 
-        agent = GetComponent<NavMeshAgent>();
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
 
     private void OnEnable()
