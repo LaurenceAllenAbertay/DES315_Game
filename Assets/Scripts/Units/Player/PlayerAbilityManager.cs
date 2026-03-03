@@ -241,6 +241,18 @@ public class PlayerAbilityManager : MonoBehaviour
             targetingSystem.SetFlipVisuals(false);
         }
         targetingSystem.StartTargeting(ability, player);
+        if (ability.IsOnlySelfTargeting())
+        {
+            TargetingResult selfResult = new TargetingResult
+            {
+                type = TargetingResultType.Point,
+                targetPoint = player.transform.position,
+            };
+            targetingSystem.CancelTargeting();
+            activeAbilitySlot = slotIndex;
+            OnTargetConfirmed(selfResult);
+            return;
+        }
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
         {
             SetCoinSpendingCount(abilityCoinCost);

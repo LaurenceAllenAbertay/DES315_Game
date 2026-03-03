@@ -7,11 +7,6 @@ using UnityEngine.Analytics;
 public class TeleportEffect : AbilityEffect
 {
     [Header("Teleport Settings")]
-    [Tooltip("Prefab for the clone that gets left behind")]
-    public GameObject clonePrefab;
-
-    [Tooltip("How long the clone lives before automatically dying (seconds). Set to 0 for infinite")]
-    public float cloneLifetime = 10f;
 
     [Header("Shadow Search")]
     [Tooltip("How many random points to try when searching for a valid shadow position")]
@@ -54,8 +49,9 @@ public class TeleportEffect : AbilityEffect
             {
                 MessageUI.Instance?.EnqueueMessage("You must be in light to use the ability!");
                 Debug.Log("[TeleportEffect] Teleport failed: Caster not in light");
+                return;
             }
-            return;
+            
         }
 
         //Get the current room//
@@ -90,7 +86,8 @@ public class TeleportEffect : AbilityEffect
 
         //Teleport the player//
         agent.Warp(destination);
-        //Clear any existing movmeent destination so the player doesn't resume walking after teleport//
+
+        //Clear any existing movement destination so the player doesn't resume walking after teleport//
         PlayerController controller = context.Caster.GetComponent<PlayerController>();
         if (controller != null)
         {
@@ -99,16 +96,6 @@ public class TeleportEffect : AbilityEffect
 
         Debug.Log($"[TeleportEffect] Player teleported from {originalPosition} to {destination}");
         MessageUI.Instance?.EnqueueMessage("You vanish into the shadows!");
-
-        //Spawn the clone at original position//
-        if(clonePrefab != null)
-        {
-            SpawnClone(originalPosition, originalRotation, context.Caster);
-        }
-        else
-        {
-            Debug.LogWarning("[TeleportEffect] No clone prefab assigned!");
-        }
     }
 
     //Search for a random point in the room that is in shadow and on the NavMesh -EM//
@@ -200,45 +187,5 @@ public class TeleportEffect : AbilityEffect
         }
 
         return bounds;
-    }
-
-    //Spawn a 1 - Health clone at the specified position -EM//
-    private void SpawnClone(Vector3 position, Quaternion rotation, Player originalPlayer)
-    {
-        GameObject cloneObject = GameObject.Instantiate(clonePrefab, position, rotation);
-        cloneObject.name = "PlayerClone_Decoy";
-
-        //Get the unit component (could be Enemy or custom clone component)//
-        Unit cloneUnit = cloneObject.GetComponent<Unit>();
-
-        if(cloneUnit != null )
-        {
-            //Set clone to 1 health -EM//
-            cloneUnit.SetMaxHealth(1f, adjustCurrentHealth: true);
-
-            Debug.Log($"[TeleportEffect] Clone spawned at {position} with 1 health");
-            MessageUI.Instance?.EnqueueMessage("A shadow decoy remains in your place!");
-
-            //Auto-destroy after lifetime if set//
-            if(cloneLifetime > 0f)
-            {
-                GameObject.Destroy(cloneObject, cloneLifetime);   
-            }
-
-            //Subscribe to death event to clean up//
-            cloneUnit.OnDied += (unit) =>
-            {
-                Debug.Log("[TeleportEffect] Clone was destroyed");
-                if (cloneObject != null)
-                {
-                    GameObject.Destroy(cloneObject, 0.1f);
-                }
-            };
-        }
-        else
-        {
-            Debug.LogWarning("[TeleportEffect] Clone prefab doesn't have a Unit component!");
-            GameObject.Destroy(clonePrefab);
-        }
     }
 }
