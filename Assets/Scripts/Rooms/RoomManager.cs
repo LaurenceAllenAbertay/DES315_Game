@@ -25,12 +25,11 @@ public class RoomManager : MonoBehaviour
         Instance = this;
         
         player = GameObject.FindFirstObjectByType<Player>().transform;
+        RefreshRooms();
+        currentRoom = FindRoomForPosition(player.position);
     }
 
-    private void Start()
-    {
-        RefreshRooms();
-    }
+    private void Start() { }
 
     private void Update()
     {
