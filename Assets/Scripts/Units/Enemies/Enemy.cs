@@ -31,6 +31,7 @@ public class Enemy : Unit
     private bool isModelVisible = true;
     private float visibilityTimer;
     private bool forceRevealUntilTurnEnd;
+    private bool hasBeenSeen;
     private bool combatCallbacksRegistered;
 
     public bool IsHiddenFromPlayer => !isModelVisible;
@@ -162,18 +163,18 @@ public class Enemy : Unit
         }
 
         bool playerClose = false;
-        bool playerInLight = true;
         if (playerController != null && revealDistance > 0f)
         {
             playerClose = Vector3.Distance(transform.position, playerController.transform.position) <= revealDistance;
-            playerInLight = playerController.IsInLight;
         }
 
         Vector3 enemyCheckPoint = transform.position + lightCheckOffset;
         bool enemyInLight = LightDetectionManager.Instance.IsPointInLight(enemyCheckPoint);
-        bool shouldBeVisible = enemyInLight || (playerClose && !playerInLight);
-        SetModelVisible(shouldBeVisible);
-        UpdateVisionConeVisibility(shouldBeVisible);
+        bool shouldBeVisible = enemyInLight || playerClose;
+        if (shouldBeVisible) hasBeenSeen = true;
+        bool finalVisible = shouldBeVisible || hasBeenSeen;
+        SetModelVisible(finalVisible);
+        UpdateVisionConeVisibility(finalVisible);
     }
 
     private void UpdateVisionConeVisibility(bool isVisible)
