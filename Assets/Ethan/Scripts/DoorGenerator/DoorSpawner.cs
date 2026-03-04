@@ -26,6 +26,9 @@ public class DoorSpawner : MonoBehaviour
     [Header("Debug")]
     public bool showDebugLogs = false;
 
+    [Tooltip("Scale multiplier for door prefabs")]
+    public Vector3 doorScale = new Vector3(100f, 100f, 100f);
+
     private DungeonGenerator generator;
     private List<DungeonDoor> spawnedDoors = new List<DungeonDoor>();
 
@@ -203,7 +206,16 @@ public class DoorSpawner : MonoBehaviour
 
         if(doorPrefab != null)
         {
-            doorObject = Instantiate(doorPrefab, doorsParent);
+            //Rotate the door to face along the connection direction//
+            float yAngle = 0f;
+            if (connection.direction == new Vector2Int(0, 1)) yAngle = 0f; //North//
+            else if (connection.direction == new Vector2Int(1, 0)) yAngle = 90f; //East//
+            else if (connection.direction == new Vector2Int(0, -1)) yAngle = 180f; //South//
+            else if (connection.direction == new Vector2Int(-1, 0)) yAngle = 270f; //West//
+
+            Quaternion doorRotation = Quaternion.Euler(270f, yAngle, 0f);
+            doorObject = Instantiate(doorPrefab, connection.doorPosition, doorRotation, doorsParent);
+            doorObject.transform.localScale = doorScale;
         }
         else
         {

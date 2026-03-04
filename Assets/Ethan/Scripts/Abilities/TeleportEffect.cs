@@ -13,13 +13,17 @@ public class TeleportEffect : AbilityEffect
     public int maxSearchAttempts = 50;
 
     [Tooltip("Max distance to search for a valid NavMesh position at each candidate point")]
-    public float navMeshSampleDistance = 5f;
+    public float navMeshSampleDistance = 0.5f;
 
     [Tooltip("Minimum distance from the player the teleport destination must be")]
     public float minTeleportDistance = 2f;
 
     [Tooltip("How high above the candidate to start the floor raycast")]
     public float raycastStartHeight = 10f;
+
+    [Tooltip("Minimum clearence from walls")]
+    public float wallClearance = 0.4f;
+
 
     [Header("Requirements")]
     [Tooltip("Does caster need to be in light to teleport?")]
@@ -82,7 +86,6 @@ public class TeleportEffect : AbilityEffect
 
         //Store original position for clone spawning//
         Vector3 originalPosition = context.Caster.transform.position;
-        Quaternion originalRotation = context.Caster.transform.rotation;
 
         //Teleport the player//
         agent.Warp(destination);
@@ -106,13 +109,11 @@ public class TeleportEffect : AbilityEffect
         //Get the boundfs of the room from its colliders to know where to sample//
         Bounds roomBounds = GetRoomBounds(room);
 
-        //Use the caster's Y so candidates are at ground level, not the collider's center Y//
-        float groundY = casterPosition.y;
-
         int failedContains = 0;
         int failedFloor = 0;
         int failedDistance = 0;
         int failedNavMesh = 0;
+        int failedWall = 0;
         int failedLight = 0;
 
         for(int i = 0; i < maxSearchAttempts; i++)
@@ -128,9 +129,24 @@ public class TeleportEffect : AbilityEffect
                 failedContains++;
                 continue;
             }
+
             //Raycast downward from above to find the actual floor Y//
-            Vector3 rayOrigin = new Vector3(randomX, groundY + raycastStartHeight, randomZ);
+            Vector3 rayOrigin = new Vector3(randomX, casterPosition.y + raycastStartHeight, randomZ);
             if(!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit floorHit, raycastStartHeight + 5f))
+            {
+                failedFloor++;
+                continue;
+            }
+
+            //Reject if the surface is not flat//
+            if(Vector3.Dot(floorHit.normal, Vector3.up) < 0.9f)
+            {
+                failedFloor++;
+                continue;
+            }
+
+            //Reject if the surface is a prop or non-ground object//
+            if (floorHit.collider.gameObject.layer != LayerMask.NameToLayer("Ground"))
             {
                 failedFloor++;
                 continue;
@@ -140,16 +156,23 @@ public class TeleportEffect : AbilityEffect
             Vector3 floorPosition = floorHit.point;
 
             //Must be far enough from the player//
-            if (Vector3.Distance(candidate, casterPosition) < minTeleportDistance)
+            if (Vector3.Distance(floorPosition, casterPosition) < minTeleportDistance)
             {
                 failedDistance++;
                 continue;
             }
 
             //Must be on the navMesh//
-            if (!NavMesh.SamplePosition(candidate, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+            if (!NavMesh.SamplePosition(floorPosition, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
             {
                 failedNavMesh++;
+                continue;
+            }
+
+            //Check proximity to wall//
+            if(Physics.CheckSphere(navHit.position + Vector3.up * 0.5f, wallClearance, ~0))
+            {
+                failedWall++;
                 continue;
             }
 
@@ -165,7 +188,7 @@ public class TeleportEffect : AbilityEffect
             result = navHit.position;
             return true;
         }
-        Debug.Log($"[TeleportEffect] Search failed after {maxSearchAttempts} attempts - " + $"Contains:{failedContains} Floor:{failedFloor} Distance:{failedDistance} NavMesh:{failedNavMesh} Light:{failedLight}");
+        Debug.Log($"[TeleportEffect] Search failed after {maxSearchAttempts} attempts - " + $"Contains:{failedContains} Floor:{failedFloor} Distance:{failedDistance} NavMesh:{failedNavMesh} Wall:{failedWall} Light:{failedLight}");
         return false;
     }
 

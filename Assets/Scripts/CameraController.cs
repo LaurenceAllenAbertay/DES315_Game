@@ -365,4 +365,15 @@ public class CameraController : MonoBehaviour
 
         return new Vector3(clampedX, position.y, clampedZ);
     }
+
+    //Instantly snap the camera to be centred over the player -EM//
+    public void SnapToPlayer()
+    {
+        if (player == null) return;
+
+        Vector3 snapped = transform.position;
+        snapped.x = player.position.x;
+        snapped.z = player.position.z;
+        transform.position = snapped;
+    }
 }

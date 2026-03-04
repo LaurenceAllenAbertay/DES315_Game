@@ -41,6 +41,7 @@ public class DungeonDoor : MonoBehaviour
     private float lastTeleportTime = -999f;
     private static int lastTeleportFrame = -999;
     private static float globalLastTeleportTime = -999f;
+    private CameraController cameraController;
 
 
     private InputAction interactionAction;
@@ -57,6 +58,7 @@ public class DungeonDoor : MonoBehaviour
     private void Awake()
     {
         SetupInteractionAction();
+        cameraController = FindFirstObjectByType<CameraController>();
     }
 
     private void OnEnable()
@@ -163,6 +165,7 @@ public class DungeonDoor : MonoBehaviour
         {
             //Properly teleports NavMeshAgent//
             agent.Warp(destinationPos);
+            cameraController?.SnapToPlayer();
         }
         else
         {
