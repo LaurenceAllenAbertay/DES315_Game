@@ -17,15 +17,23 @@ public class ShadowParticleRoom : MonoBehaviour
     [SerializeField] private float driftAmplitudeY = 0.15f;
     [SerializeField] private float driftSpeed = 0.4f;
 
-    [Header("Performance")]
+    [Header("Variation")]
+    [SerializeField] private float sizeVariation = 0.05f;
+    [SerializeField] private float colorVariation = 0.15f;
+
+
     [SerializeField] private int lightCheckBatchPerFrame = 8;
-    [SerializeField] private Material overrideMaterial;
+    [SerializeField] private Material material;
 
     private Vector3[] basePositions;
     private float[] phaseOffsets;
     private bool[] inShadow;
 
+    private Quaternion[] rotations;
+    private float[] sizes;
+    private Vector4[] colors;
     private Matrix4x4[] shadowMatrices;
+    private MaterialPropertyBlock propertyBlock;
     private int shadowCount;
 
     private Mesh quadMesh;
@@ -42,7 +50,12 @@ public class ShadowParticleRoom : MonoBehaviour
             room = GetComponentInParent<RoomLA>();
 
         quadMesh = CreateQuadMesh();
-        particleMaterial = overrideMaterial != null ? new Material(overrideMaterial) : CreateMaterial();
+        if (material == null)
+        {
+            Debug.LogError("[ShadowParticleRoom] No material provided.");
+            return;
+        }
+        particleMaterial = new Material(material);
 
         if (particleMaterial != null)
             particleMaterial.SetColor(BaseColorId, particleColor);
@@ -51,6 +64,23 @@ public class ShadowParticleRoom : MonoBehaviour
         phaseOffsets = new float[particleCount];
         inShadow = new bool[particleCount];
         shadowMatrices = new Matrix4x4[particleCount];
+        propertyBlock = new MaterialPropertyBlock();
+
+        rotations = new Quaternion[particleCount];
+        sizes = new float[particleCount];
+        colors = new Vector4[particleCount];
+        for (int i = 0; i < particleCount; i++)
+        {
+            rotations[i] = Random.rotation;
+            sizes[i] = particleSize + Random.Range(-sizeVariation, sizeVariation);
+            float v = Random.Range(-colorVariation, colorVariation);
+            colors[i] = new Vector4(
+                Mathf.Clamp01(particleColor.r + v),
+                Mathf.Clamp01(particleColor.g + v),
+                Mathf.Clamp01(particleColor.b + v),
+                Mathf.Clamp01(particleColor.a + Random.Range(-colorVariation * 0.5f, colorVariation * 0.5f))
+            );
+        }
     }
 
     private void Start()
@@ -132,12 +162,14 @@ public class ShadowParticleRoom : MonoBehaviour
             );
 
             Vector3 worldPos = basePositions[i] + drift;
-            shadowMatrices[shadowCount] = Matrix4x4.TRS(worldPos, Quaternion.identity, Vector3.one * particleSize);
+            shadowMatrices[shadowCount] = Matrix4x4.TRS(worldPos, rotations[i], Vector3.one * sizes[i]);
             shadowCount++;
         }
 
         if (shadowCount > 0)
+        {
             Graphics.DrawMeshInstanced(quadMesh, 0, particleMaterial, shadowMatrices, shadowCount);
+        }
     }
 
     private void RunFullLightCheck()
@@ -216,10 +248,10 @@ public class ShadowParticleRoom : MonoBehaviour
         float h = 0.5f;
         mesh.vertices = new Vector3[]
         {
-            new Vector3(-h, 0f, -h),
-            new Vector3( h, 0f, -h),
-            new Vector3( h, 0f,  h),
-            new Vector3(-h, 0f,  h),
+            new Vector3(-h, -h, 0f),
+            new Vector3( h, -h, 0f),
+            new Vector3( h,  h, 0f),
+            new Vector3(-h,  h, 0f),
         };
 
         mesh.triangles = new int[] { 0, 2, 1, 0, 3, 2 };
@@ -233,27 +265,5 @@ public class ShadowParticleRoom : MonoBehaviour
 
         mesh.RecalculateNormals();
         return mesh;
-    }
-
-    private static Material CreateMaterial()
-    {
-        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
-        if (shader == null)
-        {
-            Debug.LogWarning("[ShadowParticleRoom] URP/Unlit shader not found. Assign a material via overrideMaterial.");
-            return null;
-        }
-
-        Material mat = new Material(shader);
-        mat.SetFloat("_Surface", 1);
-        mat.SetFloat("_Blend", 0);
-        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        mat.SetInt("_ZWrite", 0);
-        mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-        mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-        mat.enableInstancing = true;
-
-        return mat;
     }
 }

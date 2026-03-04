@@ -1035,6 +1035,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5134897791358940403}
   - {fileID: 3697368564184561986}
   - {fileID: 8167952087998768614}
   - {fileID: 2131762636867294557}
@@ -1363,6 +1364,63 @@ MonoBehaviour:
   currentHealth: 0
   currentBlock: 0
   debugMode: 0
+--- !u!1 &4556454564443589795
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5134897791358940403}
+  - component: {fileID: 4216391012375599534}
+  m_Layer: 0
+  m_Name: ShadowParticles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5134897791358940403
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4556454564443589795}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7862468264598611319}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4216391012375599534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4556454564443589795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19883ac3b700ccd46ad02b6ea5e2afa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  room: {fileID: 386532537634809679}
+  particleCount: 1028
+  particleSize: 0.2
+  particleColor: {r: 0.19595744, g: 0.18903525, b: 0.2264151, a: 0.48235294}
+  spawnHeightMin: 0.1
+  spawnHeightMax: 8
+  driftAmplitudeXZ: 0.25
+  driftAmplitudeY: 0.15
+  driftSpeed: 0.4
+  sizeVariation: 0.1
+  colorVariation: 0.1
+  lightCheckBatchPerFrame: 8
+  material: {fileID: 2100000, guid: 2e32e220f00e47e4bacae7ef0d8b1ed4, type: 2}
 --- !u!1 &4625154081446124977
 GameObject:
   m_ObjectHideFlags: 0
