@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class RoomLA : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class RoomLA : MonoBehaviour
     public Collider[] BoundaryColliders => boundaryColliders;
 
     private LightSource[] roomLights;
+    private Enemy[] roomEnemies;
 
     public bool Contains(Vector3 position)
     {
@@ -47,6 +49,9 @@ public class RoomLA : MonoBehaviour
 
         bool isCurrentRoom = RoomManager.Instance != null && RoomManager.Instance.CurrentRoom == this;
         SetLightsActive(isCurrentRoom);
+
+        CacheRoomEnemies();
+        SetEnemiesActive(isCurrentRoom);
     }
 
     private void OnDestroy()
@@ -61,19 +66,48 @@ public class RoomLA : MonoBehaviour
     private void OnRoomChanged(RoomLA previous, RoomLA current)
     {
         if (current == this)
+        {
             SetLightsActive(true);
+            SetEnemiesActive(true);
+        }
         else if (previous == this)
+        {
             SetLightsActive(false);
+            SetEnemiesActive(false);
+        }
     }
 
     private void SetLightsActive(bool active)
     {
         foreach (var light in roomLights)
         {
-            if (light == null) continue;
-            Light unityLight = light.GetLight();
-            if (unityLight != null)
-                unityLight.enabled = active;
+            if (light != null)
+                light.transform.parent.gameObject.SetActive(active);
+        }
+    }
+
+    /// <summary>
+    /// Finds all enemies whose position falls inside this room's boundaries at scene load time.
+    /// Must be called after all enemies have run Awake so positions are valid.
+    /// </summary>
+    private void CacheRoomEnemies()
+    {
+        List<Enemy> enemies = new List<Enemy>();
+        foreach (Enemy e in FindObjectsByType<Enemy>(FindObjectsSortMode.None))
+        {
+            if (e != null && Contains(e.transform.position))
+                enemies.Add(e);
+        }
+        roomEnemies = enemies.ToArray();
+    }
+
+    private void SetEnemiesActive(bool active)
+    {
+        if (roomEnemies == null) return;
+        foreach (Enemy e in roomEnemies)
+        {
+            if (e != null)
+                e.gameObject.SetActive(active);
         }
     }
 

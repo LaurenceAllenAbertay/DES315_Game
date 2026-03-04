@@ -38,19 +38,28 @@ public class EnemyVisionCone : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         visionTrigger = GetComponent<SphereCollider>();
 
-        // Visual mesh (updated every frame for obstacle occlusion visuals)
         visionMesh = new Mesh();
         visionMesh.name = "Vision Cone Visual";
         meshFilter.mesh = visionMesh;
 
-        // Setup the trigger used for nearby detection only
         visionTrigger.isTrigger = true;
         visionTrigger.center = Vector3.zero;
         visionTrigger.radius = visionRange;
 
         SetupMaterial();
         meshRenderer.enabled = false;
+    }
 
+    private void OnEnable()
+    {
+        if (VisionConeManager.Instance != null)
+            VisionConeManager.Instance.Register(this);
+    }
+
+    private void OnDisable()
+    {
+        if (VisionConeManager.Instance != null)
+            VisionConeManager.Instance.Unregister(this);
     }
 
     private void SetupMaterial()
@@ -265,16 +274,14 @@ public class EnemyVisionCone : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (VisionConeManager.Instance != null)
+            VisionConeManager.Instance.Unregister(this);
+
         if (instancedMaterial != null)
-        {
             Destroy(instancedMaterial);
-        }
 
         if (visionMesh != null)
-        {
             Destroy(visionMesh);
-        }
-
     }
 
     private void OnDrawGizmosSelected()

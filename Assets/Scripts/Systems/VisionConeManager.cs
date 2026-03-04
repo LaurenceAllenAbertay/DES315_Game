@@ -1,17 +1,21 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class VisionConeManager : MonoBehaviour
 {
+    public static VisionConeManager Instance { get; private set; }
+
     [Header("Input")]
     public InputActionAsset inputActions;
     private InputAction showVisionConesAction;
 
-    private EnemyVisionCone[] visionCones;
+    private readonly List<EnemyVisionCone> visionCones = new List<EnemyVisionCone>();
 
     private void Awake()
     {
-        RefreshVisionCones();
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
 
         if (inputActions != null)
         {
@@ -23,55 +27,37 @@ public class VisionConeManager : MonoBehaviour
     private void OnEnable()
     {
         if (showVisionConesAction != null)
-        {
             showVisionConesAction.Enable();
-        }
     }
 
     private void OnDisable()
     {
         if (showVisionConesAction != null)
-        {
             showVisionConesAction.Disable();
-        }
+    }
+
+    public void Register(EnemyVisionCone cone)
+    {
+        if (cone != null && !visionCones.Contains(cone))
+            visionCones.Add(cone);
+    }
+
+    public void Unregister(EnemyVisionCone cone)
+    {
+        visionCones.Remove(cone);
     }
 
     private void Update()
     {
-        if (showVisionConesAction != null)
+        if (showVisionConesAction == null) return;
+
+        bool isPressed = showVisionConesAction.IsPressed();
+        bool allowVisionCones = CombatManager.Instance == null || !CombatManager.Instance.InCombat;
+
+        foreach (var cone in visionCones)
         {
-            bool isPressed = showVisionConesAction.IsPressed();
-            bool allowVisionCones = true;
-            if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
-            {
-                allowVisionCones = false;
-            }
-
-            foreach (var cone in visionCones)
-            {
-                if (cone != null)
-                {
-                    if (allowVisionCones && isPressed && IsConeAllowedToShow(cone))
-                    {
-                        cone.SetVisible(true);
-                    }
-                    else
-                    {
-                        cone.SetVisible(false);
-                    }
-                }
-            }
+            if (cone != null)
+                cone.SetVisible(allowVisionCones && isPressed);
         }
-    }
-
-    public void RefreshVisionCones()
-    {
-        visionCones = FindObjectsByType<EnemyVisionCone>(FindObjectsSortMode.None);
-    }
-
-    private bool IsConeAllowedToShow(EnemyVisionCone cone)
-    {
-        Enemy enemy = cone.GetComponentInParent<Enemy>();
-        return enemy == null || !enemy.IsHiddenFromPlayer;
     }
 }
