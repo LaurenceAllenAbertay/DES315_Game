@@ -90,8 +90,7 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: 5791246380287980528}
   - {fileID: -7725403641769349537}
-  - {fileID: 1094063085425912892}
-  m_RendererFeatureMap: ad6b866f10d7b46cf0f3d447e6a35e505f2ed49951dac9943cecad6094e42e0f
+  m_RendererFeatureMap: ad6b866f10d7b46cf0f3d447e6a35e505f2ed49951dac994
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -132,14 +131,23 @@ MonoBehaviour:
   m_Active: 0
   settings:
     renderPassEvent: 500
-    shadowColor: {r: 0.1, g: 0.1, b: 0.2, a: 0.78039217}
-    lightColor: {r: 1, g: 0.39607844, b: 0.2, a: 0.69803923}
+    shadowColor:
+      r: 0.1
+      g: 0.1
+      b: 0.2
+      a: 0.78039217
+    lightColor:
+      r: 1
+      g: 0.39607844
+      b: 0.2
+      a: 0.69803923
     maxLights: 16
     wobbleAmount: 0.25
     wobbleSpeed: 5
     wobbleFrequency: 7
     edgeSoftness: 0
     debugMode: 0
+  shadowMaterial: {fileID: 0}
 --- !u!114 &5791246380287980528
 MonoBehaviour:
   m_ObjectHideFlags: 0

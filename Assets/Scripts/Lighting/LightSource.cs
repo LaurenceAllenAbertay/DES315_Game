@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 /// <summary>
 /// Attach this to any GameObject to make it a light source
 /// Handles gameplay light detection
