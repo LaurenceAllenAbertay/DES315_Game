@@ -12,8 +12,7 @@ public class Player : Unit
     [SerializeField] private bool isInCombat = false;
 
     [Header("Coin System")]
-    [SerializeField] private int baseCoins = 5;
-    [SerializeField] private int currentCoins = 5;
+    [SerializeField] private int currentCoins = 3;
     [SerializeField] private int bonusCoinsNextTurn = 0;
     [SerializeField] private int baseCarryoverCoins = 1;
 
@@ -224,64 +223,19 @@ public class Player : Unit
         return true;
     }
 
-    /// <summary>
-    /// Spend the movement coin for this turn (only costs 1 coin for the entire turn's movement).
-    /// When the infinite coins cheat is active the deduction is skipped.
-    /// </summary>
     public bool SpendMovementCoin()
     {
-        if (hasSpentMovementCoin)
-        {
-            // Already spent movement coin this turn, movement is free
-            return true;
-        }
+        if (hasSpentMovementCoin) return true;
 
-        // Infinite coins cheat: skip deduction but mark movement coin as spent
-        // so the rest of the movement logic (distance tracking etc.) still works.
-        if (CheatManager.Instance != null && CheatManager.Instance.InfiniteCoins)
-        {
-            hasSpentMovementCoin = true;
-            if (debugMode) Debug.Log("[Player] Movement coin bypassed by Infinite Coins cheat.");
-            OnMovementCoinSpent?.Invoke();
-            return true;
-        }
-
-        if (currentCoins < 1)
-        {
-            if (debugMode)
-            {
-                Debug.Log("[Player] Cannot move - no coins available!");
-            }
-            return false;
-        }
-
-        currentCoins--;
         hasSpentMovementCoin = true;
-        
-        if (debugMode)
-        {
-            Debug.Log($"[Player] Spent movement coin. Remaining coins: {currentCoins}");
-        }
-        
-        OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
+        if (debugMode) Debug.Log("[Player] Movement started (no coin cost).");
         OnMovementCoinSpent?.Invoke();
         return true;
     }
 
-    /// <summary>
-    /// Check if player can still move (has distance remaining)
-    /// </summary>
     public bool CanMove()
     {
         if (!isInCombat) return true;
-        
-        // If haven't spent movement coin yet, need at least 1 coin
-        if (!hasSpentMovementCoin && currentCoins < 1)
-        {
-            return false;
-        }
-
-        // Check if there's distance remaining
         return distanceMovedThisTurn < MaxCombatMoveDistance;
     }
 
@@ -431,11 +385,6 @@ public class Player : Unit
 
     private int GetBaseCoins()
     {
-        if (StatsManager.Instance == null)
-        {
-            return baseCoins;
-        }
-
         return StatsManager.Instance.GetBaseCoins();
     }
 

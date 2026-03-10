@@ -996,8 +996,7 @@ MonoBehaviour:
   debugMode: 0
   icon: {fileID: 21300000, guid: 224e646b79ad4b1478409d150d68d9e5, type: 3}
   isInCombat: 0
-  baseCoins: 5
-  currentCoins: 5
+  currentCoins: 0
   bonusCoinsNextTurn: 0
   baseCarryoverCoins: 1
   currentFlipChance: 60
@@ -1088,6 +1087,7 @@ MonoBehaviour:
   propLayer:
     serializedVersion: 2
     m_Bits: 512
+  aimRotationSpeed: 720
   debugMode: 0
   isTargeting: 0
   flipVisualizerColor: {r: 0.6, g: 0.2, b: 1, a: 0.3}
