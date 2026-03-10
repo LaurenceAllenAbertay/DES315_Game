@@ -1,4 +1,4 @@
-﻿﻿﻿using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -9,12 +9,20 @@ public class CameraController : MonoBehaviour
 
     [Header("Rotation Settings")]
     public float rotateSpeed = 0.3f;
+    [Tooltip("Pivot offset in camera local space (forward = +Z, down = -Y)")]
+    public Vector3 offsetVector = new Vector3(0f, -6f, 5f);
 
     [Header("Player Tether")]
     [Tooltip("The player transform to stay near")]
     public Transform player;
     [Tooltip("Maximum distance camera can be from player")]
     public float maxDistanceFromPlayer = 25f;
+
+    [Header("Player Follow")]
+    [Tooltip("PlayerController to subscribe to for movement events")]
+    public PlayerController playerController;
+    [Tooltip("How fast the camera lerps to the player when they start moving")]
+    public float followLerpSpeed = 8f;
 
     [Header("Room Clamp")]
     [SerializeField] private RoomManager roomManager;
@@ -32,10 +40,14 @@ public class CameraController : MonoBehaviour
     private InputAction rotateDeltaAction;
 
     private bool isRotating;
+    private bool isFollowingPlayer;
     private bool isFastMoving;
     private Vector3 desiredMoveDirection;
     private float desiredMoveSpeed;
     private float pendingYaw;
+    private Vector3 pivotPoint;
+    private float cameraPitch;
+    private float currentYaw;
 
     //Input actions awake -EM//
     private void Awake()
@@ -43,6 +55,11 @@ public class CameraController : MonoBehaviour
         if (roomManager == null)
         {
             roomManager = FindFirstObjectByType<RoomManager>();
+        }
+
+        if (playerController == null)
+        {
+            playerController = FindFirstObjectByType<PlayerController>();
         }
 
         //Setup input actions//
@@ -60,6 +77,11 @@ public class CameraController : MonoBehaviour
     //Input action on Enable -EM//
     private void OnEnable()
     {
+        if (playerController != null)
+        {
+            playerController.OnMovementStateChanged += OnPlayerMovementStateChanged;
+        }
+
         if(movementAction != null)
         {
             movementAction.Enable();
@@ -88,6 +110,11 @@ public class CameraController : MonoBehaviour
     //Input action on Disable -EM//
     private void OnDisable()
     {
+        if (playerController != null)
+        {
+            playerController.OnMovementStateChanged -= OnPlayerMovementStateChanged;
+        }
+
         if(movementAction != null)
         {
             movementAction.Disable();
@@ -112,12 +139,21 @@ public class CameraController : MonoBehaviour
             rotateDeltaAction.Disable();
         }
     }
+    private void Start()
+    {
+        cameraPitch = transform.eulerAngles.x;
+        currentYaw = transform.eulerAngles.y;
+        pivotPoint = transform.position + transform.rotation * offsetVector;
+    }
+
     private void Update()
     {
         CachePanInput();
         CacheRotationInput();
+        ApplyPlayerFollow();
         ApplyPan();
         ApplyRotation();
+        ApplyCameraTransform();
     }
 
     //On fast move perfromed -EM//
@@ -185,23 +221,21 @@ public class CameraController : MonoBehaviour
         if (desiredMoveDirection == Vector3.zero || desiredMoveSpeed <= 0f) return;
 
         Vector3 delta = desiredMoveDirection * desiredMoveSpeed * Time.deltaTime;
-        Vector3 newPosition = transform.position + delta;
+        Vector3 newPivot = pivotPoint + delta;
 
         if (player != null)
         {
-            Vector3 offset = newPosition - player.position;
-            offset.y = 0f;
+            Vector3 tetherOffset = newPivot - player.position;
+            tetherOffset.y = 0f;
 
-            if (offset.magnitude > maxDistanceFromPlayer)
+            if (tetherOffset.magnitude > maxDistanceFromPlayer)
             {
-                offset = offset.normalized * maxDistanceFromPlayer;
-                newPosition = player.position + offset;
-                newPosition.y = transform.position.y;
+                tetherOffset = tetherOffset.normalized * maxDistanceFromPlayer;
+                newPivot = new Vector3(player.position.x + tetherOffset.x, pivotPoint.y, player.position.z + tetherOffset.z);
             }
         }
 
-        newPosition = ClampToCurrentRoom(newPosition);
-        transform.position = newPosition;
+        pivotPoint = newPivot;
     }
 
     //Handle rotation update -EM//
@@ -215,13 +249,29 @@ public class CameraController : MonoBehaviour
         pendingYaw += angle;
     }
 
+    /// <summary>
+    /// Orbits the full camera arm (including Y) around the pivot, then faces the camera toward the pivot.
+    /// </summary>
     private void ApplyRotation()
     {
         if (pendingYaw == 0f) return;
-
-        Quaternion rotation = Quaternion.Euler(0f, pendingYaw, 0f) * transform.rotation;
-        transform.rotation = rotation;
+        currentYaw += pendingYaw;
         pendingYaw = 0f;
+    }
+
+    /// <summary>
+    /// Single point that writes to transform. Derives position from pivotPoint + currentYaw,
+    /// clamps camera XZ to the room, and back-computes pivot from the clamped position so they stay consistent.
+    /// </summary>
+    private void ApplyCameraTransform()
+    {
+        Quaternion rot = Quaternion.Euler(cameraPitch, currentYaw, 0f);
+        Vector3 desiredPos = pivotPoint - rot * offsetVector;
+        Vector3 clampedPos = ClampToCurrentRoom(desiredPos);
+        transform.position = clampedPos;
+        transform.rotation = rot;
+        if (clampedPos != desiredPos)
+            pivotPoint = clampedPos + rot * offsetVector;
     }
 
     private Vector3 ClampToCurrentRoom(Vector3 position)
@@ -366,14 +416,28 @@ public class CameraController : MonoBehaviour
         return new Vector3(clampedX, position.y, clampedZ);
     }
 
+    private void OnPlayerMovementStateChanged(bool moving)
+    {
+        isFollowingPlayer = moving;
+    }
+
+    /// <summary>
+    /// Lerps the orbit pivot toward the player XZ while following, moving the camera by the same delta so the offset is preserved.
+    /// </summary>
+    private void ApplyPlayerFollow()
+    {
+        if (!isFollowingPlayer || player == null) return;
+
+        Vector3 targetPivot = new Vector3(player.position.x, pivotPoint.y, player.position.z);
+        pivotPoint = Vector3.Lerp(pivotPoint, targetPivot, followLerpSpeed * Time.deltaTime);
+    }
+
     //Instantly snap the camera to be centred over the player -EM//
     public void SnapToPlayer()
     {
         if (player == null) return;
 
-        Vector3 snapped = transform.position;
-        snapped.x = player.position.x;
-        snapped.z = player.position.z;
-        transform.position = snapped;
+        pivotPoint = new Vector3(player.position.x, pivotPoint.y, player.position.z);
+        ApplyCameraTransform();
     }
 }

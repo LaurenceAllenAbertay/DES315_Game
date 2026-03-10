@@ -247,6 +247,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 1115159051}
+  resumeButton: {fileID: 1819883278}
+  restartRunButton: {fileID: 1659487038}
+  settingsButton: {fileID: 445676324}
+  mainMenuButton: {fileID: 1672997185}
+  quitButton: {fileID: 1716682520}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   pauseActionName: TogglePauseMenu
   mainMenuSceneName: MainMenu
@@ -1281,7 +1286,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 3ab2ead1cac109944926e834af4c51d9, type: 2}
     - target: {fileID: 8598696227221657001, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8598696227221657001, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1289,7 +1294,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8598696227221657001, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8598696227221657001, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3960,7 +3965,7 @@ Transform:
   m_GameObject: {fileID: 1437648967}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.9396927, z: 0.3420201, w: 0}
-  m_LocalPosition: {x: 0, y: 6, z: 5}
+  m_LocalPosition: {x: 9, y: 6, z: 14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4025,8 +4030,11 @@ MonoBehaviour:
   moveSpeed: 8
   fastMoveMultiplier: 2
   rotateSpeed: 0.3
+  offsetVector: {x: 0, y: -6, z: 11}
   player: {fileID: 1530810335}
   maxDistanceFromPlayer: 15
+  playerController: {fileID: 1530810344}
+  followLerpSpeed: 8
   roomManager: {fileID: 51621939}
   roomClampPadding: 1
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
@@ -4336,6 +4344,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8598696227221657001, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
   m_PrefabInstance: {fileID: 458790865}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1530810344 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5730069245732350810, guid: 1dca0b6704c4fba4a8d88e3bd9d75dbe, type: 3}
+  m_PrefabInstance: {fileID: 458790865}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cae980fe209b34b49bfecf141a8b522d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1564228205
 GameObject:
   m_ObjectHideFlags: 0
@@ -5762,6 +5781,8 @@ MonoBehaviour:
   roomType3_2x2Prefab: {fileID: 1947832568294653419, guid: 9aa3ef74762195943a9880712bf0eeaa, type: 3}
   roomType4_1x1Prefab: {fileID: 7218070955348550772, guid: fb5422219487aac499703f4096064ee7, type: 3}
   roomType4_2x2Prefab: {fileID: 3705893967017727234, guid: 56f314a7bbdfbdd4cab5cdad0562b276, type: 3}
+  winConditionPrefab: {fileID: 0}
+  winConditionSpawnHeight: 1
   autoBakeNavMesh: 1
   rebindAgentsAfterBake: 1
   agentRebindRadius: 10
