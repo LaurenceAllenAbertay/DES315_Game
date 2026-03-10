@@ -22,6 +22,13 @@ public class WinCondition : MonoBehaviour
     [Tooltip("Optional prompt shown above the object when the player is in range")]
     public GameObject interactPrompt;
 
+    [Header("Room Marker")]
+    [Tooltip("Optional decorative prefab to spawn at the centre of the final room, Leave blank to use the WinCondition object's own model.")]
+    public GameObject roomMarkerPrefab;
+
+    [Tooltip("Offset from the win conditions position to spawn the marker")]
+    public Vector3 markerOffset = Vector3.zero;
+
     [Header("Pulse Visual")]
     [Tooltip("If true, the object bobs up abd down to draw attention")]
     public bool doPulse = true;
@@ -44,6 +51,13 @@ public class WinCondition : MonoBehaviour
         if (pc != null) playerTransform = pc.transform;
 
         if (interactPrompt != null) interactPrompt.SetActive(false);
+
+        //Spawn the decorative room marker if one is assigned//
+        if(roomMarkerPrefab != null)
+        {
+            GameObject marker = Instantiate(roomMarkerPrefab, transform.position + markerOffset, Quaternion.identity, transform);
+            marker.name = "FinalRoomMarker";
+        }
     }
 
     private void Update()

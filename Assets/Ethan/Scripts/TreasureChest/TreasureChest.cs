@@ -32,6 +32,9 @@ public class TreasureChest : MonoBehaviour
     [Tooltip("GameObject to show when chest can be interacted with")]
     public GameObject interactionPrompt;
 
+    [Tooltip("Drag the chest model root here so aritsts can swap it out")]
+    public GameObject chestModel;
+
     [Tooltip("Optional: Animator for chest opening animation")]
     public Animator chestAnimator;
 
@@ -80,6 +83,12 @@ public class TreasureChest : MonoBehaviour
         if(chestUI == null)
         {
             chestUI = FindAnyObjectByType<TreasureChestUI>();
+        }
+
+        //If no animator assigned try to find one the chest model//
+        if(chestAnimator == null && chestModel != null)
+        {
+            chestAnimator = chestModel.GetComponentInChildren<Animator>();
         }
     }
 
