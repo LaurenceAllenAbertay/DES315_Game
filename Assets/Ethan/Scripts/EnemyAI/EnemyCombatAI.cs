@@ -1,69 +1,92 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
 
-//Handles all enemy combat behaviour via a decision tree -EM//
-//Add this and Enemy.cs on every enemy that needs combat AI//
-//Descision tree priority each turn (highest first)//
-//1. Heal if health % <= healThreshold AND a Heal action exists//
-//2. Defend if health % <= defendThreshold AND a Defend action exists//
-//3. SpecialAttack if health % >= specialHealthMin (enemy is confident)//
-//4. Attack always available as a fallback//
-//Each chosen action runs the same coin-flip streak as the player//
-//Success reduces flip chance, failure increases it, streaks reset to base//
+//Enemy type definitions//
+//Each type has fixed base stats set here; can be tweaked in the inspector per enemy//
+public enum EnemyType
+{
+    Grunt, //Fast, low health, low damage - currently spames basic hits//
+    Brute //Slow, high health, high damage - one heavy attack per turn?//
+}
+
+//Simplified enemy combat AI - Each enemy type has one attack and fixed stats//
+//Replaces the old descion tree, Alert/Vision/Roam logic in EnemyAI is unchanged -EM//
 
 [RequireComponent(typeof(Enemy))]
 public class EnemyCombatAI : MonoBehaviour
 {
-    [Header("Combat Actions")]
-    [Tooltip("Assign EnemyCombatAction ScriptableObjects here. Include at least one Attack")]
-    public List<EnemyCombatAction> availableActions = new List<EnemyCombatAction>();
+    [Header("Enemy Type")]
+    [Tooltip("Determine this enemy's stats and attack style")]
+    public EnemyType enemyType = EnemyType.Grunt;
 
-    [Header("Decision Threshold")]
-    [Tooltip("Use heal when health % is at or below this (0-1)")]
-    [Range(0f, 1f)]
-    public float healThreshold = 0.4f;
+    //Per type stat overrides//
+    [Header("Grunt Settings (only used if type = Grunt)")]
+    [Tooltip("Max Health for a Grunt")]
+    public float gruntMaxHealth = 40f;
+    [Tooltip("Damage dealt per succesful Grunt Attack")]
+    public float gruntAttackDamage = 8f;
+    [Tooltip("Starting coin-flip chancefor a Grunt (0-100)")]
+    [Range(0f, 100f)]
+    public float gruntFlipChance = 65f;
 
-    [Tooltip("Use Defend when health % is at or below this (0-1)")]
-    [Range(0f, 1f)]
-    public float defendThreshold = 0.6f;
+    [Header("Grunt Range Settings")]
+    [Tooltip("Minimum distance the Grunt tries to keep from the player")]
+    public float gruntMinRange = 4f;
+    [Tooltip("Maximum distance the Grunt can attack from")]
+    public float gruntMaxRange = 7f;
+    [Tooltip("How close the player must get before the Grunt actively retreats")]
+    public float gruntRetreatRange = 3f;
 
-    [Tooltip("Use SpecialAttack only when health % is at or above this (0-1)")]
-    [Range(0f, 1f)]
-    public float specialHealthMin = 0.5f;
+    [Header("Grunt Shadow Settings")]
+    [Tooltip("Flat reduction to flip chance when the Grunt attacks from light instad of shadow")]
+    [Range(0f, 50f)]
+    public float gruntLightPenalty = 20f;
+
+    [Header("Brute Settings (only used if type = Brute")]
+    [Tooltip("Max Health for a Brute")]
+    public float bruteMaxHealth = 120f;
+    [Tooltip("Damage dealt per succesful Brute Attack")]
+    public float bruteAttackDamage = 22f;
+    [Tooltip("Attack range for a Brute")]
+    public float bruteAttackRange = 2.5f;
+    [Tooltip("Starting coin-flip chancefor a Brute (0-100)")]
+    [Range(0f, 100f)]
+    public float bruteFlipChance = 45f;
 
     [Header("Timing")]
     [Tooltip("Pause before acting - gives the player a moment to read the situation")]
     public float thinkTime = 0.6f;
-
     [Tooltip("Short pause after acting before handing control back")]
     public float postActionDelay = 0.5f;
 
     [Header("Combat Movement")]
-    [Tooltip("Max time spent moving into range for an action (seconds)")]
+    [Tooltip("Max time spent moving into range before acting anyway")]
     public float maxMoveTime = 2.5f;
+    [Tooltip("Tolerance added to range check so the enemy doesnt need to be pixel perfect")]
+    public float rangeTolerance = 0.3f;
 
-    [Tooltip("How close to the action range we accept before acting")]
-    public float rangeTolerance = 0.2f;
+    [Header("Coin Flip Streak")]
+    [Tooltip("How much the flip chance rises after a miss (same mechanic as the player)")]
+    public float failBonus = 10f;
+    [Tooltip("How much the flip chance falls after a hit")]
+    public float successPenalty = 5f;
 
     [Header("Debug")]
     [SerializeField] private bool debugMode = true;
-    [SerializeField] private string lastChosenAction = "None";
-    [SerializeField] private bool lastFlipresult = false;
-    [SerializeField] private float lastFlipChance = 0f;
+    [SerializeField] private bool lastFlipResult = false;
+    [SerializeField] private float currentFlipChance = 60f;
 
-    //Per-action flip chance, keyed by action name, persists across turns//
-    private Dictionary<string, float> actionFlipChances = new Dictionary<string, float>();
+    private const float MIN_FLIP = 5f;
+    private const float MAX_FLIP = 95f;
 
     private Enemy enemy;
     private NavMeshAgent agent;
     private bool isTakingTurn = false;
-    private float originalStoppingDistance = 0f;
-
-    private const float MIN_FLIP_CHANCE = 0f;
-    private const float MAX_FLIP_CHANCE = 100f;
+    private float originalStoppingDistance;
 
     //Lifecycle -EM//
 
@@ -79,7 +102,32 @@ public class EnemyCombatAI : MonoBehaviour
 
     private void Start()
     {
-        InitialiseFlipChances();
+        ApplyTypeStats();
+    }
+
+    //Apply the fixed stats for this enemy's type to the enemy component//
+    //SetMaxHealth(newMax, flase) so we can manually reset current health to full//
+    private void ApplyTypeStats()
+    {
+        switch(enemyType)
+        {
+            case EnemyType.Grunt:
+                enemy.SetMaxHealth(gruntMaxHealth, false);
+                enemy.Heal(gruntMaxHealth);
+                currentFlipChance = gruntFlipChance;
+                break;
+
+            case EnemyType.Brute:
+                enemy.SetMaxHealth(bruteMaxHealth, false);
+                enemy.Heal(bruteMaxHealth);
+                currentFlipChance = bruteFlipChance;
+                break;
+        }
+
+        if(debugMode)
+        {
+            Debug.Log($"[EnemyCombatAI] {gameObject.name} initialised as {enemyType} " + $"(hp:{enemy.MaxHealth}, flip:{currentFlipChance:F0}%");
+        }
     }
 
     //Public API -EM//
@@ -110,248 +158,199 @@ public class EnemyCombatAI : MonoBehaviour
 
         yield return new WaitForSeconds(thinkTime);
 
-        //Run the descision tree//
-        EnemyCombatAction chosen = ChooseAction();
-
-        if(chosen != null)
-        {
-            lastChosenAction = chosen.actionName;
-            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} chose: {chosen.actionName}");
-
-            if (RequiresTarget(chosen) && !IsTargetInRange(chosen, player))
-            {
-                yield return MoveIntoRange(chosen, player);
-            }
-
-            if (RequiresTarget(chosen) && !IsTargetInRange(chosen, player))
-            {
-                if (debugMode) Debug.LogWarning($"[EnemyCombatAI] {gameObject.name} could not reach range for {chosen.actionName}");
-            }
-            else
-            {
-            bool flipSuccess = PerformFlip(chosen);
-            lastFlipresult = flipSuccess;
-
-            if(flipSuccess)
-            {
-                if(debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} FLIP SUCCESS - executing {chosen.actionName}");
-                ExecuteAction(chosen, player);
-            }
-            else
-            {
-                if(debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} FLIP MISS - {chosen.actionName} failed");
-                MessageUI.Instance?.EnqueueMessage($"{gameObject.name} missed {chosen.actionName}.");
-            }
-            }
-        }
-        else
-        {
-            lastChosenAction = "No valid action";
-            if (debugMode) Debug.LogWarning($"[EnemyCombatAI] {gameObject.name}: no valid action foind - ending turn");
-        }
+        //Branch to the correct behaviour for this type//
+        if (enemyType == EnemyType.Grunt) yield return ExecuteGruntTurn(player);
+        else yield return ExecuteBruteTurn(player);
 
         yield return new WaitForSeconds(postActionDelay);
 
         isTakingTurn = false;
-
-        //Hand control back to CombatManager//
         CombatManager.Instance?.EndCurrentTurn();
     }
 
-    //Decision tree -EM//
-    
-    //Evaluates the decision tree and returns the best action for this turn//
-    //Priority: Heal > defend > SpecialAttack > Attack//
-    private EnemyCombatAction ChooseAction()
+    private IEnumerator ExecuteGruntTurn(Player player)
     {
-        float healthPercent = (enemy.MaxHealth > 0f) ? enemy.CurrentHealth / enemy.MaxHealth : 1f;
+        //Step 1: reposition into preffered range band//
+        yield return RepositionGrunt(player);
 
-        //1. Heal only when hurting//
-        if(healthPercent <= healThreshold)
+        //Step 2: Check we are within attack range after repositioning//
+        float distToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        if(distToPlayer > gruntMaxRange + rangeTolerance)
         {
-            EnemyCombatAction heal = FindBestActionOfType(EnemyActionType.Heal, healthPercent);
-            if(heal != null)
-            {
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} descision: HEAL (hp {healthPercent:P0})");
-                return heal;
-            }
+            if (debugMode) Debug.LogWarning($"[EnemyCombatAI] {gameObject.name} Grunt could not reach attack range");
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} couldn't get into position!");
+            yield break;
         }
 
-        //2. Defend - When moderatley hurt//
-        if(healthPercent <= defendThreshold)
+        //Step 3: Check light and calculate effective flip chance//
+        bool isInLight = LightDetectionManager.Instance != null && LightDetectionManager.Instance.IsPointInLight(transform.position);
+
+        float effectiveFlipChance = currentFlipChance;
+        if(isInLight)
         {
-            EnemyCombatAction defend = FindBestActionOfType(EnemyActionType.Defend, healthPercent);
-            if(defend != null)
-            {
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} decision: DEFEND (hp {healthPercent:P0})");
-                return defend;
-            }
+            effectiveFlipChance = Mathf.Max(MIN_FLIP, currentFlipChance - gruntLightPenalty);
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} in LIGHT - flip {currentFlipChance:F0}% -> {effectiveFlipChance:F0}%");
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} is exposed in the light!");
+        }
+        else
+        {
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} in SHADOW - no penalty");
         }
 
-        //3. Special attack - only when healthy enough to be aggressive//
-        if(healthPercent >= specialHealthMin)
-        {
-            EnemyCombatAction special = FindBestActionOfType(EnemyActionType.SpecialAttack, healthPercent);
-            if(special != null)
-            {
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} decision: SPECIAL ATTACK");
-                return special;
-            }
-        }
+        //Step 4: Attack//
+        bool success = PerformFlip(effectiveFlipChance);
+        lastFlipResult = success;
 
-        //4. Fallback - basic attack//
-        EnemyCombatAction attack = FindBestActionOfType(EnemyActionType.Attack, healthPercent);
-        if(attack != null)
+        if(success)
         {
-            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} decision: ATTACK");
-            return attack;
+            player.TakeDamage(gruntAttackDamage);
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} used Strike and dealth {gruntAttackDamage:0} damage!");
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Grunt HIT for {gruntAttackDamage}");
         }
-
-        return null;
+        else
+        {
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} used Strike but missed!");
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Grunt Missed");
+        }
     }
 
-    //Returns the highest-weoght valid action of the requested type -EM//
-    //If multiple actions tie on weight, one is chosen at random -EM//
-    //Respect healthThresholdMin?Max set on each action -EM//
-    private EnemyCombatAction FindBestActionOfType(EnemyActionType type, float healthPercent)
+    //Reposition the Grunt into its prteffered range band -EM//
+    //Too close: retreat away from player. Too far: advance toward player. in band: stay put//
+    private IEnumerator RepositionGrunt(Player player)
     {
-        List<EnemyCombatAction> candidates = new List<EnemyCombatAction>();
-        int bestWeight = 0;
+        if(agent == null || !agent.isOnNavMesh || !agent.isActiveAndEnabled) yield break;
 
-        foreach(EnemyCombatAction action in availableActions)
+        float dist = Vector3.Distance(transform.position, player.transform.position);
+
+        //Already in preffered badn - no movement needed//
+        if(dist >= gruntMinRange && dist <= gruntMaxRange)
         {
-            if (action == null) continue;
-            if (action.actionType != type) continue;
-            if (healthPercent > action.healthThresholdMax) continue;
-            if (healthPercent < action.healthThresholdMin) continue;
-
-            if(action.selectionWeight > bestWeight)
-            {
-                candidates.Clear();
-                bestWeight = action.selectionWeight;
-                candidates.Add(action);
-            }
-            else if (action.selectionWeight == bestWeight)
-            {
-                candidates.Add(action);
-            }
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Grunt already in range band ({dist:F1})");
+            yield break;
         }
 
-        if (candidates.Count == 0) return null;
-        return candidates[Random.Range(0, candidates.Count)];
+        Vector3 targetPos;
+
+        if(dist < gruntRetreatRange)
+        {
+            //Too close - retreat directly away from the player//
+            Vector3 awayDir = (transform.position - player.transform.position).normalized;
+            targetPos = transform.position + awayDir * (gruntMinRange - dist);
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Grunt retreating ({dist:F1})");
+        }
+        else
+        {
+            //Too far - retreat directly away from the player//
+            Vector3 toPlayer = (player.transform.position - transform.position).normalized;
+            float midRange = gruntMinRange + (gruntMaxRange - dist);
+            targetPos = transform.position - toPlayer * midRange;
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Grunt advancing to range band (dist {dist:F1})");
+        }
+
+        //Snap target to NavMesh//
+        if(NavMesh.SamplePosition(targetPos, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+        {
+            agent.isStopped = false;
+            agent.stoppingDistance = 0.1f;
+            agent.SetDestination(hit.position);
+
+            float timer = 0f;
+            while(timer < maxMoveTime)
+            {
+                if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance + rangeTolerance) break;
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            agent.isStopped = true;
+            agent.ResetPath();
+            agent.stoppingDistance = originalStoppingDistance;
+        }
+    }
+
+    //Brute turn: close in and slam -EM//
+    private IEnumerator ExecuteBruteTurn(Player player)
+    {
+        if(!IsInRange(player, bruteAttackRange)) yield return MoveIntoRange(player, bruteAttackRange);
+
+        if(!IsInRange(player, bruteAttackRange))
+        {
+            if (debugMode) Debug.LogWarning($"[EnemyCombatAI] {gameObject.name} Brute could not reach the player.");
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} couldn't reach you!");
+            yield break;
+        }
+
+        bool success = PerformFlip(currentFlipChance);
+        lastFlipResult = success;
+
+        if(success)
+        {
+            player.TakeDamage(bruteAttackDamage);
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} used Slam and dealt {bruteAttackDamage:0} damage!");
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Brute HIT for {bruteAttackDamage}");
+        }
+        else
+        {
+            MessageUI.Instance?.EnqueueMessage($"{gameObject.name} used Slam but missed!");
+            if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} Brute MISSED");
+        }
     }
 
     //Coin flip (mirrors player coin flip) -EM//
 
-    private bool PerformFlip(EnemyCombatAction action)
+    private bool PerformFlip(float chance)
     {
-        //Initialise this action's chance if we haven't seen it yet//
-        if (!actionFlipChances.ContainsKey(action.actionName)) actionFlipChances[action.actionName] = action.startingFlipChance;
-
-        float currentChance = actionFlipChances[action.actionName];
-        lastFlipChance = currentChance;
+   
         float roll = Random.Range(0f, 100f);
-        bool success = roll < currentChance;
+        float chanceUsed = chance;
+        bool success = roll < chance;
 
-        if (debugMode)
-        {
-            Debug.Log($"[EnemyCombatAI] {gameObject.name} - {action.actionName}: " + $"Chance {currentChance:F0}%, roll {roll:F1} -> {(success ? "HIT" : "MISS")}");
-        }
+        float startingChance = GetStartingFlipChance();
 
-        //Update streak//
-        if(success)
+        if (success)
         {
-            if(currentChance > action.startingFlipChance)
+            //Coming off a fail streak: rest; otherwise decrease;
+            
+            if (currentFlipChance > startingChance)
             {
-                //Coming off a fail streak: rest to base//
-                actionFlipChances[action.actionName] = action.startingFlipChance;
+                currentFlipChance = startingChance;
             }
             else
             {
-                //Normal success: decrease chance//
-                actionFlipChances[action.actionName] = Mathf.Max(MIN_FLIP_CHANCE, currentChance - action.successPenalty);
+                currentFlipChance = Mathf.Max(MIN_FLIP, currentFlipChance - successPenalty);
             }
         }
         else
         {
-            if(currentChance < action.startingFlipChance)
+            if (currentFlipChance < startingChance)
             {
-                //Coming off a success streak: reset to base//
-                actionFlipChances[action.actionName] = action.startingFlipChance;
+                currentFlipChance = startingChance;
             }
             else
             {
-                //Normal failure: increase chance//
-                actionFlipChances[action.actionName] = Mathf.Min(MAX_FLIP_CHANCE, currentChance + action.failBonus);
+                currentFlipChance = Mathf.Min(MAX_FLIP, currentFlipChance + failBonus);
             }
         }
-
+        if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} flip: roll {roll:F1} vs {chanceUsed:F0}% -> {(success ? "HIT" : "MISS")}");
         return success;
     }
 
-    //Action execution -EM//
-    private void ExecuteAction(EnemyCombatAction action, Player player)
+    //Per type helpers -EM//
+
+    private float GetStartingFlipChance()
     {
-        switch(action.actionType)
-        {
-            case EnemyActionType.Attack:
-                float damage = Mathf.Ceil(action.baseValue);
-                player.TakeDamage(damage);
-                MessageUI.Instance?.EnqueueMessage(
-                    $"{gameObject.name} cast {action.actionName} and dealt {damage:0} damage to you.");
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} attacked player for {damage}");
-                break;
-
-            case EnemyActionType.SpecialAttack:
-                float specialDamage = Mathf.Ceil(action.baseValue * action.specialMultiplier);
-                player.TakeDamage(specialDamage);
-                MessageUI.Instance?.EnqueueMessage(
-                    $"{gameObject.name} cast {action.actionName} and dealt {specialDamage:0} damage to you.");
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} used special attack on player for {specialDamage}");
-                break;
-
-            case EnemyActionType.Defend:
-                float blockAmount = Mathf.Ceil(action.baseValue);
-                enemy.AddBlock(blockAmount);
-                MessageUI.Instance?.EnqueueMessage(
-                    $"{gameObject.name} cast {action.actionName} and gained {blockAmount:0} block.");
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} added {blockAmount} block");
-                break;
-
-            case EnemyActionType.Heal:
-                float healAmount = Mathf.Ceil(action.baseValue);
-                enemy.Heal(healAmount);
-                MessageUI.Instance?.EnqueueMessage(
-                    $"{gameObject.name} cast {action.actionName} and healed for {healAmount:0}.");
-                if (debugMode) Debug.Log($"[EnemyCombatAI] {gameObject.name} healed for {healAmount}");
-                break;
-        }
+        return enemyType == EnemyType.Grunt ? gruntFlipChance : bruteFlipChance;
     }
 
-    //Helpers -EM//
+    //Movement helpers -EM//
 
-    private void StopMovement()
+    private bool IsInRange(Player player, float range)
     {
-        if(agent != null && agent.isOnNavMesh && agent.isActiveAndEnabled)
-        {
-            agent.isStopped = true;
-            agent.ResetPath();
-        }
+        if (player == null) return false;
+        return Vector3.Distance(transform.position, player.transform.position) <= range + rangeTolerance;
     }
 
-    private bool RequiresTarget(EnemyCombatAction action)
-    {
-        return action.actionType == EnemyActionType.Attack || action.actionType == EnemyActionType.SpecialAttack;
-    }
-
-    private bool IsTargetInRange(EnemyCombatAction action, Player player)
-    {
-        if (action.range <= 0f || player == null) return true;
-        float distance = Vector3.Distance(transform.position, player.transform.position);
-        return distance <= action.range + rangeTolerance;
-    }
-
-    private IEnumerator MoveIntoRange(EnemyCombatAction action, Player player)
+    private IEnumerator MoveIntoRange(Player player, float range)
     {
         if (agent == null || player == null || !agent.isOnNavMesh || !agent.isActiveAndEnabled)
         {
@@ -359,13 +358,13 @@ public class EnemyCombatAI : MonoBehaviour
         }
 
         agent.isStopped = false;
-        agent.stoppingDistance = Mathf.Max(0.1f, action.range);
+        agent.stoppingDistance = Mathf.Max(0.1f, range);
         agent.SetDestination(player.transform.position);
 
         float timer = 0f;
         while (timer < maxMoveTime)
         {
-            if (IsTargetInRange(action, player))
+            if (IsInRange(player, range))
             {
                 break;
             }
@@ -384,13 +383,12 @@ public class EnemyCombatAI : MonoBehaviour
         agent.stoppingDistance = originalStoppingDistance;
     }
 
-    //Seed the flip chance dictionary from the action list so the inspector reflects starting values on the first turn -EM//
-    private void InitialiseFlipChances()
+    private void StopMovement()
     {
-        foreach(EnemyCombatAction action in availableActions)
+        if (agent != null && agent.isOnNavMesh && agent.isActiveAndEnabled)
         {
-            if (action == null) continue;
-            if (!actionFlipChances.ContainsKey(action.actionName)) actionFlipChances[action.actionName] = action.startingFlipChance;
+            agent.isStopped = true;
+            agent.ResetPath();
         }
     }
 }

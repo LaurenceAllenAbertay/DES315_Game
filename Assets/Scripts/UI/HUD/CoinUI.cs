@@ -1,5 +1,4 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -17,9 +16,6 @@ public class CoinUI : MonoBehaviour
     [Tooltip("Reference to the player")]
     public Player player;
 
-    [Tooltip("Text to show when the player has no coins left")]
-    [SerializeField] private TextMeshProUGUI outOfCoinsText;
-
     [Header("Animation")]
     public float destroyDelay = 1f;
     [Tooltip("Seconds between coin fill steps.")]
@@ -28,7 +24,6 @@ public class CoinUI : MonoBehaviour
     private const string CoinSpendingParam = "CoinSpending";
     private int currentUICoins = 0;
     private Coroutine fillCoroutine;
-    private bool hasReceivedCoinsThisTurn = false;
     private int spendingCoinCount = 0;
 
     private void Start()
@@ -42,16 +37,14 @@ public class CoinUI : MonoBehaviour
         {
             player.OnCoinsChanged += OnCoinsChanged;
             player.OnCombatStateChanged += OnCombatStateChanged;
-            SetCoinUIVisible(player.IsInCombat);
-            if (player.IsInCombat)
-            {
-                RefreshCoins(player.CurrentCoins);
-                UpdateOutOfCoinsText(player.CurrentCoins);
-            }
-            else
-            {
-                ClearCoins();
-            }
+            SetCoinUIVisible(false);
+        }
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnTurnStarted += OnTurnStarted;
+            CombatManager.Instance.OnTurnEnded += OnTurnEnded;
+            CombatManager.Instance.OnCombatEnded += OnCombatEnded;
         }
     }
 
@@ -62,26 +55,42 @@ public class CoinUI : MonoBehaviour
             player.OnCoinsChanged -= OnCoinsChanged;
             player.OnCombatStateChanged -= OnCombatStateChanged;
         }
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnTurnStarted -= OnTurnStarted;
+            CombatManager.Instance.OnTurnEnded -= OnTurnEnded;
+            CombatManager.Instance.OnCombatEnded -= OnCombatEnded;
+        }
     }
 
     private void OnCoinsChanged(int current, int max)
     {
         RefreshCoins(current);
-        UpdateOutOfCoinsText(current);
     }
 
     private void OnCombatStateChanged(bool inCombat)
     {
-        SetCoinUIVisible(inCombat);
-        if (inCombat)
+        if (!inCombat)
         {
-            RefreshCoins(player != null ? player.CurrentCoins : 0);
-            UpdateOutOfCoinsText(player != null ? player.CurrentCoins : 0);
-        }
-        else
-        {
+            SetCoinUIVisible(false);
             ClearCoins();
         }
+    }
+
+    private void OnTurnStarted(Unit unit)
+    {
+        if (CombatManager.Instance == null || !CombatManager.Instance.IsPlayerTurn) return;
+        SetCoinUIVisible(true);
+        RefreshCoins(player != null ? player.CurrentCoins : 0);
+    }
+
+    private void OnTurnEnded(Unit unit) => SetCoinUIVisible(false);
+
+    private void OnCombatEnded(CombatManager.CombatOutcome outcome)
+    {
+        SetCoinUIVisible(false);
+        ClearCoins();
     }
 
     private void SetCoinUIVisible(bool visible)
@@ -93,12 +102,7 @@ public class CoinUI : MonoBehaviour
 
         if (!visible)
         {
-            hasReceivedCoinsThisTurn = false;
             spendingCoinCount = 0;
-            if (outOfCoinsText != null)
-            {
-                outOfCoinsText.gameObject.SetActive(false);
-            }
         }
     }
 
@@ -210,20 +214,4 @@ public class CoinUI : MonoBehaviour
         animator.SetBool(CoinSpendingParam, isSpending);
     }
 
-    private void UpdateOutOfCoinsText(int current)
-    {
-        if (outOfCoinsText == null) return;
-
-        if (current > 0)
-        {
-            hasReceivedCoinsThisTurn = true;
-        }
-
-        bool shouldShow = player != null
-            && player.IsInCombat
-            && hasReceivedCoinsThisTurn
-            && current <= 0;
-
-        outOfCoinsText.gameObject.SetActive(shouldShow);
-    }
 }

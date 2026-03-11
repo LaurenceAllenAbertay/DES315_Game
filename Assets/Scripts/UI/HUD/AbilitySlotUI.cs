@@ -1,12 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-/// <summary>
-/// Attaches UI buttons to the player's ability slots.
-/// Assign one Button per slot in the Inspector; each click calls
-/// PlayerAbilityManager.ActivateAbilitySlot(slotIndex).
-/// </summary>
 public class AbilitySlotUI : MonoBehaviour
 {
     [Header("References")]
@@ -17,49 +14,144 @@ public class AbilitySlotUI : MonoBehaviour
     [SerializeField] private Button slot2Button;
     [SerializeField] private Button slot3Button;
 
-    [Header("Optional Labels (show ability name)")]
-    [SerializeField] private TextMeshProUGUI slot1Label;
-    [SerializeField] private TextMeshProUGUI slot2Label;
-    [SerializeField] private TextMeshProUGUI slot3Label;
+    [Header("Description")]
+    [SerializeField] private TextMeshProUGUI descriptionText;
+
+    [Header("Active Slot Highlight")]
+    [SerializeField] private Color activeColor = new Color(1f, 0.8f, 0f, 1f);
+    [SerializeField] private Color normalColor = Color.white;
+
+    private Button[] buttons;
 
     private void Awake()
     {
         if (abilityManager == null)
             abilityManager = FindFirstObjectByType<PlayerAbilityManager>();
+
+        buttons = new Button[] { slot1Button, slot2Button, slot3Button };
     }
 
     private void OnEnable()
     {
-        if (slot1Button != null) slot1Button.onClick.AddListener(() => abilityManager?.ActivateAbilitySlot(0));
-        if (slot2Button != null) slot2Button.onClick.AddListener(() => abilityManager?.ActivateAbilitySlot(1));
-        if (slot3Button != null) slot3Button.onClick.AddListener(() => abilityManager?.ActivateAbilitySlot(2));
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i] == null) continue;
+            int index = i;
+            buttons[i].onClick.AddListener(() => abilityManager?.ActivateAbilitySlot(index));
+            AddHoverEvents(buttons[i], index);
+        }
 
-        RefreshLabels();
+        if (abilityManager != null)
+            abilityManager.OnActiveSlotChanged += HandleActiveSlotChanged;
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted += HandleCombatStarted;
+            CombatManager.Instance.OnCombatEnded += HandleCombatEnded;
+            CombatManager.Instance.OnTurnStarted += HandleTurnStarted;
+        }
+
+        RefreshIcons();
+        UpdateVisibility();
     }
 
     private void OnDisable()
     {
-        if (slot1Button != null) slot1Button.onClick.RemoveAllListeners();
-        if (slot2Button != null) slot2Button.onClick.RemoveAllListeners();
-        if (slot3Button != null) slot3Button.onClick.RemoveAllListeners();
+        foreach (Button b in buttons)
+        {
+            if (b != null) b.onClick.RemoveAllListeners();
+        }
+
+        if (abilityManager != null)
+            abilityManager.OnActiveSlotChanged -= HandleActiveSlotChanged;
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted -= HandleCombatStarted;
+            CombatManager.Instance.OnCombatEnded -= HandleCombatEnded;
+            CombatManager.Instance.OnTurnStarted -= HandleTurnStarted;
+        }
+
+        if (descriptionText != null)
+            descriptionText.text = string.Empty;
     }
 
     /// <summary>
-    /// Updates each button label to show the equipped ability name (if a label is assigned).
-    /// Call this whenever abilities are re-equipped.
+    /// Adds pointer enter/exit EventTrigger entries to a button for hover description display.
+    /// Clears existing triggers first to avoid duplicates on re-enable.
     /// </summary>
-    public void RefreshLabels()
+    private void AddHoverEvents(Button button, int slotIndex)
+    {
+        EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.gameObject.AddComponent<EventTrigger>();
+        trigger.triggers.Clear();
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        enterEntry.callback.AddListener(_ => ShowDescription(slotIndex));
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        exitEntry.callback.AddListener(_ => ClearDescription());
+        trigger.triggers.Add(exitEntry);
+    }
+
+    public void RefreshIcons()
     {
         if (abilityManager == null) return;
 
-        SetLabel(slot1Label, abilityManager.equippedAbilities.Length > 0 ? abilityManager.equippedAbilities[0] : null, "Slot 1");
-        SetLabel(slot2Label, abilityManager.equippedAbilities.Length > 1 ? abilityManager.equippedAbilities[1] : null, "Slot 2");
-        SetLabel(slot3Label, abilityManager.equippedAbilities.Length > 2 ? abilityManager.equippedAbilities[2] : null, "Slot 3");
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i] == null) continue;
+            Ability ability = i < abilityManager.equippedAbilities.Length ? abilityManager.equippedAbilities[i] : null;
+            buttons[i].image.sprite = ability != null ? ability.icon : null;
+        }
     }
 
-    private static void SetLabel(TextMeshProUGUI label, Ability ability, string fallback)
+    private void ShowDescription(int slotIndex)
     {
-        if (label == null) return;
-        label.text = ability != null ? ability.abilityName : fallback;
+        if (descriptionText == null || abilityManager == null) return;
+        Ability ability = slotIndex < abilityManager.equippedAbilities.Length ? abilityManager.equippedAbilities[slotIndex] : null;
+        descriptionText.text = ability != null ? ability.description : string.Empty;
     }
+
+    private void ClearDescription()
+    {
+        if (descriptionText != null)
+            descriptionText.text = string.Empty;
+    }
+
+    private void HandleActiveSlotChanged(int? activeSlot)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i] == null) continue;
+            ColorBlock colors = buttons[i].colors;
+            colors.normalColor = activeSlot.HasValue && activeSlot.Value == i ? activeColor : normalColor;
+            buttons[i].colors = colors;
+        }
+    }
+
+    private void UpdateVisibility()
+    {
+        if (CombatManager.Instance == null || !CombatManager.Instance.InCombat)
+        {
+            SetButtonsVisible(true);
+            return;
+        }
+
+        SetButtonsVisible(CombatManager.Instance.IsPlayerTurn);
+    }
+
+    private void SetButtonsVisible(bool visible)
+    {
+        foreach (Button b in buttons)
+        {
+            if (b != null) b.gameObject.SetActive(visible);
+        }
+    }
+
+    private void HandleCombatStarted(List<Enemy> enemies) => SetButtonsVisible(false);
+
+    private void HandleCombatEnded(CombatManager.CombatOutcome outcome) => SetButtonsVisible(true);
+
+    private void HandleTurnStarted(Unit unit) => SetButtonsVisible(unit is Player);
 }

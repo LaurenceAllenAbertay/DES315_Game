@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private GameObject root;
     [SerializeField] private Transform contentRoot;
     [SerializeField] private InventoryItemButton itemPrefab;
+    [SerializeField] private Button openInventoryButton;
 
     [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
@@ -47,6 +49,12 @@ public class InventoryUI : MonoBehaviour
             inventoryAction.performed += OnInventory;
             inventoryAction.Enable();
         }
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted += OnCombatStarted;
+            CombatManager.Instance.OnCombatEnded += OnCombatEnded;
+        }
     }
 
     private void OnDisable()
@@ -55,6 +63,37 @@ public class InventoryUI : MonoBehaviour
         {
             inventoryAction.performed -= OnInventory;
             inventoryAction.Disable();
+        }
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted -= OnCombatStarted;
+            CombatManager.Instance.OnCombatEnded -= OnCombatEnded;
+        }
+    }
+
+    private void OnCombatStarted(System.Collections.Generic.List<Enemy> enemies)
+    {
+        SetInventoryInputEnabled(false);
+        SetUIActive(false);
+    }
+
+    private void OnCombatEnded(CombatManager.CombatOutcome outcome)
+    {
+        SetInventoryInputEnabled(true);
+    }
+
+    private void SetInventoryInputEnabled(bool enabled)
+    {
+        if (inventoryAction != null)
+        {
+            if (enabled) inventoryAction.Enable();
+            else inventoryAction.Disable();
+        }
+
+        if (openInventoryButton != null)
+        {
+            openInventoryButton.gameObject.SetActive(enabled);
         }
     }
 
@@ -69,7 +108,12 @@ public class InventoryUI : MonoBehaviour
         {
             return;
         }
-
+        
+        if (openInventoryButton != null)
+        {
+            openInventoryButton.gameObject.SetActive(!openInventoryButton.gameObject.activeSelf);
+        }
+        
         bool show = !root.activeSelf;
         SetUIActive(show);
 

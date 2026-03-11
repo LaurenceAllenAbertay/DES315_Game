@@ -397,16 +397,6 @@ public class DungeonGenerator : MonoBehaviour
         return null;
     }
 
-    //Returns the room tagges as the final room, or null if not yet generated -EM//
-    public Room GetFinalRoom()
-    {
-        foreach(Room room in rooms)
-        {
-            if (room.isFinalRoom) return room;
-        }
-        return null;
-    }
-
     //Test generate with current seed value in inspector -EM//
     [ContextMenu("Generate With Current Seed")]
     private void TestGenerateWithSeed()

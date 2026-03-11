@@ -28,8 +28,8 @@ public class PlayerAbilityManager : MonoBehaviour
     [SerializeField] private bool debugMode = true;
     [SerializeField] private float[] cooldownTimers = new float[3];
 
-    //Matty addition , needed the animation script to detect ability casts 
     public event System.Action<int> OnAbilityCast;
+    public event System.Action<int?> OnActiveSlotChanged;
 
     // Input actions
     private InputAction ability1Action;
@@ -38,7 +38,17 @@ public class PlayerAbilityManager : MonoBehaviour
     private InputAction cancelAction;
     private InputAction flipAction;
 
-    private int? activeAbilitySlot = null;
+    private int? _activeAbilitySlot = null;
+    private int? activeAbilitySlot
+    {
+        get => _activeAbilitySlot;
+        set
+        {
+            _activeAbilitySlot = value;
+            OnActiveSlotChanged?.Invoke(value);
+        }
+    }
+
     private bool flipSelected = false;
 
     public bool IsTargeting => activeAbilitySlot.HasValue;

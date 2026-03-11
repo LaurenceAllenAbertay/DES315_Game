@@ -1,11 +1,17 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PauseManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button resumeButton;
+    [SerializeField] private Button restartRunButton;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private Button mainMenuButton;
+    [SerializeField] private Button quitButton;
 
     [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
@@ -20,14 +26,16 @@ public class PauseManager : MonoBehaviour
     private void Awake()
     {
         if (pausePanel != null)
-        {
             pausePanel.SetActive(false);
-        }
+
+        if (resumeButton != null) resumeButton.onClick.AddListener(Resume);
+        if (restartRunButton != null) restartRunButton.onClick.AddListener(RestartRun);
+        if (settingsButton != null) settingsButton.onClick.AddListener(OpenSettings);
+        if (mainMenuButton != null) mainMenuButton.onClick.AddListener(ReturnToMainMenu);
+        if (quitButton != null) quitButton.onClick.AddListener(QuitGame);
 
         if (inputActions != null)
-        {
             pauseAction = inputActions.FindAction(pauseActionName, true);
-        }
     }
 
     private void OnEnable()

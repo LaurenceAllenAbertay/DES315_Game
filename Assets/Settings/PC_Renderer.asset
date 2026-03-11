@@ -90,7 +90,8 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: 5791246380287980528}
   - {fileID: -7725403641769349537}
-  m_RendererFeatureMap: ad6b866f10d7b46cf0f3d447e6a35e505f2ed49951dac994
+  - {fileID: 5341701953305408755}
+  m_RendererFeatureMap: ad6b866f10d7b46cf0f3d447e6a35e505f2ed49951dac994f374c7fe9f89214a
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -148,6 +149,32 @@ MonoBehaviour:
     edgeSoftness: 0
     debugMode: 0
   shadowMaterial: {fileID: 0}
+--- !u!114 &5341701953305408755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5b862e8b4570c2459e5cdc751d2f4e7, type: 3}
+  m_Name: HardShadowFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 500
+    shadowColor: {r: 0.05, g: 0.05, b: 0.1, a: 0.6}
+    lightColor: {r: 1, g: 1, b: 1, a: 0.4}
+    wobbleAmount: 0.3
+    wobbleSpeed: 1.5
+    wobbleFrequency: 6
+    edgeSoftness: 1
+    occluderLayers:
+      serializedVersion: 2
+      m_Bits: 136
+    maxLights: 16
+    debugMode: 0
 --- !u!114 &5791246380287980528
 MonoBehaviour:
   m_ObjectHideFlags: 0

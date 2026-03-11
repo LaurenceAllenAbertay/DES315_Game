@@ -3,7 +3,17 @@ guid: a2a032d219442f244b8ec32610658b22
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hoops
+    second: {fileID: 2100000, guid: 46e9d83778eafd6429bf7c869e79932e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Planks
+    second: {fileID: 2100000, guid: b2484c0c610374c46bf57d05e6bbf367, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
