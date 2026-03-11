@@ -91,6 +91,11 @@ public class CheatManager : MonoBehaviour
         OnShowFinalRoomChanged?.Invoke(showFinalRoom);
     }
 
+    //Toggle the final room waypoint marker on and off//
+    public void ToggleShowFinalRoom()
+    {
+        SetShowFinalRoom(!showFinalRoom);
+    }
     private void SpawnFinalRoomMarker()
     {
         //Find the WinCondition Object - it lives in the final room//

@@ -9,32 +9,15 @@ public class WinCondition : MonoBehaviour
     [Header("Interaction")]
     [Tooltip("How close the player must be to click and win")]
     public float interactionRange = 3f;
-
-    [Tooltip("Layer mask for the player")]
     public LayerMask playerLayer;
 
     [Header("Win Screen")]
-    [Tooltip("Name of the scene to load on win (leave blank to show UI panel instead")]
     public string winSceneName = "";
-
-    [Tooltip("Optional UI panel to activate on win (used if winSceneName is blank")]
     public GameObject winScreenPanel;
 
-    [Tooltip("Optional prompt shown above the object when the player is in range")]
+    [Header("UI")]
+    [Tooltip("Drage the Canvas child here - shows/hide based on proximity")]
     public GameObject interactPrompt;
-
-    [Header("Room Marker")]
-    [Tooltip("Optional decorative prefab to spawn at the centre of the final room, Leave blank to use the WinCondition object's own model.")]
-    public GameObject roomMarkerPrefab;
-
-    [Tooltip("Offset from the win conditions position to spawn the marker")]
-    public Vector3 markerOffset = Vector3.zero;
-
-    [Header("Pulse Visual")]
-    [Tooltip("If true, the object bobs up abd down to draw attention")]
-    public bool doPulse = true;
-    public float pulseSpeed = 1.5f;
-    public float pulseHeight = 0.15f;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -44,7 +27,6 @@ public class WinCondition : MonoBehaviour
 
     private InputAction interactionAction;
     private Transform playerTransform;
-    private Vector3 startPosition;
     private bool gameWon = false;
     private bool playerInRange = false;
 
@@ -59,20 +41,12 @@ public class WinCondition : MonoBehaviour
     }
     private void Start()
     {
-        startPosition = transform.position;
-
         //Find player//
         PlayerController pc = FindFirstObjectByType<PlayerController>();
         if (pc != null) playerTransform = pc.transform;
 
+        //Hide prompt on start//
         if (interactPrompt != null) interactPrompt.SetActive(false);
-
-        //Spawn the decorative room marker if one is assigned//
-        if(roomMarkerPrefab != null)
-        {
-            GameObject marker = Instantiate(roomMarkerPrefab, transform.position + markerOffset, Quaternion.identity, transform);
-            marker.name = "FinalRoomMarker";
-        }
     }
 
     private void OnEnable()
@@ -97,22 +71,14 @@ public class WinCondition : MonoBehaviour
     {
         if (gameWon) return;
 
-        //Pulse animation//
-        if(doPulse)
-        {
-            float newY = startPosition.y + Mathf.Sin(Time.time * pulseSpeed) * pulseHeight;
-            transform.position = new Vector3(startPosition.x, newY, startPosition.z);
-        }
-
         //Show or hide ineract prompt based on player proximity//
         bool wasInRange = playerInRange;
-        playerInRange = IsPlayerInRange();
+        playerInRange = playerTransform != null && Vector3.Distance(transform.position, playerTransform.position) <= interactionRange;
 
+        //Only update the Canvas when the state actually changes//
         if(playerInRange != wasInRange && interactPrompt != null)
-        {
-
+        { 
             interactPrompt.SetActive(playerInRange);
-
             if (debugMode) Debug.Log($"[WinCondition] Player {(playerInRange ? "entered" : "left")} interaction range");
         }
     }
@@ -120,9 +86,8 @@ public class WinCondition : MonoBehaviour
     //Called when the playert presses E//
     private void OnInteract(InputAction.CallbackContext context)
     {
-        if (gameWon) return;
-        if (!playerInRange) return;
-
+        if (gameWon || !playerInRange) return;
+        
         TriggerWin();
     }
 
@@ -149,13 +114,6 @@ public class WinCondition : MonoBehaviour
             Debug.LogWarning("[WinCondition] No win scene or panel set! Add one in the Inspector.");
         }
     }
-
-    private bool IsPlayerInRange()
-    {
-        if (playerTransform == null) return false;
-        return Vector3.Distance(transform.position, playerTransform.position) <= interactionRange;
-    }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

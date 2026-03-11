@@ -45,13 +45,6 @@ public class RoomBuilder : MonoBehaviour
     [Tooltip("Prefab for a 2x2 room type 4")]
     public GameObject roomType4_2x2Prefab;
 
-    [Header("Win Condition")]
-    [Tooltip("Prefab with WinCondition.cs to spawn in the final room")]
-    public GameObject winConditionPrefab;
-
-    [Tooltip("Height above floor to spawn the win condition object")]
-    public float winConditionSpawnHeight = 1f;
-
     [Header("NavMesh")]
     [Tooltip("Automatically bake NavMesh after building rooms")]
     public bool autoBakeNavMesh = true;
@@ -191,8 +184,6 @@ public class RoomBuilder : MonoBehaviour
         {
             BakeNavMesh();
         }
-
-        SpawnWinCondition();
 
         if(showDebugLogs)
         {
@@ -444,38 +435,6 @@ public class RoomBuilder : MonoBehaviour
         cameraTransform.position = centerPos + new Vector3(0f, 6f, 5f);
 
         if (showDebugLogs) Debug.Log($"[RoomBuilder] Player spawned at lobby center: {centerPos}");
-    }
-
-    //Spawn the win condition prefab in the final room -EM//
-    private void SpawnWinCondition()
-    {
-        if(winConditionPrefab == null)
-        {
-            if (showDebugLogs) Debug.LogWarning("[RoomBuilder] No win condition prefab assigned");
-            return;
-        }
-
-        Room finalRoom = generator.GetFinalRoom();
-        if (finalRoom == null)
-        {
-            if (showDebugLogs) Debug.LogWarning("[RoomBuilder] No final room tagged, cannto spawn win condition");
-            return;
-        }
-        
-        //Get the world space centre of the final room//
-        finalRoom.GetBounds(out int minX, out int minY, out int maxX, out int maxY);
-        float centreGridX = (minX + maxX) * 0.5f;
-        float centreGridY = (minY + maxY) * 0.5f;
-
-        //Reuse GridToWorldPosition with fractional coords by computing directly//
-        int gs = generator.gridSize;
-        Vector3 offset = new Vector3(-gs * cellSize * 0.5f, 0f, -gs * cellSize * 0.5f);
-        Vector3 worldCentre = offset + new Vector3(centreGridX * cellSize, winConditionSpawnHeight, centreGridY * cellSize);
-
-        GameObject winObj = Instantiate(winConditionPrefab, worldCentre, Quaternion.identity, roomsParent);
-        winObj.name = "WinCondition_FinalRoom";
-
-        if (showDebugLogs) Debug.Log($"[RoomBuilder] WinCondition spawned at {worldCentre} in final room");
     }
     
 }
