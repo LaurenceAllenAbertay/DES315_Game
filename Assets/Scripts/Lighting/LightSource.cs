@@ -38,11 +38,13 @@ public class LightSource : MonoBehaviour
     private void OnEnable()
     {
         LightDetectionManager.RegisterLight(this);
+        HardShadowManager.RegisterLight(this);
     }
 
     private void OnDisable()
     {
         LightDetectionManager.UnregisterLight(this);
+        HardShadowManager.UnregisterLight(this);
     }
 
     /// <summary>
