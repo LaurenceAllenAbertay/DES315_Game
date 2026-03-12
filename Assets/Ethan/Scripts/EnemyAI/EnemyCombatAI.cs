@@ -393,4 +393,9 @@ public class EnemyCombatAI : MonoBehaviour
             agent.ResetPath();
         }
     }
+
+    private void OnDisable()
+    {
+        isTakingTurn = false;
+    }
 }
