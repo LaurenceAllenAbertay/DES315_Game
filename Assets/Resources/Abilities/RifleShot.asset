@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e8f45edd040295418f823db2b63ccd4, type: 3}
   m_Name: RifleShot
   m_EditorClassIdentifier: 
-  abilityName: Rifle Shot
-  description: 
-  icon: {fileID: 0}
+  abilityName: Rifle
+  description: 'Name: Rifle   Cost: 1 Coin
+
+    Description: Ranged single target
+    attack'
+  icon: {fileID: 21300000, guid: 3aeeb79e73603b64ab4dbb58cebd157f, type: 3}
+  coinCost: 1
   targetingType: 0
   range: 15
   coneAngle: 60
