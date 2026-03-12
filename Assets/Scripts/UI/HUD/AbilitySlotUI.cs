@@ -21,6 +21,8 @@ public class AbilitySlotUI : MonoBehaviour
     [SerializeField] private Color activeColor = new Color(1f, 0.8f, 0f, 1f);
     [SerializeField] private Color normalColor = Color.white;
 
+    [SerializeField] private GameObject background;
+    
     private Button[] buttons;
 
     private void Awake()
@@ -138,6 +140,7 @@ public class AbilitySlotUI : MonoBehaviour
             return;
         }
 
+        background.SetActive(CombatManager.Instance.IsPlayerTurn);
         SetButtonsVisible(CombatManager.Instance.IsPlayerTurn);
     }
 
@@ -147,6 +150,7 @@ public class AbilitySlotUI : MonoBehaviour
         {
             if (b != null) b.gameObject.SetActive(visible);
         }
+        if (background != null) background.SetActive(visible);
     }
 
     private void HandleCombatStarted(List<Enemy> enemies) => SetButtonsVisible(false);
