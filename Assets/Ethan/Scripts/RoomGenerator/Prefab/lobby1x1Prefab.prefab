@@ -2666,17 +2666,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7892729445659127353}
     m_Modifications:
+    - target: {fileID: 2699993568427599358, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: debugMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2895476920334390502, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2895476920334390502, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.41
       objectReference: {fileID: 0}
     - target: {fileID: 2895476920334390502, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5
+      value: -3.93
       objectReference: {fileID: 0}
     - target: {fileID: 2895476920334390502, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2714,6 +2718,14 @@ PrefabInstance:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: 37642b4cb52cf494db6e7aa056090a79, type: 3}
+    - target: {fileID: 5277034082239648248, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: m_WarningMessage
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5452007818771334953, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 57031756967108135, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
     m_RemovedGameObjects:

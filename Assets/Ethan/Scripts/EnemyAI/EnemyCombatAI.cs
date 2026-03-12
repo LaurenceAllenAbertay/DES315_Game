@@ -284,6 +284,7 @@ public class EnemyCombatAI : MonoBehaviour
 
         bool success = PerformFlip(currentFlipChance);
         lastFlipResult = success;
+        animController?.TriggerAttack();
 
         if (success)
         {
