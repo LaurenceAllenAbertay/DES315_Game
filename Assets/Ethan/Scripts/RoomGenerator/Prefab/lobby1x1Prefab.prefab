@@ -290,15 +290,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   room: {fileID: 4023876818927459606}
-  particleCount: 2056
-  particleSize: 0.2
+  particleCount: 10000
+  particleSize: 0.05
   particleColor: {r: 0.19595744, g: 0.18903525, b: 0.2264151, a: 0.48235294}
   spawnHeightMin: 0.1
   spawnHeightMax: 8
   driftAmplitudeXZ: 0.25
   driftAmplitudeY: 0.15
   driftSpeed: 0.4
-  sizeVariation: 0.1
+  sizeVariation: 0.04
   colorVariation: 0.1
   lightCheckBatchPerFrame: 8
   material: {fileID: 2100000, guid: 2e32e220f00e47e4bacae7ef0d8b1ed4, type: 2}
