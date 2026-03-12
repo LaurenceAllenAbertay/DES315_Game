@@ -2710,8 +2710,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Brute
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 4862704586428919061, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: m_Avatar
+      value: 
+      objectReference: {fileID: 9000000, guid: 37642b4cb52cf494db6e7aa056090a79, type: 3}
+    m_RemovedComponents:
+    - {fileID: 57031756967108135, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 2829598106136199248, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}

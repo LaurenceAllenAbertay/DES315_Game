@@ -100,7 +100,82 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: Brute(Clone)
+      parentName: 
+      position: {x: -0.0000002844595, y: 1.02, z: 0.0023484314}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 32.69231, y: 32.69231, z: 32.69231}
+    - name: Hood_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Boots_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cuff_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cuff2_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Horn1_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Horn2_low
+      parentName: Brute(Clone)
+      position: {x: -0.013806599, y: 0.022334546, z: -0.0020734032}
+      rotation: {x: 0.05853694, y: 0.16401738, z: 0.0835941, w: 0.9811645}
+      scale: {x: 0.7032386, y: 0.7032386, z: 0.7032386}
+    - name: Horn5_low
+      parentName: Brute(Clone)
+      position: {x: -0.0072009885, y: 0.023548279, z: 0.0010634959}
+      rotation: {x: 0.19223022, y: -0.011956445, z: -0.24430288, w: 0.95037925}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Belt1_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Belt2_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Skirt_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Horn3_low
+      parentName: Brute(Clone)
+      position: {x: 0.011586096, y: 0.02018182, z: -0.00025342463}
+      rotation: {x: 0.12706201, y: 0.97986454, z: 0.07422549, w: 0.13494934}
+      scale: {x: 0.45126155, y: 0.45126155, z: 0.45126155}
+    - name: Horn4_low
+      parentName: Brute(Clone)
+      position: {x: 0.010517657, y: 0.023548279, z: -0.0062967865}
+      rotation: {x: -8.541125e-18, y: -0.7734025, z: 8.541125e-18, w: 0.63391536}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Gloves_low
+      parentName: Brute(Clone)
+      position: {x: -0, y: -0.14632234, z: -0.0023399561}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -115,9 +190,9 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 3
+  animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
