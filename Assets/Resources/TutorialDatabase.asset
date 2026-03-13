@@ -14,16 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entries:
   - triggerKey: game_start
-    message: Welcome to Incinder!
+    message: Welcome to Incinder!\n[insert brief game explanation]\nLeft-click anywhere
+      to move.
   - triggerKey: first_move
-    message: hrhsdrhrsh
+    message: You're on the move!\nOutside of combat you can move freely. Want to
+      investigate the room without moving? Use WASD to move the camera, and hold
+      right-click to pivot it.
   - triggerKey: first_ability_selected
-    message: hrhdhrdhdrvdrvr
+    message: Abilities are your main tools in combat. Press 1, 2, or 3, or click
+      the buttons at the bottom to select one, then click a target/area to cast it.
+      Hover over the ability buttons to learn each ability's details. To cancel targeting,
+      press the same ability key again or switch to a different one.
   - triggerKey: first_attack
-    message: liulhjkihkhkhuk
+    message: Good job, you got them!\nNow combat begins...\nBefore confirming a target
+      during combat, you can press Space to gamble a coin flip. Success boosts the
+      ability's damage by 50%, but failure halves it. You can see enemy health by
+      hovering over them, or at the top of the screen.
   - triggerKey: first_damage_taken
-    message: hrhdrvbdrjrdjdrbtbt
+    message: You took a hit!\nKeep an eye on your health in the bottom left. If it
+      reaches zero, your quest is over, that's a complete reset back to the very
+      beginning.
   - triggerKey: first_combat_win
-    message: mumvnfbtfnftnftn
-  - triggerKey: first_combat_win
-    message: chest
+    message: Victory!\nKeep exploring, somewhere in these ruins lies a powerful artifact,
+      and it won't find itself. If things get too dangerous, try stealthing through
+      the shadows to slip past enemies undetected. Good luck on your quest!
+  - triggerKey: first_chest_open
+    message: You found some items!\nSelect one of 3 options to take with you. After,
+      press Tab or click the bag icon in the bottom right to open your inventory,
+      where you can click items to equip or unequip them. You can only have 5 items
+      equipped at a time.
