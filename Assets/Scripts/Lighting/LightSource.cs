@@ -76,7 +76,7 @@ public class LightSource : MonoBehaviour
             return false;
         }
 
-        lightContribution = 1f;
+        lightContribution = 1f - (distance / strength);
         return true;
     }
 

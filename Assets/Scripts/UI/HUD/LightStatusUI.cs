@@ -1,116 +1,62 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class LightStatusUI : MonoBehaviour
 {
     [Header("References")]
     public PlayerController player;
-    public TextMeshProUGUI statusText;
-    public Image statusIndicator;
     public Image shadowOverlay;
+    public Image shadowBorder;
 
-    [Header("Colors")]
-    public Color lightColor = new Color(1f, 0.9f, 0.5f); 
-    public Color shadowColor = new Color(0.2f, 0.2f, 0.4f); 
-
-    [Header("Animation")]
-    public float colorTransitionSpeed = 5f;
-    
+    [Header("Overlay")]
     public float overlayTransitionSpeed = 3f;
-    public float maxShadowAlpha = 0.7f;
-    public float initialOverlayFadeDuration = 2f;
+    public float maxOverlayAlpha = 0.7f;
+    [Tooltip("Multiplier on light contribution before clamping — increase to suppress the overlay at lower light levels")]
+    public float overlayLightScale = 2f;
 
-    private Color targetColor;
-    private float targetOverlayAlpha;
-    private bool isInitialOverlayFadeActive;
-    private float initialOverlayFadeStartTime;
+    [Header("Border")]
+    public float borderTransitionSpeed = 3f;
+    public float maxBorderAlpha = 1f;
 
     private void Start()
     {
         if (player == null)
-        {
             player = FindFirstObjectByType<PlayerController>();
-        }
-
-        if (player != null)
-        {
-            player.OnLightStateChanged += HandleLightStateChanged;
-        }
 
         if (shadowOverlay != null)
         {
-            shadowOverlay.enabled = true;
+            Color c = shadowOverlay.color;
+            shadowOverlay.color = new Color(c.r, c.g, c.b, 0f);
         }
-        UpdateUI();
 
-        if (shadowOverlay != null)
+        if (shadowBorder != null)
         {
-            Color currentColor = shadowOverlay.color;
-            shadowOverlay.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
-            isInitialOverlayFadeActive = true;
-            initialOverlayFadeStartTime = Time.realtimeSinceStartup;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (player != null)
-        {
-            player.OnLightStateChanged -= HandleLightStateChanged;
+            Color c = shadowBorder.color;
+            shadowBorder.color = new Color(c.r, c.g, c.b, 0f);
         }
     }
 
     private void Update()
     {
-        UpdateUI();
+        if (player == null) return;
 
-        if (statusIndicator != null)
-        {
-            statusIndicator.color = Color.Lerp(statusIndicator.color, targetColor,
-                                                colorTransitionSpeed * Time.deltaTime);
-        }
+        float lightLevel = Mathf.Clamp01(player.CurrentLightLevel * overlayLightScale);
+        float shadowAmount = 1f - lightLevel;
 
         if (shadowOverlay != null)
         {
-            Color currentColor = shadowOverlay.color;
-            float newAlpha;
-            if (isInitialOverlayFadeActive)
-            {
-                float elapsed = Time.realtimeSinceStartup - initialOverlayFadeStartTime;
-                float t = Mathf.Clamp01(elapsed / Mathf.Max(0.01f, initialOverlayFadeDuration));
-                newAlpha = Mathf.Lerp(1f, targetOverlayAlpha, t);
-                if (t >= 1f)
-                {
-                    isInitialOverlayFadeActive = false;
-                }
-            }
-            else
-            {
-                newAlpha = Mathf.Lerp(currentColor.a, targetOverlayAlpha, overlayTransitionSpeed * Time.deltaTime);
-            }
-            shadowOverlay.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
+            float targetAlpha = shadowAmount * maxOverlayAlpha;
+            Color c = shadowOverlay.color;
+            c.a = Mathf.Lerp(c.a, targetAlpha, overlayTransitionSpeed * Time.deltaTime);
+            shadowOverlay.color = c;
         }
-    }
 
-    private void HandleLightStateChanged(bool inLight)
-    {
-        // In future, stuff will go here probably
-    }
-
-    private void UpdateUI()
-    {
-        if (player == null) return;
-
-        bool inLight = player.IsInLight;
-
-        if (statusText != null)
+        if (shadowBorder != null)
         {
-            statusText.text = inLight ? "IN LIGHT" : "IN SHADOW";
-            statusText.color = inLight ? lightColor : shadowColor;
+            float targetAlpha = player.IsInLight ? 0f : maxBorderAlpha;
+            Color c = shadowBorder.color;
+            c.a = Mathf.Lerp(c.a, targetAlpha, borderTransitionSpeed * Time.deltaTime);
+            shadowBorder.color = c;
         }
-
-        targetColor = inLight ? lightColor : shadowColor;
-        targetOverlayAlpha = inLight ? 0f : maxShadowAlpha;
     }
 }
