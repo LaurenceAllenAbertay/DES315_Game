@@ -246,6 +246,7 @@ public class PlayerAbilityManager : MonoBehaviour
         // Start targeting
         activeAbilitySlot = slotIndex;
         flipSelected = false;
+        TutorialManager.Instance?.Trigger("first_ability_selected");
         if (targetingSystem != null)
         {
             targetingSystem.SetFlipVisuals(false);
@@ -342,6 +343,9 @@ public class PlayerAbilityManager : MonoBehaviour
         bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
         float flipMultiplier = 1f;
 
+        if (HasDamageEffect(ability))
+            TutorialManager.Instance?.Trigger("first_attack");
+        
         if (inCombat)
         {
             if (player == null) return;
@@ -550,6 +554,16 @@ public class PlayerAbilityManager : MonoBehaviour
             }
         }
 
+        return false;
+    }
+    
+    private static bool HasDamageEffect(Ability ability)
+    {
+        if (ability == null || ability.effects == null) return false;
+        foreach (AbilityEffect effect in ability.effects)
+        {
+            if (effect is DamageEffect) return true;
+        }
         return false;
     }
 

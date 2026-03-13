@@ -78,15 +78,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CancelAbility",
-                    "type": "Button",
-                    "id": "1bcfc6ec-8769-4da2-acd7-4d5af7a50a96",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "EndTurn",
                     "type": "Button",
                     "id": "8e31170d-27c7-4d06-a4e3-1f8bcb33b70f",
@@ -209,17 +200,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "ConfirmTarget",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "474d5272-2a58-4a43-a18f-f678cb484fba",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CancelAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

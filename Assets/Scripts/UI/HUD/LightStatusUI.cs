@@ -1,4 +1,4 @@
-﻿ using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +24,7 @@ public class LightStatusUI : MonoBehaviour
     private Color targetColor;
     private float targetOverlayAlpha;
     private bool isInitialOverlayFadeActive;
-    private float initialOverlayFadeElapsed;
+    private float initialOverlayFadeStartTime;
 
     private void Start()
     {
@@ -49,7 +49,7 @@ public class LightStatusUI : MonoBehaviour
             Color currentColor = shadowOverlay.color;
             shadowOverlay.color = new Color(currentColor.r, currentColor.g, currentColor.b, 1f);
             isInitialOverlayFadeActive = true;
-            initialOverlayFadeElapsed = 0f;
+            initialOverlayFadeStartTime = Time.realtimeSinceStartup;
         }
     }
 
@@ -77,8 +77,8 @@ public class LightStatusUI : MonoBehaviour
             float newAlpha;
             if (isInitialOverlayFadeActive)
             {
-                initialOverlayFadeElapsed += Time.deltaTime;
-                float t = Mathf.Clamp01(initialOverlayFadeElapsed / Mathf.Max(0.01f, initialOverlayFadeDuration));
+                float elapsed = Time.realtimeSinceStartup - initialOverlayFadeStartTime;
+                float t = Mathf.Clamp01(elapsed / Mathf.Max(0.01f, initialOverlayFadeDuration));
                 newAlpha = Mathf.Lerp(1f, targetOverlayAlpha, t);
                 if (t >= 1f)
                 {

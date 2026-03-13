@@ -164,15 +164,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""CancelAbility"",
-                    ""type"": ""Button"",
-                    ""id"": ""1bcfc6ec-8769-4da2-acd7-4d5af7a50a96"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""EndTurn"",
                     ""type"": ""Button"",
                     ""id"": ""8e31170d-27c7-4d06-a4e3-1f8bcb33b70f"",
@@ -295,17 +286,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ConfirmTarget"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""474d5272-2a58-4a43-a18f-f678cb484fba"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""CancelAbility"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -528,7 +508,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         m_Player_Ability2 = m_Player.FindAction("Ability2", throwIfNotFound: true);
         m_Player_Ability3 = m_Player.FindAction("Ability3", throwIfNotFound: true);
         m_Player_ConfirmTarget = m_Player.FindAction("ConfirmTarget", throwIfNotFound: true);
-        m_Player_CancelAbility = m_Player.FindAction("CancelAbility", throwIfNotFound: true);
         m_Player_EndTurn = m_Player.FindAction("EndTurn", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
@@ -632,7 +611,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Ability2;
     private readonly InputAction m_Player_Ability3;
     private readonly InputAction m_Player_ConfirmTarget;
-    private readonly InputAction m_Player_CancelAbility;
     private readonly InputAction m_Player_EndTurn;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_Interact;
@@ -680,10 +658,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/ConfirmTarget".
         /// </summary>
         public InputAction @ConfirmTarget => m_Wrapper.m_Player_ConfirmTarget;
-        /// <summary>
-        /// Provides access to the underlying input action "Player/CancelAbility".
-        /// </summary>
-        public InputAction @CancelAbility => m_Wrapper.m_Player_CancelAbility;
         /// <summary>
         /// Provides access to the underlying input action "Player/EndTurn".
         /// </summary>
@@ -750,9 +724,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @ConfirmTarget.started += instance.OnConfirmTarget;
             @ConfirmTarget.performed += instance.OnConfirmTarget;
             @ConfirmTarget.canceled += instance.OnConfirmTarget;
-            @CancelAbility.started += instance.OnCancelAbility;
-            @CancelAbility.performed += instance.OnCancelAbility;
-            @CancelAbility.canceled += instance.OnCancelAbility;
             @EndTurn.started += instance.OnEndTurn;
             @EndTurn.performed += instance.OnEndTurn;
             @EndTurn.canceled += instance.OnEndTurn;
@@ -800,9 +771,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
             @ConfirmTarget.started -= instance.OnConfirmTarget;
             @ConfirmTarget.performed -= instance.OnConfirmTarget;
             @ConfirmTarget.canceled -= instance.OnConfirmTarget;
-            @CancelAbility.started -= instance.OnCancelAbility;
-            @CancelAbility.performed -= instance.OnCancelAbility;
-            @CancelAbility.canceled -= instance.OnCancelAbility;
             @EndTurn.started -= instance.OnEndTurn;
             @EndTurn.performed -= instance.OnEndTurn;
             @EndTurn.canceled -= instance.OnEndTurn;
@@ -1136,13 +1104,6 @@ public partial class @GameInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnConfirmTarget(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "CancelAbility" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCancelAbility(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "EndTurn" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

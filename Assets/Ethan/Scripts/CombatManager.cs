@@ -345,6 +345,11 @@ public class CombatManager : MonoBehaviour
             player.TakeDamage(lethalDamage);
         }
 
+        if (outcome == CombatOutcome.PlayerWon)
+        {
+            TutorialManager.Instance?.Trigger("first_combat_win");
+        }
+
         MessageUI.Instance?.EnqueueMessage("Combat Ended!");
 
         //Clean up//

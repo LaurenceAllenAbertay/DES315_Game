@@ -151,6 +151,8 @@ public class TreasureChest : MonoBehaviour
         hasBeenOpened = true;
 
         if (debugMode) Debug.Log("[TreasureChest] Opening Chest!");
+        
+        TutorialManager.Instance?.Trigger("first_chest_open");
 
         //Hide interaction prompt//
         if(interactionPrompt != null)
