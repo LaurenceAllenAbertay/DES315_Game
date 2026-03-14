@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 //Individual card UI elelement for item selection, shows item icon, name and description -EM//
 public class TreasureChestCard : MonoBehaviour
@@ -13,13 +14,17 @@ public class TreasureChestCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI descriptionText;
 
     [Header("Visual Feedback")]
+    [Tooltip("Optional: tint or bage to distinguish ability cards from item cards")]
+    public GameObject abilityBadge;
     [Tooltip("Optional: Object to enable when hovering")]
     public GameObject hoverHighlight;
 
-    private ItemDefinition item;
+    private ChestReward reward;
     private Action<TreasureChestCard> onClickedCallback;
 
-    public ItemDefinition Item => item;
+    public ChestReward Reward => reward;
+
+    public ItemDefinition Item => reward.item;
 
     private void Awake()
     {
@@ -40,35 +45,36 @@ public class TreasureChestCard : MonoBehaviour
         {
             hoverHighlight.SetActive(false);
         }
+
+        if(abilityBadge != null)
+        {
+            abilityBadge.SetActive(false);
+        }
     }
 
-    //Setup this card with item data -EM//
-    public void Setup(ItemDefinition itemDef, Action<TreasureChestCard> onClicked)
+    //Setup this card with a chestReward (item or ability) -EM//
+    public void Setup(ChestReward chestReward, Action<TreasureChestCard> onClicked)
     {
-        item = itemDef;
+        reward = chestReward;
         onClickedCallback = onClicked;
 
-        if(item == null)
+        if(reward.type == ChestRewardType.Item && reward.item != null)
         {
-            Debug.LogWarning("[TreasureChestCard] Item is null");
+            if (iconImage != null) iconImage.sprite = reward.item.icon;
+            if (nameText != null) nameText.text = reward.item.itemName;
+            if (descriptionText != null) descriptionText.text = reward.item.description;
+            if (abilityBadge != null) abilityBadge.SetActive(false);
         }
-
-        //Set Icon//
-        if (iconImage != null && item.icon != null)
+        else if(reward.type == ChestRewardType.Ability && reward.ability != null)
         {
-            iconImage.sprite = item.icon;
+            if (iconImage != null) iconImage.sprite = reward.ability.icon;
+            if (nameText != null) nameText.text = reward.ability.abilityName;
+            if (descriptionText != null) descriptionText.text = reward.ability.description;
+            if (abilityBadge != null) abilityBadge.SetActive(true);
         }
-
-        //Set name//
-        if(nameText != null)
+        else 
         {
-            nameText.text = item.itemName;
-        }
-
-        //Set description//
-        if(descriptionText != null)
-        {
-            descriptionText.text = item.description;
+            Debug.LogWarning("[TreasureChestCard] Reward data is null or type mismatch");
         }
     }
 

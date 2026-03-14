@@ -1,9 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-//UI manager for treasure chest item selection, shows 3 cards with items and lets player pick one -EM//
+//UI manager for treasure chest item selection, shows 3 cards with items or abilities and lets player pick one -EM//
 public class TreasureChestUI : MonoBehaviour
 {
     [Header("UI References")]
@@ -16,6 +16,10 @@ public class TreasureChestUI : MonoBehaviour
     [Tooltip("Prefab for individual item card")]
     public TreasureChestCard cardPrefab;
 
+    [Header("Replace Prompt")]
+    [Tooltip("Optional label ot show 'Choose an ability to replace'")]
+    public GameObject replacePromptLabel;
+
     [Header("Animation")]
     [Tooltip("Delay between spawning each card (for staggered animation)")]
     public float cardSpawnDelay = 0.1f;
@@ -24,7 +28,8 @@ public class TreasureChestUI : MonoBehaviour
     public bool debugMode = true;
 
     private List<TreasureChestCard> spawnedCards = new List<TreasureChestCard>();
-    private Action<ItemDefinition> onItemSelectedCallBack;
+    private Action<ChestReward> onRewardSelectedCallBack;
+    private Action<int> onReplaceSlotSelectedCallBack;
 
     private void Awake()
     {
@@ -33,14 +38,19 @@ public class TreasureChestUI : MonoBehaviour
         {
             uiRoot.SetActive(false);
         }
+
+        if(replacePromptLabel != null) 
+        {
+            replacePromptLabel.SetActive(false);
+        }
     }
 
-    //Show the item selection UI with given Items -EM//
-    public void ShowItemSelection(List<ItemDefinition> items, Action<ItemDefinition> onItemSelected)
+    //Show the reward selection UI with a mixed list of items and abilities -EM//
+    public void ShowRewards(List<ChestReward> rewards, Action<ChestReward> onRewardSelected)
     {
-        if(items == null || items.Count == 0)
+        if(rewards == null || rewards.Count == 0)
         {
-            Debug.LogWarning("[TreasureChestUI] No Items to display!");
+            Debug.LogWarning("[TreasureChestUI] No Rewards to display!");
             return;
         }
 
@@ -49,7 +59,10 @@ public class TreasureChestUI : MonoBehaviour
             Debug.LogError("[TreasureChestUI] Card prefab or container not assigned!");
         }
 
-        onItemSelectedCallBack = onItemSelected;
+        StopAllCoroutines();
+
+        onRewardSelectedCallBack = onRewardSelected;
+        onReplaceSlotSelectedCallBack = null;
 
         //Clear any existing cards//
         ClearCards();
@@ -61,79 +74,92 @@ public class TreasureChestUI : MonoBehaviour
         }
 
         //Spawn cards with staggered animation//
-        StartCoroutine(SpawnCardsCoroutine(items));
+        StartCoroutine(SpawnCardsCoroutine(rewards));
     }
 
-    //Spawn cards one by one with a delay -EM//
-    private System.Collections.IEnumerator SpawnCardsCoroutine(List<ItemDefinition> items)
+    //Show the replace slot UI when ability slots are full -EM//
+    public void ShowReplacePrompt(Ability[] equippedAbilities, Action<int> onSlotSelected)
     {
-        if (debugMode) Debug.Log($"[TreasureChestUI] Starting to spawn {items.Count} cards");
-
-        for (int i = 0; i < items.Count; i++)
+        if(equippedAbilities == null || equippedAbilities.Length == 0)
         {
-            if (debugMode) Debug.Log($"[TreasureChestUI] Spawning card {i + 1}...");
+            Debug.LogWarning("[TreasureChestUI] No equipped abilities to replace!");
+            return;
+        }
 
-            ItemDefinition item = items[i];
+        StopAllCoroutines();
 
-            if (item == null)
+        onReplaceSlotSelectedCallBack = onSlotSelected;
+        onRewardSelectedCallBack = null;
+
+        ClearCards();
+
+        if(replacePromptLabel != null) replacePromptLabel.SetActive(true);
+        if (uiRoot != null) uiRoot.SetActive(true);
+
+        StartCoroutine(SpawnReplaceCardsCoroutine(equippedAbilities));
+    }
+
+    private IEnumerator SpawnReplaceCardsCoroutine(Ability[] equippedAbilities)
+    {
+        if (debugMode) Debug.Log($"[TreasureChestUI] Showing {equippedAbilities.Length} equipped abilities for replacement");
+
+        for(int i = 0; i < equippedAbilities.Length; i++)
+        {
+            Ability ability = equippedAbilities[i];
+            if (ability == null) continue;
+
+            ChestReward reward = new ChestReward
             {
-                Debug.LogWarning($"[TreasureChestUI] Item {i} is null, skipping");
-                continue;
-            }
+                type = ChestRewardType.Ability,
+                ability = ability
+            };
 
-            if (cardPrefab == null)
-            {
-                Debug.LogError("[TreasureChestUI] Card prefab became null!");
-                yield break;
-            }
-
-            if (cardContainer == null)
-            {
-                Debug.LogError("[TreasureChestUI] Card container became null!");
-                yield break;
-            }
-
-            // Instantiate card
-            if (debugMode) Debug.Log($"[TreasureChestUI] Instantiating card for item: {item.itemName}");
+            int slotIndex = i; //Capture for lambda//
             TreasureChestCard card = Instantiate(cardPrefab, cardContainer);
-
-            if (debugMode) Debug.Log($"[TreasureChestUI] Setting up card...");
-            card.Setup(item, OnCardClicked);
-
-            if (debugMode) Debug.Log($"[TreasureChestUI] Adding card to list");
+            card.Setup(reward, (c) => OnReplaceCardClicked(slotIndex));
             spawnedCards.Add(card);
 
-            // Wait before spawning next card
-            if (i < items.Count - 1)
+            if(i < equippedAbilities.Length - 1)
             {
                 yield return new WaitForSeconds(cardSpawnDelay);
             }
         }
-
-        if (debugMode)
-        {
-            Debug.Log($"[TreasureChestUI] Finished spawning {spawnedCards.Count} cards");
-        }
     }
 
-    //Called when player clicks on a card -EM//
+    //Called when player clicks a card during normal reward selection -EM//
     private void OnCardClicked(TreasureChestCard card)
     {
-        if(card == null || card.Item == null)
-        {
-            return;
-        }
-
-        if(debugMode)
-        {
-            Debug.Log($"[TreasureChestUI] Card Clicked: {card.Item.itemName}");
-        }
-
-        //Notify callback//
-        onItemSelectedCallBack?.Invoke(card.Item);
-
-        //Hide UI//
+        onRewardSelectedCallBack?.Invoke(card.Reward);
         Hide();
+    }
+
+    //Called when player clicks a card during normal reward selection -EM//
+    private void OnReplaceCardClicked(int slotIndex)
+    {
+        if (debugMode) Debug.Log($"[TreasureChestUI] Player chose to replace slot {slotIndex}");
+        onReplaceSlotSelectedCallBack?.Invoke(slotIndex);
+        Hide();
+    }
+
+    //Spawn cards one by one with a delay -EM//
+    private IEnumerator SpawnCardsCoroutine(List<ChestReward> rewards)
+    {
+        if (debugMode) Debug.Log($"[TreasureChestUI] Starting to spawn {rewards.Count} cards");
+
+        for (int i = 0; i < rewards.Count; i++)
+        {
+            ChestReward reward  = rewards[i];
+
+            TreasureChestCard card = Instantiate(cardPrefab, cardContainer);
+            card.Setup(reward, OnCardClicked);
+            spawnedCards.Add(card);
+
+            // Wait before spawning next card
+            if (i < rewards.Count - 1)
+            {
+                yield return new WaitForSeconds(cardSpawnDelay);
+            }
+        }
     }
 
     //Hide the item selection UI -EM//
@@ -157,7 +183,6 @@ public class TreasureChestUI : MonoBehaviour
                 Destroy(card.gameObject);
             }
         }
-
         spawnedCards.Clear();
     }
 }
