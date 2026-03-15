@@ -26,8 +26,8 @@ public class EnemyVisionCone : MonoBehaviour
     private bool playerDetected = false;
     private Material instancedMaterial;
 
-    // Cache for player detection
     private Transform detectedPlayerTransform;
+    private PlayerController playerController;
 
     public delegate void PlayerDetected();
     public event PlayerDetected OnPlayerDetected;
@@ -48,6 +48,8 @@ public class EnemyVisionCone : MonoBehaviour
 
         SetupMaterial();
         meshRenderer.enabled = false;
+
+        playerController = FindFirstObjectByType<PlayerController>();
     }
 
     private void OnEnable()
@@ -216,6 +218,12 @@ public class EnemyVisionCone : MonoBehaviour
     private void CheckLineOfSight()
     {
         if (detectedPlayerTransform == null) return;
+
+        if (playerController != null && !playerController.IsInLight)
+        {
+            playerDetected = false;
+            return;
+        }
 
         Vector3 directionToPlayer = detectedPlayerTransform.position - transform.position;
         float distanceToPlayer = directionToPlayer.magnitude;
