@@ -56,6 +56,11 @@ public class CharacterMoodTool : EditorWindow
         _specularHardness = EditorGUILayout.Slider("Specular Hardness", _specularHardness, 0f, 1f);
         if (EditorGUI.EndChangeCheck()) ApplyToScene();
 
+        EditorGUILayout.Space(15);
+        if (GUILayout.Button("Bake to Build"))
+        {
+            BakeToDefaults();
+        }
     }
 
     void ApplyToScene()
@@ -73,7 +78,6 @@ public class CharacterMoodTool : EditorWindow
             Shader.SetGlobalFloat("_Char_SpecularHardness", 1f);
             return;
         }
-        
 
         Shader.SetGlobalColor("_Char_ShadowTint", _shadowTint);
         Shader.SetGlobalColor("_Char_HighlightTint", _highlightTint);
@@ -84,5 +88,50 @@ public class CharacterMoodTool : EditorWindow
         Shader.SetGlobalFloat("_Char_FresnelIntensity", _fresnelIntensity);
         Shader.SetGlobalColor("_Char_RimColour", _rimColour);
         Shader.SetGlobalFloat("_Char_SpecularHardness", _specularHardness);
+    }
+
+    void BakeToDefaults()
+    {
+        string path = "Assets/Maddie/Scripts/MoodShaderDefaults.cs";
+
+        string content =
+            @"using UnityEngine;
+
+public class MoodShaderDefaults : MonoBehaviour
+{
+    void Awake()
+    {
+        // Character globals - baked from CharacterMoodTool
+        Shader.SetGlobalColor(""_Char_ShadowTint"",         " + ColorToCode(_shadowTint) + @");
+        Shader.SetGlobalColor(""_Char_HighlightTint"",      " + ColorToCode(_highlightTint) + @");
+        Shader.SetGlobalFloat(""_Char_Saturation"",         " + _saturation + @"f);
+        Shader.SetGlobalFloat(""_Char_PulseSpeed"",         " + _pulseSpeed + @"f);
+        Shader.SetGlobalFloat(""_Char_EmissionMultiplier"", " + _emissionMultiplier + @"f);
+        Shader.SetGlobalInt  (""_Char_ToonSteps"",          " + _toonSteps + @");
+        Shader.SetGlobalFloat(""_Char_FresnelIntensity"",   " + _fresnelIntensity + @"f);
+        Shader.SetGlobalColor(""_Char_RimColour"",          " + ColorToCode(_rimColour) + @");
+        Shader.SetGlobalFloat(""_Char_SpecularHardness"",   " + _specularHardness + @"f);
+
+        // Environment globals - neutral until EnvironmentMoodTool is baked
+        Shader.SetGlobalColor(""_Env_ShadowTint"",         new Color(1f, 1f, 1f, 1f));
+        Shader.SetGlobalColor(""_Env_HighlightTint"",      new Color(1f, 1f, 1f, 1f));
+        Shader.SetGlobalFloat(""_Env_Saturation"",         1f);
+        Shader.SetGlobalFloat(""_Env_PulseSpeed"",         0f);
+        Shader.SetGlobalFloat(""_Env_EmissionMultiplier"", 1f);
+        Shader.SetGlobalInt  (""_Env_ToonSteps"",          8);
+        Shader.SetGlobalFloat(""_Env_FresnelIntensity"",   0f);
+        Shader.SetGlobalColor(""_Env_RimColour"",          new Color(0f, 0f, 0f, 1f));
+        Shader.SetGlobalFloat(""_Env_SpecularHardness"",   1f);
+    }
+}";
+
+        System.IO.File.WriteAllText(path, content);
+        AssetDatabase.Refresh();
+        Debug.Log("[MoodTool] Character values baked to MoodShaderDefaults.cs");
+    }
+
+    string ColorToCode(Color c)
+    {
+        return $"new Color({c.r}f, {c.g}f, {c.b}f, {c.a}f)";
     }
 }
