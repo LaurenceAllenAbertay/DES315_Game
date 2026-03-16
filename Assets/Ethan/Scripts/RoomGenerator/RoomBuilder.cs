@@ -179,13 +179,16 @@ public class RoomBuilder : MonoBehaviour
             buildRoom(room);
         }
 
-        //Bake NavMesh//
-        if(autoBakeNavMesh)
+        if(disableAgentsDuringBake)
         {
-            BakeNavMesh();
+            ReenableAgentsAfterBake();
+        }
+        else if(rebindAgentsAfterBake)
+        {
+            ReenableAgentsAfterBake();
         }
 
-        if(showDebugLogs)
+        if (showDebugLogs)
         {
             Debug.Log($"[RoomBuilder] Room building complete!");
         }
@@ -227,6 +230,21 @@ public class RoomBuilder : MonoBehaviour
         //Instantiate prefab at 1:1 scale//
         GameObject roomInstance = Instantiate(prefab, centerPos, Quaternion.identity, roomContainer.transform);
         roomInstance.name = $"Prefab_{roomLabel}_{sizeLabel}";
+
+        //Bake a navMeshSurface isolated to this room's children//
+        NavMeshSurface roomSurface = roomInstance.AddComponent<NavMeshSurface>();
+        roomSurface.agentTypeID = navMeshSurface != null ? navMeshSurface.agentTypeID : 0;
+        roomSurface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+        int mask = navMeshLayerMask;
+        if(excludePlayerAndEnemyLayers)
+        {
+            int playerLayer = LayerMask.NameToLayer("Player");
+            if (playerLayer >= 0) mask &= ~(1 << playerLayer);
+            int enemyLayer = LayerMask.NameToLayer("Enemy");
+            if (enemyLayer >= 0) mask &= ~(1 << enemyLayer);
+        }
+        roomSurface.layerMask = mask;
+        roomSurface.BuildNavMesh();
 
         if(showDebugLogs)
         {
@@ -294,6 +312,10 @@ public class RoomBuilder : MonoBehaviour
         if(navMeshSurface == null) return;
 
         ConfigureNavMeshSurface();
+
+        navMeshSurface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+        
+
         navMeshSurface.BuildNavMesh();
 
         if(disableAgentsDuringBake)
@@ -316,12 +338,20 @@ public class RoomBuilder : MonoBehaviour
         NavMeshAgent[] agents = FindObjectsByType<NavMeshAgent>(FindObjectsSortMode.None);
         foreach (NavMeshAgent agent in agents)
         {
-            if(agent == null || !agent.isActiveAndEnabled) continue;
-            if(agent.isOnNavMesh) continue;
+            if (agent == null || !agent.isActiveAndEnabled) continue;
 
-            if(NavMesh.SamplePosition(agent.transform.position, out NavMeshHit hit, agentRebindRadius, NavMesh.AllAreas))
+            if (showDebugLogs) Debug.Log($"[RoomBuilder] Agent {agent.name} isOnNavMesh:{agent.isOnNavMesh}"); //-EM//
+
+            if (agent.isOnNavMesh) continue;
+
+            if (NavMesh.SamplePosition(agent.transform.position, out NavMeshHit hit, agentRebindRadius, NavMesh.AllAreas))
             {
+                if (showDebugLogs) Debug.Log($"[RoomBuilder] Warping {agent.name} to NavMesh at {hit.position}"); //-EM//
                 agent.Warp(hit.position);
+            }
+            else
+            {
+                if (showDebugLogs) Debug.LogWarning($"[RoomBuilder] Could not find NavMesh near {agent.name} at {agent.transform.position}"); //-EM//
             }
         }
     }
@@ -357,8 +387,6 @@ public class RoomBuilder : MonoBehaviour
             int enemyLayer = LayerMask.NameToLayer("Enemy");
             if(enemyLayer >= 0) mask &= ~(1 << enemyLayer);
         }
-
-        navMeshSurface.layerMask = mask;
     }
 
     private void DisableAgentsForBake()

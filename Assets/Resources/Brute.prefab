@@ -320,9 +320,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 20
-  currentHealth: 0
+  currentHealth: 1
   currentBlock: 0
-  debugMode: 0
+  debugMode: 1
   icon: {fileID: 21300000, guid: c0996ec1d89930047a492a510d37c114, type: 3}
   visionCone: {fileID: 883052606427701706}
   lightCheckOffset: {x: 0, y: 1, z: 0}
@@ -342,15 +342,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  gruntMaxHealth: 40
+  gruntMaxHealth: 15
   gruntAttackDamage: 8
   gruntFlipChance: 65
   gruntMinRange: 4
   gruntMaxRange: 7
   gruntRetreatRange: 3
   gruntLightPenalty: 20
-  bruteMaxHealth: 120
-  bruteAttackDamage: 22
+  bruteMaxHealth: 30
+  bruteAttackDamage: 15
   bruteAttackRange: 2.5
   bruteFlipChance: 45
   thinkTime: 0.6
@@ -374,14 +374,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ee42fa0653acf4fb01e1f003ad9894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roamRadius: 0
-  minIdleTime: 99
-  maxIdleTime: 99
+  roamRadius: 30
+  minIdleTime: 2
+  maxIdleTime: 10
   alertRoamRadius: 4
   alertMaxIdleTime: 1.5
   combatEngageRange: 1.5
   chaseTimeout: 6
-  debugMode: 0
+  debugMode: 1
   currentState: 0
   currentDestination: {x: 0, y: 0, z: 0}
   idleTimer: 0

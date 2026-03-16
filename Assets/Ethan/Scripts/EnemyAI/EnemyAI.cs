@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using Unity.AI.Navigation;
+using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Video;
 
@@ -12,6 +14,8 @@ public class EnemyAI : MonoBehaviour
     [Header("Roaming Settings")]
     [Tooltip("How far from current position the enemy will roam")]
     public float roamRadius = 10f;
+    private float roamSettleTImer = 0f;
+    private const float ROAM_SETTLE_TIME = 0.3f;
 
     [Tooltip("Minimum time to wait at each desitination")]
     public float minIdleTime = 2f;
@@ -149,6 +153,12 @@ public class EnemyAI : MonoBehaviour
 
         enabled = true;
 
+        //Un-stopped the agent so th enemy can move//
+        if(ValidateAgent())
+        {
+            agent.isStopped = false;
+        }
+
         if (hasCombatStartTransform)
         {
             if (ValidateAgent())
@@ -171,13 +181,33 @@ public class EnemyAI : MonoBehaviour
 
     private void InitializeAI()
     {
-        if(!ValidateAgent())
+        if (!ValidateAgent())
         {
-            if (debugMode) Debug.LogError($"{gameObject.name}: Cannot initialize AI - NavMehsAgent is not on a valid NavMesh!");
+            if (debugMode) Debug.LogError($"{gameObject.name}: Cannot initialize - not on NavMesh!");
             enabled = false;
             return;
         }
 
+        if (!agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+                if (debugMode) Debug.Log($"{gameObject.name}: Warped to NavMesh at {hit.position}");
+            }
+            else
+            {
+                if (debugMode) Debug.LogWarning($"{gameObject.name}: No NavMesh found - disabling AI");
+                enabled = false;
+                return;
+            }
+        }
+        else
+        {
+            if (debugMode) Debug.Log($"{gameObject.name}: Already on NavMesh at {transform.position}"); //-EM//
+        }
+
+        agent.isStopped = false;
         currentState = AIState.Idle;
         idleTimer = Random.Range(minIdleTime, maxIdleTime);
         isInitialized = true;
@@ -231,17 +261,54 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    //private void HandleRoamingState()
+    //{
+    //    if (!ValidateAgent()) return;
+
+    //    //Give the agent a moment to start moving before checking arrival//
+    //    roamSettleTImer += Time.deltaTime;
+    //    if (roamSettleTImer < ROAM_SETTLE_TIME) return;
+
+
+    //    //Check if we've reached our destination//
+    //    if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+    //    {
+    //        if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+    //        {
+    //            StartIdling();
+    //        }
+    //    }
+    //}
+
     private void HandleRoamingState()
     {
         if (!ValidateAgent()) return;
 
-        //Check if we've reached our destination//
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        roamSettleTImer += Time.deltaTime;
+        if (roamSettleTImer < ROAM_SETTLE_TIME) return;
+
+        float distToDest = Vector3.Distance(transform.position, currentDestination);
+
+        if (distToDest <= 1.0f)
         {
-            if(!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+            StartIdling();
+            return;
+        }
+
+        //Stuck detection -EM//
+        if (agent.velocity.sqrMagnitude < 0.05f && roamSettleTImer > 2.0f)
+        {
+            if (debugMode) Debug.LogWarning($"{gameObject.name}: Stuck, warping to NavMesh and re-idling");
+
+            //Warp back to nearest valid NavMesh point -EM//
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 5f, NavMesh.AllAreas))
             {
-                StartIdling();
+                agent.Warp(hit.position);
             }
+
+            agent.ResetPath();
+            StartIdling();
+
         }
     }
 
@@ -300,6 +367,10 @@ public class EnemyAI : MonoBehaviour
     private void StartRoaming()
     {
         if (!ValidateAgent()) return;
+
+        roamSettleTImer = 0f;
+
+        agent.isStopped = false;
 
         //use tighter radius when alert//
         float radius = (currentState == AIState.Alert) ? alertRoamRadius : roamRadius;
@@ -405,20 +476,47 @@ public class EnemyAI : MonoBehaviour
     }
     private Vector3 GetRandomNavMeshPointWithRadius(float radius)
     {
-        //Try to find a random point on the NavMesh within roam radius//
-        for (int i = 0; i < 30; i++) //Try up to 30x//
+        //Find which room this enemy is in -EM//
+        RoomLA myRoom = null;
+        foreach (var room in FindObjectsByType<RoomLA>(FindObjectsSortMode.None))
         {
-            Vector3 randomDirection = Random.insideUnitSphere * radius;
-            randomDirection += transform.position;
+            if (room.Contains(transform.position))
+            {
+                myRoom = room;
+                break;
+            }
+        }
 
-            NavMeshHit hit;
-            if (NavMesh.SamplePosition(randomDirection, out hit, radius, NavMesh.AllAreas))
+        if (myRoom == null)
+        {
+            if (debugMode) Debug.LogWarning($"{gameObject.name}: Not inside any RoomLA bounds!");
+            return Vector3.zero;
+        }
+
+        //Get the room's collider bounds for XZ clamping -EM//
+        Bounds roomBounds = new Bounds();
+        foreach (Collider col in myRoom.BoundaryColliders)
+        {
+            if (col == null) continue;
+            roomBounds.Encapsulate(col.bounds);
+        }
+
+        for (int i = 0; i < 30; i++)
+        {
+            //Pick random point within room bounds at floor height -EM//
+            float randX = Random.Range(roomBounds.min.x, roomBounds.max.x);
+            float randZ = Random.Range(roomBounds.min.z, roomBounds.max.z);
+            Vector3 candidate = new Vector3(randX, transform.position.y, randZ);
+
+            if (!myRoom.Contains(candidate)) continue;
+
+            if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 1.5f, NavMesh.AllAreas))
             {
                 return hit.position;
             }
         }
 
-        if (debugMode) Debug.LogWarning($"{gameObject.name} couldn't find valid NavMesh point within {roamRadius} units");
+        if (debugMode) Debug.LogWarning($"{gameObject.name}: Could not find valid point within room bounds");
         return Vector3.zero;
     }
 
