@@ -46,6 +46,12 @@ public class InventoryUI : MonoBehaviour
             inventoryAction.performed += OnInventory;
             inventoryAction.Enable();
         }
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted += OnCombatStarted;
+            CombatManager.Instance.OnCombatEnded += OnCombatEnded;
+        }
     }
 
     private void OnDisable()
@@ -55,6 +61,23 @@ public class InventoryUI : MonoBehaviour
             inventoryAction.performed -= OnInventory;
             inventoryAction.Disable();
         }
+
+        if (CombatManager.Instance != null)
+        {
+            CombatManager.Instance.OnCombatStarted -= OnCombatStarted;
+            CombatManager.Instance.OnCombatEnded -= OnCombatEnded;
+        }
+    }
+
+    private void OnCombatStarted(List<Enemy> enemies)
+    {
+        SetUIActive(false);
+        if (inventoryButton != null) inventoryButton.SetActive(false);
+    }
+
+    private void OnCombatEnded(CombatManager.CombatOutcome outcome)
+    {
+        if (inventoryButton != null) inventoryButton.SetActive(true);
     }
 
     private void OnInventory(InputAction.CallbackContext context) => Toggle();
@@ -62,6 +85,7 @@ public class InventoryUI : MonoBehaviour
     public void Toggle()
     {
         if (root == null) return;
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat) return;
 
         bool show = !root.activeSelf;
         SetUIActive(show);

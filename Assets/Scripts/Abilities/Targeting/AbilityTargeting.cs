@@ -694,6 +694,11 @@ public class AbilityTargeting : MonoBehaviour
                 continue;
             }
 
+            if (!CheckLineOfSight(origin, unit.transform.position))
+            {
+                continue;
+            }
+
             seenUnits.Add(unit);
             targets.Add(unit);
         }
