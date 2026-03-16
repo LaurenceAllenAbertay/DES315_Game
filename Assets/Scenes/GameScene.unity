@@ -3001,7 +3001,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2.500122, y: 0}
+  m_AnchoredPosition: {x: -2.5, y: 0}
   m_SizeDelta: {x: 5, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &589689600
@@ -6082,6 +6082,9 @@ MonoBehaviour:
   walkableMask:
     serializedVersion: 2
     m_Bits: 128
+  occluderMask:
+    serializedVersion: 2
+    m_Bits: 8
   lightCheckOffset: {x: 0, y: 0.1, z: 0}
   lightCheckRadius: 0.3
   maxMoveDistance: 14
