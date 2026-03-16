@@ -10,9 +10,9 @@ public class EnvironmentMoodTool : EditorWindow
     private float _pulseSpeed = 1f;
     private float _emissionMultiplier = 1f;
     private int _toonSteps = 4;
-    private float _fresnelIntensity = 0.5f;
+    private float _fresnelIntensity = 0f;
     private Color _rimColour = Color.white;
-    private float _specularHardness = 0.5f;
+    private float _specularHardness = 0f;
     private bool _toolEnabled = false;
 
     [MenuItem("Tools/Environment Mood Tool")]

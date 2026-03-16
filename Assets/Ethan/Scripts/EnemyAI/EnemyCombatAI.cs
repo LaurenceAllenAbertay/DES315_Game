@@ -95,7 +95,7 @@ public class EnemyCombatAI : MonoBehaviour
     {
        enemy = GetComponent<Enemy>();
        agent = GetComponent<NavMeshAgent>();
-        animController = GetComponent<Brute_AnimController>();
+        animController = GetComponentInChildren<Brute_AnimController>();
         if (agent != null)
        {
            originalStoppingDistance = agent.stoppingDistance;
