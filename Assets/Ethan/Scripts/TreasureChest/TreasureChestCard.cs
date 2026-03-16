@@ -2,7 +2,6 @@ using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 //Individual card UI elelement for item selection, shows item icon, name and description -EM//
 public class TreasureChestCard : MonoBehaviour

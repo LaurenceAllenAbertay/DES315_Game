@@ -180,11 +180,12 @@ public class HardShadowFeature : ScriptableRendererFeature
 
         public HardShadowOverlayPass(Material mat, Settings s)
         {
-            material       = mat;
-            settings       = s;
-            lightPositions = new Vector4[s.maxLights];
-            lightRanges    = new float[s.maxLights];
-            lightIndices   = new float[s.maxLights];
+            material                    = mat;
+            settings                    = s;
+            lightPositions              = new Vector4[s.maxLights];
+            lightRanges                 = new float[s.maxLights];
+            lightIndices                = new float[s.maxLights];
+            requiresIntermediateTexture = true;
         }
 
         private class PassData
@@ -199,9 +200,6 @@ public class HardShadowFeature : ScriptableRendererFeature
         {
             var resourceData = frameData.Get<UniversalResourceData>();
             var cameraData   = frameData.Get<UniversalCameraData>();
-
-            if (resourceData.isActiveTargetBackBuffer)
-                return;
 
             int lightCount = GatherAndUploadLights(frameData);
 
