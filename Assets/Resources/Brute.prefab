@@ -381,7 +381,7 @@ MonoBehaviour:
   maxIdleTime: 10
   alertRoamRadius: 4
   alertMaxIdleTime: 1.5
-  combatEngageRange: 1.5
+  combatEngageRange: 0.1
   chaseTimeout: 6
   debugMode: 1
   currentState: 0
@@ -424,12 +424,12 @@ NavMeshAgent:
   m_GameObject: {fileID: 3961211913289936245}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.7
+  m_Radius: 2.5
   m_Speed: 5
   m_Acceleration: 120
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 0.1
+  m_StoppingDistance: 2
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

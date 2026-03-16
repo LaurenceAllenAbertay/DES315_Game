@@ -1639,6 +1639,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1100755875304801368, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: combatEngageRange
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2895476920334390502, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8
@@ -1688,8 +1692,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5452007818771334953, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: m_Radius
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5452007818771334953, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5452007818771334953, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: avoidancePriority
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8925485147563509332, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
+      propertyPath: postActionDelay
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -3907123726844778780, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
@@ -6032,7 +6048,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
