@@ -263,15 +263,6 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
 
-                // Spend movement coin if not already spent
-                if (!player.HasSpentMovementCoin)
-                {
-                    if (!player.SpendMovementCoin())
-                    {
-                        if (debugMode) Debug.Log("[PlayerController] Failed to spend movement coin");
-                        return;
-                    }
-                }
             }
             else
             {

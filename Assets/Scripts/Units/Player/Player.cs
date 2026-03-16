@@ -275,12 +275,6 @@ public class Player : Unit
     {
         if (!isInCombat) return true;
         
-        // If haven't spent movement coin yet, need at least 1 coin
-        if (!hasSpentMovementCoin && currentCoins < 1)
-        {
-            return false;
-        }
-
         // Check if there's distance remaining
         return distanceMovedThisTurn < MaxCombatMoveDistance;
     }

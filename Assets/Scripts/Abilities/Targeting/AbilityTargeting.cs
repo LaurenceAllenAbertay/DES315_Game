@@ -485,12 +485,6 @@ public class AbilityTargeting : MonoBehaviour
                 RotateCasterToward(toAoeTarget.normalized);
             }
 
-            if (!HasLineOfSightToPoint(currentCaster.transform.position, targetPoint))
-            {
-                ClearHighlight();
-                return;
-            }
-
             List<Unit> targets = GetUnitsInRadius(targetPoint, currentAbilityAoeRadius, currentAbilityAoeHeight);
             SetHighlightsForUnits(targets);
         }
@@ -575,14 +569,6 @@ public class AbilityTargeting : MonoBehaviour
         if (aoeVisualizer == null || currentCaster == null) return;
 
         Vector3 center = aoeVisualizer.CurrentPosition;
-        if (!HasLineOfSightToPoint(currentCaster.transform.position, center))
-        {
-            if (debugMode)
-            {
-                Debug.Log("[AbilityTargeting] AOE cast blocked by line of sight");
-            }
-            return;
-        }
 
         List<Unit> targets = GetUnitsInRadius(center, currentAbilityAoeRadius, currentAbilityAoeHeight);
 
