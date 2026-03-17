@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b2bbf3fada98249b2f2339557b2ead, type: 3}
   m_Name: ShadowStep
   m_EditorClassIdentifier: 
-  targetSelf: 0
-  clonePrefab: {fileID: 0}
-  cloneLifetime: 10
+  targetSelf: 1
   maxSearchAttempts: 50
   navMeshSampleDistance: 5
   minTeleportDistance: 2
   raycastStartHeight: 10
+  wallClearance: 0.2
   requireCasterInLight: 1
