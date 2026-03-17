@@ -693,6 +693,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pausePanel: {fileID: 1001836030}
+  resumeButton: {fileID: 0}
+  restartRunButton: {fileID: 0}
+  settingsButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
+  quitButton: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   pauseActionName: TogglePauseMenu
   mainMenuSceneName: MainMenu
@@ -902,7 +907,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.1
+  m_VoxelSize: 0.06666667
   m_MinRegionArea: 1
   m_NavMeshData: {fileID: 23800000, guid: da6cd6d6dca4af44985c034ed6f8aa61, type: 2}
   m_BuildHeightMesh: 0
@@ -3117,6 +3122,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401876984}
   m_Mesh: {fileID: 4289507729932207123, guid: 73a5b8523205fa8408e84dc1405b81fd, type: 3}
+--- !u!1 &420218383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 420218385}
+  - component: {fileID: 420218384}
+  m_Layer: 0
+  m_Name: WwiseGlobal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &420218384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420218383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7312abfc1bb0f74babeb8bd8558251a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitializationSettings: {fileID: 11400000, guid: 9e33c4840bca47a42a84615748a2508d, type: 2}
+  basePath: 
+  language: 
+  defaultPoolSize: 0
+  lowerPoolSize: 0
+  streamingPoolSize: 0
+  memoryCutoffThreshold: 0
+  monitorPoolSize: 0
+  monitorQueuePoolSize: 0
+  callbackManagerBufferSize: 0
+  spatialAudioPoolSize: 0
+  maxSoundPropagationDepth: 0
+  engineLogging: 0
+--- !u!4 &420218385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420218383}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &435050147
 GameObject:
   m_ObjectHideFlags: 0
@@ -7464,6 +7526,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   infiniteHealth: 0
   infiniteCoins: 0
+  showFinalRoom: 0
+  finalRoomArrow: {fileID: 0}
 --- !u!114 &950211812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7901,7 +7965,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71cad2bb3c4f352459d2cb915b58a75a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugMode: 1
 --- !u!1 &979088654
 GameObject:
   m_ObjectHideFlags: 0
@@ -10747,15 +10810,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1779377415}
-  statusText: {fileID: 735488061}
-  statusIndicator: {fileID: 951882371}
   shadowOverlay: {fileID: 1408837567}
-  lightColor: {r: 1, g: 0.9, b: 0.5, a: 1}
-  shadowColor: {r: 0.2, g: 0.2, b: 0.4, a: 1}
-  colorTransitionSpeed: 5
+  shadowBorder: {fileID: 0}
   overlayTransitionSpeed: 2
-  maxShadowAlpha: 0.75
-  initialOverlayFadeDuration: 3
+  maxOverlayAlpha: 0.7
+  overlayLightScale: 2
+  borderTransitionSpeed: 3
+  maxBorderAlpha: 1
 --- !u!1 &1317663864
 GameObject:
   m_ObjectHideFlags: 0
@@ -11740,9 +11801,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1437648970}
   - component: {fileID: 1437648969}
-  - component: {fileID: 1437648968}
   - component: {fileID: 1437648971}
   - component: {fileID: 1437648972}
+  - component: {fileID: 1437648974}
+  - component: {fileID: 1437648973}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -11750,14 +11812,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1437648968
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1437648967}
-  m_Enabled: 1
 --- !u!20 &1437648969
 Camera:
   m_ObjectHideFlags: 0
@@ -11883,11 +11937,50 @@ MonoBehaviour:
   moveSpeed: 8
   fastMoveMultiplier: 2
   rotateSpeed: 0.3
+  offsetVector: {x: 0, y: -6, z: 5}
   player: {fileID: 1779377417}
   maxDistanceFromPlayer: 15
+  playerController: {fileID: 0}
+  followLerpSpeed: 8
   roomManager: {fileID: 51621939}
   roomClampPadding: 1
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+--- !u!114 &1437648973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437648967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d29ad5c2a903414fbb2b9c839f65f1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDefaultListener: 1
+  listenerId: 0
+--- !u!114 &1437648974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437648967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a62b75398863341868ec694927b4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_listeners:
+    initialListenerList: []
+    useDefaultListeners: 1
+  isEnvironmentAware: 0
+  isStaticObject: 0
+  m_positionOffsetData:
+    KeepMe: 0
+    positionOffset: {x: 0, y: 0, z: 0}
+  m_posOffsetData: {fileID: 0}
+  listenerMask: 1
 --- !u!1 &1439026089
 GameObject:
   m_ObjectHideFlags: 0
@@ -15644,7 +15737,6 @@ MonoBehaviour:
   coinPrefab: {fileID: 8230219826058003220, guid: fcdfbb6fa84427f4fbaa54ed2b7f32a5, type: 3}
   coinParent: {fileID: 1868648727}
   player: {fileID: 233694642}
-  outOfCoinsText: {fileID: 1662913771}
   destroyDelay: 1
   fillStepDelay: 0.05
 --- !u!114 &1868648729
@@ -15724,6 +15816,7 @@ MonoBehaviour:
   uiRoot: {fileID: 320559540}
   cardContainer: {fileID: 161554549}
   cardPrefab: {fileID: 7496308736789289923, guid: 2169d626a610b8b42909658b5da503b0, type: 3}
+  replacePromptLabel: {fileID: 0}
   cardSpawnDelay: 0.15
   debugMode: 1
 --- !u!1 &1906914789
@@ -16127,8 +16220,11 @@ MonoBehaviour:
   root: {fileID: 929272531}
   contentRoot: {fileID: 708861073}
   itemPrefab: {fileID: 1482560410135912450, guid: c8674ceca78084a41b280353c0fce0a7, type: 3}
+  inventoryButton: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   itemManager: {fileID: 1576573009}
+  abilityManager: {fileID: 0}
+  abilitySlotUI: {fileID: 0}
 --- !u!1 &1974522005
 GameObject:
   m_ObjectHideFlags: 0
@@ -18459,9 +18555,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df5730ff343769468d65666bb1a1e9a, type: 2}
   - {fileID: 11400000, guid: d470fb85667438246945bb1adf147278, type: 2}
   - {fileID: 11400000, guid: e982d64170881e147a12defeac44583c, type: 2}
+  abilityPool: []
+  minAbilityCards: 1
+  maxAbilityCards: 2
   itemChoiceCount: 3
   chestUI: {fileID: 0}
   interactionPrompt: {fileID: 3090699156396919470}
+  chestModel: {fileID: 0}
   chestAnimator: {fileID: 0}
   openSound: {fileID: 8300000, guid: 6d8904e4447cb134a9382b065452a48b, type: 3}
   audioSource: {fileID: 8253360074976029184}
@@ -18489,9 +18589,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df5730ff343769468d65666bb1a1e9a, type: 2}
   - {fileID: 11400000, guid: d470fb85667438246945bb1adf147278, type: 2}
   - {fileID: 11400000, guid: e982d64170881e147a12defeac44583c, type: 2}
+  abilityPool: []
+  minAbilityCards: 1
+  maxAbilityCards: 2
   itemChoiceCount: 3
   chestUI: {fileID: 0}
   interactionPrompt: {fileID: 3090699155735876767}
+  chestModel: {fileID: 0}
   chestAnimator: {fileID: 0}
   openSound: {fileID: 8300000, guid: 6d8904e4447cb134a9382b065452a48b, type: 3}
   audioSource: {fileID: 8253360075671450673}
@@ -21943,3 +22047,4 @@ SceneRoots:
   - {fileID: 1512805851}
   - {fileID: 1565509335}
   - {fileID: 233694641}
+  - {fileID: 420218385}

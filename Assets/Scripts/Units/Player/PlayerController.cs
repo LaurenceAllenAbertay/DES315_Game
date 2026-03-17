@@ -277,7 +277,6 @@ public class PlayerController : MonoBehaviour
                 agent.SetDestination(navHit.position);
                 lowVelocityTimer = 0f;
                 ShowDestinationIndicator(navHit.position);
-                TutorialManager.Instance?.Trigger("first_move");
             }
         }
     }
@@ -433,6 +432,7 @@ public class PlayerController : MonoBehaviour
             if (!isMoving)
             {
                 HideDestinationIndicator();
+                TutorialManager.Instance?.Trigger("first_move");
             }
         }
     }

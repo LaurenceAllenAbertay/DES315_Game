@@ -15,15 +15,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "StopMovement",
-                    "type": "Button",
-                    "id": "a635fa50-7ac9-4dfc-85bd-b871f01df7f8",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "PointerPosition",
                     "type": "Value",
                     "id": "2b074c5d-d102-4b14-9ff8-ba44e5f80763",
@@ -66,6 +57,15 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CancelAbility",
+                    "type": "Button",
+                    "id": "9a30d5f7-de60-434d-ace5-4591009ef9c5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap",
                     "initialStateCheck": false
                 },
                 {
@@ -123,17 +123,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c3c39914-3f50-4a95-8682-3932a168a850",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "StopMovement",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -244,6 +233,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "FlipCoinForAction",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bd318ab7-4070-4a5c-9456-0f728ba74676",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CancelAbility",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
