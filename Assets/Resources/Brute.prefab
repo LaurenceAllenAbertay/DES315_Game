@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60118e8f7df4cac46a91f2a03dcf0b7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
+  maxHealth: 150
   currentHealth: 1
   currentBlock: 0
   debugMode: 1
@@ -351,9 +351,9 @@ MonoBehaviour:
   gruntMaxRange: 7
   gruntRetreatRange: 3
   gruntLightPenalty: 20
-  bruteMaxHealth: 30
+  bruteMaxHealth: 150
   bruteAttackDamage: 15
-  bruteAttackRange: 2.5
+  bruteAttackRange: 1.5
   bruteFlipChance: 45
   thinkTime: 0.6
   postActionDelay: 0.5
