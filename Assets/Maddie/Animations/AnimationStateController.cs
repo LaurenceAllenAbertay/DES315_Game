@@ -22,6 +22,8 @@ public class AnimationStateController : MonoBehaviour
 
     private float currentCrouchBlend = 0f;
     private bool isCasting = false;
+    private bool hasEnteredCastState = false;
+    public bool IsCasting => isCasting;
 
     private void Awake()
     {
@@ -94,22 +96,28 @@ public class AnimationStateController : MonoBehaviour
         animator.SetBool(IsCastingHash, true);
 
         isCasting = true;
+        hasEnteredCastState = false;
     }
 
     private void HandleCastingState()
     {
         if (!isCasting) return;
 
-        // Check if the Animator has finished the cast state and returned to idle
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        bool inCastState = stateInfo.IsTag("Cast"); // tag your cast states with "Cast" in the Animator
+        bool inCastState = stateInfo.IsTag("Cast");
 
-        if (!inCastState)
+        if (inCastState)
+        {
+            hasEnteredCastState = true;
+            agent.isStopped = true;
+        }
+
+        if (hasEnteredCastState && !inCastState)
         {
             isCasting = false;
+            hasEnteredCastState = false;
             animator.SetBool(IsCastingHash, false);
 
-            // Re-enable the agent after casting is done
             if (agent != null)
                 agent.isStopped = false;
         }
