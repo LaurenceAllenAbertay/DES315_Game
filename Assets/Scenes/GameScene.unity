@@ -6560,6 +6560,10 @@ MonoBehaviour:
   lightCheckOffset: {x: 0, y: 0.1, z: 0}
   lightCheckRadius: 0.3
   minMoveDistance: 0.67
+  holdMoveLookAhead: 1.5
+  holdMoveMinSpeedDistance: 0.25
+  holdMoveMaxSpeedDistance: 3
+  holdMoveMinSpeedFraction: 0.15
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
   movementLockSeconds: 1.67
   targetingSystem: {fileID: 0}

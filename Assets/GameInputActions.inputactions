@@ -15,6 +15,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "HoldMove",
+                    "type": "Button",
+                    "id": "90993881-b309-4809-82e6-3d36abe0cf7e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "PointerPosition",
                     "type": "Value",
                     "id": "2b074c5d-d102-4b14-9ff8-ba44e5f80763",
@@ -244,6 +253,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "CancelAbility",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "51ced9cb-0bd1-46a5-94f8-46a03f451097",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldMove",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

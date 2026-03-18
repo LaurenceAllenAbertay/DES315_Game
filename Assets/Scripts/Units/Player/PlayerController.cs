@@ -18,6 +18,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Movement Range")]
     public float minMoveDistance = 0.3f;
+    [Tooltip("Extra distance added in the cursor direction while hold-moving, so the player walks through the cursor rather than stopping at it")]
+    public float holdMoveLookAhead = 1.5f;
+    [Tooltip("Cursor distance at which hold-move speed reaches minimum")]
+    public float holdMoveMinSpeedDistance = 1f;
+    [Tooltip("Cursor distance at which hold-move speed reaches full agent speed")]
+    public float holdMoveMaxSpeedDistance = 6f;
+    [Tooltip("Minimum speed fraction when cursor is very close (0–1)")]
+    [Range(0f, 1f)] public float holdMoveMinSpeedFraction = 0.15f;
 
     //Input system updated - EM//
     [Header("Input Actions")]
@@ -64,9 +72,13 @@ public class PlayerController : MonoBehaviour
 
     //Input Actions - EM//
     private InputAction moveAction;
+    private InputAction holdMoveAction;
     private InputAction stopMovementAction;
     private InputAction pointerPositionAction;
     private InputAction endTurnAction;
+
+    private bool isHoldMoving;
+    private float agentBaseSpeed;
 
     private GameObject destinationIndicatorInstance;
 
@@ -103,6 +115,7 @@ public class PlayerController : MonoBehaviour
         {
             var playerMap = inputActions.FindActionMap("Player");
             moveAction = playerMap.FindAction("Move");
+            holdMoveAction = playerMap.FindAction("HoldMove");
             stopMovementAction = playerMap.FindAction("StopMovement");
             pointerPositionAction = playerMap.FindAction("PointerPosition");
             endTurnAction = playerMap.FindAction("EndTurn");
@@ -122,6 +135,13 @@ public class PlayerController : MonoBehaviour
         {
             moveAction.performed += OnMovePerformed;
             moveAction.Enable();
+        }
+
+        if (holdMoveAction != null)
+        {
+            holdMoveAction.performed += OnHoldMoveStarted;
+            holdMoveAction.canceled += OnHoldMoveCanceled;
+            holdMoveAction.Enable();
         }
 
         if (stopMovementAction != null)
@@ -151,6 +171,13 @@ public class PlayerController : MonoBehaviour
             moveAction.Disable();
         }
 
+        if (holdMoveAction != null)
+        {
+            holdMoveAction.performed -= OnHoldMoveStarted;
+            holdMoveAction.canceled -= OnHoldMoveCanceled;
+            holdMoveAction.Disable();
+        }
+
         if (stopMovementAction != null)
         {
             stopMovementAction.performed -= OnStopMovement;
@@ -174,6 +201,7 @@ public class PlayerController : MonoBehaviour
         UpdateLightState();
         lastFramePosition = transform.position;
         movementUnlockTime = Time.unscaledTime + movementLockSeconds;
+        agentBaseSpeed = agent.speed;
     }
 
     private void Update()
@@ -186,6 +214,14 @@ public class PlayerController : MonoBehaviour
         if (!CanPlayerAct() && agent.hasPath)
         {
             StopMovement();
+        }
+
+        if (isHoldMoving)
+        {
+            if (IsTargetingActive() || !CanPlayerAct() || Time.unscaledTime < movementUnlockTime)
+                isHoldMoving = false;
+            else
+                UpdateHoldMovement();
         }
         
         // Track movement distance in combat
@@ -282,8 +318,77 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Track movement distance during combat
+    /// Continuously moves the player toward the cursor position each frame while the button is held.
+    /// Speed and look-ahead both scale with cursor distance so the player decelerates as the cursor gets close.
+    /// Occluders are intentionally ignored — hold-move reads the ground directly beneath the cursor.
     /// </summary>
+    private void UpdateHoldMovement()
+    {
+        if (isPointerOverUI) return;
+        if (mainCamera == null) return;
+        if (pointerPositionAction == null) return;
+
+        Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
+        Ray ray = mainCamera.ScreenPointToRay(pointerPos);
+
+        if (!Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
+        {
+            agent.speed = agentBaseSpeed;
+            return;
+        }
+
+        Vector3 targetPoint = hit.point;
+
+        Vector3 toTarget = targetPoint - transform.position;
+        toTarget.y = 0f;
+        float cursorDistance = toTarget.magnitude;
+
+        float t = Mathf.InverseLerp(holdMoveMinSpeedDistance, holdMoveMaxSpeedDistance, cursorDistance);
+        agent.speed = Mathf.Lerp(agentBaseSpeed * holdMoveMinSpeedFraction, agentBaseSpeed, t);
+
+        if (cursorDistance > 0.001f)
+            targetPoint += (toTarget / cursorDistance) * (holdMoveLookAhead * t);
+
+        bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+        if (inCombat)
+        {
+            if (player == null || !player.CanMove()) return;
+            float remainingDistance = player.RemainingMoveDistance;
+            if (remainingDistance <= 0.01f) return;
+            float requestedDistance = Vector3.Distance(transform.position, targetPoint);
+            if (requestedDistance > remainingDistance) return;
+        }
+
+        if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+        {
+            agent.isStopped = false;
+            agent.SetDestination(navHit.position);
+            lowVelocityTimer = 0f;
+        }
+    }
+
+    private void OnHoldMoveStarted(InputAction.CallbackContext context)
+    {
+        if (isPointerOverUI) return;
+        if (Time.unscaledTime < movementUnlockTime) return;
+        if (!CanPlayerAct()) return;
+        if (IsTargetingActive()) return;
+
+        isHoldMoving = true;
+        agent.speed = agentBaseSpeed;
+        HideDestinationIndicator();
+        agent.isStopped = true;
+        agent.ResetPath();
+    }
+
+    private void OnHoldMoveCanceled(InputAction.CallbackContext context)
+    {
+        isHoldMoving = false;
+        agent.speed = agentBaseSpeed;
+        StopMovement();
+    }
+
+
     private void TrackMovementDistance()
     {
         if (player == null) return;
