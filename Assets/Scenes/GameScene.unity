@@ -7789,6 +7789,9 @@ MonoBehaviour:
   overlayLightScale: 2
   borderTransitionSpeed: 3
   maxBorderAlpha: 1
+  cameraController: {fileID: 0}
+  distanceFadeStart: 15
+  distanceFadeEnd: 25
 --- !u!1 &1314640703
 GameObject:
   m_ObjectHideFlags: 0
@@ -8712,13 +8715,14 @@ MonoBehaviour:
   fastMoveMultiplier: 2
   rotateSpeed: 0.3
   offsetVector: {x: 0, y: -6, z: 11}
-  player: {fileID: 0}
+  player: {fileID: 1107796543}
   maxDistanceFromPlayer: 15
   playerController: {fileID: 0}
   followLerpSpeed: 8
   roomManager: {fileID: 51621939}
   roomClampPadding: 1
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  carouselPanSpeed: 8
 --- !u!114 &1437648973
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
 
     [Header("Rotation Settings")]
     public float rotateSpeed = 0.3f;
+    
     [Tooltip("Pivot offset in camera local space (forward = +Z, down = -Y)")]
     public Vector3 offsetVector = new Vector3(0f, -6f, 5f);
 
@@ -39,6 +40,7 @@ public class CameraController : MonoBehaviour
     private InputAction rotateAction;
     private InputAction rotateDeltaAction;
 
+    public Vector3 PivotPoint => pivotPoint;
     private bool isRotating;
     [Header("Carousel Pan")]
     [SerializeField] private float carouselPanSpeed = 8f;
@@ -52,6 +54,7 @@ public class CameraController : MonoBehaviour
     private float cameraPitch;
     private float currentYaw;
     private Vector3? lerpPanTarget;
+    
 
     //Input actions awake -EM//
     private void Awake()

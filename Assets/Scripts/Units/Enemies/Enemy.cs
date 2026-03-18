@@ -22,11 +22,16 @@ public class Enemy : Unit
     [Tooltip("Material applied to all renderers while the enemy is hidden in shadow.")]
     [SerializeField] private Material hiddenMaterial;
 
+    [Header("Distance Hiding")]
+    [Tooltip("Enemies beyond this distance from the player will have their model hidden. Set to 0 to disable.")]
+    [SerializeField] private float farHideDistance = 20f;
+
     private PlayerController playerController;
     private Renderer[] modelRenderers;
     private Material[][] originalMaterials;
     private bool hasBeenRevealed;
     private bool hiddenMaterialApplied;
+    private bool isHiddenByDistance;
     private float visibilityTimer;
 
     public bool IsHiddenFromPlayer => hiddenMaterialApplied;
@@ -84,6 +89,7 @@ public class Enemy : Unit
         }
 
         UpdateVisibility();
+        UpdateDistanceVisibility();
     }
 
     private void UpdateVisibility()
@@ -99,6 +105,25 @@ public class Enemy : Unit
         if (!hiddenMaterialApplied)
         {
             ApplyHiddenMaterial();
+        }
+    }
+
+    /// <summary>
+    /// Toggles renderer visibility based on distance from the player, independent of the shadow material system.
+    /// </summary>
+    private void UpdateDistanceVisibility()
+    {
+        if (playerController == null || farHideDistance <= 0f) return;
+
+        float distSqr = (transform.position - playerController.transform.position).sqrMagnitude;
+        bool shouldHide = distSqr > farHideDistance * farHideDistance;
+
+        if (shouldHide == isHiddenByDistance) return;
+
+        isHiddenByDistance = shouldHide;
+        foreach (Renderer r in modelRenderers)
+        {
+            if (r != null) r.enabled = !isHiddenByDistance;
         }
     }
 
