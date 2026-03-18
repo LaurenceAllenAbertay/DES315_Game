@@ -106,97 +106,59 @@ public class TeleportEffect : AbilityEffect
     {
         result = Vector3.zero;
 
-        //Get the boundfs of the room from its colliders to know where to sample//
         Bounds roomBounds = GetRoomBounds(room);
 
         int failedContains = 0;
-        int failedFloor = 0;
-        int failedDistance = 0;
         int failedNavMesh = 0;
-        int failedWall = 0;
+        int failedDistance = 0;
         int failedLight = 0;
 
-        for(int i = 0; i < maxSearchAttempts; i++)
+        for (int i = 0; i < maxSearchAttempts; i++)
         {
-            //Pick a random point within the room's XZ bounds//
+            //Pick a random XZ point within the room's bounds//
             float randomX = Random.Range(roomBounds.min.x, roomBounds.max.x);
             float randomZ = Random.Range(roomBounds.min.z, roomBounds.max.z);
-            Vector3 candidate = new Vector3(randomX, roomBounds.center.y, randomZ);
 
-            //Must be inside the collider//
+            //Use the caster's Y as the floor level - player is always on the floor//
+            Vector3 candidate = new Vector3(randomX, casterPosition.y, randomZ);
+
+            //Must be inside the room boundary at floor level//
             if (!room.Contains(candidate))
             {
                 failedContains++;
                 continue;
             }
 
-            //Raycast downward from above to find the actual floor Y//
-            Vector3 rayOrigin = new Vector3(randomX, casterPosition.y + raycastStartHeight, randomZ);
-            if(!Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit floorHit, raycastStartHeight + 5f))
-            {
-                failedFloor++;
-                continue;
-            }
-
-            //Reject if the surface is not flat//
-            if(Vector3.Dot(floorHit.normal, Vector3.up) < 0.9f)
-            {
-                failedFloor++;
-                continue;
-            }
-
-            //Reject if the surface is a prop or non-ground object//
-            if (floorHit.collider.gameObject.layer != LayerMask.NameToLayer("Ground"))
-            {
-                failedFloor++;
-                continue;
-            }
-
-            //use the actual floor position for navMesh sampling//
-            Vector3 floorPosition = floorHit.point;
-
             //Must be far enough from the player//
-            if (Vector3.Distance(floorPosition, casterPosition) < minTeleportDistance)
+            if (Vector3.Distance(candidate, casterPosition) < minTeleportDistance)
             {
                 failedDistance++;
                 continue;
             }
 
-            //Must be on the navMesh//
-            //Vector3 sampleOrigin = floorPosition + Vector3.up * 0.5f;
-
-            NavMeshHit navHit;
-            NavMesh.SamplePosition(floorPosition + Vector3.up * 0.5f, out navHit, navMeshSampleDistance, NavMesh.AllAreas);
-            Vector3 teleportPos = navHit.hit ? navHit.position : floorPosition; 
-
-            if (float.IsInfinity(teleportPos.x) || float.IsInfinity(teleportPos.z))
+            //Must land on the NavMesh//
+            if (!NavMesh.SamplePosition(candidate, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
             {
                 failedNavMesh++;
                 continue;
             }
 
-            ////Check proximity to wall//
-            //int groundLayer = LayerMask.NameToLayer("Ground");
-            //int wallCheskMask = ~(1 << groundLayer); //Exclude ground so floor doesn't block the check//
-            //if(Physics.CheckSphere(navHit.position + Vector3.up * 1.5f, wallClearance, ~0))
-            //{
-            //    failedWall++;
-            //    continue;
-            //}
+            Vector3 teleportPos = navHit.position; 
 
-            //Must be in the shadow//
+            //Must be in shadow/
             if (LightDetectionManager.Instance != null && LightDetectionManager.Instance.IsPointInLight(teleportPos))
             {
                 failedLight++;
                 continue;
             }
 
-            //All checks passed//
-            Debug.Log($"[TeleportEffect] Found shadow point at {teleportPos} after {i + 1} attempts");
+            Debug.Log($"[TeleportEffect] Found shadow point at {teleportPos} after {i + 1} attempts"); 
             result = teleportPos;
             return true;
         }
-        Debug.Log($"[TeleportEffect] Search failed after {maxSearchAttempts} attempts - " + $"Contains:{failedContains} Floor:{failedFloor} Distance:{failedDistance} NavMesh:{failedNavMesh} Wall:{failedWall} Light:{failedLight}");
+
+        Debug.Log($"[TeleportEffect] Search failed after {maxSearchAttempts} attempts - " +
+                  $"Contains:{failedContains} Distance:{failedDistance} NavMesh:{failedNavMesh} Light:{failedLight}");
         return false;
     }
 

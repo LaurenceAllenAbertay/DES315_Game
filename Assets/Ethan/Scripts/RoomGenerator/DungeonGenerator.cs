@@ -212,40 +212,51 @@ public class DungeonGenerator : MonoBehaviour
     {
         bool[,] proccessed = new bool[gridSize, gridSize];
 
-        for (int x = 0; x < gridSize - 1; x++)
+        //Pass 0: guarantee at least one 2x2 per room type//
+        //Tracks which types have already been guaranteed a 2x2 this pass//
+        HashSet<int> guaranteedTypes = new HashSet<int>();
+
+        for (int type = 1; type <= roomTypeCount; type++)
         {
-            for (int y = 0; y < gridSize - 1; y++)
+            //Scan the entire grid looking for the first valid 2x2 of this type//
+            bool found = false;
+            for (int x = 0; x < gridSize && !found; x++)
             {
-                if (!grid[x, y].isFinalRoom) continue;
+                for (int y = 0; y < gridSize && !found; y++)
+                {
+                    if (!grid[x, y].isOccupied || proccessed[x, y]) continue;
+                    if (grid[x, y].roomType != type) continue;
 
-                //Check all 4 cells are final room and unprocessed -EM//
-                if (!grid[x, y].isOccupied || proccessed[x, y]) continue;
-                if (!grid[x + 1, y].isOccupied || proccessed[x + 1, y]) continue;
-                if (!grid[x, y + 1].isOccupied || proccessed[x, y + 1]) continue;
-                if (!grid[x + 1, y + 1].isOccupied || proccessed[x + 1, y + 1]) continue;
+                    if (CanMerge(x, y, 2, 2, type, proccessed))
+                    {
+                        List<Vector2Int> cells = new List<Vector2Int>
+                    {
+                        new Vector2Int(x, y),
+                        new Vector2Int(x + 1, y),
+                        new Vector2Int(x, y + 1),
+                        new Vector2Int(x + 1, y + 1)
+                    };
 
-                if (!grid[x + 1, y].isFinalRoom) continue;
-                if (!grid[x, y + 1].isFinalRoom) continue;
-                if (!grid[x + 1, y + 1].isFinalRoom) continue;
+                        foreach (Vector2Int cell in cells)
+                            proccessed[cell.x, cell.y] = true;
 
-                List<Vector2Int> cells = new List<Vector2Int>
-            {
-                new Vector2Int(x, y),
-                new Vector2Int(x + 1, y),
-                new Vector2Int(x, y + 1),
-                new Vector2Int(x + 1, y + 1)
-            };
+                        rooms.Add(new Room(cells, type, false));
+                        guaranteedTypes.Add(type);
+                        found = true;
 
-                foreach (Vector2Int cell in cells)
-                    proccessed[cell.x, cell.y] = true;
-
-                rooms.Add(new Room(cells, grid[x, y].roomType, false, true));
-                if (showDebugLogs) Debug.Log($"[DungeonGenerator] Final room claimed as 2x2 at ({x},{y})");
-                break;
+                        if (showDebugLogs)
+                            Debug.Log($"[DungeonGenerator] Pass 0: Guaranteed 2x2 for type {type} at ({x},{y})");
+                    }
+                }
             }
+
+            //Warn if a type had no valid 2x2 available on this seed//
+            if (!found && showDebugLogs)
+                Debug.LogWarning($"[DungeonGenerator] Pass 0: Could not guarantee a 2x2 for type {type} - not enough clustered cells. Consider raising typeClusterChance or gridSize.");
         }
 
-        //Pass 1: find and claim all valid 2x2 merges//
+
+        //Pass 1: greedily claim any remaining valid 2x2 merges//
         for (int x = 0; x < gridSize; x++)
         {
             for (int y = 0; y < gridSize; y++)
@@ -254,37 +265,36 @@ public class DungeonGenerator : MonoBehaviour
 
                 int roomType = grid[x, y].roomType;
 
-                //Only try 2x2 - skip lobbies, the stay 1x1//
-                if (!grid[x,y].isLobby && CanMerge(x,y,2,2,roomType, proccessed))
+                //Only try 2x2 - skip lobbies, they stay 1x1//
+                if (!grid[x, y].isLobby && CanMerge(x, y, 2, 2, roomType, proccessed))
                 {
                     List<Vector2Int> cells = new List<Vector2Int>
-                    {
-                        new Vector2Int(x,y),
-                        new Vector2Int(x+1,y),
-                        new Vector2Int(x,y+1),
-                        new Vector2Int(x+1,y+1)
-                    };
+                {
+                    new Vector2Int(x,y),
+                    new Vector2Int(x+1,y),
+                    new Vector2Int(x,y+1),
+                    new Vector2Int(x+1,y+1)
+                };
 
-                    foreach(Vector2Int cell in cells)
+                    foreach (Vector2Int cell in cells)
                     {
                         proccessed[cell.x, cell.y] = true;
                     }
 
-                    bool isFinal = grid[x, y].isFinalRoom;
-                    rooms.Add(new Room(cells, roomType, false, isFinal));
+                    rooms.Add(new Room(cells, roomType, false));
                 }
             }
         }
 
         //Pass 2: any cell not yet claimed becomes a 1x1//
-        for(int x = 0; x < gridSize; x++)
+        for (int x = 0; x < gridSize; x++)
         {
-            for(int y = 0;y < gridSize; y++)
+            for (int y = 0; y < gridSize; y++)
             {
-                if (!grid[x,y].isOccupied || proccessed[x,y]) continue;
+                if (!grid[x, y].isOccupied || proccessed[x, y]) continue;
 
                 proccessed[x, y] = true;
-                rooms.Add(new Room(new List<Vector2Int> { new Vector2Int(x, y) }, grid[x, y].roomType, grid[x, y].isLobby, grid[x, y].isFinalRoom));
+                rooms.Add(new Room(new List<Vector2Int> { new Vector2Int(x, y) }, grid[x, y].roomType, grid[x, y].isLobby));
             }
         }
 
@@ -298,7 +308,8 @@ public class DungeonGenerator : MonoBehaviour
                 if (r.gridCells.Count == 1) count1x1++;
                 else if (r.gridCells.Count == 4) count2x2++;
             }
-        Debug.Log($"[DungeonGenerator ]Room merging complete: {rooms.Count} rooms ({count2x2} x 2x2, {count1x1} x 1x1)");
+            Debug.Log($"[DungeonGenerator] Room merging complete: {rooms.Count} rooms ({count2x2} x 2x2, {count1x1} x 1x1) | Guaranteed types: {string.Join(", ", guaranteedTypes)}"); //-EM//
+
         }
     }
 
