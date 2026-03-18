@@ -40,6 +40,9 @@ public class CameraController : MonoBehaviour
     private InputAction rotateDeltaAction;
 
     private bool isRotating;
+    [Header("Carousel Pan")]
+    [SerializeField] private float carouselPanSpeed = 8f;
+
     private bool isFollowingPlayer;
     private bool isFastMoving;
     private Vector3 desiredMoveDirection;
@@ -48,6 +51,7 @@ public class CameraController : MonoBehaviour
     private Vector3 pivotPoint;
     private float cameraPitch;
     private float currentYaw;
+    private Vector3? lerpPanTarget;
 
     //Input actions awake -EM//
     private void Awake()
@@ -151,6 +155,7 @@ public class CameraController : MonoBehaviour
         CachePanInput();
         CacheRotationInput();
         ApplyPlayerFollow();
+        ApplyLerpPan();
         ApplyPan();
         ApplyRotation();
         ApplyCameraTransform();
@@ -196,6 +201,8 @@ public class CameraController : MonoBehaviour
             desiredMoveSpeed = 0f;
             return;
         }
+
+        lerpPanTarget = null;
 
         Vector3 forward = transform.forward;
         forward.y = 0f;
@@ -433,11 +440,30 @@ public class CameraController : MonoBehaviour
     }
 
     //Instantly snap the camera to be centred over the player -EM//
+    private void ApplyLerpPan()
+    {
+        if (lerpPanTarget == null) return;
+
+        Vector3 target = new Vector3(lerpPanTarget.Value.x, pivotPoint.y, lerpPanTarget.Value.z);
+        pivotPoint = Vector3.Lerp(pivotPoint, target, carouselPanSpeed * Time.deltaTime);
+
+        if (Vector3.Distance(new Vector3(pivotPoint.x, 0f, pivotPoint.z), new Vector3(target.x, 0f, target.z)) < 0.01f)
+        {
+            pivotPoint = target;
+            lerpPanTarget = null;
+        }
+    }
+
     public void SnapToPlayer()
     {
         if (player == null) return;
 
         pivotPoint = new Vector3(player.position.x, pivotPoint.y, player.position.z);
         ApplyCameraTransform();
+    }
+
+    public void PanToPosition(Vector3 worldPosition)
+    {
+        lerpPanTarget = worldPosition;
     }
 }

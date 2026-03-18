@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     [Header("UI")]
     [SerializeField] private Image unitIconImage;
@@ -13,6 +13,7 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
     private Unit unit;
     private bool isHovering;
     private AbilityTargeting abilityTargeting;
+    private CameraController cameraController;
 
     private void Awake()
     {
@@ -28,6 +29,7 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
         }
 
         abilityTargeting = FindFirstObjectByType<AbilityTargeting>();
+        cameraController = FindFirstObjectByType<CameraController>();
 
         SetTurnIndicatorActive(false);
     }
@@ -156,6 +158,14 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
     public void OnPointerExit(PointerEventData eventData)
     {
         ClearHoverOverride();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (unit == null || cameraController == null) return;
+        if (abilityTargeting != null && abilityTargeting.IsTargeting) return;
+
+        cameraController.PanToPosition(unit.transform.position);
     }
 
     private void ClearHoverOverride()
