@@ -37,6 +37,7 @@ public class CombatCarouselUI : MonoBehaviour
             combatManager.OnCombatEnded += HandleCombatEnded;
             combatManager.OnTurnStarted += HandleTurnStarted;
             combatManager.OnTurnEnded += HandleTurnEnded;
+            combatManager.OnRoundStarted += HandleRoundStarted;
 
             if (combatManager.InCombat)
             {
@@ -58,6 +59,7 @@ public class CombatCarouselUI : MonoBehaviour
             combatManager.OnCombatEnded -= HandleCombatEnded;
             combatManager.OnTurnStarted -= HandleTurnStarted;
             combatManager.OnTurnEnded -= HandleTurnEnded;
+            combatManager.OnRoundStarted -= HandleRoundStarted;
         }
 
         ClearEntries();
@@ -89,6 +91,16 @@ public class CombatCarouselUI : MonoBehaviour
     {
         CleanupNullEntries();
         SetCurrentTurnIndicator(unit, false);
+        SetEntryCompleted(unit, true);
+    }
+
+    private void HandleRoundStarted(int round)
+    {
+        CleanupNullEntries();
+        foreach (CombatCarouselEntry entry in entries)
+        {
+            entry.SetCompletedState(false);
+        }
     }
 
     private void HandleCombatEnded(CombatManager.CombatOutcome outcome)
@@ -165,6 +177,20 @@ public class CombatCarouselUI : MonoBehaviour
             if (entry.Unit == unit)
             {
                 entry.SetTurnIndicatorActive(isActive);
+                return;
+            }
+        }
+    }
+
+    private void SetEntryCompleted(Unit unit, bool completed)
+    {
+        if (unit == null) return;
+
+        foreach (CombatCarouselEntry entry in entries)
+        {
+            if (entry != null && entry.Unit == unit)
+            {
+                entry.SetCompletedState(completed);
                 return;
             }
         }

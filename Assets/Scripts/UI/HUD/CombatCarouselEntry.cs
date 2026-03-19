@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI")]
     [SerializeField] private Image unitIconImage;
@@ -10,10 +10,16 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private GameObject currentTurnIndicator;
     [SerializeField] private HealthUI healthUI;
 
+    [Header("Active Turn")]
+    [SerializeField] private Vector3 activeTurnScale = new Vector3(1.3f, 1.3f, 1f);
+
+    [Header("Completed Turn")]
+    [SerializeField] private Color completedTintColor = new Color(0.45f, 0.45f, 0.45f, 1f);
+
+    private static readonly Vector3 DefaultScale = new Vector3(0.8f, 0.8f, 1f);
+
     private Unit unit;
     private bool isHovering;
-    private AbilityTargeting abilityTargeting;
-    private CameraController cameraController;
 
     private void Awake()
     {
@@ -28,8 +34,12 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
             healthUI = FindFirstObjectByType<HealthUI>();
         }
 
-        abilityTargeting = FindFirstObjectByType<AbilityTargeting>();
-        cameraController = FindFirstObjectByType<CameraController>();
+        // Pivot at top-centre so scaling expands downward, away from the screen edge
+        RectTransform rt = GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.pivot = new Vector2(0.5f, 1f);
+        }
 
         SetTurnIndicatorActive(false);
     }
@@ -136,23 +146,27 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             currentTurnIndicator.SetActive(isActive);
         }
+
+        transform.localScale = isActive ? activeTurnScale : DefaultScale;
+    }
+
+    public void SetCompletedState(bool completed)
+    {
+        if (unitIconImage != null)
+        {
+            unitIconImage.color = completed ? completedTintColor : Color.white;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (unit == null) return;
+        if (healthUI == null || unit == null)
+        {
+            return;
+        }
 
         isHovering = true;
-
-        if (healthUI != null)
-        {
-            healthUI.SetExternalOverride(unit);
-        }
-
-        if (abilityTargeting != null && abilityTargeting.IsTargeting)
-        {
-            abilityTargeting.SetCarouselHoverUnit(unit);
-        }
+        healthUI.SetExternalOverride(unit);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -160,28 +174,18 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
         ClearHoverOverride();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (unit == null || cameraController == null) return;
-        if (abilityTargeting != null && abilityTargeting.IsTargeting) return;
-
-        cameraController.PanToPosition(unit.transform.position);
-    }
-
     private void ClearHoverOverride()
     {
-        if (!isHovering) return;
+        if (!isHovering)
+        {
+            return;
+        }
 
         isHovering = false;
 
         if (healthUI != null)
         {
             healthUI.ClearExternalOverride(unit);
-        }
-
-        if (abilityTargeting != null)
-        {
-            abilityTargeting.ClearCarouselHoverUnit();
         }
     }
 

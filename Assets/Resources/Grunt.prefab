@@ -322,12 +322,13 @@ MonoBehaviour:
   currentHealth: 0
   currentBlock: 0
   debugMode: 0
-  icon: {fileID: 21300000, guid: 40cf7a7c72ded7e449bafac9f12585c2, type: 3}
+  icon: {fileID: 21300000, guid: 3ea44bf9ac4dde747bceecce7e20a51d, type: 3}
   visionCone: {fileID: 106782857013349786}
   lightCheckOffset: {x: 0, y: 1, z: 0}
   revealDistance: 3.14159
   visibilityCheckInterval: 0.1
   hiddenMaterial: {fileID: 0}
+  farHideDistance: 20
 --- !u!114 &8568050635138050564
 MonoBehaviour:
   m_ObjectHideFlags: 0

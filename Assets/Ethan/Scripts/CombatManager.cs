@@ -22,6 +22,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private bool debugMode = true;
 
     private readonly List<Unit> subscribedUnits = new List<Unit>();
+    private int roundNumber = 0;
 
     //Events//
     public delegate void CombatStarted(List<Enemy> enemies);
@@ -35,6 +36,9 @@ public class CombatManager : MonoBehaviour
 
     public delegate void TurnEnded(Unit unit);
     public event TurnEnded OnTurnEnded;
+
+    public delegate void RoundStarted(int round);
+    public event RoundStarted OnRoundStarted;
 
     public delegate void PhaseChanged(CombatPhase newPhase);
     public event PhaseChanged OnPhaseChanged;
@@ -103,6 +107,7 @@ public class CombatManager : MonoBehaviour
         }
 
         inCombat = true;
+        roundNumber = 0;
         SetPhase(CombatPhase.CombatStarting);
 
         if (debugMode) Debug.Log($"[CombatManager] Starting combat with {enemies.Count} enemies!");
@@ -287,10 +292,19 @@ public class CombatManager : MonoBehaviour
         //Move to next turn//
         currentTurnIndex = (currentTurnIndex + 1) % turnOrder.Count;
 
-        //If we've completed a full round, log it//
-        if (currentTurnIndex == 0 && debugMode)
+        if (currentTurnIndex == 0)
         {
-            Debug.Log("[CombatManager] ==== Round Completed ====");
+            roundNumber++;
+            OnRoundStarted?.Invoke(roundNumber);
+
+            if (debugMode)
+            {
+                Debug.Log($"[CombatManager] ==== Round {roundNumber} Starting ====");
+            }
+        }
+        else if (debugMode && currentTurnIndex == 1)
+        {
+            // kept for legacy log parity — round completed log now fires above
         }
 
         StartNextTurn();
