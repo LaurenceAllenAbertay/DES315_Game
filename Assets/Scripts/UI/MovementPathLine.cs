@@ -24,7 +24,7 @@ public class MovementPathLine : MonoBehaviour
     [SerializeField] private float lineWidth = 0.05f;
     [SerializeField] private float lineHeightOffset = 0.02f;
     [Tooltip("Match this to PlayerController's minMoveDistance — line hides when remaining movement is below this")]
-    [SerializeField] private float minMoveDistance = 0.3f;
+    [SerializeField] private float minMoveDistance = 0.67f;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI outOfRangeText;

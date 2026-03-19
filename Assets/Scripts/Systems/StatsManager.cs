@@ -24,7 +24,6 @@ public class StatsManager : MonoBehaviour
     [Header("Base Player Stats")]
     public float maxHealth = 100f;
     public int baseCoins = 5;
-    public int carryoverCoins = 1;
     public float maxCombatMoveDistance = 5f;
 
     [Header("Run Modifiers")]
