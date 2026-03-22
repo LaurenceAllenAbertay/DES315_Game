@@ -5,16 +5,18 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Draws a NavMesh-following path line from the player to the mouse cursor during the player's
-/// combat turn. White along the reachable portion, red beyond the remaining move distance.
-/// Shows a TextMeshProUGUI warning when the cursor is out of range.
+/// Draws a NavMesh-following path line from the player to the mouse cursor (or active destination
+/// while moving). Uses two separate LineRenderers so the white/red split is a hard material colour
+/// swap with no gradient blending — compatible with any shader. Only the tip fades to transparent.
+/// Active during the player's combat turn, or outside combat when ShowVisibilityFeatures is held.
 /// </summary>
-[RequireComponent(typeof(LineRenderer))]
 public class MovementPathLine : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Player player;
+    [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private InputActionAsset inputActions;
 
     [Header("Floor Raycast")]
     [Tooltip("Match this to PlayerController's walkableMask")]
@@ -23,161 +25,284 @@ public class MovementPathLine : MonoBehaviour
     [Header("Line Appearance")]
     [SerializeField] private float lineWidth = 0.05f;
     [SerializeField] private float lineHeightOffset = 0.02f;
-    [Tooltip("Match this to PlayerController's minMoveDistance — line hides when remaining movement is below this")]
-    [SerializeField] private float minMoveDistance = 0.67f;
+    [Tooltip("Match this to PlayerController's minMoveDistance")]
+    [SerializeField] private float minMoveDistance = 0.3f;
+    [Tooltip("World-unit pull-back distance on each segment before rounding a corner")]
+    [SerializeField] private float cornerRadius = 0.4f;
+    [Tooltip("Bezier steps per rounded corner")]
+    [SerializeField] [Range(2, 20)] private int cornerSteps = 8;
+    [Tooltip("World-space distance over which the line tip fades to transparent")]
+    [SerializeField] private float tipFadeDistance = 0.3f;
+    [Tooltip("Material used for both line segments — any transparent unlit material works")]
+    [SerializeField] private Material lineMaterial;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI outOfRangeText;
     [SerializeField] private string outOfRangeMessage = "Movement out of range.";
 
-    private LineRenderer lineRenderer;
+    private LineRenderer whiteRenderer;
+    private LineRenderer redRenderer;
     private NavMeshPath navPath;
-
-    private static readonly Color ColorInRange    = Color.white;
-    private static readonly Color ColorOutOfRange = Color.red;
+    private InputAction showVisibilityAction;
 
     private void Awake()
     {
-        lineRenderer = GetComponent<LineRenderer>();
         navPath = new NavMeshPath();
-        lineRenderer.useWorldSpace = true;
-        lineRenderer.startWidth    = lineWidth;
-        lineRenderer.endWidth      = lineWidth;
-        lineRenderer.positionCount = 0;
-        lineRenderer.enabled       = false;
 
-        if (mainCamera == null)
-            mainCamera = Camera.main;
+        if (mainCamera == null) mainCamera = Camera.main;
+        if (player == null)    player    = FindFirstObjectByType<Player>();
+        if (agent == null)     agent     = player != null ? player.GetComponent<NavMeshAgent>() : null;
 
-        if (player == null)
-            player = FindFirstObjectByType<Player>();
+        if (inputActions != null)
+        {
+            var map = inputActions.FindActionMap("Player");
+            showVisibilityAction = map?.FindAction("ShowVisibilityFeatures");
+        }
 
         if (walkableMask.value == 0)
             walkableMask = ~0;
+
+        whiteRenderer = GetOrCreateRenderer("WhiteLine", Color.white);
+        redRenderer   = GetOrCreateRenderer("RedLine",   Color.red);
+    }
+
+    private LineRenderer GetOrCreateRenderer(string childName, Color colour)
+    {
+        Transform existing = transform.Find(childName);
+        GameObject go = existing != null ? existing.gameObject : new GameObject(childName);
+        go.transform.SetParent(transform, false);
+
+        LineRenderer lr = go.GetComponent<LineRenderer>();
+        if (lr == null) lr = go.AddComponent<LineRenderer>();
+
+        lr.useWorldSpace   = true;
+        lr.startWidth      = lineWidth;
+        lr.endWidth        = lineWidth;
+        lr.positionCount   = 0;
+        lr.enabled         = false;
+        lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        lr.receiveShadows  = false;
+
+        // Instance the material and set the colour directly — works with any shader
+        if (lineMaterial != null)
+        {
+            lr.material         = new Material(lineMaterial);
+            float originalAlpha = lineMaterial.color.a;
+            lr.material.color   = new Color(colour.r, colour.g, colour.b, originalAlpha);
+        }
+        else
+        {
+            lr.material       = new Material(Shader.Find("Sprites/Default"));
+            lr.material.color = colour;
+        }
+
+        return lr;
+    }
+
+    private void OnEnable()
+    {
+        showVisibilityAction?.Enable();
     }
 
     private void OnDisable()
     {
-        HideLine();
-        SetOutOfRangeText(false);
+        showVisibilityAction?.Disable();
+        HideAll();
     }
 
     private void Update()
     {
         if (!ShouldShow())
         {
-            HideLine();
+            HideAll();
             SetOutOfRangeText(false);
             return;
         }
 
-        Vector3? mouseFloorPoint = GetMouseFloorPoint();
-        if (mouseFloorPoint == null)
+        Vector3? target = GetTarget();
+        if (target == null)
         {
-            HideLine();
+            HideAll();
             SetOutOfRangeText(false);
             return;
         }
 
-        DrawNavMeshLine(mouseFloorPoint.Value);
+        DrawNavMeshLine(target.Value);
     }
 
     /// <summary>
-    /// Calculates the NavMesh path to the mouse point and draws the line along the corners,
-    /// splitting colour at the remaining-range boundary.
+    /// Returns the destination to draw toward: the agent's active destination while moving,
+    /// otherwise the mouse floor point.
     /// </summary>
-    private void DrawNavMeshLine(Vector3 mousePoint)
+    private Vector3? GetTarget()
+    {
+        if (agent != null && agent.hasPath && !agent.isStopped)
+            return agent.destination;
+
+        return GetMouseFloorPoint();
+    }
+
+    /// <summary>
+    /// Calculates the NavMesh path to the target, smooths corners, then populates the two
+    /// LineRenderers: white up to remaining range, red beyond.
+    /// </summary>
+    private void DrawNavMeshLine(Vector3 target)
     {
         Vector3 origin = player.transform.position;
 
-        NavMesh.CalculatePath(origin, mousePoint, NavMesh.AllAreas, navPath);
+        NavMesh.CalculatePath(origin, target, NavMesh.AllAreas, navPath);
 
         if (navPath.status == NavMeshPathStatus.PathInvalid || navPath.corners.Length < 2)
         {
-            HideLine();
+            HideAll();
             SetOutOfRangeText(false);
             return;
         }
 
         Vector3[] corners = navPath.corners;
-
-        float totalPathLength = 0f;
-        for (int i = 0; i < corners.Length - 1; i++)
-            totalPathLength += Vector3.Distance(corners[i], corners[i + 1]);
-
-        float remaining  = Mathf.Max(0f, player.RemainingMoveDistance);
-        bool  outOfRange = totalPathLength > remaining;
-
-        List<Vector3> points = new List<Vector3>(corners.Length);
+        List<Vector3> elevated = new List<Vector3>(corners.Length);
         for (int i = 0; i < corners.Length; i++)
-            points.Add(new Vector3(corners[i].x, corners[i].y + lineHeightOffset, corners[i].z));
+            elevated.Add(new Vector3(corners[i].x, corners[i].y + lineHeightOffset, corners[i].z));
+
+        List<Vector3> smooth = BuildRoundedCornerPath(elevated);
+
+        float totalLength = 0f;
+        for (int i = 0; i < smooth.Count - 1; i++)
+            totalLength += Vector3.Distance(smooth[i], smooth[i + 1]);
+
+        bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+        float remaining = inCombat ? Mathf.Max(0f, player.RemainingMoveDistance) : float.MaxValue;
+        bool outOfRange = totalLength > remaining;
 
         if (!outOfRange)
         {
-            SetLinePoints(points, BuildGradient(ColorInRange, ColorInRange));
+            SetRenderer(whiteRenderer, smooth, tipFadeDistance);
+            HideRenderer(redRenderer);
             SetOutOfRangeText(false);
         }
         else
         {
-            List<Vector3> splitPoints = BuildSplitPoints(points, remaining, out float splitT);
-            SetLinePoints(splitPoints, BuildSplitGradient(splitT, ColorInRange, ColorOutOfRange));
+            SplitPath(smooth, remaining, out List<Vector3> whitePart, out List<Vector3> redPart);
+            SetRenderer(whiteRenderer, whitePart, 0f);
+            SetRenderer(redRenderer,   redPart,   tipFadeDistance);
             SetOutOfRangeText(true);
         }
     }
 
     /// <summary>
-    /// Walks the corner list and inserts an extra point exactly at the range boundary.
-    /// Returns the normalised position of that split along the full line length (used for the gradient).
+    /// Splits the smoothed point list at the remaining-distance boundary into two separate lists.
     /// </summary>
-    private List<Vector3> BuildSplitPoints(List<Vector3> points, float remaining, out float splitT)
+    private static void SplitPath(List<Vector3> points, float remaining,
+        out List<Vector3> before, out List<Vector3> after)
     {
-        float totalLength = 0f;
-        for (int i = 0; i < points.Count - 1; i++)
-            totalLength += Vector3.Distance(points[i], points[i + 1]);
+        before = new List<Vector3>();
+        after  = new List<Vector3>();
 
-        List<Vector3> result = new List<Vector3>(points.Count + 1);
-        splitT = 0f;
         float accumulated = 0f;
-        bool  inserted    = false;
+        bool  split       = false;
 
         for (int i = 0; i < points.Count - 1; i++)
         {
-            result.Add(points[i]);
+            float segLen  = Vector3.Distance(points[i], points[i + 1]);
+            float nextAcc = accumulated + segLen;
 
-            if (!inserted)
+            if (!split)
             {
-                float segLen = Vector3.Distance(points[i], points[i + 1]);
-                float nextAcc = accumulated + segLen;
+                before.Add(points[i]);
 
-                if (accumulated < remaining && nextAcc >= remaining)
+                if (nextAcc >= remaining)
                 {
-                    float t       = segLen > 0f ? (remaining - accumulated) / segLen : 0f;
-                    Vector3 split = Vector3.Lerp(points[i], points[i + 1], t);
-                    result.Add(split);
-                    splitT   = totalLength > 0f ? remaining / totalLength : 0.5f;
-                    inserted = true;
+                    float t          = segLen > 0f ? (remaining - accumulated) / segLen : 0f;
+                    Vector3 splitPt  = Vector3.Lerp(points[i], points[i + 1], t);
+                    before.Add(splitPt);
+                    after.Add(splitPt);
+                    split = true;
                 }
+            }
+            else
+            {
+                after.Add(points[i]);
+            }
 
-                accumulated = nextAcc;
+            accumulated = nextAcc;
+        }
+
+        if (!split)
+            before.Add(points[points.Count - 1]);
+        else
+            after.Add(points[points.Count - 1]);
+    }
+
+    /// <summary>
+    /// Assigns points to a LineRenderer and builds an alpha-only gradient that fades the tip to
+    /// transparent over tipFade world units. Pass tipFade=0 for a fully opaque line.
+    /// </summary>
+    private static void SetRenderer(LineRenderer lr, List<Vector3> points, float tipFade)
+    {
+        if (points == null || points.Count < 2)
+        {
+            HideRenderer(lr);
+            return;
+        }
+
+        lr.positionCount = points.Count;
+        lr.SetPositions(points.ToArray());
+        lr.colorGradient = BuildAlphaFadeGradient(points, tipFade);
+        lr.enabled       = true;
+    }
+
+    private static void HideRenderer(LineRenderer lr)
+    {
+        lr.enabled       = false;
+        lr.positionCount = 0;
+    }
+
+    /// <summary>
+    /// Gradient that is fully opaque, fading to transparent only at the tip over tipFade world units.
+    /// Colour is driven entirely by the material, not the gradient.
+    /// </summary>
+    private static Gradient BuildAlphaFadeGradient(List<Vector3> points, float tipFade)
+    {
+        var g = new Gradient();
+
+        if (tipFade <= 0f || points.Count < 2)
+        {
+            g.SetKeys(
+                new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+                new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) }
+            );
+            return g;
+        }
+
+        // Walk backwards by world distance to find the index-fraction for fade start
+        float accumulated = 0f;
+        float fadeStartT  = 0f;
+        for (int i = points.Count - 1; i > 0; i--)
+        {
+            accumulated += Vector3.Distance(points[i], points[i - 1]);
+            if (accumulated >= tipFade)
+            {
+                fadeStartT = (i - 1) / (float)(points.Count - 1);
+                break;
             }
         }
 
-        result.Add(points[points.Count - 1]);
-        return result;
+        g.SetKeys(
+            new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+            new[]
+            {
+                new GradientAlphaKey(1f, 0f),
+                new GradientAlphaKey(1f, fadeStartT),
+                new GradientAlphaKey(0f, 1f),
+            }
+        );
+        return g;
     }
 
-    private void SetLinePoints(List<Vector3> points, Gradient gradient)
+    private void HideAll()
     {
-        lineRenderer.positionCount = points.Count;
-        lineRenderer.SetPositions(points.ToArray());
-        lineRenderer.colorGradient = gradient;
-        lineRenderer.enabled       = true;
-    }
-
-    private void HideLine()
-    {
-        lineRenderer.enabled       = false;
-        lineRenderer.positionCount = 0;
+        if (whiteRenderer != null) HideRenderer(whiteRenderer);
+        if (redRenderer   != null) HideRenderer(redRenderer);
     }
 
     private void SetOutOfRangeText(bool visible)
@@ -189,12 +314,9 @@ public class MovementPathLine : MonoBehaviour
 
     private Vector3? GetMouseFloorPoint()
     {
-        if (mainCamera == null) return null;
-        if (Mouse.current == null) return null;
+        if (mainCamera == null || Mouse.current == null) return null;
 
-        Vector2 screenPos = Mouse.current.position.ReadValue();
-        Ray ray = mainCamera.ScreenPointToRay(screenPos);
-
+        Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (!Physics.Raycast(ray, out RaycastHit hit, 200f, walkableMask))
             return null;
 
@@ -207,45 +329,62 @@ public class MovementPathLine : MonoBehaviour
 
     private bool ShouldShow()
     {
-        if (player == null || CombatManager.Instance == null) return false;
-        if (!CombatManager.Instance.InCombat || !CombatManager.Instance.IsPlayerTurn) return false;
-        if (!player.CanMove()) return false;
-        return player.RemainingMoveDistance > minMoveDistance;
-    }
+        if (player == null) return false;
 
-    private static Gradient BuildGradient(Color start, Color end)
-    {
-        var g = new Gradient();
-        g.SetKeys(
-            new[] { new GradientColorKey(start, 0f), new GradientColorKey(end, 1f) },
-            new[] { new GradientAlphaKey(1f,    0f), new GradientAlphaKey(1f,  1f) }
-        );
-        return g;
+        if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
+        {
+            if (!CombatManager.Instance.IsPlayerTurn) return false;
+            if (!player.CanMove()) return false;
+            return player.RemainingMoveDistance > minMoveDistance;
+        }
+
+        return showVisibilityAction != null && showVisibilityAction.IsPressed();
     }
 
     /// <summary>
-    /// Hard colour split at splitT: white before, red after.
+    /// Rounds each NavMesh corner with a quadratic bezier. Pulls back cornerRadius along each
+    /// segment then curves through the corner as the control handle — no looping possible.
     /// </summary>
-    private static Gradient BuildSplitGradient(float splitT, Color inRange, Color outOfRange)
+    private List<Vector3> BuildRoundedCornerPath(List<Vector3> controls)
     {
-        const float epsilon = 0.0001f;
-        float safeT = Mathf.Clamp(splitT, epsilon, 1f - epsilon);
+        List<Vector3> result = new List<Vector3>();
 
-        var g = new Gradient();
-        g.SetKeys(
-            new[]
+        if (controls.Count < 2) return new List<Vector3>(controls);
+        if (controls.Count == 2) { result.AddRange(controls); return result; }
+
+        result.Add(controls[0]);
+
+        for (int i = 1; i < controls.Count - 1; i++)
+        {
+            Vector3 prev = controls[i - 1];
+            Vector3 curr = controls[i];
+            Vector3 next = controls[i + 1];
+
+            Vector3 inDir  = (curr - prev).normalized;
+            Vector3 outDir = (next - curr).normalized;
+
+            float r  = Mathf.Min(cornerRadius, Vector3.Distance(prev, curr) * 0.5f,
+                                               Vector3.Distance(curr, next) * 0.5f);
+            Vector3 p0 = curr - inDir  * r;
+            Vector3 p2 = curr + outDir * r;
+
+            result.Add(p0);
+
+            for (int step = 1; step <= cornerSteps; step++)
             {
-                new GradientColorKey(inRange,    0f),
-                new GradientColorKey(inRange,    safeT),
-                new GradientColorKey(outOfRange, safeT + epsilon),
-                new GradientColorKey(outOfRange, 1f),
-            },
-            new[]
-            {
-                new GradientAlphaKey(1f, 0f),
-                new GradientAlphaKey(1f, 1f),
+                float t  = step / (float)cornerSteps;
+                float it = 1f - t;
+                result.Add(it * it * p0 + 2f * it * t * curr + t * t * p2);
             }
-        );
-        return g;
+        }
+
+        result.Add(controls[controls.Count - 1]);
+        return result;
+    }
+
+    private void OnDestroy()
+    {
+        if (whiteRenderer != null) Destroy(whiteRenderer.material);
+        if (redRenderer   != null) Destroy(redRenderer.material);
     }
 }
