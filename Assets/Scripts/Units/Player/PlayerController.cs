@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Click Settings")]
     public LayerMask walkableMask = ~0;
-    [Tooltip("Objects on these layers block movement clicks — clicks landing on them are ignored")]
+    [Tooltip("Objects on these layers block movement clicks - clicks landing on them are ignored")]
     public LayerMask occluderMask;
 
     [Header("Light Detection")]
