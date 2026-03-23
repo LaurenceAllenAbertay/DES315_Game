@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Singleton that owns the minimap's composite Texture2D.
+/// When a room is entered for the first time: a MinimapRoomData component is added
+/// to it, the room is scanned, and the composite is rebuilt by blitting all visited
+/// rooms into a single texture centred on the current room.
+/// Current room is painted with full colors; previously-visited rooms use a dark tint.
 /// </summary>
 public class MinimapManager : MonoBehaviour
 {
