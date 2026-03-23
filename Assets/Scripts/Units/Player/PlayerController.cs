@@ -293,8 +293,8 @@ public class PlayerController : MonoBehaviour
 
                 if (requestedDistance > remainingDistance)
                 {
-                    if (debugMode) Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
-                    return;
+                    if (debugMode) Debug.Log($"[PlayerController] Click too far — clamping to {remainingDistance:F2} units");
+                    targetPoint = transform.position + toTarget.normalized * remainingDistance;
                 }
             }
 
@@ -347,7 +347,11 @@ public class PlayerController : MonoBehaviour
             float remainingDistance = player.RemainingMoveDistance;
             if (remainingDistance <= 0.01f) return;
             float requestedDistance = Vector3.Distance(transform.position, targetPoint);
-            if (requestedDistance > remainingDistance) return;
+            if (requestedDistance > remainingDistance)
+            {
+                Vector3 dir = (targetPoint - transform.position).normalized;
+                targetPoint = transform.position + dir * remainingDistance;
+            }
         }
 
         if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))

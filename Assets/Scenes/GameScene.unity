@@ -3167,6 +3167,7 @@ MonoBehaviour:
   agent: {fileID: 1107796536}
   mainCamera: {fileID: 1437648969}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  abilityTargeting: {fileID: 0}
   walkableMask:
     serializedVersion: 2
     m_Bits: 128
@@ -9241,8 +9242,7 @@ MonoBehaviour:
   rotateSpeed: 0.3
   offsetVector: {x: 0, y: -6, z: 10}
   player: {fileID: 1107796543}
-  maxDistanceFromPlayer: 15
-  playerController: {fileID: 0}
+  playerController: {fileID: 1107796539}
   followLerpSpeed: 8
   roomManager: {fileID: 51621939}
   roomClampPadding: 1

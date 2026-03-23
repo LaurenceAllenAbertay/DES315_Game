@@ -13,13 +13,9 @@ public class CameraController : MonoBehaviour
     [Tooltip("Pivot offset in camera local space (forward = +Z, down = -Y)")]
     public Vector3 offsetVector = new Vector3(0f, -6f, 5f);
 
-    [Header("Player Tether")]
-    [Tooltip("The player transform to stay near")]
-    public Transform player;
-    [Tooltip("Maximum distance camera can be from player")]
-    public float maxDistanceFromPlayer = 25f;
-
     [Header("Player Follow")]
+    [Tooltip("The player transform to follow")]
+    public Transform player;
     [Tooltip("PlayerController to subscribe to for movement events")]
     public PlayerController playerController;
     [Tooltip("How fast the camera lerps to the player when they start moving")]
@@ -231,21 +227,7 @@ public class CameraController : MonoBehaviour
         if (desiredMoveDirection == Vector3.zero || desiredMoveSpeed <= 0f) return;
 
         Vector3 delta = desiredMoveDirection * desiredMoveSpeed * Time.deltaTime;
-        Vector3 newPivot = pivotPoint + delta;
-
-        if (player != null)
-        {
-            Vector3 tetherOffset = newPivot - player.position;
-            tetherOffset.y = 0f;
-
-            if (tetherOffset.magnitude > maxDistanceFromPlayer)
-            {
-                tetherOffset = tetherOffset.normalized * maxDistanceFromPlayer;
-                newPivot = new Vector3(player.position.x + tetherOffset.x, pivotPoint.y, player.position.z + tetherOffset.z);
-            }
-        }
-
-        pivotPoint = newPivot;
+        pivotPoint += delta;
     }
 
     //Handle rotation update -EM//
