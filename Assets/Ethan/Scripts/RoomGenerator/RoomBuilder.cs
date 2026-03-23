@@ -231,7 +231,7 @@ public class RoomBuilder : MonoBehaviour
         NavMeshSurface roomSurface = roomInstance.AddComponent<NavMeshSurface>();
         roomSurface.agentTypeID = navMeshSurface != null ? navMeshSurface.agentTypeID : 0;
         roomSurface.collectObjects = CollectObjects.Children;
-        roomSurface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+        roomSurface.useGeometry = NavMeshCollectGeometry.RenderMeshes;
         int mask = navMeshLayerMask;
         if(excludePlayerAndEnemyLayers)
         {
@@ -241,6 +241,8 @@ public class RoomBuilder : MonoBehaviour
             if (enemyLayer >= 0) mask &= ~(1 << enemyLayer);
         }
         roomSurface.layerMask = mask;
+
+       
         roomSurface.BuildNavMesh();
 
         if (showDebugLogs) Debug.Log($"[RoomBuilder] NavMesh baked for {roomInstance.name}, data null: {roomSurface.navMeshData == null}");

@@ -2916,7 +2916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 514.90625, y: -33.69995}
+  m_AnchoredPosition: {x: 514.90625, y: -33.700195}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &484774878
@@ -3167,6 +3167,7 @@ MonoBehaviour:
   agent: {fileID: 1107796536}
   mainCamera: {fileID: 1437648969}
   inputActions: {fileID: -944628639613478452, guid: 102f2d70ec95fd1498234180cf7b19b5, type: 3}
+  abilityTargeting: {fileID: 0}
   walkableMask:
     serializedVersion: 2
     m_Bits: 128
@@ -7244,7 +7245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -173, y: -26.400024}
+  m_AnchoredPosition: {x: -173, y: -26.40039}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1160706523
@@ -10512,7 +10513,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 85.234375, y: -21.300049}
+  m_AnchoredPosition: {x: 85.234375, y: -21.299805}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1643991290
@@ -12210,7 +12211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 044134583548ad54eaef316c8399e3fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSize: 5
+  cellSize: 18
   showGrid: 0
   showRooms: 0
   showConnections: 0
@@ -12242,8 +12243,8 @@ MonoBehaviour:
   gridSize: 6
   occupationPercentage: 0.6
   roomTypeCount: 4
-  useRandomSeed: 1
-  seed: 567234109
+  useRandomSeed: 0
+  seed: 1076922390
   lastSeedUsed: 
   typeClusterChance: 0.5
   generateOnStart: 0
