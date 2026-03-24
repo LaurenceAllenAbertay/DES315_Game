@@ -1250,7 +1250,6 @@ Transform:
   - {fileID: 8380372635902267515}
   - {fileID: 277760405802426295}
   - {fileID: 7539854214950657166}
-  - {fileID: 2738247322565035377}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1216615632869616803
@@ -3277,7 +3276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4306400999369326885, guid: ac7b2502fefd2a849858e34cc349f678, type: 3}
       propertyPath: m_Name
-      value: Grunt (1)
+      value: 'Grunt '
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4045,7 +4044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3961211913289936245, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_Name
-      value: Brute (2)
+      value: Brute
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4056,68 +4055,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2895476920334390502, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
   m_PrefabInstance: {fileID: 2279678206282327805}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &2416898167130432154
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2435395910092744855}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.7597904
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.2552328
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 7.149714
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-      propertyPath: m_Name
-      value: Torch_Metal_Cathedral
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
---- !u!4 &2738247322565035377 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 26a8c4116ef53f74aab9210511761cd7, type: 3}
-  m_PrefabInstance: {fileID: 2416898167130432154}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2420341522927560163
 PrefabInstance:
@@ -4821,7 +4758,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4306400999369326885, guid: ac7b2502fefd2a849858e34cc349f678, type: 3}
       propertyPath: m_Name
-      value: Grunt (2)
+      value: 'Grunt '
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6639,7 +6576,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3961211913289936245, guid: f86f5be42942aa04bb2dfb0fd3f506ef, type: 3}
       propertyPath: m_Name
-      value: Brute (1)
+      value: 'Brute '
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

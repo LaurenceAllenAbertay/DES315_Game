@@ -3,7 +3,22 @@ guid: 9bbc921348ad2a741a396ba679f67a24
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CBase
+    second: {fileID: 2100000, guid: 5d586a76b71cd1d4a83740f02188655f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cross
+    second: {fileID: 2100000, guid: 39759b1b83951ca4b9487370313f3ec1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lock
+    second: {fileID: 2100000, guid: 06bcc7ab290f47e439c90b38f0148588, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
