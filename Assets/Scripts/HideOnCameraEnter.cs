@@ -5,7 +5,7 @@ using UnityEngine.Rendering;
 [RequireComponent(typeof(MeshRenderer))]
 public class HideOnCameraEnter : MonoBehaviour
 {
-    [SerializeField] private float entryMargin = 0.5f;
+    [SerializeField] private float entryMargin = 1.5f;
 
     private Collider col;
     private MeshRenderer meshRenderer;

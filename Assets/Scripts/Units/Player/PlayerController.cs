@@ -11,11 +11,6 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Objects on these layers block movement clicks — clicks landing on them are ignored")]
     public LayerMask occluderMask;
 
-    [Header("Light Detection")]
-    public Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
-    [Tooltip("Radius around the light check point used to avoid tiny false shadow checks")]
-    public float lightCheckRadius = 0.3f;
-
     [Header("Movement Range")]
     public float minMoveDistance = 0.3f;
     [Tooltip("Extra distance added in the cursor direction while hold-moving, so the player walks through the cursor rather than stopping at it")]
@@ -39,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private Player player;
+    [SerializeField] private LightDetectable lightDetectable;
 
     [Header("Destination Indicator")]
     [Tooltip("Prefab to spawn at the destination point")]
@@ -62,8 +58,6 @@ public class PlayerController : MonoBehaviour
     public bool debugMode = true;
 
     [Header("Current State (Read Only)")]
-    [SerializeField] private bool isInLight;
-    [SerializeField] private float currentLightLevel;
     [SerializeField] private bool isMoving;
 
     private NavMeshAgent agent;
@@ -91,8 +85,8 @@ public class PlayerController : MonoBehaviour
     public delegate void MovementStateChanged(bool moving);
     public event MovementStateChanged OnMovementStateChanged;
 
-    public bool IsInLight => isInLight;
-    public float CurrentLightLevel => currentLightLevel;
+    public bool IsInLight => lightDetectable != null && lightDetectable.IsInLight;
+    public float CurrentLightLevel => lightDetectable != null ? lightDetectable.LightLevel : 0f;
     public bool IsMoving => isMoving;
 
     private void Awake()
@@ -106,6 +100,16 @@ public class PlayerController : MonoBehaviour
         if (player == null)
         {
             player = GetComponent<Player>();
+        }
+
+        if (lightDetectable == null)
+        {
+            lightDetectable = GetComponent<LightDetectable>();
+        }
+
+        if (lightDetectable != null)
+        {
+            lightDetectable.OnLightStateChanged += OnLightDetectableStateChanged;
         }
 
         if (inputActions != null)
@@ -203,7 +207,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        UpdateLightState();
         lastFramePosition = transform.position;
         movementUnlockTime = Time.unscaledTime + movementLockSeconds;
         agentBaseSpeed = agent.speed;
@@ -238,10 +241,14 @@ public class PlayerController : MonoBehaviour
         }
         
         UpdateMovingState();
-        UpdateLightState();
         UpdateDestinationIndicator();
         
         lastFramePosition = transform.position;
+    }
+
+    private void OnLightDetectableStateChanged(bool inLight)
+    {
+        OnLightStateChanged?.Invoke(inLight);
     }
 
     private void OnMovePerformed(InputAction.CallbackContext context)
@@ -293,8 +300,8 @@ public class PlayerController : MonoBehaviour
 
                 if (requestedDistance > remainingDistance)
                 {
-                    if (debugMode) Debug.Log($"[PlayerController] Click too far — clamping to {remainingDistance:F2} units");
-                    targetPoint = transform.position + toTarget.normalized * remainingDistance;
+                    if (debugMode) Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
+                    return;
                 }
             }
 
@@ -347,11 +354,7 @@ public class PlayerController : MonoBehaviour
             float remainingDistance = player.RemainingMoveDistance;
             if (remainingDistance <= 0.01f) return;
             float requestedDistance = Vector3.Distance(transform.position, targetPoint);
-            if (requestedDistance > remainingDistance)
-            {
-                Vector3 dir = (targetPoint - transform.position).normalized;
-                targetPoint = transform.position + dir * remainingDistance;
-            }
+            if (requestedDistance > remainingDistance) return;
         }
 
         if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
@@ -541,31 +544,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpdateLightState()
-    {
-        if (LightDetectionManager.Instance == null) return;
-
-        Vector3 checkPoint = transform.position + lightCheckOffset;
-        LightCheckResult result = LightDetectionManager.Instance.CheckLightAtPoint(checkPoint, lightCheckRadius);
-
-        bool previousState = isInLight;
-
-        isInLight = result.isInLight;
-        currentLightLevel = result.totalLightContribution;
-
-        if (previousState != isInLight)
-        {
-            OnLightStateChanged?.Invoke(isInLight);
-        }
-    }
-
-    public Vector3 GetLightCheckPoint()
-    {
-        return transform.position + lightCheckOffset;
-    }
-
     private void OnDestroy()
     {
+        if (lightDetectable != null)
+            lightDetectable.OnLightStateChanged -= OnLightDetectableStateChanged;
+
         if (destinationIndicatorInstance != null)
         {
             Destroy(destinationIndicatorInstance);
@@ -574,10 +557,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Vector3 checkPoint = transform.position + lightCheckOffset;
-        Gizmos.color = isInLight ? Color.yellow : Color.blue;
-        Gizmos.DrawWireSphere(checkPoint, Mathf.Max(0.01f, lightCheckRadius));
-
         if (agent != null && agent.hasPath)
         {
             Gizmos.color = Color.green;

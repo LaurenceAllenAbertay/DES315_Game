@@ -14,7 +14,7 @@ public class Enemy : Unit
     public EnemyVisionCone visionCone;
 
     [Header("Shadow Visibility")]
-    [SerializeField] private Vector3 lightCheckOffset = new Vector3(0f, 1f, 0f);
+    [SerializeField] private LightDetectable lightDetectable;
     [Tooltip("If the player is within this distance the enemy is permanently revealed.")]
     [SerializeField] private float revealDistance = 3f;
     [Tooltip("Seconds between visibility checks (0 = every frame).")]
@@ -42,6 +42,9 @@ public class Enemy : Unit
         base.Awake();
 
         playerController = FindFirstObjectByType<PlayerController>();
+
+        if (lightDetectable == null)
+            lightDetectable = GetComponent<LightDetectable>();
 
         visionCone = GetComponentInChildren<EnemyVisionCone>();
         if (visionCone == null)
@@ -96,7 +99,7 @@ public class Enemy : Unit
     {
         if (hasBeenRevealed) return;
 
-        if (IsInLight() || IsPlayerClose())
+        if (lightDetectable != null && lightDetectable.IsInLight || IsPlayerClose())
         {
             Reveal();
             return;
@@ -132,12 +135,6 @@ public class Enemy : Unit
         if (hasBeenRevealed) return;
         hasBeenRevealed = true;
         ApplyOriginalMaterials();
-    }
-
-    private bool IsInLight()
-    {
-        if (LightDetectionManager.Instance == null) return true;
-        return LightDetectionManager.Instance.IsPointInLight(transform.position + lightCheckOffset);
     }
 
     private bool IsPlayerClose()

@@ -257,6 +257,7 @@ GameObject:
   - component: {fileID: 2699993568427599358}
   - component: {fileID: 8925485147563509332}
   - component: {fileID: 1100755875304801368}
+  - component: {fileID: 1306012779614226101}
   - component: {fileID: 6452683335510763956}
   - component: {fileID: 5452007818771334953}
   - component: {fileID: 5042869440780910369}
@@ -327,7 +328,7 @@ MonoBehaviour:
   debugMode: 1
   icon: {fileID: 21300000, guid: f435bf055b99e5745bb19e3b819ae0ab, type: 3}
   visionCone: {fileID: 883052606427701706}
-  lightCheckOffset: {x: 0, y: 1, z: 0}
+  lightDetectable: {fileID: 0}
   revealDistance: 3.14159
   visibilityCheckInterval: 0.1
   hiddenMaterial: {fileID: 0}
@@ -389,6 +390,19 @@ MonoBehaviour:
   currentDestination: {x: 0, y: 0, z: 0}
   idleTimer: 0
   isInitialized: 0
+--- !u!114 &1306012779614226101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3961211913289936245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed135b83802108459f72b6d3b968fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkOffset: {x: 0, y: 0.1, z: 0}
 --- !u!54 &6452683335510763956
 Rigidbody:
   m_ObjectHideFlags: 0

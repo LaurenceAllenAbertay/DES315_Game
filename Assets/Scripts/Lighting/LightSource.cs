@@ -11,6 +11,9 @@ public class LightSource : MonoBehaviour
     [Tooltip("How far this light reaches (used for both gameplay and visuals)")]
     public float strength = 10f;
 
+    [Tooltip("Override how far this light detects units for gameplay. Set to 0 to use Strength.")]
+    public float detectionRangeExtension = 0.6f;
+
     [Tooltip("Layer mask for objects that block light")]
     public LayerMask occluderMask = ~0;
     
@@ -18,7 +21,7 @@ public class LightSource : MonoBehaviour
     public LayerMask enemyMask = 0 << 8;
 
     [Header("Debug")]
-    [SerializeField] private bool drawDebugRays = true;
+    [SerializeField] private bool drawDebugRays = false;
 
     private Light unityLight;
 
@@ -54,10 +57,12 @@ public class LightSource : MonoBehaviour
     {
         lightContribution = 0f;
 
+        float effectiveRange = strength + detectionRangeExtension;
+
         Vector3 toTarget = targetPoint - transform.position;
         float distance = toTarget.magnitude;
 
-        if (distance > strength)
+        if (distance > effectiveRange)
         {
             return false;
         }
@@ -65,18 +70,15 @@ public class LightSource : MonoBehaviour
         Ray ray = new Ray(transform.position, toTarget.normalized);
         bool isBlocked = Physics.Raycast(ray, distance, occluderMask | enemyMask);
 
-        if (drawDebugRays)
-        {
-            Color rayColor = isBlocked ? Color.red : Color.yellow;
-            Debug.DrawLine(transform.position, targetPoint, rayColor);
-        }
-
         if (isBlocked)
         {
+            if (drawDebugRays) Debug.DrawLine(transform.position, targetPoint, Color.red);
             return false;
         }
 
-        lightContribution = 1f - (distance / strength);
+        if (drawDebugRays) Debug.DrawLine(transform.position, targetPoint, Color.yellow);
+
+        lightContribution = 1f - (distance / effectiveRange);
         return true;
     }
 
@@ -90,7 +92,10 @@ public class LightSource : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        float effectiveRange = strength + detectionRangeExtension;
         Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
         Gizmos.DrawWireSphere(transform.position, strength);
+        Gizmos.color = new Color(0f, 1f, 0f, 0.1f);
+        Gizmos.DrawWireSphere(transform.position, effectiveRange);
     }
 }

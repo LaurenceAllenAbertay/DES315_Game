@@ -2919,56 +2919,6 @@ RectTransform:
   m_AnchoredPosition: {x: 514.90625, y: -33.700195}
   m_SizeDelta: {x: 1000, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &484774878
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 484774880}
-  - component: {fileID: 484774879}
-  m_Layer: 0
-  m_Name: DeleteAfterTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &484774879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484774878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4b156005c7c1d44bd749b164e9ee81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  floorPrefabToTest: {fileID: 4923247229184233194, guid: bfc819eb2202a524c8290983357ef8a7, type: 3}
-  testCellSize: 5
-  test1x1: 1
-  test2x1: 1
-  test1x2: 1
-  test2x2: 1
---- !u!4 &484774880
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 484774878}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.81284, y: 0, z: 8.9792}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &522249566
 GameObject:
   m_ObjectHideFlags: 0
@@ -6772,6 +6722,7 @@ GameObject:
   - component: {fileID: 1107796541}
   - component: {fileID: 1107796540}
   - component: {fileID: 1107796539}
+  - component: {fileID: 1107796544}
   - component: {fileID: 1107796538}
   - component: {fileID: 1107796537}
   - component: {fileID: 1107796536}
@@ -6912,8 +6863,6 @@ MonoBehaviour:
   occluderMask:
     serializedVersion: 2
     m_Bits: 8
-  lightCheckOffset: {x: 0, y: 0.1, z: 0}
-  lightCheckRadius: 0.3
   minMoveDistance: 0.67
   holdMoveLookAhead: 1.5
   holdMoveMinSpeedDistance: 0.25
@@ -6923,6 +6872,7 @@ MonoBehaviour:
   movementLockSeconds: 1.67
   targetingSystem: {fileID: 0}
   player: {fileID: 1107796542}
+  lightDetectable: {fileID: 0}
   destinationIndicatorPrefab: {fileID: 686496462743916664, guid: fb557d0c6b58434468fc525fe04912d9, type: 3}
   indicatorHeight: 0.05
   navMeshSampleDistance: 1
@@ -6930,8 +6880,6 @@ MonoBehaviour:
   stuckVelocityThreshold: 0.1
   stuckTime: 0.5
   debugMode: 0
-  isInLight: 0
-  currentLightLevel: 0
   isMoving: 0
 --- !u!114 &1107796540
 MonoBehaviour:
@@ -7032,6 +6980,19 @@ Transform:
   - {fileID: 582764319}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1107796544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107796533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed135b83802108459f72b6d3b968fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkOffset: {x: 0, y: 0.1, z: 0}
 --- !u!1 &1115159051
 GameObject:
   m_ObjectHideFlags: 0
@@ -14446,7 +14407,6 @@ SceneRoots:
   - {fileID: 438069189}
   - {fileID: 1512805851}
   - {fileID: 1829371480}
-  - {fileID: 484774880}
   - {fileID: 160797749}
   - {fileID: 2072008223}
   - {fileID: 1565509335}

@@ -10,7 +10,6 @@ public abstract class AbilityEffect : ScriptableObject
     [Tooltip("If true, this effect targets the caster. Otherwise targets units.")]
     public bool targetSelf = false;
     
-    // Execute this effect within the given context
     public abstract void Execute(AbilityExecutionContext context);
 }
 
@@ -26,7 +25,7 @@ public class AbilityExecutionContext
     public Vector3 TargetPoint { get; set; }
     public bool FlipUsed { get; private set; }
     public bool FlipSuccess { get; private set; }
-    
+
     /// <summary>
     /// Accumulated damage/heal multiplier from conditional modifiers
     /// Persists through the entire ability execution
@@ -60,29 +59,16 @@ public class AbilityExecutionContext
         }
     }
 
-    /// <summary>
-    /// Check if the caster is in light
-    /// </summary>
     public bool IsCasterInLight()
     {
-        if (LightDetectionManager.Instance == null) return false;
-        
-        PlayerController playerController = Caster.GetComponent<PlayerController>();
-        Vector3 checkPoint = playerController != null 
-            ? playerController.GetLightCheckPoint() 
-            : Caster.transform.position;
-            
-        return LightDetectionManager.Instance.IsPointInLight(checkPoint);
+        LightDetectable detectable = Caster.GetComponent<LightDetectable>();
+        return detectable != null && detectable.IsInLight;
     }
 
-    /// <summary>
-    /// Check if the current target is in light
-    /// </summary>
     public bool IsTargetInLight()
     {
-        if (LightDetectionManager.Instance == null) return false;
         if (CurrentTarget == null) return false;
-        
-        return LightDetectionManager.Instance.IsPointInLight(CurrentTarget.transform.position);
+        LightDetectable detectable = CurrentTarget.GetComponent<LightDetectable>();
+        return detectable != null && detectable.IsInLight;
     }
 }
