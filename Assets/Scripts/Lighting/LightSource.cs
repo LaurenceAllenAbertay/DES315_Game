@@ -16,9 +16,6 @@ public class LightSource : MonoBehaviour
 
     [Tooltip("Layer mask for objects that block light")]
     public LayerMask occluderMask = ~0;
-    
-    [Tooltip("Layer mask for enemies")]
-    public LayerMask enemyMask = 0 << 8;
 
     [Header("Debug")]
     [SerializeField] private bool drawDebugRays = false;
@@ -68,7 +65,7 @@ public class LightSource : MonoBehaviour
         }
 
         Ray ray = new Ray(transform.position, toTarget.normalized);
-        bool isBlocked = Physics.Raycast(ray, distance, occluderMask | enemyMask);
+        bool isBlocked = Physics.Raycast(ray, distance, occluderMask);
 
         if (isBlocked)
         {
