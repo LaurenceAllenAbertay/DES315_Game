@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -13,7 +12,7 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Start Game")]
     [SerializeField] private string playTriggerName = "Play";
-    [SerializeField] private TMP_InputField seedInputField;
+    [SerializeField] private string animaticSceneName = "Animatic";
     private AudioSource gameAudioSource;
     [SerializeField] private AudioClip titleClip;
     [SerializeField] private AudioClip startGameClip;
@@ -82,16 +81,6 @@ public class MainMenuManager : MonoBehaviour
 
         isStartingGame = true;
 
-        if (seedInputField != null && int.TryParse(seedInputField.text, out int parsedSeed))
-        {
-            DungeonGenerator.HasPendingSeed = true;
-            DungeonGenerator.PendingSeed = parsedSeed;
-        }
-        else
-        {
-            DungeonGenerator.HasPendingSeed = false;
-        }
-
         if (menuAnimator != null)
         {
             menuAnimator.SetTrigger(playTriggerName);
@@ -113,7 +102,7 @@ public class MainMenuManager : MonoBehaviour
             yield return new WaitForSeconds(3.5f);
         }
 
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(animaticSceneName);
     }
 
     private IEnumerator FadeOutBackgroundMusic()
