@@ -9,9 +9,14 @@ public class CursorManager : MonoBehaviour
     [Header("Sprites")]
     public Sprite defaultSprite;
     public Sprite hoverSprite;
+    public Sprite targetingSprite;
 
     [Header("References")]
     public Image cursorImage;
+    [SerializeField] private PlayerAbilityManager playerAbilityManager;
+
+    private static readonly Vector2 PivotTopLeft = new Vector2(0f, 1f);
+    private static readonly Vector2 PivotCenter  = new Vector2(0.5f, 0.5f);
 
     private Canvas canvas;
     private RectTransform canvasRect;
@@ -23,13 +28,16 @@ public class CursorManager : MonoBehaviour
         canvas = cursorImage.canvas;
         canvasRect = canvas.GetComponent<RectTransform>();
         cursorRect = cursorImage.rectTransform;
-        cursorRect.pivot = new Vector2(0f, 1f);
+        cursorRect.pivot = PivotTopLeft;
 
         Cursor.visible = false;
         cursorImage.sprite = defaultSprite;
 
         if (canvas == null)
             Debug.LogError("CursorManager: canvas is null. Check that cursorImage is assigned and is inside a Canvas.");
+
+        if (playerAbilityManager == null)
+            playerAbilityManager = FindFirstObjectByType<PlayerAbilityManager>();
     }
 
     private void Update()
@@ -45,9 +53,20 @@ public class CursorManager : MonoBehaviour
             out Vector2 localPoint
         );
 
-        cursorRect.localPosition = localPoint;
+        bool isTargeting = playerAbilityManager != null && playerAbilityManager.IsTargeting;
 
-        cursorImage.sprite = IsHoveringTarget(mousePosition) ? hoverSprite : defaultSprite;
+        if (isTargeting)
+        {
+            cursorRect.pivot = PivotCenter;
+            cursorRect.localPosition = localPoint;
+            cursorImage.sprite = targetingSprite != null ? targetingSprite : defaultSprite;
+        }
+        else
+        {
+            cursorRect.pivot = PivotTopLeft;
+            cursorRect.localPosition = localPoint;
+            cursorImage.sprite = IsHoveringTarget(mousePosition) ? hoverSprite : defaultSprite;
+        }
     }
 
     /// <summary>
