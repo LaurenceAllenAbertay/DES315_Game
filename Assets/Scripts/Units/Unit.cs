@@ -126,15 +126,22 @@ public abstract class Unit : MonoBehaviour
     }
 
     /// <summary>
-    /// Set max health and optionally adjust current health
+    /// Set max health and optionally adjust current health.
+    /// If max health increases, current health increases by the same delta.
+    /// If max health decreases, current health is clamped down.
     /// </summary>
     public virtual void SetMaxHealth(float newMax, bool adjustCurrentHealth = true)
     {
+        float oldMax = maxHealth;
         maxHealth = Mathf.Max(1f, newMax);
 
         if (adjustCurrentHealth)
         {
-            currentHealth = Mathf.Min(currentHealth, maxHealth);
+            float delta = maxHealth - oldMax;
+            if (delta > 0f)
+                currentHealth = Mathf.Min(currentHealth + delta, maxHealth);
+            else
+                currentHealth = Mathf.Min(currentHealth, maxHealth);
         }
 
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
