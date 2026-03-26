@@ -7,7 +7,7 @@ public class Grunt_AnimController : MonoBehaviour
 {
     [Header("Movement")]
     [Tooltip("Agent velocity must exceed this to trigger the moving animation")]
-    public float moveThreshold = 0.1f;
+    public float moveThreshold = 0.3f;
 
     private Animator animator;
     private NavMeshAgent agent;
