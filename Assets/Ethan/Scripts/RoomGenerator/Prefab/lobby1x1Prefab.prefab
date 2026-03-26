@@ -3528,7 +3528,7 @@ PrefabInstance:
       addedObject: {fileID: 328307191793824132}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5de37ed064cf8b84bb7edfecea146831, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3871761730057181236}
+      addedObject: {fileID: 3227691937423578851}
   m_SourcePrefab: {fileID: 100100000, guid: 5de37ed064cf8b84bb7edfecea146831, type: 3}
 --- !u!4 &8506322150773428745 stripped
 Transform:
@@ -3553,8 +3553,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entryMargin: 0.1
---- !u!64 &3871761730057181236
-MeshCollider:
+--- !u!65 &3227691937423578851
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3571,10 +3571,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1442763394014116441, guid: 5de37ed064cf8b84bb7edfecea146831, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.0106471395, y: 0.7386227, z: 0.010647131}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8340077596106185411
 PrefabInstance:
   m_ObjectHideFlags: 0
