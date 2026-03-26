@@ -248,7 +248,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5502394825915155544}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: UpdatedChest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8594884140665040632}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.98825115, z: -0, w: 0.1528391}
+  m_LocalRotation: {x: 0, y: -0.9882511, z: 0, w: 0.15283918}
   m_LocalPosition: {x: -3.3, y: 0, z: 5.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -540,14 +540,39 @@ MonoBehaviour:
     m_Bits: 64
   itemPool:
   - {fileID: 11400000, guid: 3df5730ff343769468d65666bb1a1e9a, type: 2}
-  - {fileID: 11400000, guid: e982d64170881e147a12defeac44583c, type: 2}
+  - {fileID: 11400000, guid: bb46d3ce2f20ad24c9e61c1a54d78606, type: 2}
+  - {fileID: 11400000, guid: b5629c02b81d27b4cb040838400557f2, type: 2}
+  - {fileID: 11400000, guid: 06f49fe140f6f2c4a80d7a515a25ed0d, type: 2}
+  - {fileID: 11400000, guid: 6447faed6bca54949a4120d9abab2490, type: 2}
+  - {fileID: 11400000, guid: 73d5493ae01761d4c97a0949db2be1c6, type: 2}
+  - {fileID: 11400000, guid: e4d59c5dc41444b4796af9596cec48a7, type: 2}
+  - {fileID: 11400000, guid: ab43af57704c0d448919fdb5cbdbd7b5, type: 2}
+  - {fileID: 11400000, guid: ab9b44b66f343a340a47b51c86951a24, type: 2}
+  - {fileID: 11400000, guid: 534784dc5654d4144846339a45332aa3, type: 2}
+  - {fileID: 11400000, guid: c1764880c75b892498834553692ed981, type: 2}
+  - {fileID: 11400000, guid: 3f63b95f3d7f56d47823d2c5158499b4, type: 2}
+  - {fileID: 11400000, guid: 6eb9ca7e03ab23f43a4c60728b4a227f, type: 2}
+  - {fileID: 11400000, guid: f7501563cdd03004d85854c9f9926abc, type: 2}
+  - {fileID: 11400000, guid: 52641adebbd7b154da5961d92a146300, type: 2}
+  - {fileID: 11400000, guid: 91e42ab4fb49ae143a35965c0443b540, type: 2}
+  - {fileID: 11400000, guid: f6923c7343b7ea04ebf7fd0ed47ed374, type: 2}
+  - {fileID: 11400000, guid: 0d84cde51f36cc440948e3ef7ae28728, type: 2}
+  - {fileID: 11400000, guid: ee07137b5effea849a8d78b14855dec4, type: 2}
+  - {fileID: 11400000, guid: 8c0806375487fc544be86ce059545104, type: 2}
+  - {fileID: 11400000, guid: e09e1f4e163074b41928d0d7aceae557, type: 2}
+  - {fileID: 11400000, guid: 83d7ce46dbd7bc64292cbe4264187eb1, type: 2}
+  - {fileID: 11400000, guid: ba49c57607df6c54d970e63ab838363f, type: 2}
+  - {fileID: 11400000, guid: 753a1f0bec331fd4fb317d3024dd5b0b, type: 2}
+  - {fileID: 11400000, guid: 6a93623600da4f14f8343557ef70e24f, type: 2}
+  - {fileID: 11400000, guid: f012a43eaf11d0d429b908664535edba, type: 2}
+  - {fileID: 11400000, guid: 49883b2f1fc83844eaa9b584ffd30a27, type: 2}
+  - {fileID: 11400000, guid: 808880184d9a1a846bf7a8896aac6ed7, type: 2}
+  - {fileID: 11400000, guid: 3df5730ff343769468d65666bb1a1e9a, type: 2}
   - {fileID: 11400000, guid: d470fb85667438246945bb1adf147278, type: 2}
+  - {fileID: 11400000, guid: e982d64170881e147a12defeac44583c, type: 2}
   abilityPool:
-  - {fileID: 11400000, guid: 70c446b9ada508e4981b30882db11d40, type: 2}
-  - {fileID: 11400000, guid: de968a7d7ff98d940b8e6b4e5649a440, type: 2}
-  - {fileID: 11400000, guid: 00961e77624bb714093dbc191d7c3fa8, type: 2}
-  - {fileID: 11400000, guid: c492c9c24143edb4796defa5805bc546, type: 2}
   - {fileID: 11400000, guid: 3ab2ead1cac109944926e834af4c51d9, type: 2}
+  - {fileID: 11400000, guid: 70c446b9ada508e4981b30882db11d40, type: 2}
   minAbilityCards: 1
   maxAbilityCards: 2
   itemChoiceCount: 3
