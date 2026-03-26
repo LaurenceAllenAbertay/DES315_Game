@@ -253,7 +253,7 @@ public class HardShadowFeature : ScriptableRendererFeature
                 Light unityLight = src.GetLight();
                 if (unityLight == null) continue;
 
-                lightPositions[count] = src.transform.position;
+                lightPositions[count] = src.GetLightOrigin();
                 lightRanges[count]    = src.GetRange();
                 lightIndices[count]   = indexLookup.TryGetValue(unityLight, out int idx) ? idx : -1f;
                 count++;

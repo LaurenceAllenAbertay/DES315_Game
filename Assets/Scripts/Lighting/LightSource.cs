@@ -7,6 +7,10 @@
 /// </summary>
 public class LightSource : MonoBehaviour
 {
+    [Header("Light Origin")]
+    [Tooltip("The transform rays are cast from. Assign a child object positioned outside the occluder mesh. Falls back to this object's position if unassigned.")]
+    public Transform lightPoint;
+
     [Header("Light Properties")]
     [Tooltip("How far this light reaches (used for both gameplay and visuals)")]
     public float strength = 10f;
@@ -33,6 +37,8 @@ public class LightSource : MonoBehaviour
         }
     }
 
+    public Vector3 GetLightOrigin() => lightPoint != null ? lightPoint.position : transform.position;
+
     public Light GetLight() => unityLight;
 
     private void OnEnable()
@@ -56,7 +62,8 @@ public class LightSource : MonoBehaviour
 
         float effectiveRange = strength + detectionRangeExtension;
 
-        Vector3 toTarget = targetPoint - transform.position;
+        Vector3 origin = GetLightOrigin();
+        Vector3 toTarget = targetPoint - origin;
         float distance = toTarget.magnitude;
 
         if (distance > effectiveRange)
@@ -64,16 +71,16 @@ public class LightSource : MonoBehaviour
             return false;
         }
 
-        Ray ray = new Ray(transform.position, toTarget.normalized);
+        Ray ray = new Ray(origin, toTarget.normalized);
         bool isBlocked = Physics.Raycast(ray, distance, occluderMask);
 
         if (isBlocked)
         {
-            if (drawDebugRays) Debug.DrawLine(transform.position, targetPoint, Color.red);
+            if (drawDebugRays) Debug.DrawLine(origin, targetPoint, Color.red);
             return false;
         }
 
-        if (drawDebugRays) Debug.DrawLine(transform.position, targetPoint, Color.yellow);
+        if (drawDebugRays) Debug.DrawLine(origin, targetPoint, Color.yellow);
 
         lightContribution = 1f - (distance / effectiveRange);
         return true;
@@ -91,8 +98,8 @@ public class LightSource : MonoBehaviour
     {
         float effectiveRange = strength + detectionRangeExtension;
         Gizmos.color = new Color(1f, 1f, 0f, 0.2f);
-        Gizmos.DrawWireSphere(transform.position, strength);
+        Gizmos.DrawWireSphere(GetLightOrigin(), strength);
         Gizmos.color = new Color(0f, 1f, 0f, 0.1f);
-        Gizmos.DrawWireSphere(transform.position, effectiveRange);
+        Gizmos.DrawWireSphere(GetLightOrigin(), effectiveRange);
     }
 }
