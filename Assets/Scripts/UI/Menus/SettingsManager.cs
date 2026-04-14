@@ -12,23 +12,16 @@ public class SettingsManager : MonoBehaviour
 
     private void Awake()
     {
-        Screen.fullScreen = true;
-
         if (fullscreenToggle != null)
         {
-            fullscreenToggle.isOn = true;
-            fullscreenToggle.onValueChanged.AddListener(OnFullscreenToggleChanged);
+            fullscreenToggle.isOn = Screen.fullScreen;
+            fullscreenToggle.onValueChanged.AddListener(isFullscreen => Screen.fullScreen = isFullscreen);
         }
     }
 
     private void OnDisable()
     {
         if (fullscreenToggle != null)
-            fullscreenToggle.onValueChanged.RemoveListener(OnFullscreenToggleChanged);
-    }
-
-    private void OnFullscreenToggleChanged(bool isFullscreen)
-    {
-        Screen.fullScreen = isFullscreen;
+            fullscreenToggle.onValueChanged.RemoveAllListeners();
     }
 }
