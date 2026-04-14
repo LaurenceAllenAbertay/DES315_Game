@@ -34,7 +34,7 @@ public class DungeonDoor : MonoBehaviour
 
     [Header("Cooldown")]
     [Tooltip("Cooldown after teleporting to prevent re-triggering")]
-    public float teleportCooldown = 5.0f;
+    public float teleportCooldown = 2.0f;
 
     private Transform playerTransform;
     private bool playerInRange = false;
