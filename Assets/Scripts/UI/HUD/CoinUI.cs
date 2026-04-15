@@ -22,6 +22,7 @@ public class CoinUI : MonoBehaviour
     public float fillStepDelay = 0.05f;
 
     private const string CoinSpendingParam = "CoinSpending";
+    private const string IsFlippingParam = "IsFlipping";
     private int currentUICoins = 0;
     private Coroutine fillCoroutine;
     private int spendingCoinCount = 0;
@@ -61,6 +62,17 @@ public class CoinUI : MonoBehaviour
             CombatManager.Instance.OnTurnStarted -= OnTurnStarted;
             CombatManager.Instance.OnTurnEnded -= OnTurnEnded;
             CombatManager.Instance.OnCombatEnded -= OnCombatEnded;
+        }
+    }
+
+    public void SetIsFlipping(bool flipping)
+    {
+        if (coinParent == null) return;
+        for (int i = 0; i < coinParent.childCount; i++)
+        {
+            Animator animator = coinParent.GetChild(i).GetComponent<Animator>();
+            if (animator != null)
+                animator.SetBool(IsFlippingParam, flipping);
         }
     }
 

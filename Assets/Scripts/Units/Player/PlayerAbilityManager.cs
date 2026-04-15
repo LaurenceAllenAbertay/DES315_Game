@@ -167,6 +167,7 @@ public class PlayerAbilityManager : MonoBehaviour
         
         activeAbilitySlot = null;
         SetCoinSpendingCount(0);
+        coinUI?.SetIsFlipping(false);
     }
 
     private void Update()
@@ -306,6 +307,7 @@ public class PlayerAbilityManager : MonoBehaviour
         activeAbilitySlot = null;
         flipSelected = false;
         targetingSystem.SetFlipVisuals(false);
+        coinUI?.SetIsFlipping(false);
         SetCoinSpendingCount(0);
         if (debugMode)
             Debug.Log("[AbilityManager] Targeting cancelled");
@@ -340,6 +342,7 @@ public class PlayerAbilityManager : MonoBehaviour
         activeAbilitySlot = null;
         flipSelected = false;
         targetingSystem.SetFlipVisuals(false);
+        coinUI?.SetIsFlipping(false);
         SetCoinSpendingCount(0);
     }
 
@@ -354,6 +357,7 @@ public class PlayerAbilityManager : MonoBehaviour
         {
             targetingSystem.SetFlipVisuals(false);
         }
+        coinUI?.SetIsFlipping(false);
         SetCoinSpendingCount(0);
     }
 
@@ -457,6 +461,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
         flipSelected = !flipSelected;
         targetingSystem.SetFlipVisuals(flipSelected);
+        coinUI?.SetIsFlipping(flipSelected);
     }
 
     private void PlayAbilityCastSound(Ability ability)
