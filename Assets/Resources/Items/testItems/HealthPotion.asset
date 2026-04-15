@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 958b37cb8b7492542959593bfc5460a6, type: 3}
   m_Name: HealthPotion
   m_EditorClassIdentifier: 
-  itemName: Health Potion
+  itemName: Max Health Potion
   description: +20 Max Health
   icon: {fileID: 21300000, guid: 40cf7a7c72ded7e449bafac9f12585c2, type: 3}
   modifiers:
     maxHealthFlat: 20
     blockFlat: 0
-    healFlat: 20
+    healFlat: 0
     baseCoinsFlat: 0
     abilityDamagePercent: 0
     abilityRangePercent: 0
