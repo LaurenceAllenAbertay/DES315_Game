@@ -263,14 +263,14 @@ public class PlayerController : MonoBehaviour
         Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
-        if (occluderMask.value != 0 && Physics.Raycast(ray, out RaycastHit occluderHit, 100f, occluderMask))
+        if (occluderMask.value != 0 && HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit occluderHit, 100f, occluderMask))
         {
-            bool hasWalkableHit = Physics.Raycast(ray, out RaycastHit walkablePrecheck, 100f, walkableMask);
+            bool hasWalkableHit = HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit walkablePrecheck, 100f, walkableMask);
             if (!hasWalkableHit || occluderHit.distance <= walkablePrecheck.distance)
                 return;
         }
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
+        if (HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit hit, 100f, walkableMask))
         {
             Vector3 targetPoint = hit.point;
             Vector3 toTarget = targetPoint - transform.position;
@@ -300,8 +300,8 @@ public class PlayerController : MonoBehaviour
 
                 if (requestedDistance > remainingDistance)
                 {
-                    if (debugMode) Debug.Log($"[PlayerController] Click too far, clamping to {remainingDistance:F2} units");
-                    targetPoint = transform.position + toTarget.normalized * remainingDistance;
+                    if (debugMode) Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
+                    return;
                 }
             }
 
@@ -328,7 +328,7 @@ public class PlayerController : MonoBehaviour
         Vector2 pointerPos = pointerPositionAction.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
-        if (!Physics.Raycast(ray, out RaycastHit hit, 100f, walkableMask))
+        if (!HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit hit, 100f, walkableMask))
         {
             agent.speed = agentBaseSpeed;
             return;

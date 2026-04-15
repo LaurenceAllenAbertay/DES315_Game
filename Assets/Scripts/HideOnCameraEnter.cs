@@ -12,6 +12,8 @@ public class HideOnCameraEnter : MonoBehaviour
     private Color originalColor;
     private bool isTransparent;
 
+    public bool IsTransparent => isTransparent;
+
     private void Awake()
     {
         colliders = GetComponents<Collider>();
@@ -72,6 +74,28 @@ public class HideOnCameraEnter : MonoBehaviour
                 minDistance = dist;
         }
         return minDistance;
+    }
+
+    /// <summary>
+    /// Drop-in replacement for Physics.Raycast that skips hits on objects whose HideOnCameraEnter
+    /// component is currently transparent, continuing through them to find the first solid hit.
+    /// </summary>
+    public static bool RaycastIgnoreTransparent(Ray ray, out RaycastHit hit, float maxDistance, LayerMask mask)
+    {
+        RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance, mask);
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        foreach (RaycastHit h in hits)
+        {
+            HideOnCameraEnter hider = h.collider.GetComponentInParent<HideOnCameraEnter>();
+            if (hider != null && hider.isTransparent)
+                continue;
+            hit = h;
+            return true;
+        }
+
+        hit = default;
+        return false;
     }
 
     private static void SetTransparent(Material mat)

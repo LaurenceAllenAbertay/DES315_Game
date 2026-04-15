@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 /// <summary>
@@ -316,7 +315,7 @@ public class AbilityTargeting : MonoBehaviour
 
         LayerMask targetMask = enemyLayer | propLayer;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, targetMask | targetBlockerLayer))
+        if (HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit hit, 100f, targetMask | targetBlockerLayer))
         {
             Unit unit = hit.collider.GetComponentInParent<Unit>();
 
@@ -441,7 +440,7 @@ public class AbilityTargeting : MonoBehaviour
 
         Ray ray = mainCamera.ScreenPointToRay(pointerPos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundLayer))
+        if (HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit hit, 100f, groundLayer))
         {
             Vector3 casterPos = currentCaster.transform.position;
             Vector3 targetPoint = hit.point;
@@ -456,7 +455,7 @@ public class AbilityTargeting : MonoBehaviour
                 targetPoint.y = hit.point.y;
             }
 
-            if (Physics.Raycast(targetPoint + Vector3.up * 10f, Vector3.down, out RaycastHit groundHit, 20f, groundLayer))
+            if (HideOnCameraEnter.RaycastIgnoreTransparent(new Ray(targetPoint + Vector3.up * 10f, Vector3.down), out RaycastHit groundHit, 20f, groundLayer))
             {
                 targetPoint = groundHit.point;
             }
@@ -494,9 +493,6 @@ public class AbilityTargeting : MonoBehaviour
     private void OnConfirmPerformed(InputAction.CallbackContext context)
     {
         if (!isTargeting || currentAbility == null) return;
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return;
 
         switch (currentAbility.targetingType)
         {
@@ -710,7 +706,7 @@ public class AbilityTargeting : MonoBehaviour
             targetPoint.y = unit.transform.position.y;
         }
 
-        if (Physics.Raycast(targetPoint + Vector3.up * 10f, Vector3.down, out RaycastHit groundHit, 20f, groundLayer))
+        if (HideOnCameraEnter.RaycastIgnoreTransparent(new Ray(targetPoint + Vector3.up * 10f, Vector3.down), out RaycastHit groundHit, 20f, groundLayer))
         {
             targetPoint = groundHit.point;
         }
