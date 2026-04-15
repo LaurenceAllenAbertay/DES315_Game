@@ -439,6 +439,8 @@ public class PlayerAbilityManager : MonoBehaviour
                 ability.Execute(player, result.targetPoint, baseMultiplier);
                 break;
         }
+        
+        TutorialManager.Instance?.Trigger("first_attack");
     }
 
     private void OnTurnEnded(Unit unit)
