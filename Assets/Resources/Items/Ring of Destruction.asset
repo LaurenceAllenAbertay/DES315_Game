@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Ring of Destruction
   m_EditorClassIdentifier: 
   itemName: Ring of destruction
-  description: Increase AOE size exponentially however love most of your max health
+  description: '-30 max health
+
+    +1000% AOE size'
   icon: {fileID: 21300000, guid: 9b08c8c040fe8e14c8315cd51341347f, type: 3}
   modifiers:
-    maxHealthFlat: -50
+    maxHealthFlat: -30
     blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 0
-    abilityDamagePercent: 1
+    abilityDamagePercent: 0
     abilityRangePercent: 0
     aoeSizePercent: 1000
     maxCombatMovePercent: 0
+    conditionalDamagePercent: 0

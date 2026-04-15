@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: Cursed Coin Purse
   m_EditorClassIdentifier: 
   itemName: Curse Coin Purse
-  description: Allows for 2 more coins but removes 2 block
+  description: '+2 coins
+
+    -5 max health
+
+    -15% damage'
   icon: {fileID: 21300000, guid: da3f8c19ff8333e4182ebf42423af843, type: 3}
   modifiers:
-    maxHealthFlat: 0
-    blockFlat: -2
+    maxHealthFlat: -5
+    blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 2
-    abilityDamagePercent: 0
+    abilityDamagePercent: -15
     abilityRangePercent: 0
     aoeSizePercent: 0
     maxCombatMovePercent: 0
+    conditionalDamagePercent: 0

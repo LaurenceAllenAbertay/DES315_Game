@@ -13,15 +13,26 @@ MonoBehaviour:
   m_Name: Heart of Greed
   m_EditorClassIdentifier: 
   itemName: Heart of Greed
-  description: Massive Health. Small increase to ability, movement and range boost
-    at cost of 2 coins and 5 block
+  description: '+60 max health
+
+    -1 coin
+
+    +10% damage
+
+    +10% range
+
+    +10%
+    AOE size
+
+    +15% move range'
   icon: {fileID: 0}
   modifiers:
-    maxHealthFlat: 100
-    blockFlat: -5
+    maxHealthFlat: 60
+    blockFlat: 0
     healFlat: 0
-    baseCoinsFlat: -2
+    baseCoinsFlat: -1
     abilityDamagePercent: 10
     abilityRangePercent: 10
     aoeSizePercent: 10
-    maxCombatMovePercent: 20
+    maxCombatMovePercent: 15
+    conditionalDamagePercent: 0

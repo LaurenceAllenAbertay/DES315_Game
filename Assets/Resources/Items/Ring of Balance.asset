@@ -13,9 +13,18 @@ MonoBehaviour:
   m_Name: Ring of Balance
   m_EditorClassIdentifier: 
   itemName: Ring of Balance
-  description: 'Small 5% increase to abilities, healthe and movement
+  description: '+5 max health
 
-'
+    +5% damage
+
+    +5% range
+
+    +5% AOE size
+
+    +5%
+    move range
+
+    +5% conditional damage'
   icon: {fileID: 21300000, guid: 224e7f01c24dbe946842e08bd497d780, type: 3}
   modifiers:
     maxHealthFlat: 5
@@ -26,3 +35,4 @@ MonoBehaviour:
     abilityRangePercent: 5
     aoeSizePercent: 5
     maxCombatMovePercent: 5
+    conditionalDamagePercent: 5

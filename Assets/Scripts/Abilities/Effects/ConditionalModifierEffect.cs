@@ -31,7 +31,12 @@ public class ConditionalModifierEffect : AbilityEffect
 
         if (conditionMet)
         {
-            context.AccumulatedMultiplier *= multiplier;
+            float effectiveMultiplier = multiplier;
+            if (StatsManager.Instance != null)
+            {
+                effectiveMultiplier += StatsManager.Instance.Modifiers.conditionalDamagePercent * 0.01f;
+            }
+            context.AccumulatedMultiplier *= effectiveMultiplier;
             Debug.Log($"[ConditionalModifier] Condition '{condition}' met! Multiplier now: {context.AccumulatedMultiplier:F2}");
         }
     }

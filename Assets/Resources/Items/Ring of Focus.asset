@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Ring of Focus
   m_EditorClassIdentifier: 
   itemName: Ring of Focus
-  description: Increase DMG by 25% decreases AOE abilities size by 15%
+  description: '+35% damage
+
+    -15% AOE size'
   icon: {fileID: 21300000, guid: 95861b84ed68cd94aaebe0ef7b9d559b, type: 3}
   modifiers:
     maxHealthFlat: 0
     blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 0
-    abilityDamagePercent: 25
+    abilityDamagePercent: 35
     abilityRangePercent: 0
     aoeSizePercent: -15
     maxCombatMovePercent: 0
+    conditionalDamagePercent: 0

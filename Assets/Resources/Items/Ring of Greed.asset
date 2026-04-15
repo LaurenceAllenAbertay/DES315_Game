@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Ring of Greed
   m_EditorClassIdentifier: 
   itemName: RIng of Greed
-  description: -1 with 15% more damage
+  description: '-1 coin
+
+    +100% damage'
   icon: {fileID: 21300000, guid: b3c0f3c84f5b22b44838d3e53f720079, type: 3}
   modifiers:
     maxHealthFlat: 0
     blockFlat: 0
     healFlat: 0
     baseCoinsFlat: -1
-    abilityDamagePercent: 15
+    abilityDamagePercent: 100
     abilityRangePercent: 0
     aoeSizePercent: 0
     maxCombatMovePercent: 0
+    conditionalDamagePercent: 0

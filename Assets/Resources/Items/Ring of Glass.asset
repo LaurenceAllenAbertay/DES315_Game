@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Ring of Glass
   m_EditorClassIdentifier: 
   itemName: Ring of Glass
-  description: 'Double your damage BUT halve your health
+  description: '-50 max health
 
-    -50% HP +100% DMG'
+    +100% damage'
   icon: {fileID: 21300000, guid: 224e7f01c24dbe946842e08bd497d780, type: 3}
   modifiers:
-    maxHealthFlat: -30
+    maxHealthFlat: -50
     blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
     abilityRangePercent: 0
     aoeSizePercent: 0
     maxCombatMovePercent: 0
+    conditionalDamagePercent: 0

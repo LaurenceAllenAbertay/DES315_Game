@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Soiled Trousers
   m_EditorClassIdentifier: 
   itemName: Soiled Trousers
-  description: +1 coin at the cost of your dignity and movement speed
+  description: '+1 coin
+
+    -90% move range'
   icon: {fileID: 0}
   modifiers:
     maxHealthFlat: 0
@@ -23,4 +25,5 @@ MonoBehaviour:
     abilityDamagePercent: 0
     abilityRangePercent: 0
     aoeSizePercent: 0
-    maxCombatMovePercent: -50
+    maxCombatMovePercent: -90
+    conditionalDamagePercent: 0

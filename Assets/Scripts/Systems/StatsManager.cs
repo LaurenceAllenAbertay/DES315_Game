@@ -17,6 +17,7 @@ public class StatsManager : MonoBehaviour
         public float abilityRangePercent;
         public float aoeSizePercent;
         public float maxCombatMovePercent;
+        public float conditionalDamagePercent;
     }
 
     public static StatsManager Instance { get; private set; }
@@ -122,7 +123,8 @@ public class StatsManager : MonoBehaviour
             abilityDamagePercent = a.abilityDamagePercent + b.abilityDamagePercent,
             abilityRangePercent = a.abilityRangePercent + b.abilityRangePercent,
             aoeSizePercent = a.aoeSizePercent + b.aoeSizePercent,
-            maxCombatMovePercent = a.maxCombatMovePercent + b.maxCombatMovePercent
+            maxCombatMovePercent = a.maxCombatMovePercent + b.maxCombatMovePercent,
+            conditionalDamagePercent = a.conditionalDamagePercent + b.conditionalDamagePercent
         };
     }
 

@@ -13,30 +13,28 @@ MonoBehaviour:
   m_Name: Bottomless Coin Purse
   m_EditorClassIdentifier: 
   itemName: Bottomless Coin Purse
-  description: 'Gain 15 Extra Coins but lose health, block, damage, movement, range,
-    and AOE
+  description: '+4 coins
 
-    -50 Max Health
+    +20 flat heal
 
-    -10 Block
+    -50 max health
 
-    +15 Coins
+    -30% damage
 
-    -20% Damage
+    -20%
+    range
 
-    -10%
-    Range
+    -10% AOE size
 
-    -10% AOE
-
-    -10% Movement'
+    -20% move range'
   icon: {fileID: 21300000, guid: bbfc1ea83c6b55c45913f74bdfdeb8b1, type: 3}
   modifiers:
     maxHealthFlat: -50
     blockFlat: 0
-    healFlat: 100
-    baseCoinsFlat: 15
-    abilityDamagePercent: -20
-    abilityRangePercent: -10
-    aoeSizePercent: -10
-    maxCombatMovePercent: -10
+    healFlat: 20
+    baseCoinsFlat: 4
+    abilityDamagePercent: -30
+    abilityRangePercent: -20
+    aoeSizePercent: -15
+    maxCombatMovePercent: -20
+    conditionalDamagePercent: 0

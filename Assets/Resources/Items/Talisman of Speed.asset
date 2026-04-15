@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 958b37cb8b7492542959593bfc5460a6, type: 3}
   m_Name: Talisman of Speed
   m_EditorClassIdentifier: 
-  itemName: Talisman o Speed
-  description: Gives 30% movement speed at cost of 10% range and AOE
+  itemName: Talisman of Speed
+  description: '+250% move range
+
+    +10% range'
   icon: {fileID: 0}
   modifiers:
     maxHealthFlat: 0
@@ -23,4 +25,5 @@ MonoBehaviour:
     abilityDamagePercent: 0
     abilityRangePercent: 10
     aoeSizePercent: 10
-    maxCombatMovePercent: 30
+    maxCombatMovePercent: 250
+    conditionalDamagePercent: 0
