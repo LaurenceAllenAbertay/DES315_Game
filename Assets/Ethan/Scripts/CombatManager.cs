@@ -217,10 +217,6 @@ public class CombatManager : MonoBehaviour
         }
 
         MessageUI.Instance?.EnqueueMessage($"{currentUnit.name}'s turn.");
-        if (IsPlayerTurn)
-        {
-            TutorialManager.Instance?.Trigger("first_combat");
-        }
 
         OnTurnStarted?.Invoke(currentUnit);
 

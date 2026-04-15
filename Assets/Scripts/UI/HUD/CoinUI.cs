@@ -196,6 +196,8 @@ public class CoinUI : MonoBehaviour
 
         fillCoroutine = null;
         ApplyCoinSpending();
+        
+        TutorialManager.Instance?.Trigger("first_combat");
     }
 
     public void SetCoinSpendingCount(int count)
