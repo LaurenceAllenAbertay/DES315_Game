@@ -434,6 +434,31 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="Gameplay_Looped" ID="{AAFED2C2-8181-4027-AF98-5C49E6C6EF4A}">
+							<ChildrenList>
+								<Action Name="" ID="{FBAF96AD-E722-4964-9BD5-F05244259EC0}" ShortID="902768884">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Incinder_Gameplay" ID="{D0B2F003-81D5-4F95-99FD-35AA810BE528}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="OpeningAnimatic" ID="{5CA9C99A-0D7F-4C59-B17E-59F58D5525A2}">
+							<ChildrenList>
+								<Action Name="" ID="{5A7B484A-4787-41FC-9A10-77A708534103}" ShortID="927457647">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="4"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="mus_AnimaticMusic" ID="{9C165A57-C3C9-43E1-95FD-D7BA70CAAA2E}" WorkUnitID="{F629EE12-201A-4238-A515-08A0979AC5F6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

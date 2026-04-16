@@ -1087,6 +1087,31 @@
 								<ActiveSource Name="Incinder_MainMenu" ID="{763F4799-132E-4F43-B31B-430FF022A5AC}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
+						<Sound Name="Incinder_Gameplay" ID="{D0B2F003-81D5-4F95-99FD-35AA810BE528}" ShortID="772160096">
+							<PropertyList>
+								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Incinder_Gameplay" ID="{F7F9BB7F-25CF-49DF-8D9F-D1D857485BBB}">
+									<Language>SFX</Language>
+									<AudioFile>Incinder_Gameplay.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="436896071"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="Incinder_Gameplay" ID="{F7F9BB7F-25CF-49DF-8D9F-D1D857485BBB}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
 					</ChildrenList>
 				</Folder>
 				<RandomSequenceContainer Name="Flintlock" ID="{6893F140-04D5-410C-8EF2-DD52D3342239}" ShortID="229695086">

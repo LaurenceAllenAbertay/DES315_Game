@@ -36,7 +36,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{6BD346D7-9A3D-CA1C-076C-736E75941592}">
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{C59D99CE-68EE-0C98-AA7B-29E05F5EC04A}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -327,6 +327,10 @@
 				<File Id="420762295" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>CardPick.wav</ShortName>
 					<CachePath>SFX/CardPick_10C4C929.wem</CachePath>
+				</File>
+				<File Id="436896071" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Incinder_Gameplay.wav</ShortName>
+					<CachePath>SFX/Incinder_Gameplay_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="437784108" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>CoinDrop.wav</ShortName>
@@ -1007,6 +1011,11 @@
 						<MediaRef Id="439767275"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="3407605449" Name="Gameplay_Looped" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="436896071"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="3604647259" Name="MainMenu" DurationType="OneShot" DurationMin="101.106255" DurationMax="101.106255">
 					<MediaRefs>
 						<MediaRef Id="969439922"/>
@@ -1017,6 +1026,7 @@
 						<MediaRef Id="955620415"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="4208309095" Name="OpeningAnimatic" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
 				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.297375" DurationMax="3.0626667">
 					<MediaRefs>
 						<MediaRef Id="223675437"/>
@@ -1136,5 +1146,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{B8155DB6-07E5-1267-C31D-99DE7A314D46}</FileHash>
+	<FileHash>{3A8367AD-FD49-3F03-4BBC-08B9AAE24B81}</FileHash>
 </SoundBanksInfo>
