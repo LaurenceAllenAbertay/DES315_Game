@@ -94,6 +94,94 @@
 						</MusicSegment>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Anim" ID="{76955F4B-C404-4EC8-B5BD-4018F2433156}" ShortID="961948710">
+					<ChildrenList>
+						<MusicSegment Name="mus_AnimaticMusic" ID="{BBD9E726-CB31-43A3-92E0-382CFBB891FB}" ShortID="819516785">
+							<PropertyList>
+								<Property Name="EndPosition" Type="Real64" Value="55999.977324263"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicTrack Name="mus_AnimaticMusic" ID="{9C165A57-C3C9-43E1-95FD-D7BA70CAAA2E}" ShortID="975326336">
+									<ReferenceList>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="mus_AnimaticMusic" ID="{00F55AB2-38BF-401B-BA06-3A80E4BA3B14}">
+											<Language>SFX</Language>
+											<AudioFile>mus_AnimaticMusic.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="397428832"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{AB2E4DD0-DE8A-4B19-B28C-53AE61C07F3C}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<ObjectLists>
+										<ObjectList Name="Sequences">
+											<Reference>
+												<Local>
+													<MusicTrackSequence Name="" ID="{34E5D06D-C7E8-4D9F-BF45-77297D3E84EE}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<Reference>
+																	<Local>
+																		<MusicClip Name="mus_AnimaticMusic" ID="{574474CA-5C4E-4441-BFDF-57559A6559EC}">
+																			<PropertyList>
+																				<Property Name="EndTrimOffset" Type="Real64" Value="55999.977324263"/>
+																				<Property Name="FadeInMode" Type="int16" Value="0"/>
+																				<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																			</PropertyList>
+																			<AudioSourceRef Name="mus_AnimaticMusic" ID="{00F55AB2-38BF-401B-BA06-3A80E4BA3B14}"/>
+																		</MusicClip>
+																	</Local>
+																</Reference>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</Local>
+											</Reference>
+										</ObjectList>
+									</ObjectLists>
+								</MusicTrack>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Cues">
+									<Reference>
+										<Local>
+											<MusicCue Name="Entry Cue" ID="{226524F9-8659-4C9B-9961-56436F649BCA}"/>
+										</Local>
+									</Reference>
+									<Reference>
+										<Local>
+											<MusicCue Name="Exit Cue" ID="{1C41725C-EDAB-49B0-803C-0E9C86297265}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="55999.977324263"/>
+												</PropertyList>
+											</MusicCue>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</MusicSegment>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</InteractiveMusic>
