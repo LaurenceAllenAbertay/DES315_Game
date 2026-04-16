@@ -36,7 +36,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{C276617A-8C8F-E6CF-947B-63572382461C}">
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{52EFC46D-6079-A900-7C76-2F1A86154BF7}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -660,6 +660,10 @@
 					<ShortName>PlayerSwing-03.wav</ShortName>
 					<CachePath>SFX/PlayerSwing-03_10C4C929.wem</CachePath>
 				</File>
+				<File Id="969439922" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Incinder_MainMenu.wav</ShortName>
+					<CachePath>SFX/Incinder_MainMenu_D79FB2B7.wem</CachePath>
+				</File>
 				<File Id="970236375" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>CardShuffle-09.wav</ShortName>
 					<CachePath>SFX/CardShuffle-09_10C4C929.wem</CachePath>
@@ -999,6 +1003,11 @@
 						<MediaRef Id="439767275"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="3604647259" Name="MainMenu" DurationType="OneShot" DurationMin="101.106255" DurationMax="101.106255">
+					<MediaRefs>
+						<MediaRef Id="969439922"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.297375" DurationMax="3.0626667">
 					<MediaRefs>
 						<MediaRef Id="223675437"/>
@@ -1118,5 +1127,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{1418A74F-18FC-E953-8FC3-BB12DA5F26E6}</FileHash>
+	<FileHash>{8C84DBB3-BB8A-2D4A-0801-5EEE266135C9}</FileHash>
 </SoundBanksInfo>

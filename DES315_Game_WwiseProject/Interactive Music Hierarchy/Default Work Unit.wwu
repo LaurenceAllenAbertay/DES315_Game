@@ -1,6 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{F629EE12-201A-4238-A515-08A0979AC5F6}" SchemaVersion="110">
 	<InteractiveMusic>
-		<WorkUnit Name="Default Work Unit" ID="{F629EE12-201A-4238-A515-08A0979AC5F6}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{F629EE12-201A-4238-A515-08A0979AC5F6}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="Main_Menu" ID="{3766FB3E-32E5-40DC-9E13-4F32A842F2C4}" ShortID="1021346911">
+					<ChildrenList>
+						<MusicSegment Name="Incinder_MainMenu" ID="{59DEA967-0DA9-4D1F-9852-71861BF63386}" ShortID="176052963">
+							<PropertyList>
+								<Property Name="EndPosition" Type="Real64" Value="101106.258503401"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<MusicTrack Name="Incinder_MainMenu" ID="{DB27AE5D-F757-4BA5-B986-5D99F02FF9CB}" ShortID="28308132">
+									<ReferenceList>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Incinder_MainMenu" ID="{E44852BE-429D-4B1D-9157-49ADDF86FDE4}">
+											<Language>SFX</Language>
+											<AudioFile>Incinder_MainMenu.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="969439922"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<TransitionList>
+										<MusicTransition Name="Root" ID="{C87C3504-C932-4E12-B025-AFA381DF02A9}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</TransitionList>
+									<ObjectLists>
+										<ObjectList Name="Sequences">
+											<Reference>
+												<Local>
+													<MusicTrackSequence Name="" ID="{0E2EFAFF-4B54-4896-AB51-27170A87B60E}">
+														<ObjectLists>
+															<ObjectList Name="Clips">
+																<Reference>
+																	<Local>
+																		<MusicClip Name="Incinder_MainMenu" ID="{E6BA7724-1715-4985-AD29-7D7D122D48D0}">
+																			<PropertyList>
+																				<Property Name="EndTrimOffset" Type="Real64" Value="101106.258503401"/>
+																				<Property Name="FadeInMode" Type="int16" Value="0"/>
+																				<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																			</PropertyList>
+																			<AudioSourceRef Name="Incinder_MainMenu" ID="{E44852BE-429D-4B1D-9157-49ADDF86FDE4}"/>
+																		</MusicClip>
+																	</Local>
+																</Reference>
+															</ObjectList>
+														</ObjectLists>
+													</MusicTrackSequence>
+												</Local>
+											</Reference>
+										</ObjectList>
+									</ObjectLists>
+								</MusicTrack>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Cues">
+									<Reference>
+										<Local>
+											<MusicCue Name="Entry Cue" ID="{D3E8A878-A385-4652-89F3-3CB47364BAB5}"/>
+										</Local>
+									</Reference>
+									<Reference>
+										<Local>
+											<MusicCue Name="Exit Cue" ID="{2CBCECCB-552C-47A5-B578-6970E539C80B}">
+												<PropertyList>
+													<Property Name="CueType" Type="int16" Value="1"/>
+													<Property Name="TimeMs" Type="Real64" Value="101106.258503401"/>
+												</PropertyList>
+											</MusicCue>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</MusicSegment>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
 	</InteractiveMusic>
 </WwiseDocument>

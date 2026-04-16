@@ -410,6 +410,21 @@
 						</Event>
 					</ChildrenList>
 				</Folder>
+				<Folder Name="Music" ID="{31E887CC-8EAF-4EAE-9625-E29E778339F8}" ShortID="365440074">
+					<ChildrenList>
+						<Event Name="MainMenu" ID="{D16A0EA3-E7B5-450C-9117-B275E6D1E046}">
+							<ChildrenList>
+								<Action Name="" ID="{CB9341F8-EC27-4399-8FCB-4A46D355B3B4}" ShortID="447277143">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Incinder_MainMenu" ID="{59DEA967-0DA9-4D1F-9852-71861BF63386}" WorkUnitID="{F629EE12-201A-4238-A515-08A0979AC5F6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+					</ChildrenList>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
