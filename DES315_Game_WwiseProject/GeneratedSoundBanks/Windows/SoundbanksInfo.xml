@@ -36,7 +36,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{06D9751E-7D14-C877-A314-4BF5F7194D23}">
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{FDC1EF15-0208-6F67-0F46-8E451902B4AD}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -1066,7 +1066,7 @@
 						<MediaRef Id="686190957"/>
 					</MediaRefs>
 				</Event>
-				<Event Id="4171534483" Name="TorchLoop" DurationType="Infinite">
+				<Event Id="4171534483" Name="TorchLoop" MaxAttenuation="20" DurationType="Infinite">
 					<MediaRefs>
 						<MediaRef Id="33000027"/>
 					</MediaRefs>
@@ -1118,5 +1118,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{1ACBA7DF-0A48-3942-EEEC-3AC41372A66E}</FileHash>
+	<FileHash>{0D77B354-35E4-4A68-005A-C8BD8CFF8BFC}</FileHash>
 </SoundBanksInfo>

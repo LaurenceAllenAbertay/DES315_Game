@@ -2933,9 +2933,13 @@
 						</Sound>
 						<Sound Name="Fire SND8761 Compressed" ID="{624CC96B-6020-4074-9772-847DDB3983DA}" ShortID="516378879">
 							<PropertyList>
+								<Property Name="3DSpatialization" Type="int16" Value="2"/>
 								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 							</PropertyList>
 							<ReferenceList>
+								<Reference Name="Attenuation">
+									<ObjectRef Name="TorchFire" ID="{997008BA-F335-4554-BE9E-ADA8D6572C38}" WorkUnitID="{1DC499B3-7ABC-4C1C-89FA-C9CEC991D676}"/>
+								</Reference>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
 								</Reference>
