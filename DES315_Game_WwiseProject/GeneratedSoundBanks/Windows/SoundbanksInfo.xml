@@ -36,7 +36,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{52EFC46D-6079-A900-7C76-2F1A86154BF7}">
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{2291A786-2D48-B73A-C736-A3B9403B8ACA}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -656,6 +656,10 @@
 					<ShortName>EnemyHealPitched-02.wav</ShortName>
 					<CachePath>SFX/EnemyHealPitched-02_10C4C929.wem</CachePath>
 				</File>
+				<File Id="955620415" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Incinder_MainMenu.wav</ShortName>
+					<CachePath>SFX/Incinder_MainMenu_C5579977.wem</CachePath>
+				</File>
 				<File Id="962061646" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerSwing-03.wav</ShortName>
 					<CachePath>SFX/PlayerSwing-03_10C4C929.wem</CachePath>
@@ -1008,6 +1012,11 @@
 						<MediaRef Id="969439922"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="2808240339" Name="MainMenu_Looped" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="955620415"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.297375" DurationMax="3.0626667">
 					<MediaRefs>
 						<MediaRef Id="223675437"/>
@@ -1127,5 +1136,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{8C84DBB3-BB8A-2D4A-0801-5EEE266135C9}</FileHash>
+	<FileHash>{82F5B4F5-F652-4551-661C-9BFA7811604A}</FileHash>
 </SoundBanksInfo>
