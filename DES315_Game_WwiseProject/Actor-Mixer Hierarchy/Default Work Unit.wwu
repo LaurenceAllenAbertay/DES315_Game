@@ -1481,6 +1481,10 @@
 											</ReferenceList>
 											<ChildrenList>
 												<AudioFileSource Name="PlayerCast-06" ID="{09097002-61E4-4ADF-8017-8FFE95A2DC66}">
+													<PropertyList>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.803975694444444"/>
+													</PropertyList>
 													<Language>SFX</Language>
 													<AudioFile>PlayerCast-06.wav</AudioFile>
 													<MediaIDList>
