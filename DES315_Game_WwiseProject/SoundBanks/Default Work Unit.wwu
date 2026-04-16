@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{506BD1DC-F745-43B5-AA1B-29726E8D04C5}" SchemaVersion="110">
 	<SoundBanks>
-		<WorkUnit Name="Default Work Unit" ID="{506BD1DC-F745-43B5-AA1B-29726E8D04C5}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{506BD1DC-F745-43B5-AA1B-29726E8D04C5}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="Main" ID="{C41660A7-D1FB-4967-A63E-BF224C7E39E9}">
+					<ObjectInclusionList>
+						<ObjectRef Name="BruteHurt" ID="{51C0460E-C291-40AE-821A-BD1101996EB0}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="PlayerHurt" ID="{C9E5376F-693F-426D-944B-3352332959A6}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="TorchLoop" ID="{37E2A7B9-18F1-42BF-8B04-47F10797D8F6}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BruteHeal" ID="{A290F2C4-8837-42E5-9A60-160FA7687DFC}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CardUI_Confirm" ID="{4C97B26D-8DC6-431D-BC72-49FAA1F26973}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="TorchBreak" ID="{8CA9EF57-14CF-43F3-A51E-29FA1E74CB7A}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CardUI_Shuffle" ID="{7482BE4D-B7F8-442A-9ED0-CCB2F921C702}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CardUI_Pick" ID="{9E13AE7C-A9F9-4453-9461-304096ED4BEE}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CoinSpend" ID="{9AEF2D0A-E029-453B-BDC0-3B4C2D3155F6}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="ChestClose" ID="{6EBBF05A-218F-4591-A6C7-E5603911F8FF}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="PlayerMeleeAttack" ID="{DF4F44C0-FA44-45F8-A677-E6AFF8116AB1}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="ChestOpen" ID="{77C0B971-9ACE-4617-BD43-4C055F2F5B0A}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CardUI_End" ID="{E30A3ECC-5488-4647-A48C-D10B825A571B}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Bloodstorm" ID="{8DB008DD-5B92-476C-8E08-1E32C11AFEE0}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BruteMove" ID="{B43324FD-5453-48A8-8CC0-C561BCE73EB5}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="PlayerDeath" ID="{72FF0CB9-4BE7-494D-A182-D9949BCB4264}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BruteAttack" ID="{20D53960-7C44-495D-A27E-F84D6D5213B7}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CoinToss" ID="{90787D80-C0E5-49FA-AE42-41AD69316D83}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CoinMiss" ID="{ABA88992-47B1-4C2E-B706-F8204CA4CD30}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_Open" ID="{E4067FE9-9991-4C40-94F1-F6CA3933372E}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="PlayerLaugh" ID="{2253CB54-F5BB-4C5C-908B-F2A743FD203E}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="PlayerHeal" ID="{37273510-D69C-4C8A-9DC5-5CC87272111C}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="Footsteps" ID="{E44C36A5-F854-4CE2-AA32-CB1A05AD7942}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_NextPage" ID="{1795DDDA-78B9-4CEC-B250-EF15D2D5A1A9}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="DoorOpen" ID="{FAFE3DAC-55C9-4D14-B177-DA81C4AE59E0}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="BruteBlock" ID="{D1BB03C3-393A-4DF3-A660-39DF8476F934}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_PrevPage" ID="{C99BA61F-F20F-4E33-B459-3D7E3339E364}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_Close" ID="{9B4628CF-A818-4E73-AC20-688DEBC973B1}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="CardUI_Start" ID="{5AF2F706-DB23-4E9F-991E-85CDA7E4A508}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="FireFlintlock" ID="{A3083A63-FB00-4EEC-8F28-3376CB136756}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="GameOver" ID="{39246F61-98FA-4EF6-A9DF-BB0569DD52D4}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
 	</SoundBanks>
 </WwiseDocument>

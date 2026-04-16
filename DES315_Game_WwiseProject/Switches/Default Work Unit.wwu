@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{5130BFF3-129A-45B2-97AA-D37322469310}" SchemaVersion="110">
 	<Switches>
-		<WorkUnit Name="Default Work Unit" ID="{5130BFF3-129A-45B2-97AA-D37322469310}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{5130BFF3-129A-45B2-97AA-D37322469310}" PersistMode="Standalone">
+			<ChildrenList>
+				<SwitchGroup Name="Footstep_Type" ID="{8753A845-706E-4AC2-8E0E-B1A54A46EA6A}">
+					<ChildrenList>
+						<Switch Name="GrassHeavy" ID="{611D4448-8B9B-4CD2-B1C6-A845771FCBFD}"/>
+						<Switch Name="GrassLight" ID="{401575FA-8FFC-40C7-A42B-4D8A76194DA1}"/>
+						<Switch Name="GravelHeavy" ID="{FBEEF4F0-EEA6-42A6-8C71-D649295C1FD2}"/>
+						<Switch Name="GravelLight" ID="{928CB3F5-8A96-4A66-A538-3991A4A511B8}"/>
+						<Switch Name="StoneHeavy" ID="{5FC4A1C2-18EB-4E79-8B39-2790E899F06F}"/>
+						<Switch Name="StoneLight" ID="{AE7FA220-DB07-4AB0-9BC7-C52A05C59826}"/>
+						<Switch Name="WoodHeavy" ID="{496B8E8B-91C3-496C-A1DD-DBB16F423D77}"/>
+						<Switch Name="WoodLight" ID="{E988CC2C-D231-4923-88EF-9000565D0451}"/>
+					</ChildrenList>
+				</SwitchGroup>
+			</ChildrenList>
+		</WorkUnit>
 	</Switches>
 </WwiseDocument>
