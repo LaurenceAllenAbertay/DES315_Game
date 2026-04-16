@@ -34,6 +34,7 @@ namespace AK
         static const AkUniqueID FOOTSTEPS = 2385628198U;
         static const AkUniqueID GAMEOVER = 4158285989U;
         static const AkUniqueID MAINMENU = 3604647259U;
+        static const AkUniqueID MAINMENU_LOOPED = 2808240339U;
         static const AkUniqueID PLAYERDEATH = 1656947812U;
         static const AkUniqueID PLAYERHEAL = 3216143520U;
         static const AkUniqueID PLAYERHURT = 3537581393U;
