@@ -88,7 +88,11 @@ public class InventoryUI : MonoBehaviour
         if (inventoryButton != null) inventoryButton.SetActive(true);
     }
 
-    private void OnInventory(InputAction.CallbackContext context) => Toggle();
+    private void OnInventory(InputAction.CallbackContext context)
+    {
+        if (PauseStack.IsPaused && !root.activeSelf) return;
+        Toggle();
+    }
 
     private void OnGamePaused()
     {
@@ -229,7 +233,10 @@ public class InventoryUI : MonoBehaviour
         Debug.Log("Inventory UI active: " + inventoryButton.activeSelf);
 
         if (isActive)
+        {
             PauseStack.Push();
+            inventoryAction?.Enable();
+        }
         else
             PauseStack.Pop();
     }

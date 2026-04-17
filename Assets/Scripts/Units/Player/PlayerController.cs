@@ -165,6 +165,8 @@ public class PlayerController : MonoBehaviour
         {
             targetingSystem.OnTargetConfirmed += OnAbilityTargetConfirmed;
         }
+
+        PauseStack.OnPauseStateChanged += OnPauseStateChanged;
     }
 
     private void OnDisable()
@@ -203,6 +205,17 @@ public class PlayerController : MonoBehaviour
         {
             targetingSystem.OnTargetConfirmed -= OnAbilityTargetConfirmed;
         }
+
+        PauseStack.OnPauseStateChanged -= OnPauseStateChanged;
+    }
+
+    private void OnPauseStateChanged(bool isPaused)
+    {
+        var playerMap = inputActions?.FindActionMap("Player");
+        if (playerMap == null) return;
+
+        if (isPaused) playerMap.Disable();
+        else playerMap.Enable();
     }
 
     private void Start()

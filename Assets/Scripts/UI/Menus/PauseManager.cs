@@ -94,8 +94,6 @@ public class PauseManager : MonoBehaviour
         PauseStack.Push();
         SetPauseUI(true);
         OnPaused?.Invoke();
-
-        inputActions?.FindActionMap("Player")?.Disable();
     }
 
     public void Resume()
@@ -105,8 +103,6 @@ public class PauseManager : MonoBehaviour
         isPaused = false;
         PauseStack.Pop();
         SetPauseUI(false);
-
-        inputActions?.FindActionMap("Player")?.Enable();
     }
 
     public void RestartRun()
