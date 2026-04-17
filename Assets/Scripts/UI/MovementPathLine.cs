@@ -6,8 +6,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Draws a NavMesh-following path line from the player to the mouse cursor (or active destination
-/// while moving). Uses two separate LineRenderers so the white/red split is a hard material colour
-/// swap with no gradient blending.
+/// while moving). Uses two separate LineRenderers so the white/red split is a hard colour swap.
 /// Active during the player's combat turn, or outside combat when ShowVisibilityFeatures is held.
 /// Hidden entirely while an ability is being targeted.
 /// </summary>
@@ -19,13 +18,14 @@ public class MovementPathLine : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private AbilityTargeting abilityTargeting;
+    [SerializeField] private LineRenderer whiteRenderer;
+    [SerializeField] private LineRenderer redRenderer;
 
     [Header("Floor Raycast")]
     [Tooltip("Match this to PlayerController's walkableMask")]
     [SerializeField] private LayerMask walkableMask;
 
     [Header("Line Appearance")]
-    [SerializeField] private float lineWidth = 0.05f;
     [SerializeField] private float lineHeightOffset = 0.02f;
     [Tooltip("Match this to PlayerController's minMoveDistance")]
     [SerializeField] private float minMoveDistance = 0.3f;
@@ -33,17 +33,11 @@ public class MovementPathLine : MonoBehaviour
     [SerializeField] private float cornerRadius = 0.4f;
     [Tooltip("Bezier steps per rounded corner")]
     [SerializeField] [Range(2, 20)] private int cornerSteps = 8;
-    [Tooltip("World-space distance over which the line tip fades to transparent")]
-    [SerializeField] private float tipFadeDistance = 0.3f;
-    [Tooltip("Material used for both line segments — any transparent unlit material works")]
-    [SerializeField] private Material lineMaterial;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI outOfRangeText;
     [SerializeField] private string outOfRangeMessage = "Movement out of range.";
 
-    private LineRenderer whiteRenderer;
-    private LineRenderer redRenderer;
     private NavMeshPath navPath;
     private InputAction showVisibilityAction;
     private InputAction holdMoveAction;
@@ -66,41 +60,6 @@ public class MovementPathLine : MonoBehaviour
 
         if (walkableMask.value == 0)
             walkableMask = ~0;
-
-        whiteRenderer = GetOrCreateRenderer("WhiteLine", Color.white);
-        redRenderer   = GetOrCreateRenderer("RedLine",   Color.red);
-    }
-
-    private LineRenderer GetOrCreateRenderer(string childName, Color colour)
-    {
-        Transform existing = transform.Find(childName);
-        GameObject go = existing != null ? existing.gameObject : new GameObject(childName);
-        go.transform.SetParent(transform, false);
-
-        LineRenderer lr = go.GetComponent<LineRenderer>();
-        if (lr == null) lr = go.AddComponent<LineRenderer>();
-
-        lr.useWorldSpace   = true;
-        lr.startWidth      = lineWidth;
-        lr.endWidth        = lineWidth;
-        lr.positionCount   = 0;
-        lr.enabled         = false;
-        lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        lr.receiveShadows  = false;
-
-        if (lineMaterial != null)
-        {
-            lr.material         = new Material(lineMaterial);
-            float originalAlpha = lineMaterial.color.a;
-            lr.material.color   = new Color(colour.r, colour.g, colour.b, originalAlpha);
-        }
-        else
-        {
-            lr.material       = new Material(Shader.Find("Sprites/Default"));
-            lr.material.color = colour;
-        }
-
-        return lr;
     }
 
     private void OnEnable()
@@ -182,15 +141,15 @@ public class MovementPathLine : MonoBehaviour
 
         if (!outOfRange)
         {
-            SetRenderer(whiteRenderer, smooth, tipFadeDistance);
+            SetRenderer(whiteRenderer, smooth);
             HideRenderer(redRenderer);
             SetOutOfRangeText(false);
         }
         else
         {
             SplitPath(smooth, remaining, out List<Vector3> whitePart, out List<Vector3> redPart);
-            SetRenderer(whiteRenderer, whitePart, 0f);
-            SetRenderer(redRenderer,   redPart,   tipFadeDistance);
+            SetRenderer(whiteRenderer, whitePart);
+            SetRenderer(redRenderer,   redPart);
             SetOutOfRangeText(true);
         }
     }
@@ -218,8 +177,8 @@ public class MovementPathLine : MonoBehaviour
 
                 if (nextAcc >= remaining)
                 {
-                    float t          = segLen > 0f ? (remaining - accumulated) / segLen : 0f;
-                    Vector3 splitPt  = Vector3.Lerp(points[i], points[i + 1], t);
+                    float t         = segLen > 0f ? (remaining - accumulated) / segLen : 0f;
+                    Vector3 splitPt = Vector3.Lerp(points[i], points[i + 1], t);
                     before.Add(splitPt);
                     after.Add(splitPt);
                     split = true;
@@ -239,13 +198,9 @@ public class MovementPathLine : MonoBehaviour
             after.Add(points[points.Count - 1]);
     }
 
-    /// <summary>
-    /// Assigns points to a LineRenderer and builds an alpha-only gradient that fades the tip to
-    /// transparent over tipFade world units. Pass tipFade=0 for a fully opaque line.
-    /// </summary>
-    private static void SetRenderer(LineRenderer lr, List<Vector3> points, float tipFade)
+    private static void SetRenderer(LineRenderer lr, List<Vector3> points)
     {
-        if (points == null || points.Count < 2)
+        if (lr == null || points == null || points.Count < 2)
         {
             HideRenderer(lr);
             return;
@@ -253,61 +208,20 @@ public class MovementPathLine : MonoBehaviour
 
         lr.positionCount = points.Count;
         lr.SetPositions(points.ToArray());
-        lr.colorGradient = BuildAlphaFadeGradient(points, tipFade);
-        lr.enabled       = true;
+        lr.enabled = true;
     }
 
     private static void HideRenderer(LineRenderer lr)
     {
+        if (lr == null) return;
         lr.enabled       = false;
         lr.positionCount = 0;
     }
 
-    /// <summary>
-    /// Gradient that is fully opaque, fading to transparent only at the tip over tipFade world units.
-    /// Colour is driven entirely by the material, not the gradient.
-    /// </summary>
-    private static Gradient BuildAlphaFadeGradient(List<Vector3> points, float tipFade)
-    {
-        var g = new Gradient();
-
-        if (tipFade <= 0f || points.Count < 2)
-        {
-            g.SetKeys(
-                new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
-                new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) }
-            );
-            return g;
-        }
-
-        float accumulated = 0f;
-        float fadeStartT  = 0f;
-        for (int i = points.Count - 1; i > 0; i--)
-        {
-            accumulated += Vector3.Distance(points[i], points[i - 1]);
-            if (accumulated >= tipFade)
-            {
-                fadeStartT = (i - 1) / (float)(points.Count - 1);
-                break;
-            }
-        }
-
-        g.SetKeys(
-            new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
-            new[]
-            {
-                new GradientAlphaKey(1f, 0f),
-                new GradientAlphaKey(1f, fadeStartT),
-                new GradientAlphaKey(0f, 1f),
-            }
-        );
-        return g;
-    }
-
     private void HideAll()
     {
-        if (whiteRenderer != null) HideRenderer(whiteRenderer);
-        if (redRenderer   != null) HideRenderer(redRenderer);
+        HideRenderer(whiteRenderer);
+        HideRenderer(redRenderer);
     }
 
     private void SetOutOfRangeText(bool visible)
@@ -387,11 +301,5 @@ public class MovementPathLine : MonoBehaviour
 
         result.Add(controls[controls.Count - 1]);
         return result;
-    }
-
-    private void OnDestroy()
-    {
-        if (whiteRenderer != null) Destroy(whiteRenderer.material);
-        if (redRenderer   != null) Destroy(redRenderer.material);
     }
 }
