@@ -24,6 +24,8 @@ public class MovementPathLine : MonoBehaviour
     [Header("Floor Raycast")]
     [Tooltip("Match this to PlayerController's walkableMask")]
     [SerializeField] private LayerMask walkableMask;
+    [Tooltip("Match this to PlayerController's navMeshSampleDistance")]
+    [SerializeField] private float navMeshSampleDistance = 0.3f;
 
     [Header("Line Appearance")]
     [SerializeField] private float lineHeightOffset = 0.02f;
@@ -33,6 +35,8 @@ public class MovementPathLine : MonoBehaviour
     [SerializeField] private float cornerRadius = 0.4f;
     [Tooltip("Bezier steps per rounded corner")]
     [SerializeField] [Range(2, 20)] private int cornerSteps = 8;
+    [Tooltip("Turns smaller than this (degrees) are treated as straight to avoid false curves")]
+    [SerializeField] [Range(0f, 45f)] private float minCornerAngleForRounding = 6f;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI outOfRangeText;
@@ -115,21 +119,55 @@ public class MovementPathLine : MonoBehaviour
     {
         Vector3 origin = player.transform.position;
 
-        NavMesh.CalculatePath(origin, target, NavMesh.AllAreas, navPath);
-
-        if (navPath.status == NavMeshPathStatus.PathInvalid || navPath.corners.Length < 2)
+        if (!NavMesh.SamplePosition(origin, out NavMeshHit originNavHit, navMeshSampleDistance, NavMesh.AllAreas))
         {
             HideAll();
             SetOutOfRangeText(false);
             return;
         }
 
-        Vector3[] corners = navPath.corners;
-        List<Vector3> elevated = new List<Vector3>(corners.Length);
-        for (int i = 0; i < corners.Length; i++)
-            elevated.Add(new Vector3(corners[i].x, corners[i].y + lineHeightOffset, corners[i].z));
+        if (!NavMesh.SamplePosition(target, out NavMeshHit targetNavHit, navMeshSampleDistance, NavMesh.AllAreas))
+        {
+            HideAll();
+            SetOutOfRangeText(false);
+            return;
+        }
 
-        List<Vector3> smooth = BuildRoundedCornerPath(elevated);
+        Vector3 originNav = originNavHit.position;
+        Vector3 targetNav = targetNavHit.position;
+        bool hasDirectPath = !NavMesh.Raycast(originNav, targetNav, out NavMeshHit _, NavMesh.AllAreas);
+
+        List<Vector3> smooth;
+        if (hasDirectPath)
+        {
+            smooth = new List<Vector3>(2)
+            {
+                new Vector3(origin.x,     origin.y     + lineHeightOffset, origin.z),
+                new Vector3(targetNav.x,  targetNav.y  + lineHeightOffset, targetNav.z)
+            };
+        }
+        else
+        {
+            NavMesh.CalculatePath(originNav, targetNav, NavMesh.AllAreas, navPath);
+
+            if (navPath.status == NavMeshPathStatus.PathInvalid || navPath.corners.Length < 2)
+            {
+                HideAll();
+                SetOutOfRangeText(false);
+                return;
+            }
+
+            Vector3[] corners = navPath.corners;
+            List<Vector3> elevated = new List<Vector3>(corners.Length);
+            for (int i = 0; i < corners.Length; i++)
+                elevated.Add(new Vector3(corners[i].x, corners[i].y + lineHeightOffset, corners[i].z));
+
+            // Ensure the rendered line starts exactly at the player.
+            elevated[0] = new Vector3(origin.x, origin.y + lineHeightOffset, origin.z);
+
+            List<Vector3> simplified = SimplifyNearCollinearCorners(elevated, minCornerAngleForRounding);
+            smooth = BuildRoundedCornerPath(simplified);
+        }
 
         float totalLength = 0f;
         for (int i = 0; i < smooth.Count - 1; i++)
@@ -236,7 +274,7 @@ public class MovementPathLine : MonoBehaviour
         if (mainCamera == null || Mouse.current == null) return null;
 
         Ray ray = mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue());
-        if (!Physics.Raycast(ray, out RaycastHit hit, 200f, walkableMask))
+        if (!HideOnCameraEnter.RaycastIgnoreTransparent(ray, out RaycastHit hit, 200f, walkableMask))
             return null;
 
         RoomLA currentRoom = RoomManager.Instance?.CurrentRoom;
@@ -283,6 +321,14 @@ public class MovementPathLine : MonoBehaviour
 
             Vector3 inDir  = (curr - prev).normalized;
             Vector3 outDir = (next - curr).normalized;
+            float turnAngle = Vector3.Angle(inDir, outDir);
+
+            // Keep visually straight paths straight.
+            if (turnAngle < minCornerAngleForRounding)
+            {
+                result.Add(curr);
+                continue;
+            }
 
             float r  = Mathf.Min(cornerRadius, Vector3.Distance(prev, curr) * 0.5f,
                                                Vector3.Distance(curr, next) * 0.5f);
@@ -301,5 +347,34 @@ public class MovementPathLine : MonoBehaviour
 
         result.Add(controls[controls.Count - 1]);
         return result;
+    }
+
+    private static List<Vector3> SimplifyNearCollinearCorners(List<Vector3> points, float minTurnAngleDeg)
+    {
+        if (points == null || points.Count <= 2)
+            return points == null ? new List<Vector3>() : new List<Vector3>(points);
+
+        List<Vector3> simplified = new List<Vector3>(points.Count) { points[0] };
+
+        for (int i = 1; i < points.Count - 1; i++)
+        {
+            Vector3 prev = simplified[simplified.Count - 1];
+            Vector3 curr = points[i];
+            Vector3 next = points[i + 1];
+
+            Vector3 toCurr = curr - prev;
+            Vector3 toNext = next - curr;
+            if (toCurr.sqrMagnitude < 0.0001f || toNext.sqrMagnitude < 0.0001f)
+                continue;
+
+            float turnAngle = Vector3.Angle(toCurr, toNext);
+            if (turnAngle < minTurnAngleDeg)
+                continue;
+
+            simplified.Add(curr);
+        }
+
+        simplified.Add(points[points.Count - 1]);
+        return simplified;
     }
 }

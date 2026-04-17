@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 lastFramePosition;
     private bool isPointerOverUI;
     private float movementUnlockTime;
+    private NavMeshPath movementPath;
 
     public delegate void LightStateChanged(bool inLight);
     public event LightStateChanged OnLightStateChanged;
@@ -92,6 +93,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        movementPath = new NavMeshPath();
         mainCamera = Camera.main;
         if (targetingSystem == null)
         {
@@ -292,6 +294,7 @@ public class PlayerController : MonoBehaviour
             if (requestedDistance < minMoveDistance) return;
 
             bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+            Vector3 destinationPoint;
 
             if (inCombat)
             {
@@ -311,20 +314,30 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
 
-                if (requestedDistance > remainingDistance)
-                {
-                    if (debugMode) Debug.Log($"[PlayerController] Click too far! Requested: {requestedDistance:F2}, Remaining: {remainingDistance:F2}");
+                if (!TryResolveDestinationOnPath(targetPoint, remainingDistance, out destinationPoint, out bool clamped, out float pathDistance))
                     return;
+
+                float resolvedDistance = clamped ? remainingDistance : pathDistance;
+                if (resolvedDistance < minMoveDistance)
+                    return;
+
+                if (clamped && debugMode)
+                {
+                    Debug.Log($"[PlayerController] Click too far on NavMesh path. Requested: {pathDistance:F2}, Remaining: {remainingDistance:F2}. Clamping to edge.");
                 }
             }
-
-            if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+            else
             {
-                agent.isStopped = false;
-                agent.SetDestination(navHit.position);
-                lowVelocityTimer = 0f;
-                ShowDestinationIndicator(navHit.position);
+                if (!NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+                    return;
+
+                destinationPoint = navHit.position;
             }
+
+            agent.isStopped = false;
+            agent.SetDestination(destinationPoint);
+            lowVelocityTimer = 0f;
+            ShowDestinationIndicator(destinationPoint);
         }
     }
 
@@ -368,21 +381,32 @@ public class PlayerController : MonoBehaviour
             targetPoint += (toTarget / cursorDistance) * (holdMoveLookAhead * t);
 
         bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
+        Vector3 destinationPoint;
+
         if (inCombat)
         {
             if (player == null || !player.CanMove()) return;
             float remainingDistance = player.RemainingMoveDistance;
             if (remainingDistance <= 0.01f) return;
-            float requestedDistance = Vector3.Distance(transform.position, targetPoint);
-            if (requestedDistance > remainingDistance) return;
+
+            if (!TryResolveDestinationOnPath(targetPoint, remainingDistance, out destinationPoint, out bool clamped, out float pathDistance))
+                return;
+
+            float resolvedDistance = clamped ? remainingDistance : pathDistance;
+            if (resolvedDistance < minMoveDistance)
+                return;
+        }
+        else
+        {
+            if (!NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+                return;
+
+            destinationPoint = navHit.position;
         }
 
-        if (NavMesh.SamplePosition(targetPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
-        {
-            agent.isStopped = false;
-            agent.SetDestination(navHit.position);
-            lowVelocityTimer = 0f;
-        }
+        agent.isStopped = false;
+        agent.SetDestination(destinationPoint);
+        lowVelocityTimer = 0f;
     }
 
     private void OnHoldMoveStarted(InputAction.CallbackContext context)
@@ -562,6 +586,72 @@ public class PlayerController : MonoBehaviour
                 TutorialManager.Instance?.Trigger("first_move");
             }
         }
+    }
+
+    private bool TryResolveDestinationOnPath(Vector3 requestedPoint, float maxPathDistance, out Vector3 destinationPoint, out bool wasClamped, out float pathDistance)
+    {
+        destinationPoint = transform.position;
+        wasClamped = false;
+        pathDistance = 0f;
+
+        if (!NavMesh.SamplePosition(requestedPoint, out NavMeshHit navHit, navMeshSampleDistance, NavMesh.AllAreas))
+            return false;
+
+        if (!NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, movementPath))
+            return false;
+
+        if (movementPath.status == NavMeshPathStatus.PathInvalid || movementPath.corners.Length < 2)
+            return false;
+
+        pathDistance = CalculatePathLength(movementPath.corners);
+        if (pathDistance <= maxPathDistance + 0.001f)
+        {
+            destinationPoint = navHit.position;
+            return true;
+        }
+
+        destinationPoint = GetPointAlongPath(movementPath.corners, maxPathDistance);
+        wasClamped = true;
+        return true;
+    }
+
+    private static float CalculatePathLength(Vector3[] corners)
+    {
+        float length = 0f;
+        for (int i = 0; i < corners.Length - 1; i++)
+        {
+            length += Vector3.Distance(corners[i], corners[i + 1]);
+        }
+
+        return length;
+    }
+
+    private static Vector3 GetPointAlongPath(Vector3[] corners, float distanceAlongPath)
+    {
+        if (corners == null || corners.Length == 0)
+            return Vector3.zero;
+
+        if (distanceAlongPath <= 0f)
+            return corners[0];
+
+        float travelled = 0f;
+        for (int i = 0; i < corners.Length - 1; i++)
+        {
+            Vector3 start = corners[i];
+            Vector3 end = corners[i + 1];
+            float segmentLength = Vector3.Distance(start, end);
+            float nextTravelled = travelled + segmentLength;
+
+            if (nextTravelled >= distanceAlongPath)
+            {
+                float segmentT = segmentLength > 0.001f ? (distanceAlongPath - travelled) / segmentLength : 0f;
+                return Vector3.Lerp(start, end, segmentT);
+            }
+
+            travelled = nextTravelled;
+        }
+
+        return corners[corners.Length - 1];
     }
 
     private void OnDestroy()

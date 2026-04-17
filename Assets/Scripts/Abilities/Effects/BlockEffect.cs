@@ -2,8 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Adds block to the target
-/// Block reduces incoming damage and clears at the start of your turn
-/// Only functional during combat mode
+/// Doesn't do anything outside of combat
 /// </summary>
 [CreateAssetMenu(fileName = "BlockEffect", menuName = "Abilities/Effects/Block")]
 public class BlockEffect : AbilityEffect
@@ -14,16 +13,18 @@ public class BlockEffect : AbilityEffect
 
     public override void Execute(AbilityExecutionContext context)
     {
-        // TODO: Check if in combat mode - block does nothing outside combat
         float modifiedBase = baseBlockAmount;
+        // Get the bonus block from the stats manager
         if (StatsManager.Instance != null)
         {
             modifiedBase = StatsManager.Instance.ApplyBlock(baseBlockAmount);
         }
 
+        // Multiple effect of block by any multiplier
         float finalBlock = modifiedBase * context.AccumulatedMultiplier;
         float roundedBlock = Mathf.Ceil(finalBlock);
         
+        // Apply block to the caster
         if (context.Caster != null)
         {
             context.Caster.AddBlock(roundedBlock);
