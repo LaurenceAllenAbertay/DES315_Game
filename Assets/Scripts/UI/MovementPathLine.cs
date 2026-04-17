@@ -250,7 +250,7 @@ public class MovementPathLine : MonoBehaviour
     {
         if (player == null) return false;
         if (abilityTargeting != null && abilityTargeting.IsTargeting) return false;
-        if (holdMoveAction != null && holdMoveAction.IsPressed()) return false;
+        if (holdMoveAction != null && holdMoveAction.phase == InputActionPhase.Performed) return false;
 
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
         {
