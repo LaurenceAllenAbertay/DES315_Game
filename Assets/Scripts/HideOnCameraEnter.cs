@@ -11,6 +11,7 @@ public class HideOnCameraEnter : MonoBehaviour
     private Material instanceMaterial;
     private Color originalColor;
     private bool isTransparent;
+    private Transform playerTransform;
 
     public bool IsTransparent => isTransparent;
 
@@ -20,6 +21,9 @@ public class HideOnCameraEnter : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         instanceMaterial = meshRenderer.material;
         originalColor = instanceMaterial.GetColor("_BaseColor");
+
+        Player player = FindFirstObjectByType<Player>();
+        if (player != null) playerTransform = player.transform;
     }
 
     private void OnDestroy()
@@ -33,9 +37,13 @@ public class HideOnCameraEnter : MonoBehaviour
         Camera cam = Camera.main;
         if (cam == null) return;
 
+        float activeMargin = entryMargin;
+        if (playerTransform != null && IsBlockingPlayer(cam.transform.position, playerTransform.position))
+            activeMargin = entryMargin * 2f;
+
         float distance = DistanceToSurface(cam.transform.position);
 
-        if (distance >= entryMargin)
+        if (distance >= activeMargin)
         {
             if (isTransparent)
             {
@@ -52,10 +60,31 @@ public class HideOnCameraEnter : MonoBehaviour
             isTransparent = true;
         }
 
-        float alpha = Mathf.Clamp01(distance / entryMargin);
+        float alpha = Mathf.Clamp01(distance / activeMargin);
         Color c = originalColor;
         c.a = alpha;
         instanceMaterial.SetColor("_BaseColor", c);
+    }
+
+    /// <summary>
+    /// Returns true if this object's colliders intersect the raycast from the camera to the player.
+    /// </summary>
+    private bool IsBlockingPlayer(Vector3 cameraPos, Vector3 playerPos)
+    {
+        Vector3 direction = playerPos - cameraPos;
+        float distance = direction.magnitude;
+        Ray ray = new Ray(cameraPos, direction / distance);
+
+        RaycastHit[] hits = Physics.RaycastAll(ray, distance);
+        foreach (RaycastHit hit in hits)
+        {
+            foreach (Collider col in colliders)
+            {
+                if (hit.collider == col)
+                    return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
