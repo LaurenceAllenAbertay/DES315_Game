@@ -103,7 +103,7 @@ public class WinCondition : MonoBehaviour
         {
             RunScoreManager.Instance?.FinalizeTime();
             winScreenPanel.SetActive(true);
-            Time.timeScale = 0f;
+            PauseStack.Push();
         }
         else
         {

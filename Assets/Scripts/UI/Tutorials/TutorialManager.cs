@@ -69,12 +69,12 @@ public class TutorialManager : MonoBehaviour
         _shownThisRun.Add(key);
         messageText.text = message;
         panel.SetActive(true);
-        Time.timeScale = 0f;
+        PauseStack.Push();
     }
 
     public void Close()
     {
         if (panel != null) panel.SetActive(false);
-        Time.timeScale = 1f;
+        PauseStack.Pop();
     }
 }

@@ -170,7 +170,7 @@ public class TreasureChest : MonoBehaviour
         
         TutorialManager.Instance?.Trigger("first_chest_open");
         
-        Time.timeScale = 0f;
+        PauseStack.Push();
 
         //Hide interaction prompt//
         if(interactionPrompt != null)
@@ -289,7 +289,7 @@ public class TreasureChest : MonoBehaviour
             isOpen = false;
         }
         
-        Time.timeScale = 1f;
+        PauseStack.Pop();
     }
 
     //Force open the chest (for testing) -EM//

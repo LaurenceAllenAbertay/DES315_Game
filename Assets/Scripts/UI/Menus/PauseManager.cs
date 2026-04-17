@@ -23,6 +23,8 @@ public class PauseManager : MonoBehaviour
     private float previousTimeScale = 1f;
     private InputAction pauseAction;
 
+    public event System.Action OnPaused;
+
     private void Awake()
     {
         if (pausePanel != null)
@@ -63,7 +65,7 @@ public class PauseManager : MonoBehaviour
         if (isPaused)
         {
             isPaused = false;
-            Time.timeScale = 1f;
+            PauseStack.Push();
         }
     }
 
@@ -86,27 +88,25 @@ public class PauseManager : MonoBehaviour
 
     public void Pause()
     {
-        if (isPaused)
-        {
-            return;
-        }
+        if (isPaused) return;
 
         isPaused = true;
-        previousTimeScale = Time.timeScale;
-        Time.timeScale = 0f;
+        PauseStack.Push();
         SetPauseUI(true);
+        OnPaused?.Invoke();
+
+        inputActions?.FindActionMap("Player")?.Disable();
     }
 
     public void Resume()
     {
-        if (!isPaused)
-        {
-            return;
-        }
+        if (!isPaused) return;
 
         isPaused = false;
-        Time.timeScale = Mathf.Approximately(previousTimeScale, 0f) ? 1f : previousTimeScale;
+        PauseStack.Pop();
         SetPauseUI(false);
+
+        inputActions?.FindActionMap("Player")?.Enable();
     }
 
     public void RestartRun()
@@ -149,7 +149,7 @@ public class PauseManager : MonoBehaviour
         if (isPaused)
         {
             isPaused = false;
-            Time.timeScale = 1f;
+            PauseStack.Pop();
         }
 
         SetPauseUI(false);

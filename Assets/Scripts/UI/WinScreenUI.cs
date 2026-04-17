@@ -45,7 +45,7 @@ public class WinScreenUI : MonoBehaviour
     //Wire this to the main menu button's OnClick event in the Inspector -EM//
     public void ReturnToMainMenu()
     {
-        Time.timeScale = 1f;
+        PauseStack.Pop();
 
         if (!string.IsNullOrEmpty(mainMenuSceneName))
             SceneManager.LoadScene(mainMenuSceneName);

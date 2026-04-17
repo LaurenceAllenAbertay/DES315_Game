@@ -7,7 +7,8 @@ public class InventoryUI : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject root;
-    [SerializeField] private Transform contentRoot;
+    [SerializeField] private Transform itemContentRoot;
+    [SerializeField] private Transform abilityContentRoot;
     [SerializeField] private InventoryItemButton itemPrefab;
     [SerializeField] private GameObject inventoryButton;
 
@@ -18,6 +19,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private ItemManager itemManager;
     [SerializeField] private PlayerAbilityManager abilityManager;
     [SerializeField] private AbilitySlotUI abilitySlotUI;
+    [SerializeField] private PauseManager pauseManager;
+
 
     private InputAction inventoryAction;
     private readonly List<InventoryItemButton> spawnedButtons = new List<InventoryItemButton>();
@@ -29,6 +32,7 @@ public class InventoryUI : MonoBehaviour
         if (itemManager == null) itemManager = FindFirstObjectByType<ItemManager>();
         if (abilityManager == null) abilityManager = FindFirstObjectByType<PlayerAbilityManager>();
         if (abilitySlotUI == null) abilitySlotUI = FindFirstObjectByType<AbilitySlotUI>();
+        if (pauseManager == null) pauseManager = FindFirstObjectByType<PauseManager>();
 
         if (inputActions != null)
         {
@@ -52,6 +56,8 @@ public class InventoryUI : MonoBehaviour
             CombatManager.Instance.OnCombatStarted += OnCombatStarted;
             CombatManager.Instance.OnCombatEnded += OnCombatEnded;
         }
+
+        if (pauseManager != null) pauseManager.OnPaused += OnGamePaused;
     }
 
     private void OnDisable()
@@ -67,6 +73,8 @@ public class InventoryUI : MonoBehaviour
             CombatManager.Instance.OnCombatStarted -= OnCombatStarted;
             CombatManager.Instance.OnCombatEnded -= OnCombatEnded;
         }
+
+        if (pauseManager != null) pauseManager.OnPaused -= OnGamePaused;
     }
 
     private void OnCombatStarted(List<Enemy> enemies)
@@ -82,6 +90,15 @@ public class InventoryUI : MonoBehaviour
 
     private void OnInventory(InputAction.CallbackContext context) => Toggle();
 
+    private void OnGamePaused()
+    {
+        if (root != null && root.activeSelf)
+        {
+            if (root != null) root.SetActive(false);
+            if (inventoryButton != null) inventoryButton.SetActive(true);
+        }
+    }
+
     public void Toggle()
     {
         if (root == null) return;
@@ -95,7 +112,7 @@ public class InventoryUI : MonoBehaviour
 
     public void Refresh()
     {
-        if (contentRoot == null || itemPrefab == null) return;
+        if (itemPrefab == null) return;
 
         if (itemManager == null)
         {
@@ -105,47 +122,53 @@ public class InventoryUI : MonoBehaviour
 
         ClearButtons();
 
-        Dictionary<ItemDefinition, int> equippedCounts = new Dictionary<ItemDefinition, int>();
-        foreach (ItemDefinition equippedItem in itemManager.EquippedItems)
+        if (itemContentRoot != null)
         {
-            if (equippedItem == null) continue;
-            if (!equippedCounts.ContainsKey(equippedItem)) equippedCounts[equippedItem] = 0;
-            equippedCounts[equippedItem]++;
-        }
-
-        Dictionary<ItemDefinition, int> usedEquippedCounts = new Dictionary<ItemDefinition, int>();
-
-        foreach (ItemDefinition item in itemManager.InventoryItems)
-        {
-            if (item == null) continue;
-
-            bool equipped = false;
-            if (equippedCounts.TryGetValue(item, out int totalEquipped))
+            Dictionary<ItemDefinition, int> equippedCounts = new Dictionary<ItemDefinition, int>();
+            foreach (ItemDefinition equippedItem in itemManager.EquippedItems)
             {
-                int usedCount = 0;
-                if (usedEquippedCounts.TryGetValue(item, out int currentUsed)) usedCount = currentUsed;
-                if (usedCount < totalEquipped)
-                {
-                    equipped = true;
-                    usedEquippedCounts[item] = usedCount + 1;
-                }
+                if (equippedItem == null) continue;
+                if (!equippedCounts.ContainsKey(equippedItem)) equippedCounts[equippedItem] = 0;
+                equippedCounts[equippedItem]++;
             }
 
-            InventoryItemButton instance = Instantiate(itemPrefab, contentRoot);
-            instance.Setup(item, equipped, HandleItemClicked);
-            spawnedButtons.Add(instance);
+            Dictionary<ItemDefinition, int> usedEquippedCounts = new Dictionary<ItemDefinition, int>();
+
+            foreach (ItemDefinition item in itemManager.InventoryItems)
+            {
+                if (item == null) continue;
+
+                bool equipped = false;
+                if (equippedCounts.TryGetValue(item, out int totalEquipped))
+                {
+                    int usedCount = 0;
+                    if (usedEquippedCounts.TryGetValue(item, out int currentUsed)) usedCount = currentUsed;
+                    if (usedCount < totalEquipped)
+                    {
+                        equipped = true;
+                        usedEquippedCounts[item] = usedCount + 1;
+                    }
+                }
+
+                InventoryItemButton instance = Instantiate(itemPrefab, itemContentRoot);
+                instance.Setup(item, equipped, HandleItemClicked);
+                spawnedButtons.Add(instance);
+            }
         }
 
-        if (abilityManager == null) abilityManager = FindFirstObjectByType<PlayerAbilityManager>();
-
-        if (abilityManager != null)
+        if (abilityContentRoot != null)
         {
-            foreach (Ability ab in abilityManager.inventoryAbilities)
+            if (abilityManager == null) abilityManager = FindFirstObjectByType<PlayerAbilityManager>();
+
+            if (abilityManager != null)
             {
-                if (ab == null) continue;
-                InventoryItemButton instance = Instantiate(itemPrefab, contentRoot);
-                instance.SetupAbility(ab, HandleAbilityClicked);
-                spawnedButtons.Add(instance);
+                foreach (Ability ab in abilityManager.inventoryAbilities)
+                {
+                    if (ab == null) continue;
+                    InventoryItemButton instance = Instantiate(itemPrefab, abilityContentRoot);
+                    instance.SetupAbility(ab, HandleAbilityClicked);
+                    spawnedButtons.Add(instance);
+                }
             }
         }
     }
@@ -203,7 +226,11 @@ public class InventoryUI : MonoBehaviour
     private void SetUIActive(bool isActive)
     {
         if (root != null) root.SetActive(isActive);
-        if (inventoryButton != null) inventoryButton.SetActive(!isActive);
         Debug.Log("Inventory UI active: " + inventoryButton.activeSelf);
+
+        if (isActive)
+            PauseStack.Push();
+        else
+            PauseStack.Pop();
     }
 }
