@@ -40,7 +40,7 @@ public class TooltipManager : MonoBehaviour
         tooltipText.text = text;
         tooltipPanel.gameObject.SetActive(true);
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipPanel);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(tooltipText.rectTransform);
         PositionTooltip();
     }
 

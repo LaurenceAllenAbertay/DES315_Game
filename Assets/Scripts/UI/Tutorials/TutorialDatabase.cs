@@ -38,4 +38,6 @@ public class TutorialDatabase : ScriptableObject
         if (_lookup == null) BuildLookup();
         return _lookup.TryGetValue(key, out message);
     }
+
+    public IReadOnlyList<TutorialEntry> GetAllEntries() => entries;
 }
