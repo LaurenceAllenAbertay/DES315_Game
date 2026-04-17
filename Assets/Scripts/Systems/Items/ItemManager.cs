@@ -73,16 +73,9 @@ public class ItemManager : MonoBehaviour
 
     public bool AddItem(ItemDefinition item)
     {
-        if (item == null)
-        {
-            return false;
-        }
+        if (item == null) return false;
 
         inventoryItems.Add(item);
-        if (equippedItems.Count < maxEquipped)
-        {
-            Equip(item);
-        }
         return true;
     }
 
