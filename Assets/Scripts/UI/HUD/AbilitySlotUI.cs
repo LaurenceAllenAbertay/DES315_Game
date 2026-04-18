@@ -200,5 +200,10 @@ public class AbilitySlotUI : MonoBehaviour
 
     private void HandleCombatEnded(CombatManager.CombatOutcome outcome) => SetButtonsVisible(true);
 
-    private void HandleTurnStarted(Unit unit) => SetButtonsVisible(unit is Player);
+    private void HandleTurnStarted(Unit unit)
+    {
+        bool isPlayerTurn = unit is Player;
+        SetButtonsVisible(isPlayerTurn);
+        if (!isPlayerTurn) ClearDescription();
+    }
 }

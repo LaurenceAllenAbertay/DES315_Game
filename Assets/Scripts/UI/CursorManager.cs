@@ -53,7 +53,7 @@ public class CursorManager : MonoBehaviour
             out Vector2 localPoint
         );
 
-        bool isTargeting = playerAbilityManager != null && playerAbilityManager.IsTargeting;
+        bool isTargeting = playerAbilityManager != null && playerAbilityManager.IsTargeting && !PauseStack.IsPaused;
 
         if (isTargeting)
         {
@@ -80,13 +80,7 @@ public class CursorManager : MonoBehaviour
         raycastResults.Clear();
         EventSystem.current.RaycastAll(pointerData, raycastResults);
 
-        foreach (RaycastResult result in raycastResults)
-        {
-            if (result.gameObject.GetComponent<HoverTarget>() != null)
-                return true;
-        }
-
-        return false;
+        return raycastResults.Count > 0 && raycastResults[0].gameObject.GetComponent<HoverTarget>() != null;
     }
 
     public void SetHoverCursor() => cursorImage.sprite = hoverSprite;
