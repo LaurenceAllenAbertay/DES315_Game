@@ -25,6 +25,7 @@ public class AbilitySlotUI : MonoBehaviour
     [Header("Active Slot Highlight")]
     [SerializeField] private Color activeColor = new Color(1f, 0.8f, 0f, 1f);
     [SerializeField] private Color normalColor = Color.white;
+    [SerializeField] private Color dimmedColor = new Color(0.35f, 0.35f, 0.35f, 1f);
 
     [SerializeField] private GameObject background;
     
@@ -169,9 +170,16 @@ public class AbilitySlotUI : MonoBehaviour
         for (int i = 0; i < buttons.Length; i++)
         {
             if (buttons[i] == null) continue;
+
+            bool isSelected = activeSlot.HasValue && activeSlot.Value == i;
+            bool isInactive = activeSlot.HasValue && !isSelected;
+
             ColorBlock colors = buttons[i].colors;
-            colors.normalColor = activeSlot.HasValue && activeSlot.Value == i ? activeColor : normalColor;
+            colors.normalColor = isSelected ? activeColor : normalColor;
             buttons[i].colors = colors;
+
+            if (slotIcons[i] != null)
+                slotIcons[i].color = isInactive ? dimmedColor : Color.white;
         }
     }
 
@@ -200,10 +208,5 @@ public class AbilitySlotUI : MonoBehaviour
 
     private void HandleCombatEnded(CombatManager.CombatOutcome outcome) => SetButtonsVisible(true);
 
-    private void HandleTurnStarted(Unit unit)
-    {
-        bool isPlayerTurn = unit is Player;
-        SetButtonsVisible(isPlayerTurn);
-        if (!isPlayerTurn) ClearDescription();
-    }
+    private void HandleTurnStarted(Unit unit) => SetButtonsVisible(unit is Player);
 }
