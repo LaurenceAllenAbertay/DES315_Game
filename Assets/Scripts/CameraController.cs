@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour
     public PlayerController playerController;
     [Tooltip("How fast the camera lerps to the player when they start moving")]
     public float followLerpSpeed = 8f;
+    [Tooltip("If the camera pivot is further than this from the player (XZ), player movement will not pull the camera. 0 = disabled.")]
+    public float maxSnapDistance = 15f;
 
     [Header("Room Clamp")]
     [SerializeField] private RoomManager roomManager;
@@ -42,6 +44,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float carouselPanSpeed = 8f;
 
     private bool isFollowingPlayer;
+    private bool followPermitted;
     private bool isFastMoving;
     private Vector3 desiredMoveDirection;
     private float desiredMoveSpeed;
@@ -411,6 +414,14 @@ public class CameraController : MonoBehaviour
     private void OnPlayerMovementStateChanged(bool moving)
     {
         isFollowingPlayer = moving;
+
+        if (moving && player != null)
+        {
+            float xzDist = Vector2.Distance(
+                new Vector2(pivotPoint.x, pivotPoint.z),
+                new Vector2(player.position.x, player.position.z));
+            followPermitted = maxSnapDistance <= 0f || xzDist <= maxSnapDistance;
+        }
     }
 
     /// <summary>
@@ -418,7 +429,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     private void ApplyPlayerFollow()
     {
-        if (!isFollowingPlayer || player == null) return;
+        if (!isFollowingPlayer || !followPermitted || player == null) return;
 
         Vector3 targetPivot = new Vector3(player.position.x, pivotPoint.y, player.position.z);
         pivotPoint = Vector3.Lerp(pivotPoint, targetPivot, followLerpSpeed * Time.deltaTime);
