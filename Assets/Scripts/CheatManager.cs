@@ -90,7 +90,7 @@ public class CheatManager : MonoBehaviour
         showFinalRoom = value;
         Debug.Log($"[CheatManager] Show final room Arrow: {showFinalRoom}");
 
-        if (finalRoomArrow == value) finalRoomArrow.SetVisible(showFinalRoom);
+        if (finalRoomArrow != null) finalRoomArrow.SetVisible(showFinalRoom);
         else Debug.LogWarning("[CheatManager] No FinalRoomArrow assigned in Inspector");
 
         OnShowFinalRoomChanged?.Invoke(showFinalRoom);
