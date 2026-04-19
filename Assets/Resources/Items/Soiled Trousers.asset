@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 958b37cb8b7492542959593bfc5460a6, type: 3}
   m_Name: Soiled Trousers
   m_EditorClassIdentifier: 
-  itemName: Soiled Trousers
-  description: '+1 coin
-
-    -90% move range'
-  icon: {fileID: 0}
+  itemName: Old Raggs
+  description: +1 coin
+  icon: {fileID: 21300000, guid: e5ee9ed3123a05740a7f53dd5dd75f47, type: 3}
   modifiers:
     maxHealthFlat: 0
     blockFlat: 0
@@ -25,5 +23,5 @@ MonoBehaviour:
     abilityDamagePercent: 0
     abilityRangePercent: 0
     aoeSizePercent: 0
-    maxCombatMovePercent: -90
+    maxCombatMovePercent: 0
     conditionalDamagePercent: 0
