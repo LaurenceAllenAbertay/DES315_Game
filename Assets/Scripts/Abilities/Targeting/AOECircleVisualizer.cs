@@ -8,14 +8,12 @@ using UnityEngine;
 public class AOECircleVisualizer : MonoBehaviour
 {
     [Header("Visual Settings")]
-    public Color circleColor = new Color(0.2f, 0.6f, 1f, 0.3f);
     public int resolution = 32;
     public float groundOffset = 0.1f;
 
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private Mesh circleMesh;
-    private Material instancedMaterial;
 
     private float currentRadius;
     private float maxRange;
@@ -34,25 +32,8 @@ public class AOECircleVisualizer : MonoBehaviour
         circleMesh.name = "AOE Circle";
         meshFilter.mesh = circleMesh;
 
-        SetupMaterial();
+        meshRenderer.sharedMaterial = Resources.Load<Material>("mat_HitboxVisualizer");
         meshRenderer.enabled = false;
-    }
-
-    private void SetupMaterial()
-    {
-        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
-        instancedMaterial = new Material(shader);
-        
-        instancedMaterial.SetFloat("_Surface", 1);
-        instancedMaterial.SetFloat("_Blend", 0);
-        instancedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        instancedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        instancedMaterial.SetInt("_ZWrite", 0);
-        instancedMaterial.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-        instancedMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-
-        instancedMaterial.SetColor("_BaseColor", circleColor);
-        meshRenderer.material = instancedMaterial;
     }
 
     /// <summary>
@@ -164,25 +145,8 @@ public class AOECircleVisualizer : MonoBehaviour
         return bestPoint;
     }
 
-    public void SetColor(Color color)
-    {
-        circleColor = color;
-
-        if (instancedMaterial != null)
-        {
-            instancedMaterial.SetColor("_BaseColor", color);
-        }
-
-        UpdateMesh();
-    }
-
     private void OnDestroy()
     {
-        if (instancedMaterial != null)
-        {
-            Destroy(instancedMaterial);
-        }
-
         if (circleMesh != null)
         {
             Destroy(circleMesh);
