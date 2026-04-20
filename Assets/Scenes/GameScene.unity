@@ -8380,7 +8380,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1107796533}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.7
+  m_Radius: 0.75
   m_Speed: 5
   m_Acceleration: 120
   avoidancePriority: 50
@@ -11521,6 +11521,7 @@ MonoBehaviour:
   descriptionText: {fileID: 1738874199}
   activeColor: {r: 1, g: 0.8, b: 0, a: 0.050980393}
   normalColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.101960786}
+  dimmedColor: {r: 0.35, g: 0.35, b: 0.35, a: 1}
   background: {fileID: 8657052}
 --- !u!1 &1489617454
 GameObject:

@@ -1,4 +1,4 @@
-# Happy Golem 
+# Happy Golem
 
 # **INCINDER**
 
@@ -111,7 +111,7 @@ Combat triggers automatically when an enemy spots the player or the player enter
 |**Input**|**Action**|
 |-|-|
 |Hover (ability/ item)|Show tooltip with description and stats|
-|Minimap|Reveals rooms the player has visited. |
+|Minimap|Reveals rooms the player has visited.|
 |Minimap +|Zoom into the current map view|
 |Minimap -|Zoom out of the current map view|
 
@@ -123,7 +123,7 @@ Combat triggers automatically when an enemy spots the player or the player enter
 
 
 
-Exploration: Navigate the procedurally generated dungeon room by toom. Enemies patrol their rooms using vision cones, avoid their line of sigh or engage in combat. Staying in shadow reduces enemy effectiveness. 
+Exploration: Navigate the procedurally generated dungeon room by toom. Enemies patrol their rooms using vision cones, avoid their line of sigh or engage in combat. Staying in shadow reduces enemy effectiveness.
 
 
 
@@ -140,6 +140,8 @@ Objectives: Find the Chalice in the final room and press E to escape the dungeon
 
 
 * Players can walk into enemy models
+* Some torches can't be targeted
+* Really far movement clicks don't move the player
 
 
 
@@ -147,7 +149,7 @@ Objectives: Find the Chalice in the final room and press E to escape the dungeon
 
 
 
-###### Programming 
+###### Programming
 
 Laurence Allen — Gameplay \& Engine/Tools Programmer
 
@@ -155,19 +157,19 @@ Ethan McCaffrey — Engine/Tools \& Gameplay Programmer
 
 &#x20;
 
-###### Art 
+###### Art
 
-Emma Gowdy — Artist 
+Emma Gowdy — Artist
 
 Kira Hetesi — Artist
 
-Matthew Van Aardt — Tech Artist 
+Matthew Van Aardt — Tech Artist
 
 
 
 ###### Design
 
-Cohen Kelly — Level Designer 
+Cohen Kelly — Level Designer
 
 Charlie Banks — Narrative Designer
 
@@ -187,9 +189,9 @@ Laurence Allen — Composer
 
 
 
-###### Production 
+###### Production
 
-Matthew Van Aardt — Producer 
+Matthew Van Aardt — Producer
 
 Charlie Banks — Co-Producer
 
@@ -199,11 +201,9 @@ Charlie Banks — Co-Producer
 
 Gareth Robinson — Academic Supervisor
 
-Asset \& Licensed Credits 
+Asset \& Licensed Credits
 
-Audio Middleware: Wwise by Audiokinetic 
+Audio Middleware: Wwise by Audiokinetic
 
-Font: CS Rohesia by Craft Supply Co. 
-
-
+Font: CS Rohesia by Craft Supply Co.
 

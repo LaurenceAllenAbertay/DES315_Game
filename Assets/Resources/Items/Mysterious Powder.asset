@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Mysterious Powder
   m_EditorClassIdentifier: 
   itemName: Mysterious Powder
-  description: '+25% conditional damage
+  description: '+75% conditional damage
 
-    +5% move range
+    -5% move range
 
-    -10% AOE size'
+    -25% AOE size'
   icon: {fileID: 21300000, guid: de070a7edc585b248aaf98b5ec511a62, type: 3}
   modifiers:
     maxHealthFlat: 0
@@ -26,6 +26,6 @@ MonoBehaviour:
     baseCoinsFlat: 0
     abilityDamagePercent: 0
     abilityRangePercent: 0
-    aoeSizePercent: -10
-    maxCombatMovePercent: 5
-    conditionalDamagePercent: 25
+    aoeSizePercent: -25
+    maxCombatMovePercent: -5
+    conditionalDamagePercent: 75
