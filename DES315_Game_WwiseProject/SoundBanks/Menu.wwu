@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{9E6651C9-5559-41C7-AF3D-4E55A686E548}" SchemaVersion="110">
+	<SoundBanks>
+		<WorkUnit Name="Menu" ID="{9E6651C9-5559-41C7-AF3D-4E55A686E548}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="Start" ID="{FF2C1933-817E-4953-A992-707D6D758271}">
+					<ObjectInclusionList>
+						<ObjectRef Name="MainMenu_Looped" ID="{2CB30682-379B-434B-8CC4-3F4129B86539}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_Open" ID="{E4067FE9-9991-4C40-94F1-F6CA3933372E}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_NextPage" ID="{1795DDDA-78B9-4CEC-B250-EF15D2D5A1A9}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_PrevPage" ID="{C99BA61F-F20F-4E33-B459-3D7E3339E364}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="UI_Close" ID="{9B4628CF-A818-4E73-AC20-688DEBC973B1}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>

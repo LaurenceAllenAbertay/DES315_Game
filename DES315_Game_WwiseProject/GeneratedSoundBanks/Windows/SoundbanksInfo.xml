@@ -9,19 +9,105 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
-		<SoundBank Id="1182958561" Type="User" Language="SFX" Hash="{FD70965D-B275-56D9-3671-B5BA3695210A}">
-			<ShortName>Cutscene</ShortName>
-			<Path>Cutscene.bnk</Path>
+		<SoundBank Id="1281810935" Type="User" Language="SFX" Hash="{F21527AF-7824-44AE-6BC2-AF6ED0CBF3D7}">
+			<ShortName>Start</ShortName>
+			<Path>Start.bnk</Path>
 			<Media>
-				<File Id="397428832" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>mus_AnimaticMusic.wav</ShortName>
-					<CachePath>SFX/mus_AnimaticMusic_D79FB2B7.wem</CachePath>
+				<File Id="22925414" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-05.wav</ShortName>
+					<CachePath>SFX/PrevPage-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="273314778" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-06.wav</ShortName>
+					<CachePath>SFX/PrevPage-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="288392327" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-04.wav</ShortName>
+					<CachePath>SFX/PrevPage-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="330218231" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-03.wav</ShortName>
+					<CachePath>SFX/NextPage-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="483124774" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BookOpen.wav</ShortName>
+					<CachePath>SFX/BookOpen_10C4C929.wem</CachePath>
+				</File>
+				<File Id="505645022" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-02.wav</ShortName>
+					<CachePath>SFX/NextPage-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="519282052" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-06.wav</ShortName>
+					<CachePath>SFX/NextPage-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="534091470" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-02.wav</ShortName>
+					<CachePath>SFX/PrevPage-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="637354026" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-01.wav</ShortName>
+					<CachePath>SFX/NextPage-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="665672550" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-03.wav</ShortName>
+					<CachePath>SFX/PrevPage-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="754259102" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-05.wav</ShortName>
+					<CachePath>SFX/NextPage-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="769009061" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-01.wav</ShortName>
+					<CachePath>SFX/PrevPage-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="929092099" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BookClose.wav</ShortName>
+					<CachePath>SFX/BookClose_10C4C929.wem</CachePath>
+				</File>
+				<File Id="955620415" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Incinder_MainMenu.wav</ShortName>
+					<CachePath>SFX/Incinder_MainMenu_D0FD7626.wem</CachePath>
+				</File>
+				<File Id="1023360547" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-04.wav</ShortName>
+					<CachePath>SFX/NextPage-04_10C4C929.wem</CachePath>
 				</File>
 			</Media>
 			<Events>
-				<Event Id="4208309095" Name="OpeningAnimatic" DurationType="OneShot" DurationMin="55.999977" DurationMax="55.999977">
+				<Event Id="2808240339" Name="MainMenu_Looped" DurationType="Infinite">
 					<MediaRefs>
-						<MediaRef Id="397428832"/>
+						<MediaRef Id="955620415"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2519197294" Name="UI_Close" DurationType="OneShot" DurationMin="1.3931458" DurationMax="1.3931458">
+					<MediaRefs>
+						<MediaRef Id="929092099"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1855554456" Name="UI_NextPage" DurationType="OneShot" DurationMin="0.6733787" DurationMax="1.4156009">
+					<MediaRefs>
+						<MediaRef Id="330218231"/>
+						<MediaRef Id="505645022"/>
+						<MediaRef Id="519282052"/>
+						<MediaRef Id="637354026"/>
+						<MediaRef Id="754259102"/>
+						<MediaRef Id="1023360547"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3282376362" Name="UI_Open" DurationType="OneShot" DurationMin="1.7879364" DurationMax="1.7879364">
+					<MediaRefs>
+						<MediaRef Id="483124774"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="896450232" Name="UI_PrevPage" DurationType="OneShot" DurationMin="0.4556236" DurationMax="1.1715193">
+					<MediaRefs>
+						<MediaRef Id="22925414"/>
+						<MediaRef Id="273314778"/>
+						<MediaRef Id="288392327"/>
+						<MediaRef Id="534091470"/>
+						<MediaRef Id="665672550"/>
+						<MediaRef Id="769009061"/>
 					</MediaRefs>
 				</Event>
 			</Events>
@@ -53,7 +139,24 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{9529000F-A6E8-39C3-6945-6AB9FC1E0B05}">
+		<SoundBank Id="1831982039" Type="User" Language="SFX" Hash="{6D39FE9B-866D-E706-1E68-3A494D804DC9}">
+			<ShortName>Opening</ShortName>
+			<Path>Opening.bnk</Path>
+			<Media>
+				<File Id="397428832" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>mus_AnimaticMusic.wav</ShortName>
+					<CachePath>SFX/mus_AnimaticMusic_D79FB2B7.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="4208309095" Name="OpeningAnimatic" DurationType="OneShot" DurationMin="55.999977" DurationMax="55.999977">
+					<MediaRefs>
+						<MediaRef Id="397428832"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{3BE6A9CA-78D9-F158-0636-E3EC9EDCFB94}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -677,17 +780,9 @@
 					<ShortName>EnemyHealPitched-02.wav</ShortName>
 					<CachePath>SFX/EnemyHealPitched-02_10C4C929.wem</CachePath>
 				</File>
-				<File Id="955620415" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Incinder_MainMenu.wav</ShortName>
-					<CachePath>SFX/Incinder_MainMenu_D0FD7626.wem</CachePath>
-				</File>
 				<File Id="962061646" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerSwing-03.wav</ShortName>
 					<CachePath>SFX/PlayerSwing-03_10C4C929.wem</CachePath>
-				</File>
-				<File Id="969439922" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>Incinder_MainMenu.wav</ShortName>
-					<CachePath>SFX/Incinder_MainMenu_D79FB2B7.wem</CachePath>
 				</File>
 				<File Id="970236375" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>CardShuffle-09.wav</ShortName>
@@ -1033,16 +1128,6 @@
 						<MediaRef Id="436896071"/>
 					</MediaRefs>
 				</Event>
-				<Event Id="3604647259" Name="MainMenu" DurationType="OneShot" DurationMin="101.106255" DurationMax="101.106255">
-					<MediaRefs>
-						<MediaRef Id="969439922"/>
-					</MediaRefs>
-				</Event>
-				<Event Id="2808240339" Name="MainMenu_Looped" DurationType="Infinite">
-					<MediaRefs>
-						<MediaRef Id="955620415"/>
-					</MediaRefs>
-				</Event>
 				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.297375" DurationMax="3.0626667">
 					<MediaRefs>
 						<MediaRef Id="223675437"/>
@@ -1162,5 +1247,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{7ED97603-1A77-1A1E-7BC9-B210A3891032}</FileHash>
+	<FileHash>{A63FAE44-862F-E4E5-A9E9-4D316DCBCCCD}</FileHash>
 </SoundBanksInfo>
