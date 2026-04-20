@@ -5,7 +5,7 @@
 			<ChildrenList>
 				<Attenuation Name="TorchFire" ID="{997008BA-F335-4554-BE9E-ADA8D6572C38}" ShortID="647298633">
 					<PropertyList>
-						<Property Name="RadiusMax" Type="Real64" Value="20"/>
+						<Property Name="RadiusMax" Type="Real64" Value="5"/>
 					</PropertyList>
 					<CurveUsageInfoList>
 						<VolumeDryUsage>
@@ -19,10 +19,10 @@
 											<XPos>0</XPos>
 											<YPos>0</YPos>
 											<Flags>5</Flags>
-											<SegmentShape>Exp3</SegmentShape>
+											<SegmentShape>Log1</SegmentShape>
 										</Point>
 										<Point>
-											<XPos>20</XPos>
+											<XPos>5</XPos>
 											<YPos>-200</YPos>
 											<Flags>37</Flags>
 										</Point>
