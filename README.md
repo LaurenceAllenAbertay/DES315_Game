@@ -43,6 +43,7 @@ The following third-party assets are used within the build:
 
 * CS Rohesia Gothic Font - Desktop License (1 user, up to 5 commercial projects). Licensed under a Desktop License purchased from Creative Supply Co. Do not redistribute the font files.
 * Wwise Audio Middleware - AudioKinetic Wwise is embedded for all in game audio. no separate Wwise installation is required to run the build.
+* VFX URP - Fire Package Cartoon VFX by Wallcoeur Unity Asset Store — Standard Unity Asset Store EULA https://assetstore.unity.com/packages/vfx/particles/fire-explosions/vfx-urp-fire-package-305098
 * Unity Engine 6 (6000.x) runtime libraries, included automatically in the Unity build output.
 
 
