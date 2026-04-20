@@ -28,7 +28,6 @@
 						<ObjectRef Name="CoinToss" ID="{90787D80-C0E5-49FA-AE42-41AD69316D83}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="CoinMiss" ID="{ABA88992-47B1-4C2E-B706-F8204CA4CD30}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="UI_Open" ID="{E4067FE9-9991-4C40-94F1-F6CA3933372E}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
-						<ObjectRef Name="OpeningAnimatic" ID="{5CA9C99A-0D7F-4C59-B17E-59F58D5525A2}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="PlayerLaugh" ID="{2253CB54-F5BB-4C5C-908B-F2A743FD203E}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="PlayerHeal" ID="{37273510-D69C-4C8A-9DC5-5CC87272111C}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="Footsteps" ID="{E44C36A5-F854-4CE2-AA32-CB1A05AD7942}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
@@ -40,6 +39,13 @@
 						<ObjectRef Name="CardUI_Start" ID="{5AF2F706-DB23-4E9F-991E-85CDA7E4A508}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="FireFlintlock" ID="{A3083A63-FB00-4EEC-8F28-3376CB136756}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="GameOver" ID="{39246F61-98FA-4EF6-A9DF-BB0569DD52D4}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+				<SoundBank Name="Cutscene" ID="{82CADC74-F3C3-4EE4-B11D-2A07CD384134}">
+					<ObjectInclusionList>
+						<ObjectRef Name="OpeningAnimatic" ID="{5CA9C99A-0D7F-4C59-B17E-59F58D5525A2}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

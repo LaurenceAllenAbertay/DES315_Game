@@ -414,6 +414,12 @@
 					<ChildrenList>
 						<Event Name="MainMenu" ID="{D16A0EA3-E7B5-450C-9117-B275E6D1E046}">
 							<ChildrenList>
+								<Action Name="" ID="{0BF9D8F8-D1D6-416D-9A88-EF39D48FFEBC}" ShortID="360196985">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList/>
+								</Action>
 								<Action Name="" ID="{CB9341F8-EC27-4399-8FCB-4A46D355B3B4}" ShortID="447277143">
 									<ReferenceList>
 										<Reference Name="Target">
@@ -425,6 +431,21 @@
 						</Event>
 						<Event Name="MainMenu_Looped" ID="{2CB30682-379B-434B-8CC4-3F4129B86539}">
 							<ChildrenList>
+								<Action Name="" ID="{2A011FB2-39E5-4E3E-A17A-AD4D0B87986F}" ShortID="224075004">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList/>
+									<ChildrenList>
+										<EventActionException Name="" ID="{02480883-EC18-4E8F-9A89-15457D0C2721}">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Incinder_MainMenu" ID="{0FD81C29-A614-4113-9252-6DC9604D8AA2}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</EventActionException>
+									</ChildrenList>
+								</Action>
 								<Action Name="" ID="{577BD47F-C8F2-4BD5-A15A-F0BFC52D7685}" ShortID="260418773">
 									<ReferenceList>
 										<Reference Name="Target">
@@ -436,6 +457,12 @@
 						</Event>
 						<Event Name="Gameplay_Looped" ID="{AAFED2C2-8181-4027-AF98-5C49E6C6EF4A}">
 							<ChildrenList>
+								<Action Name="" ID="{7FEB8BE4-51DF-4B91-9CEA-FAC99EE2CC0F}" ShortID="386162818">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="3"/>
+									</PropertyList>
+									<ReferenceList/>
+								</Action>
 								<Action Name="" ID="{FBAF96AD-E722-4964-9BD5-F05244259EC0}" ShortID="902768884">
 									<ReferenceList>
 										<Reference Name="Target">
@@ -447,13 +474,16 @@
 						</Event>
 						<Event Name="OpeningAnimatic" ID="{5CA9C99A-0D7F-4C59-B17E-59F58D5525A2}">
 							<ChildrenList>
-								<Action Name="" ID="{5A7B484A-4787-41FC-9A10-77A708534103}" ShortID="927457647">
+								<Action Name="" ID="{9C034A5F-9AFC-4A05-881F-D37E78321613}" ShortID="204396720">
 									<PropertyList>
-										<Property Name="ActionType" Type="int16" Value="4"/>
+										<Property Name="ActionType" Type="int16" Value="3"/>
 									</PropertyList>
+									<ReferenceList/>
+								</Action>
+								<Action Name="" ID="{3B7CB177-705E-44FC-A8DA-A8F7B21303AC}" ShortID="194687413">
 									<ReferenceList>
 										<Reference Name="Target">
-											<ObjectRef Name="mus_AnimaticMusic" ID="{9C165A57-C3C9-43E1-95FD-D7BA70CAAA2E}" WorkUnitID="{F629EE12-201A-4238-A515-08A0979AC5F6}"/>
+											<ObjectRef Name="mus_AnimaticMusic" ID="{BBD9E726-CB31-43A3-92E0-382CFBB891FB}" WorkUnitID="{F629EE12-201A-4238-A515-08A0979AC5F6}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>

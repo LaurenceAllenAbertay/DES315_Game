@@ -9,6 +9,23 @@
 	</RootPaths>
 	<DialogueEvents/>
 	<SoundBanks>
+		<SoundBank Id="1182958561" Type="User" Language="SFX" Hash="{FD70965D-B275-56D9-3671-B5BA3695210A}">
+			<ShortName>Cutscene</ShortName>
+			<Path>Cutscene.bnk</Path>
+			<Media>
+				<File Id="397428832" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>mus_AnimaticMusic.wav</ShortName>
+					<CachePath>SFX/mus_AnimaticMusic_D79FB2B7.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="4208309095" Name="OpeningAnimatic" DurationType="OneShot" DurationMin="55.999977" DurationMax="55.999977">
+					<MediaRefs>
+						<MediaRef Id="397428832"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
 		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{F56A610C-C7C4-F874-B68B-7ADDF94EBB7A}">
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
@@ -36,7 +53,7 @@
 				</SwitchGroup>
 			</SwitchGroups>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{C59D99CE-68EE-0C98-AA7B-29E05F5EC04A}">
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{9529000F-A6E8-39C3-6945-6AB9FC1E0B05}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -626,7 +643,7 @@
 				</File>
 				<File Id="871082607" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerCast-06.wav</ShortName>
-					<CachePath>SFX/PlayerCast-06_BDA85F6D.wem</CachePath>
+					<CachePath>SFX/PlayerCast-06_DAC47C48.wem</CachePath>
 				</File>
 				<File Id="875457795" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>EnemyPainPitched-08.wav</ShortName>
@@ -662,7 +679,7 @@
 				</File>
 				<File Id="955620415" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Incinder_MainMenu.wav</ShortName>
-					<CachePath>SFX/Incinder_MainMenu_6FD0D28F.wem</CachePath>
+					<CachePath>SFX/Incinder_MainMenu_D0FD7626.wem</CachePath>
 				</File>
 				<File Id="962061646" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerSwing-03.wav</ShortName>
@@ -1026,7 +1043,6 @@
 						<MediaRef Id="955620415"/>
 					</MediaRefs>
 				</Event>
-				<Event Id="4208309095" Name="OpeningAnimatic" MaxAttenuation="0" DurationType="OneShot" DurationMin="0" DurationMax="0"/>
 				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.297375" DurationMax="3.0626667">
 					<MediaRefs>
 						<MediaRef Id="223675437"/>
@@ -1146,5 +1162,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{20740A85-E4EE-24AD-1D0A-FF3277A6A2B6}</FileHash>
+	<FileHash>{E7727EC7-66EC-910E-FA39-E7AC45263D56}</FileHash>
 </SoundBanksInfo>
