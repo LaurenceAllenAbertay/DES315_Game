@@ -204,8 +204,11 @@ public class AbilitySlotUI : MonoBehaviour
         if (background != null) background.SetActive(visible);
     }
 
-    private void HandleCombatStarted(List<Enemy> enemies) => SetButtonsVisible(false);
-
+    private void HandleCombatStarted(List<Enemy> enemies)
+    {
+        SetButtonsVisible(false);
+        ClearDescription();
+    }
     private void HandleCombatEnded(CombatManager.CombatOutcome outcome) => SetButtonsVisible(true);
 
     private void HandleTurnStarted(Unit unit) => SetButtonsVisible(unit is Player);

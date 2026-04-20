@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Result type from targeting
@@ -493,6 +494,8 @@ public class AbilityTargeting : MonoBehaviour
     private void OnConfirmPerformed(InputAction.CallbackContext context)
     {
         if (!isTargeting || currentAbility == null) return;
+        
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
         switch (currentAbility.targetingType)
         {
