@@ -470,6 +470,26 @@
 										</Reference>
 									</ReferenceList>
 								</Action>
+								<Action Name="" ID="{B2478962-4A83-48B0-B93F-2C3A6D46C02A}" ShortID="383713035">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="4"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Incinder_MainMenu" ID="{0FD81C29-A614-4113-9252-6DC9604D8AA2}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{E6165232-D28D-47BB-B8B0-FC76BAE59A48}" ShortID="110748849">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="4"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="mus_AnimaticMusic" ID="{9C165A57-C3C9-43E1-95FD-D7BA70CAAA2E}" WorkUnitID="{F629EE12-201A-4238-A515-08A0979AC5F6}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
 							</ChildrenList>
 						</Event>
 						<Event Name="OpeningAnimatic" ID="{5CA9C99A-0D7F-4C59-B17E-59F58D5525A2}">
@@ -479,6 +499,16 @@
 										<Property Name="ActionType" Type="int16" Value="3"/>
 									</PropertyList>
 									<ReferenceList/>
+								</Action>
+								<Action Name="" ID="{D0B33527-D5D4-4C1F-8867-C1F66636B649}" ShortID="102577944">
+									<PropertyList>
+										<Property Name="ActionType" Type="int16" Value="4"/>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Incinder_MainMenu" ID="{0FD81C29-A614-4113-9252-6DC9604D8AA2}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
 								</Action>
 								<Action Name="" ID="{3B7CB177-705E-44FC-A8DA-A8F7B21303AC}" ShortID="194687413">
 									<ReferenceList>
