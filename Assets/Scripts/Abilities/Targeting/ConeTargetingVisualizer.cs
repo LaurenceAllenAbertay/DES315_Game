@@ -7,7 +7,6 @@ using UnityEngine;
 public class ConeTargetingVisualizer : MonoBehaviour
 {
     [Header("Visual Settings")]
-    public Material material;
     public int resolution = 20;
     public float groundOffset = 0.1f;
     public LayerMask obstacleMask = ~0;
@@ -31,7 +30,7 @@ public class ConeTargetingVisualizer : MonoBehaviour
         coneMesh.name = "Targeting Cone";
         meshFilter.mesh = coneMesh;
 
-        meshRenderer.sharedMaterial = material;
+        meshRenderer.sharedMaterial = Resources.Load<Material>("mat_HitboxVisualizer");
         meshRenderer.enabled = false;
     }
 

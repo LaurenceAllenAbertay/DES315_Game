@@ -1090,6 +1090,11 @@
 						<Sound Name="Incinder_Gameplay" ID="{D0B2F003-81D5-4F95-99FD-35AA810BE528}" ShortID="772160096">
 							<PropertyList>
 								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+								<Property Name="Volume" Type="Real64">
+									<ValueList>
+										<Value>-8</Value>
+									</ValueList>
+								</Property>
 							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -1101,6 +1106,11 @@
 							</ReferenceList>
 							<ChildrenList>
 								<AudioFileSource Name="Incinder_Gameplay" ID="{F7F9BB7F-25CF-49DF-8D9F-D1D857485BBB}">
+									<PropertyList>
+										<Property Name="LoopBegin" Type="Real64" Value="0.381552305961757"/>
+										<Property Name="LoopEnd" Type="Real64" Value="42.1967072297781"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Incinder_Gameplay.wav</AudioFile>
 									<MediaIDList>
