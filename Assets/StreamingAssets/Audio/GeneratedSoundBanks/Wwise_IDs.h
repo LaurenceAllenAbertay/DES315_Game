@@ -34,7 +34,6 @@ namespace AK
         static const AkUniqueID FOOTSTEPS = 2385628198U;
         static const AkUniqueID GAMEOVER = 4158285989U;
         static const AkUniqueID GAMEPLAY_LOOPED = 3407605449U;
-        static const AkUniqueID MAINMENU = 3604647259U;
         static const AkUniqueID MAINMENU_LOOPED = 2808240339U;
         static const AkUniqueID OPENINGANIMATIC = 4208309095U;
         static const AkUniqueID PLAYERDEATH = 1656947812U;
@@ -75,6 +74,8 @@ namespace AK
     {
         static const AkUniqueID INIT = 1355168291U;
         static const AkUniqueID MAIN = 3161908922U;
+        static const AkUniqueID OPENING = 1831982039U;
+        static const AkUniqueID START = 1281810935U;
     } // namespace BANKS
 
     namespace BUSSES

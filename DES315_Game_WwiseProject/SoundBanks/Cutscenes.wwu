@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{DAE3637B-460C-4D1A-8121-C6244A6927CD}" SchemaVersion="110">
+	<SoundBanks>
+		<WorkUnit Name="Cutscenes" ID="{DAE3637B-460C-4D1A-8121-C6244A6927CD}" PersistMode="Standalone">
+			<ChildrenList>
+				<SoundBank Name="Opening" ID="{82CADC74-F3C3-4EE4-B11D-2A07CD384134}">
+					<ObjectInclusionList>
+						<ObjectRef Name="OpeningAnimatic" ID="{5CA9C99A-0D7F-4C59-B17E-59F58D5525A2}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+					</ObjectInclusionList>
+					<ObjectExclusionList/>
+					<GameSyncExclusionList/>
+				</SoundBank>
+			</ChildrenList>
+		</WorkUnit>
+	</SoundBanks>
+</WwiseDocument>
