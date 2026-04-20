@@ -7,7 +7,7 @@ using UnityEngine;
 public class ConeTargetingVisualizer : MonoBehaviour
 {
     [Header("Visual Settings")]
-    public Color coneColor = new Color(0.2f, 0.6f, 1f, 0.3f);
+    public Material material;
     public int resolution = 20;
     public float groundOffset = 0.1f;
     public LayerMask obstacleMask = ~0;
@@ -15,7 +15,6 @@ public class ConeTargetingVisualizer : MonoBehaviour
     private MeshFilter meshFilter;
     private MeshRenderer meshRenderer;
     private Mesh coneMesh;
-    private Material instancedMaterial;
 
     private float currentRange;
     private float currentAngle;
@@ -32,25 +31,8 @@ public class ConeTargetingVisualizer : MonoBehaviour
         coneMesh.name = "Targeting Cone";
         meshFilter.mesh = coneMesh;
 
-        SetupMaterial();
+        meshRenderer.sharedMaterial = material;
         meshRenderer.enabled = false;
-    }
-
-    private void SetupMaterial()
-    {
-        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
-        instancedMaterial = new Material(shader);
-        
-        instancedMaterial.SetFloat("_Surface", 1);
-        instancedMaterial.SetFloat("_Blend", 0);
-        instancedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        instancedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        instancedMaterial.SetInt("_ZWrite", 0);
-        instancedMaterial.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
-        instancedMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
-
-        instancedMaterial.SetColor("_BaseColor", coneColor);
-        meshRenderer.material = instancedMaterial;
     }
 
     /// <summary>
@@ -129,15 +111,6 @@ public class ConeTargetingVisualizer : MonoBehaviour
         coneMesh.RecalculateNormals();
     }
 
-    public void SetColor(Color color)
-    {
-        coneColor = color;
-        if (instancedMaterial != null)
-        {
-            instancedMaterial.SetColor("_BaseColor", color);
-        }
-    }
-
     public void SetObstacleMask(LayerMask mask)
     {
         obstacleMask = mask;
@@ -145,11 +118,6 @@ public class ConeTargetingVisualizer : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (instancedMaterial != null)
-        {
-            Destroy(instancedMaterial);
-        }
-
         if (coneMesh != null)
         {
             Destroy(coneMesh);
