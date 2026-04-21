@@ -74,29 +74,27 @@ public class EnemyAI : MonoBehaviour
     
     private void Start()
     {
-        //Subsrcibe to combat events to pause/resume wandering//
         if(CombatManager.Instance != null)
         {
             CombatManager.Instance.OnCombatStarted += HandleCombatStarted;
             CombatManager.Instance.OnCombatEnded += HandleCombatEnded;
         }
 
-        //Wait for NavMeshAgent to be properly initialised//
-        if (!ValidateAgent())
-        {
-            if (debugMode) Debug.LogWarning($"{gameObject.name}: NavMeshAgent not on NavMesh! Retrying initialization...");
-            Invoke(nameof(InitializeAI), 0.1f);
-            return;
-        }
-
         if (visionCone != null)
-        {
             visionCone.OnPlayerDetected += HandlePlayerSpotted;
-        }
-        else
-        {
-            if (debugMode) Debug.LogWarning($"{gameObject.name}: No EnemyVisionCone found in children!");
-        }
+        else if (debugMode)
+            Debug.LogWarning($"{gameObject.name}: No EnemyVisionCone found in children!");
+
+        StartCoroutine(InitializeAfterNavMesh());
+    }
+
+    /// <summary>
+    /// Waits one fixed update so the physics system can place the NavMeshAgent
+    /// onto the freshly-baked mesh before we attempt initialization.
+    /// </summary>
+    private System.Collections.IEnumerator InitializeAfterNavMesh()
+    {
+        yield return new WaitForFixedUpdate();
         InitializeAI();
     }
 
