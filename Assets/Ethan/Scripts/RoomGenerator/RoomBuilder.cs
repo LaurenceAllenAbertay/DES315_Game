@@ -143,7 +143,6 @@ public class RoomBuilder : MonoBehaviour
         }
     }
 
-    //Build all rooms as 3D geometry - EM//
     [ContextMenu("Build Rooms")]
     public void BuildRooms()
     {
@@ -153,10 +152,8 @@ public class RoomBuilder : MonoBehaviour
             return;
         }
 
-        //Clear any existing rooms//
         ClearRooms();
 
-        //Get generated rooms//
         List<Room> rooms = generator.GetRooms();
         if(rooms == null || rooms.Count == 0)
         {
@@ -164,70 +161,69 @@ public class RoomBuilder : MonoBehaviour
             return;
         }
 
-        if(showDebugLogs)
-        {
-            Debug.Log($"[RoomBuilder] Building {rooms.Count} rooms...");
-        }
+        if(showDebugLogs) Debug.Log($"[RoomBuilder] Building {rooms.Count} rooms...");
 
-        //Build each room//
+        // Pass 1: instantiate all rooms and collect their surfaces — no baking yet
+        List<NavMeshSurface> surfacesToBake = new List<NavMeshSurface>();
         foreach(Room room in rooms)
         {
-            buildRoom(room);
+            NavMeshSurface surface = InstantiateRoom(room);
+            if (surface != null) surfacesToBake.Add(surface);
         }
 
+        // Agents now exist — disable them before any bake touches the NavMesh
         if(disableAgentsDuringBake)
-        {
-            ReenableAgentsAfterBake();
-        }
-        else if(rebindAgentsAfterBake)
-        {
-            ReenableAgentsAfterBake();
-        }
+            DisableAgentsForBake();
 
-        if (showDebugLogs)
-        {
-            Debug.Log($"[RoomBuilder] Room building complete!");
-        }
+        // Pass 2: bake every room surface with agents safely disabled
+        foreach(NavMeshSurface surface in surfacesToBake)
+            surface.BuildNavMesh();
+
+        ReenableAgentsAfterBake();
+
+        if (showDebugLogs) Debug.Log($"[RoomBuilder] Room building complete!");
     }
 
-    //Build a single room's geomertry - EM//
-    private void buildRoom(Room room)
+    /// <summary>
+    /// Instantiates a room prefab at the correct world position and prepares its NavMeshSurface.
+    /// Does NOT bake — baking is deferred to BuildRooms so agents can be disabled first.
+    /// </summary>
+    private NavMeshSurface InstantiateRoom(Room room)
     {
-        //Determine if this is a 1x1 or 2x2 room from cell count//
         bool is2x2 = room.gridCells.Count == 4;
         string sizeLabel = is2x2 ? "2x2" : "1x1";
 
-        //Get the correct prefab//
         GameObject prefab = GetRoomPrefab(room, is2x2);
-
-        if(prefab == null )
+        if(prefab == null)
         {
-            if(showDebugLogs)
-            {
-                Debug.LogWarning($"[RoomBuilder] No {sizeLabel} prefab assigned for room type {room.roomType}! Skipping room.");
-            }
-            return;
+            if(showDebugLogs) Debug.LogWarning($"[RoomBuilder] No {sizeLabel} prefab assigned for room type {room.roomType}! Skipping room.");
+            return null;
         }
 
         room.GetBounds(out int minX, out int minY, out int maxX, out int maxY);
         Vector3 placementPos = GridToWorldPosition(minX, minY);
-
-        //Offset to center//
         float roomWidth = (maxX - minX + 1) * cellSize;
         float roomDepth = (maxY - minY + 1) * cellSize;
         Vector3 centerPos = placementPos + new Vector3(roomWidth * 0.5f, 0f, roomDepth * 0.5f);
 
-        //Create a container to keep the hierarchy tidy//
         string roomLabel = room.isLobby ? "Lobby" : room.isFinalRoom ? "FinalRoom" : $"Type{room.roomType}";
         GameObject roomContainer = new GameObject($"Room_{roomLabel}_{sizeLabel}_{minX}_{minY}");
         roomContainer.transform.SetParent(roomsParent);
         roomContainer.transform.position = centerPos;
 
-        //Instantiate prefab at 1:1 scale//
         GameObject roomInstance = Instantiate(prefab, centerPos, Quaternion.identity, roomContainer.transform);
         roomInstance.name = $"Prefab_{roomLabel}_{sizeLabel}";
 
-        //Bake a navMeshSurface isolated to this room's children//
+        // Remove any stale pre-baked NavMeshSurface data the prefab brought with it.
+        // Without this, old baked data (potentially including wall tops from before
+        // NavMeshModifiers were configured) sits in the global NavMesh alongside the new bake.
+        foreach (NavMeshSurface existing in roomInstance.GetComponentsInChildren<NavMeshSurface>())
+        {
+            existing.RemoveData();
+            Destroy(existing);
+        }
+
+        // Configure a fresh surface — BuildNavMesh() is called later in BuildRooms()
         NavMeshSurface roomSurface = roomInstance.AddComponent<NavMeshSurface>();
         roomSurface.agentTypeID = navMeshSurface != null ? navMeshSurface.agentTypeID : 0;
         roomSurface.collectObjects = CollectObjects.Children;
@@ -242,16 +238,9 @@ public class RoomBuilder : MonoBehaviour
         }
         roomSurface.layerMask = mask;
 
-       
-        roomSurface.BuildNavMesh();
+        if (showDebugLogs) Debug.Log($"[RoomBuilder] Placed {sizeLabel} {roomLabel} prefab at grid ({minX},{minY}) -> world {centerPos}");
 
-        if (showDebugLogs) Debug.Log($"[RoomBuilder] NavMesh baked for {roomInstance.name}, data null: {roomSurface.navMeshData == null}");
-
-
-        if (showDebugLogs)
-        {
-            Debug.Log($"[RoomBuilder] Placed {sizeLabel} {roomLabel} prefab at grid ({minX},{minY}) -> world {placementPos}");
-        }
+        return roomSurface;
     }
 
     //Retrun the correct prefab for a room based on type and size -EM//
@@ -358,18 +347,12 @@ public class RoomBuilder : MonoBehaviour
         }
     }
 
-    //Generate dungeon and build rooms in one step -EM//
     [ContextMenu("Generate and Build")]
     public void GenerateAndBuild()
     {
         if(generator != null)
-        {
-            if(disableAgentsDuringBake)
-            {
-                DisableAgentsForBake();
-            }
             generator.GenerateDungeon();
-        }
+
         BuildRooms();
         SpawnPlayerAtLobby();
     }
