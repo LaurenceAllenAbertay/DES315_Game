@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 79600a68289650d4f9af5bf187e01fe9, type: 3}
       propertyPath: m_Name
-      value: M_winerack_low
+      value: Winerack Back
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -58,8 +58,32 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 79600a68289650d4f9af5bf187e01fe9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7702047663915142884}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 79600a68289650d4f9af5bf187e01fe9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5690891233130979267}
   m_SourcePrefab: {fileID: 100100000, guid: 79600a68289650d4f9af5bf187e01fe9, type: 3}
+--- !u!1 &3958649343136851219 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 79600a68289650d4f9af5bf187e01fe9, type: 3}
+  m_PrefabInstance: {fileID: 4192459051500329026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!208 &-5690891233130979267
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3958649343136851219}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.0135, y: 0.025, z: 0.0065}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.02, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &4441712747997118377 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 79600a68289650d4f9af5bf187e01fe9, type: 3}
