@@ -41,6 +41,7 @@ namespace AK
         static const AkUniqueID PLAYERHURT = 3537581393U;
         static const AkUniqueID PLAYERLAUGH = 2348858765U;
         static const AkUniqueID PLAYERMELEEATTACK = 1598433574U;
+        static const AkUniqueID SHOOTHANDBLOOD = 3221502139U;
         static const AkUniqueID TORCHBREAK = 717429066U;
         static const AkUniqueID TORCHLOOP = 4171534483U;
         static const AkUniqueID UI_CLOSE = 2519197294U;

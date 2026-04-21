@@ -3,28 +3,6 @@
 	<AudioObjects>
 		<WorkUnit Name="Default Work Unit" ID="{7959C9E0-BA15-4686-B24C-87E196EF1927}" PersistMode="Standalone">
 			<ChildrenList>
-				<Sound Name="Blood storm" ID="{8ED32DD7-AF31-4A77-B954-BA85E586ACC6}" ShortID="954156918">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-						</Reference>
-					</ReferenceList>
-					<ChildrenList>
-						<AudioFileSource Name="Blood storm" ID="{C57A5960-43D9-4A3E-8E7A-D647862CD978}">
-							<Language>SFX</Language>
-							<AudioFile>Blood storm.wav</AudioFile>
-							<MediaIDList>
-								<MediaID ID="549072123"/>
-							</MediaIDList>
-						</AudioFileSource>
-					</ChildrenList>
-					<ActiveSourceList>
-						<ActiveSource Name="Blood storm" ID="{C57A5960-43D9-4A3E-8E7A-D647862CD978}" Platform="Linked"/>
-					</ActiveSourceList>
-				</Sound>
 				<Folder Name="UI" ID="{CF83538C-ADCD-4FE0-9C07-4D047CE47071}" ShortID="39606760">
 					<ChildrenList>
 						<Folder Name="Book" ID="{B6780AE7-BA55-4C47-9CDD-5A2F70335CFC}" ShortID="886617188">
@@ -1124,127 +1102,6 @@
 						</Sound>
 					</ChildrenList>
 				</Folder>
-				<RandomSequenceContainer Name="Flintlock" ID="{6893F140-04D5-410C-8EF2-DD52D3342239}" ShortID="229695086">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-						</Reference>
-					</ReferenceList>
-					<ChildrenList>
-						<Sound Name="Flintlock 2" ID="{02AD08D6-E88C-4E31-8087-A92D90AFAD9A}" ShortID="76731103">
-							<PropertyList>
-								<Property Name="Weight" Type="Real64">
-									<ValueList>
-										<Value>25</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Flintlock 2" ID="{402A0B6A-5F2C-481C-8323-8AABFDD8285D}">
-									<Language>SFX</Language>
-									<AudioFile>Flintlock 2.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="695088713"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Flintlock 2" ID="{402A0B6A-5F2C-481C-8323-8AABFDD8285D}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Flintlock 3" ID="{2D747CE2-3443-4533-953B-DDBDFDAA304B}" ShortID="976200813">
-							<PropertyList>
-								<Property Name="Weight" Type="Real64">
-									<ValueList>
-										<Value>25</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Flintlock 3" ID="{D2888B85-BE78-4ECE-9F70-23536F2FE0C5}">
-									<Language>SFX</Language>
-									<AudioFile>Flintlock 3.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="849152164"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Flintlock 3" ID="{D2888B85-BE78-4ECE-9F70-23536F2FE0C5}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Flintlock 4" ID="{105A5668-FC15-48DA-A605-96E8251B61B1}" ShortID="1042705246">
-							<PropertyList>
-								<Property Name="Weight" Type="Real64">
-									<ValueList>
-										<Value>25</Value>
-									</ValueList>
-								</Property>
-							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Flintlock 4" ID="{14BED9A0-9952-4D39-8B74-8E8699F701EB}">
-									<Language>SFX</Language>
-									<AudioFile>Flintlock 4.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="529643543"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Flintlock 4" ID="{14BED9A0-9952-4D39-8B74-8E8699F701EB}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="Flintlock" ID="{9D8F62BA-5A07-408C-AD69-9A7DB039662B}" ShortID="860066756">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="Flintlock" ID="{6EFF3A46-0F2E-48F5-8752-DE4C9BF9FE40}">
-									<Language>SFX</Language>
-									<AudioFile>Flintlock.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="143551498"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="Flintlock" ID="{6EFF3A46-0F2E-48F5-8752-DE4C9BF9FE40}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-					</ChildrenList>
-				</RandomSequenceContainer>
 				<Folder Name="Vocals" ID="{73C034C0-AD6F-41F3-92B8-AB0432755664}" ShortID="414362378">
 					<ChildrenList>
 						<Folder Name="Player" ID="{D032B7BD-6BE9-46AB-AC64-06CD2457DBC8}" ShortID="316827165">
@@ -2046,6 +1903,312 @@
 										<ActiveSource Name="laugh" ID="{D3CA0FB7-32F4-49B1-9FF3-8F17F1D4253F}" Platform="Linked"/>
 									</ActiveSourceList>
 								</Sound>
+								<RandomSequenceContainer Name="Spell_01" ID="{ABF3BB40-BB18-43BF-B29C-C39DFD595CAC}" ShortID="855627354">
+									<PropertyList>
+										<Property Name="Volume" Type="Real64">
+											<ValueList>
+												<Value>12</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="PlayerCast-01" ID="{44DD9526-6F80-49C6-8BE0-F0C81EF858F3}" ShortID="640278343">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerCast-01" ID="{3B0C7A86-5D46-4852-8325-D97628E60B6D}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerCast-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="72252010"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerCast-01" ID="{3B0C7A86-5D46-4852-8325-D97628E60B6D}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerCast-02" ID="{F13E6358-8240-49A0-AD4F-1A5F1FF42605}" ShortID="3747609">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerCast-02" ID="{0DFCB80E-A367-4659-8A0A-4DCDB39183C4}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerCast-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="747789225"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerCast-02" ID="{0DFCB80E-A367-4659-8A0A-4DCDB39183C4}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerCast-03" ID="{4AED85EC-D335-446A-A9B6-F2529B959866}" ShortID="35064992">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerCast-03" ID="{D078CD3F-A1EA-4039-8117-1C0520CDD2A2}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerCast-03.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="249541702"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerCast-03" ID="{D078CD3F-A1EA-4039-8117-1C0520CDD2A2}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerCast-04" ID="{A48B57C3-A3E1-44F5-83DD-62D65AF661E0}" ShortID="109390217">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerCast-04" ID="{08C4575B-73BC-4146-9C7F-9D48F6B06DE9}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerCast-04.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="199066427"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerCast-04" ID="{08C4575B-73BC-4146-9C7F-9D48F6B06DE9}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerCast-05" ID="{FC342241-4D95-4EC3-A413-2E60706E0212}" ShortID="811267836">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerCast-05" ID="{A2766FC8-C6BE-493F-AB4E-DC17117BA9DE}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerCast-05.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="708134248"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerCast-05" ID="{A2766FC8-C6BE-493F-AB4E-DC17117BA9DE}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerCast-06" ID="{EA46AEDA-B794-48D2-9136-B147B09E09CE}" ShortID="401485613">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerCast-06" ID="{AA481B9B-EA7B-4F59-8A76-8E8DBE08ACD5}">
+													<PropertyList>
+														<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+														<Property Name="TrimEnd" Type="Real64" Value="0.803975694444444"/>
+													</PropertyList>
+													<Language>SFX</Language>
+													<AudioFile>PlayerCast-06.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="871082607"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerCast-06" ID="{AA481B9B-EA7B-4F59-8A76-8E8DBE08ACD5}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="Gun" ID="{CE275B4E-3682-48DF-941C-8E6E50C0AA7C}" ShortID="80247992">
+									<PropertyList>
+										<Property Name="InitialDelay" Type="Real64">
+											<ValueList>
+												<Value>1.5</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="PlayerSwing-01" ID="{73CE09AB-2D63-4CFF-8D82-ACE59C00BE4A}" ShortID="44489303">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerSwing-01" ID="{82EE1625-1204-445A-AAE5-33B518DFF255}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerSwing-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="145572863"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerSwing-01" ID="{82EE1625-1204-445A-AAE5-33B518DFF255}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerSwing-02" ID="{70214CAA-F46D-496C-8340-52D45BBA2AB0}" ShortID="828750434">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerSwing-02" ID="{F3E7930E-B99B-4FBD-8596-7F4ACC280992}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerSwing-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="199315037"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerSwing-02" ID="{F3E7930E-B99B-4FBD-8596-7F4ACC280992}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerSwing-03" ID="{031F7546-148F-46C3-BCC9-50DF0A73AF44}" ShortID="793678767">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerSwing-03" ID="{22421B61-04CB-43DC-8B5D-065101272E41}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerSwing-03.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="962061646"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerSwing-03" ID="{22421B61-04CB-43DC-8B5D-065101272E41}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerSwing-04" ID="{E4BB27EC-358D-4B28-A790-025336667DBB}" ShortID="10245194">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerSwing-04" ID="{451402D5-34AD-46CB-B475-99859FAF2116}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerSwing-04.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="673919322"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerSwing-04" ID="{451402D5-34AD-46CB-B475-99859FAF2116}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerSwing-05" ID="{152CA91C-48BD-475A-81CC-FFBA32A21ABE}" ShortID="83218037">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerSwing-05" ID="{586459D4-F6B2-463B-863B-B668055A47E1}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerSwing-05.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="149730050"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerSwing-05" ID="{586459D4-F6B2-463B-863B-B668055A47E1}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="PlayerSwing-06" ID="{C14D3F18-A35E-43F0-A14F-F9F2528B5B65}" ShortID="793683262">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="PlayerSwing-06" ID="{5A3FCADD-B5A3-41E8-ABFA-3453CFA13ACE}">
+													<Language>SFX</Language>
+													<AudioFile>PlayerSwing-06.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="239855936"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="PlayerSwing-06" ID="{5A3FCADD-B5A3-41E8-ABFA-3453CFA13ACE}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
 							</ChildrenList>
 						</Folder>
 						<Folder Name="Enemy" ID="{A52EA86C-C49E-420C-8793-D10A5362CFEB}" ShortID="74941171">
@@ -4174,17 +4337,9 @@
 						</GroupingList>
 					</GroupingInfo>
 				</SwitchContainer>
-				<RandomSequenceContainer Name="Swing" ID="{C71F6D7B-8D77-4870-8652-0F9141A2F267}" ShortID="231043403">
-					<ReferenceList>
-						<Reference Name="Conversion">
-							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-						</Reference>
-						<Reference Name="OutputBus">
-							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-						</Reference>
-					</ReferenceList>
+				<Folder Name="Abilities" ID="{8C34D7C3-3EAC-499F-9BCC-82D63FC6941C}" ShortID="431406115">
 					<ChildrenList>
-						<Sound Name="SwordSwing-01" ID="{F2C7F0B6-C3F4-4879-B25C-5F911D6353DD}" ShortID="361480550">
+						<RandomSequenceContainer Name="Flintlock" ID="{6893F140-04D5-410C-8EF2-DD52D3342239}" ShortID="229695086">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
@@ -4194,19 +4349,504 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-01" ID="{074B8656-9EDD-4AD3-9A39-1448C624325B}">
+								<Sound Name="Flintlock 2" ID="{02AD08D6-E88C-4E31-8087-A92D90AFAD9A}" ShortID="76731103">
+									<PropertyList>
+										<Property Name="Weight" Type="Real64">
+											<ValueList>
+												<Value>25</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Flintlock 2" ID="{402A0B6A-5F2C-481C-8323-8AABFDD8285D}">
+											<Language>SFX</Language>
+											<AudioFile>Flintlock 2.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="695088713"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Flintlock 2" ID="{402A0B6A-5F2C-481C-8323-8AABFDD8285D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Flintlock 3" ID="{2D747CE2-3443-4533-953B-DDBDFDAA304B}" ShortID="976200813">
+									<PropertyList>
+										<Property Name="Weight" Type="Real64">
+											<ValueList>
+												<Value>25</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Flintlock 3" ID="{D2888B85-BE78-4ECE-9F70-23536F2FE0C5}">
+											<Language>SFX</Language>
+											<AudioFile>Flintlock 3.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="849152164"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Flintlock 3" ID="{D2888B85-BE78-4ECE-9F70-23536F2FE0C5}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Flintlock 4" ID="{105A5668-FC15-48DA-A605-96E8251B61B1}" ShortID="1042705246">
+									<PropertyList>
+										<Property Name="Weight" Type="Real64">
+											<ValueList>
+												<Value>25</Value>
+											</ValueList>
+										</Property>
+									</PropertyList>
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Flintlock 4" ID="{14BED9A0-9952-4D39-8B74-8E8699F701EB}">
+											<Language>SFX</Language>
+											<AudioFile>Flintlock 4.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="529643543"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Flintlock 4" ID="{14BED9A0-9952-4D39-8B74-8E8699F701EB}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="Flintlock" ID="{9D8F62BA-5A07-408C-AD69-9A7DB039662B}" ShortID="860066756">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="Flintlock" ID="{6EFF3A46-0F2E-48F5-8752-DE4C9BF9FE40}">
+											<Language>SFX</Language>
+											<AudioFile>Flintlock.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="143551498"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="Flintlock" ID="{6EFF3A46-0F2E-48F5-8752-DE4C9BF9FE40}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<RandomSequenceContainer Name="Swing" ID="{C71F6D7B-8D77-4870-8652-0F9141A2F267}" ShortID="231043403">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<Sound Name="SwordSwing-01" ID="{F2C7F0B6-C3F4-4879-B25C-5F911D6353DD}" ShortID="361480550">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-01" ID="{074B8656-9EDD-4AD3-9A39-1448C624325B}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-01.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="785817419"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-01" ID="{074B8656-9EDD-4AD3-9A39-1448C624325B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-02" ID="{C815D108-0538-4BE6-A922-CDF49262251A}" ShortID="599791841">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-02" ID="{EA1274C2-4085-4172-9595-167DC23DA362}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-02.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1041528994"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-02" ID="{EA1274C2-4085-4172-9595-167DC23DA362}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-03" ID="{D514E25C-739D-4A5E-B659-532547A847A5}" ShortID="60396209">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-03" ID="{91C90A7A-04E0-4273-B967-D500079CDAB7}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-03.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="157051879"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-03" ID="{91C90A7A-04E0-4273-B967-D500079CDAB7}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-04" ID="{263A2056-C114-4438-9A24-DBDE5E7C41D9}" ShortID="125995901">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-04" ID="{6D7CC52C-F864-4AAA-BEF1-A36EFAB523D0}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-04.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="880489828"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-04" ID="{6D7CC52C-F864-4AAA-BEF1-A36EFAB523D0}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-05" ID="{73DE2E31-92C6-4F18-89F3-43534CD11EA2}" ShortID="439228318">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-05" ID="{0F5CBA3C-3ABC-4440-8FC3-9E5234098882}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-05.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1004620782"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-05" ID="{0F5CBA3C-3ABC-4440-8FC3-9E5234098882}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-06" ID="{5784B363-8D66-45A7-B2EC-CA471FA3D35A}" ShortID="170824916">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-06" ID="{FBF8F5EC-D5BA-4863-97C6-18EC5D74221A}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-06.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="711281976"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-06" ID="{FBF8F5EC-D5BA-4863-97C6-18EC5D74221A}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-07" ID="{1DBA1B38-E80A-4CA2-9F91-2D2299C530D9}" ShortID="616657314">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-07" ID="{D0E2DF40-32BF-4D5E-9BC6-636FDB2BC72D}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-07.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="827287611"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-07" ID="{D0E2DF40-32BF-4D5E-9BC6-636FDB2BC72D}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-08" ID="{A9A03FB4-4C3B-4D16-A448-8EC6EE5BEA61}" ShortID="190458748">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-08" ID="{03C0B7D6-A8C4-44F3-A7FF-618967ED5054}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-08.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="700366924"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-08" ID="{03C0B7D6-A8C4-44F3-A7FF-618967ED5054}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-09" ID="{6C54A25E-6511-4D77-86C3-10F5EB340867}" ShortID="456909248">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-09" ID="{EDA0AF96-8F0B-478A-9416-67CC81B1960B}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-09.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="266374827"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-09" ID="{EDA0AF96-8F0B-478A-9416-67CC81B1960B}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-10" ID="{A70E0A37-C557-4570-A289-B7A0172F24D7}" ShortID="106226716">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-10" ID="{3E7F83D7-953B-4049-B3ED-AD150248CA58}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-10.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="310257819"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-10" ID="{3E7F83D7-953B-4049-B3ED-AD150248CA58}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-11" ID="{BBD85315-E717-4EE8-A057-FD231D9361F2}" ShortID="491392062">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-11" ID="{DA111A93-4B2C-4C46-821F-FE5E03D7120C}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-11.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="1012071332"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-11" ID="{DA111A93-4B2C-4C46-821F-FE5E03D7120C}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-12" ID="{9CFCDEB7-7C2B-42B4-8B30-CEDBBEDA1B66}" ShortID="353232808">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-12" ID="{34AAA1EB-9ED7-4A02-A4C8-B2580BE53DE3}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-12.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="217847425"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-12" ID="{34AAA1EB-9ED7-4A02-A4C8-B2580BE53DE3}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-13" ID="{F237E6D4-5CAE-4C40-9FB6-8874EF6A4312}" ShortID="616648580">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-13" ID="{AD8D4763-1AEB-41A7-BF91-D52EA2021790}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-13.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="991199934"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-13" ID="{AD8D4763-1AEB-41A7-BF91-D52EA2021790}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-14" ID="{B5803D97-6943-4126-BF26-C297841CC1E6}" ShortID="848061365">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-14" ID="{45C86543-7C5B-4A6F-BCBE-7E4EB8A15DD7}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-14.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="333227023"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-14" ID="{45C86543-7C5B-4A6F-BCBE-7E4EB8A15DD7}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-15" ID="{EF87869C-F0D4-43AD-A333-58DC0CFAA196}" ShortID="644560453">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-15" ID="{7D13D931-B461-44DE-B344-B9C94DE9C619}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-15.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="626088333"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-15" ID="{7D13D931-B461-44DE-B344-B9C94DE9C619}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+								<Sound Name="SwordSwing-16" ID="{32C9EE62-1676-462B-82B0-45A4DA241AFE}" ShortID="361430914">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<AudioFileSource Name="SwordSwing-16" ID="{A25DA4DE-98C9-4C6E-A24D-1DC6A2626191}">
+											<Language>SFX</Language>
+											<AudioFile>SwordSwing-16.wav</AudioFile>
+											<MediaIDList>
+												<MediaID ID="104101598"/>
+											</MediaIDList>
+										</AudioFileSource>
+									</ChildrenList>
+									<ActiveSourceList>
+										<ActiveSource Name="SwordSwing-16" ID="{A25DA4DE-98C9-4C6E-A24D-1DC6A2626191}" Platform="Linked"/>
+									</ActiveSourceList>
+								</Sound>
+							</ChildrenList>
+						</RandomSequenceContainer>
+						<Sound Name="Blood storm" ID="{8ED32DD7-AF31-4A77-B954-BA85E586ACC6}" ShortID="954156918">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="Blood storm" ID="{C57A5960-43D9-4A3E-8E7A-D647862CD978}">
 									<Language>SFX</Language>
-									<AudioFile>SwordSwing-01.wav</AudioFile>
+									<AudioFile>Blood storm.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="785817419"/>
+										<MediaID ID="549072123"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-01" ID="{074B8656-9EDD-4AD3-9A39-1448C624325B}" Platform="Linked"/>
+								<ActiveSource Name="Blood storm" ID="{C57A5960-43D9-4A3E-8E7A-D647862CD978}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="SwordSwing-02" ID="{C815D108-0538-4BE6-A922-CDF49262251A}" ShortID="599791841">
+						<Sound Name="Hemabolt" ID="{2FFBD8D2-5A7A-4ED6-A408-57653A84621F}" ShortID="1063971576">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
@@ -4216,19 +4856,19 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-02" ID="{EA1274C2-4085-4172-9595-167DC23DA362}">
+								<AudioFileSource Name="Hemabolt" ID="{68F57873-B690-47EC-8F5B-41C5F29C459D}">
 									<Language>SFX</Language>
-									<AudioFile>SwordSwing-02.wav</AudioFile>
+									<AudioFile>Hemabolt.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="1041528994"/>
+										<MediaID ID="542585731"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-02" ID="{EA1274C2-4085-4172-9595-167DC23DA362}" Platform="Linked"/>
+								<ActiveSource Name="Hemabolt" ID="{68F57873-B690-47EC-8F5B-41C5F29C459D}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="SwordSwing-03" ID="{D514E25C-739D-4A5E-B659-532547A847A5}" ShortID="60396209">
+						<Sound Name="Hemabullet" ID="{3B8CD589-11A5-4E6A-95D6-E34D8A8FC4B8}" ShortID="326283664">
 							<ReferenceList>
 								<Reference Name="Conversion">
 									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
@@ -4238,306 +4878,20 @@
 								</Reference>
 							</ReferenceList>
 							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-03" ID="{91C90A7A-04E0-4273-B967-D500079CDAB7}">
+								<AudioFileSource Name="Hemabullet" ID="{C6231A87-ECCD-49C9-A688-47B0584C5AAC}">
 									<Language>SFX</Language>
-									<AudioFile>SwordSwing-03.wav</AudioFile>
+									<AudioFile>Hemabullet.wav</AudioFile>
 									<MediaIDList>
-										<MediaID ID="157051879"/>
+										<MediaID ID="42485617"/>
 									</MediaIDList>
 								</AudioFileSource>
 							</ChildrenList>
 							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-03" ID="{91C90A7A-04E0-4273-B967-D500079CDAB7}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-04" ID="{263A2056-C114-4438-9A24-DBDE5E7C41D9}" ShortID="125995901">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-04" ID="{6D7CC52C-F864-4AAA-BEF1-A36EFAB523D0}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-04.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="880489828"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-04" ID="{6D7CC52C-F864-4AAA-BEF1-A36EFAB523D0}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-05" ID="{73DE2E31-92C6-4F18-89F3-43534CD11EA2}" ShortID="439228318">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-05" ID="{0F5CBA3C-3ABC-4440-8FC3-9E5234098882}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-05.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="1004620782"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-05" ID="{0F5CBA3C-3ABC-4440-8FC3-9E5234098882}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-06" ID="{5784B363-8D66-45A7-B2EC-CA471FA3D35A}" ShortID="170824916">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-06" ID="{FBF8F5EC-D5BA-4863-97C6-18EC5D74221A}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-06.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="711281976"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-06" ID="{FBF8F5EC-D5BA-4863-97C6-18EC5D74221A}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-07" ID="{1DBA1B38-E80A-4CA2-9F91-2D2299C530D9}" ShortID="616657314">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-07" ID="{D0E2DF40-32BF-4D5E-9BC6-636FDB2BC72D}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-07.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="827287611"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-07" ID="{D0E2DF40-32BF-4D5E-9BC6-636FDB2BC72D}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-08" ID="{A9A03FB4-4C3B-4D16-A448-8EC6EE5BEA61}" ShortID="190458748">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-08" ID="{03C0B7D6-A8C4-44F3-A7FF-618967ED5054}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-08.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="700366924"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-08" ID="{03C0B7D6-A8C4-44F3-A7FF-618967ED5054}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-09" ID="{6C54A25E-6511-4D77-86C3-10F5EB340867}" ShortID="456909248">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-09" ID="{EDA0AF96-8F0B-478A-9416-67CC81B1960B}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-09.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="266374827"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-09" ID="{EDA0AF96-8F0B-478A-9416-67CC81B1960B}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-10" ID="{A70E0A37-C557-4570-A289-B7A0172F24D7}" ShortID="106226716">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-10" ID="{3E7F83D7-953B-4049-B3ED-AD150248CA58}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-10.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="310257819"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-10" ID="{3E7F83D7-953B-4049-B3ED-AD150248CA58}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-11" ID="{BBD85315-E717-4EE8-A057-FD231D9361F2}" ShortID="491392062">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-11" ID="{DA111A93-4B2C-4C46-821F-FE5E03D7120C}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-11.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="1012071332"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-11" ID="{DA111A93-4B2C-4C46-821F-FE5E03D7120C}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-12" ID="{9CFCDEB7-7C2B-42B4-8B30-CEDBBEDA1B66}" ShortID="353232808">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-12" ID="{34AAA1EB-9ED7-4A02-A4C8-B2580BE53DE3}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-12.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="217847425"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-12" ID="{34AAA1EB-9ED7-4A02-A4C8-B2580BE53DE3}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-13" ID="{F237E6D4-5CAE-4C40-9FB6-8874EF6A4312}" ShortID="616648580">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-13" ID="{AD8D4763-1AEB-41A7-BF91-D52EA2021790}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-13.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="991199934"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-13" ID="{AD8D4763-1AEB-41A7-BF91-D52EA2021790}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-14" ID="{B5803D97-6943-4126-BF26-C297841CC1E6}" ShortID="848061365">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-14" ID="{45C86543-7C5B-4A6F-BCBE-7E4EB8A15DD7}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-14.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="333227023"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-14" ID="{45C86543-7C5B-4A6F-BCBE-7E4EB8A15DD7}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-15" ID="{EF87869C-F0D4-43AD-A333-58DC0CFAA196}" ShortID="644560453">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-15" ID="{7D13D931-B461-44DE-B344-B9C94DE9C619}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-15.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="626088333"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-15" ID="{7D13D931-B461-44DE-B344-B9C94DE9C619}" Platform="Linked"/>
-							</ActiveSourceList>
-						</Sound>
-						<Sound Name="SwordSwing-16" ID="{32C9EE62-1676-462B-82B0-45A4DA241AFE}" ShortID="361430914">
-							<ReferenceList>
-								<Reference Name="Conversion">
-									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-								</Reference>
-								<Reference Name="OutputBus">
-									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-								</Reference>
-							</ReferenceList>
-							<ChildrenList>
-								<AudioFileSource Name="SwordSwing-16" ID="{A25DA4DE-98C9-4C6E-A24D-1DC6A2626191}">
-									<Language>SFX</Language>
-									<AudioFile>SwordSwing-16.wav</AudioFile>
-									<MediaIDList>
-										<MediaID ID="104101598"/>
-									</MediaIDList>
-								</AudioFileSource>
-							</ChildrenList>
-							<ActiveSourceList>
-								<ActiveSource Name="SwordSwing-16" ID="{A25DA4DE-98C9-4C6E-A24D-1DC6A2626191}" Platform="Linked"/>
+								<ActiveSource Name="Hemabullet" ID="{C6231A87-ECCD-49C9-A688-47B0584C5AAC}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>
-				</RandomSequenceContainer>
+				</Folder>
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>
