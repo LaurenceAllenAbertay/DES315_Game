@@ -4595,6 +4595,7 @@ GameObject:
   - component: {fileID: 715779224}
   - component: {fileID: 715779226}
   - component: {fileID: 715779225}
+  - component: {fileID: 715779227}
   m_Layer: 5
   m_Name: Checkmark
   m_TagString: Untagged
@@ -4659,6 +4660,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715779223}
   m_CullTransparentMesh: 1
+--- !u!114 &715779227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715779223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3856e30faed470e46a5d3680e8eff397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &718796178
 GameObject:
   m_ObjectHideFlags: 0
@@ -9003,7 +9016,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 1000 fps
+  m_text: 100 fps
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11823,6 +11836,7 @@ GameObject:
   - component: {fileID: 1504471278}
   - component: {fileID: 1504471280}
   - component: {fileID: 1504471279}
+  - component: {fileID: 1504471281}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -11948,6 +11962,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1504471277}
   m_CullTransparentMesh: 1
+--- !u!114 &1504471281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504471277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3856e30faed470e46a5d3680e8eff397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1512805848
 GameObject:
   m_ObjectHideFlags: 0

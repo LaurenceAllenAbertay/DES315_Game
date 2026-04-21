@@ -37,6 +37,7 @@ public class RoomLA : MonoBehaviour
     private void Awake()
     {
         roomLights = GetComponentsInChildren<LightSource>(true);
+        CacheRoomEnemies();
 
         if (RoomManager.Instance != null)
             RoomManager.Instance.Register(this);
@@ -49,8 +50,6 @@ public class RoomLA : MonoBehaviour
 
         bool isCurrentRoom = RoomManager.Instance != null && RoomManager.Instance.CurrentRoom == this;
         SetLightsActive(isCurrentRoom);
-
-        CacheRoomEnemies();
         SetEnemiesActive(isCurrentRoom);
     }
 
