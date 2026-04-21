@@ -19,22 +19,22 @@ MonoBehaviour:
 
     -50 max health
 
-    -30% damage
+    -50% damage
 
-    -20%
+    -30%
     range
 
     -10% AOE size
 
-    -20% move range'
+    -30% move range'
   icon: {fileID: 21300000, guid: bbfc1ea83c6b55c45913f74bdfdeb8b1, type: 3}
   modifiers:
     maxHealthFlat: -50
     blockFlat: 0
     healFlat: 20
     baseCoinsFlat: 4
-    abilityDamagePercent: -30
-    abilityRangePercent: -20
-    aoeSizePercent: -15
-    maxCombatMovePercent: -20
+    abilityDamagePercent: -50
+    abilityRangePercent: -30
+    aoeSizePercent: -10
+    maxCombatMovePercent: -30
     conditionalDamagePercent: 0

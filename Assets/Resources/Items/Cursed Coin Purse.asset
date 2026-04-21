@@ -15,16 +15,16 @@ MonoBehaviour:
   itemName: Curse Coin Purse
   description: '+2 coins
 
-    -5 max health
+    -20 max health
 
-    -15% damage'
+    -30% damage'
   icon: {fileID: 21300000, guid: da3f8c19ff8333e4182ebf42423af843, type: 3}
   modifiers:
-    maxHealthFlat: -5
+    maxHealthFlat: -20
     blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 2
-    abilityDamagePercent: -15
+    abilityDamagePercent: -30
     abilityRangePercent: 0
     aoeSizePercent: 0
     maxCombatMovePercent: 0

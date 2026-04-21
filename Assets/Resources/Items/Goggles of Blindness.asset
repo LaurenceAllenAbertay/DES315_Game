@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: Goggles of Blindness
   m_EditorClassIdentifier: 
   itemName: Goggles of Blindness
-  description: "Lose 20% range and AOE\t"
+  description: "Lose 20% range and AOE\n+10% DMG\t"
   icon: {fileID: 21300000, guid: 446a8cedd1a550f44abcfa701829608d, type: 3}
   modifiers:
     maxHealthFlat: 0
     blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 0
-    abilityDamagePercent: 0
+    abilityDamagePercent: 10
     abilityRangePercent: -20
     aoeSizePercent: -20
     maxCombatMovePercent: 0
+    conditionalDamagePercent: 0
