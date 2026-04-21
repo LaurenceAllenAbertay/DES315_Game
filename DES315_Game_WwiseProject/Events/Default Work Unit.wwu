@@ -322,6 +322,31 @@
 								</Action>
 							</ChildrenList>
 						</Event>
+						<Event Name="ShootHandBlood" ID="{B72C9E6A-9292-469D-9546-0BF8B4302E83}">
+							<ChildrenList>
+								<Action Name="" ID="{C4629BA3-35F3-4231-B1EB-41E6EB121325}" ShortID="222243462">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Hemabolt" ID="{2FFBD8D2-5A7A-4ED6-A408-57653A84621F}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{4A5FDC97-3D3E-4BF8-B532-457D3D127F0B}" ShortID="729083098">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Spell_01" ID="{ABF3BB40-BB18-43BF-B29C-C39DFD595CAC}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{D0773D6F-AF6C-47FD-B5E1-FAF796CC1DA7}" ShortID="604197096">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Gun" ID="{CE275B4E-3682-48DF-941C-8E6E50C0AA7C}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="Environment" ID="{D6E5EE3C-895A-415D-A180-2F5BC4ABA646}" ShortID="931648211">
