@@ -3566,7 +3566,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8055841945967263951}
+      addedObject: {fileID: 5936206141397177295}
   m_SourcePrefab: {fileID: 100100000, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
 --- !u!4 &1161609279044042592 stripped
 Transform:
@@ -3578,8 +3578,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
   m_PrefabInstance: {fileID: 1699092916553308299}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &8055841945967263951
-MeshCollider:
+--- !u!65 &5936206141397177295
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3596,10 +3596,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.028, y: 0.015, z: 0.01}
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!1001 &1809925585140528609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4130,7 +4129,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2880833721766318681}
+      addedObject: {fileID: 4635617960132593570}
   m_SourcePrefab: {fileID: 100100000, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
 --- !u!4 &2372750118947497944 stripped
 Transform:
@@ -4142,8 +4141,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
   m_PrefabInstance: {fileID: 2839249996033605683}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &2880833721766318681
-MeshCollider:
+--- !u!65 &4635617960132593570
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4160,10 +4159,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.028, y: 0.015, z: 0.01}
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!1001 &2863877216574136370
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6180,15 +6178,15 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4024811305470289856}
+      addedObject: {fileID: 4479010698211171429}
   m_SourcePrefab: {fileID: 100100000, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
 --- !u!1 &3742727004655030755 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
   m_PrefabInstance: {fileID: 4553631462623325362}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &4024811305470289856
-MeshCollider:
+--- !u!65 &4479010698211171429
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -6205,10 +6203,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.028, y: 0.015, z: 0.01}
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!4 &4087868564726991705 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
@@ -7846,7 +7843,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7955157696243200486}
+      addedObject: {fileID: 1185809607791302062}
   m_SourcePrefab: {fileID: 100100000, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
 --- !u!4 &6232592693358933806 stripped
 Transform:
@@ -7858,8 +7855,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
   m_PrefabInstance: {fileID: 5905388395188179141}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &7955157696243200486
-MeshCollider:
+--- !u!65 &1185809607791302062
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -7876,10 +7873,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.028, y: 0.015, z: 0.01}
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!1001 &6177443258445703070
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8090,7 +8086,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3198266677231217663}
+      addedObject: {fileID: 3485116635388893780}
   m_SourcePrefab: {fileID: 100100000, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
 --- !u!4 &5928670490229006366 stripped
 Transform:
@@ -8102,8 +8098,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 142483aeeabdb4d4f806c3ce8214575b, type: 3}
   m_PrefabInstance: {fileID: 6182429755188283381}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &3198266677231217663
-MeshCollider:
+--- !u!65 &3485116635388893780
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -8120,10 +8116,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.028, y: 0.015, z: 0.01}
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!1001 &6261778563953068142
 PrefabInstance:
   m_ObjectHideFlags: 0

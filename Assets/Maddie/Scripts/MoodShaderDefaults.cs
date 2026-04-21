@@ -5,8 +5,8 @@ public class MoodShaderDefaults : MonoBehaviour
     void Awake()
     {
         // Character globals - baked from CharacterMoodTool
-        Shader.SetGlobalColor("_Char_ShadowTint",         new Color(0f, 0f, 1f, 1f));
-        Shader.SetGlobalColor("_Char_HighlightTint",      new Color(1f, 0f, 0.4925146f, 1f));
+        Shader.SetGlobalColor("_Char_ShadowTint",         new Color(0.2f, 0.2f, 0.4f, 1f));
+        Shader.SetGlobalColor("_Char_HighlightTint",      new Color(1f, 0.95f, 0.8f, 1f));
         Shader.SetGlobalFloat("_Char_Saturation",         1f);
         Shader.SetGlobalFloat("_Char_PulseSpeed",         1f);
         Shader.SetGlobalFloat("_Char_EmissionMultiplier", 1f);
