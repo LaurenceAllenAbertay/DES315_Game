@@ -208,10 +208,10 @@ public class DoorSpawner : MonoBehaviour
         {
             //Rotate the door to face along the connection direction//
             float yAngle = 0f;
-            if (connection.direction == new Vector2Int(0, 1)) yAngle = 0f; //North//
-            else if (connection.direction == new Vector2Int(1, 0)) yAngle = 90f; //East//
-            else if (connection.direction == new Vector2Int(0, -1)) yAngle = 180f; //South//
-            else if (connection.direction == new Vector2Int(-1, 0)) yAngle = 270f; //West//
+            if (connection.direction == new Vector2Int(0, 1)) yAngle = 180f; //North//
+            else if (connection.direction == new Vector2Int(1, 0)) yAngle = 270f; //East//
+            else if (connection.direction == new Vector2Int(0, -1)) yAngle = 0f; //South//
+            else if (connection.direction == new Vector2Int(-1, 0)) yAngle = 90f; //West//
 
             Quaternion doorRotation = Quaternion.Euler(0f, yAngle, 0f);
             doorObject = Instantiate(doorPrefab, connection.doorPosition, doorRotation, doorsParent);
