@@ -93,7 +93,7 @@ MonoBehaviour:
     ParentPath: SoundBanks\Default Work Unit
     guid: dcd16b5045f7b543aa1b29726e8d04c5
     GuidInternal: 
-    m_lastTime: -8584249126423116236
+    m_lastTime: -8584248227022833309
     List:
     - name: Main
       guid: a76016c4fbd16749a63ebf224c7e39e9
@@ -148,7 +148,7 @@ MonoBehaviour:
     ParentPath: Events\Default Work Unit
     guid: a9bc6e9a3eb20245be45984b119a8d05
     GuidInternal: 
-    m_lastTime: -8584249114417542510
+    m_lastTime: -8584248227031615397
     List:
     - name: Ability
       guid: 39a7dd393af0e54f992b46e11d1ac476
@@ -730,23 +730,6 @@ MonoBehaviour:
       maxDuration: 4.9040833
       minDuration: 4.9040833
     - name: Footsteps
-      guid: c0ccbc20d01e254c871c0504e3cb85b8
-      id: 2385628198
-      PathAndIcons:
-      - ElementName: Events
-        ObjectType: 5
-        guid: 00000000000000000000000000000000
-      - ElementName: Default Work Unit
-        ObjectType: 12
-        guid: a9bc6e9a3eb20245be45984b119a8d05
-      - ElementName: Footsteps
-        ObjectType: 4
-        guid: c0ccbc20d01e254c871c0504e3cb85b8
-      Path: Events\Default Work Unit\Footsteps
-      maxAttenuation: 0
-      maxDuration: 0.8596042
-      minDuration: 0.30627084
-    - name: Footsteps
       guid: a5364ce454f8e24caa32cb1a05ad7942
       id: 2385628198
       PathAndIcons:
@@ -763,6 +746,23 @@ MonoBehaviour:
         ObjectType: 3
         guid: a5364ce454f8e24caa32cb1a05ad7942
       Path: Events\Default Work Unit\Footsteps\Footsteps
+      maxAttenuation: 0
+      maxDuration: 0.8596042
+      minDuration: 0.30627084
+    - name: Footsteps
+      guid: c0ccbc20d01e254c871c0504e3cb85b8
+      id: 2385628198
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: a9bc6e9a3eb20245be45984b119a8d05
+      - ElementName: Footsteps
+        ObjectType: 4
+        guid: c0ccbc20d01e254c871c0504e3cb85b8
+      Path: Events\Default Work Unit\Footsteps
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -1003,6 +1003,26 @@ MonoBehaviour:
       maxAttenuation: 0
       maxDuration: 1.329
       minDuration: 0.901125
+    - name: ShootHandBlood
+      guid: 6a9e2cb792929d4695460bf8b4302e83
+      id: 3221502139
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: a9bc6e9a3eb20245be45984b119a8d05
+      - ElementName: Ability
+        ObjectType: 4
+        guid: 39a7dd393af0e54f992b46e11d1ac476
+      - ElementName: ShootHandBlood
+        ObjectType: 3
+        guid: 6a9e2cb792929d4695460bf8b4302e83
+      Path: Events\Default Work Unit\Ability\ShootHandBlood
+      maxAttenuation: 0
+      maxDuration: 6.5941772
+      minDuration: 6.5941772
     - name: Torch
       guid: 8ac6171727684c4b9afb4b6c73410531
       id: 1904864137
@@ -1066,7 +1086,7 @@ MonoBehaviour:
         ObjectType: 3
         guid: b9a7e237f118bf428b0447f10797d8f6
       Path: Events\Default Work Unit\Environment\Torch\TorchLoop
-      maxAttenuation: 10
+      maxAttenuation: 15
       maxDuration: -1
       minDuration: -1
     - name: UI

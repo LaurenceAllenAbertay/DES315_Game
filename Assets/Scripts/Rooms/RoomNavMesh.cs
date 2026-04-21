@@ -9,10 +9,6 @@ public class RoomNavMesh : MonoBehaviour
     private void Awake()
     {
         surface = GetComponent<NavMeshSurface>();
-    }
-
-    private void Start()
-    {
         BakeNavMesh();
     }
 
