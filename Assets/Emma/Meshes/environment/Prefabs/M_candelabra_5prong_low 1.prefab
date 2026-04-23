@@ -180,13 +180,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 37405b765cf0d8b4a89c438bbafceb99, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2011826868737056448}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 37405b765cf0d8b4a89c438bbafceb99, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 6880171728539568194}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 37405b765cf0d8b4a89c438bbafceb99, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1674539288953595990}
     - targetCorrespondingSourceObject: {fileID: 7881557239601442330, guid: 37405b765cf0d8b4a89c438bbafceb99, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8218219315224782926}
@@ -808,27 +802,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 37405b765cf0d8b4a89c438bbafceb99, type: 3}
   m_PrefabInstance: {fileID: 7714998297846542858}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &2011826868737056448
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7480557882261360475}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6880171728539568194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,22 +822,6 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
---- !u!208 &1674539288953595990
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7480557882261360475}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.05, y: 0.05, z: 0.05}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &7912149305447516420 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8728899890933957874, guid: 37405b765cf0d8b4a89c438bbafceb99, type: 3}
