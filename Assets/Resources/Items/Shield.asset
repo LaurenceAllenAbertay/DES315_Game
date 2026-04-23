@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: Shield
   m_EditorClassIdentifier: 
   itemName: Shield
-  description: Adds +10 Max Health
-  icon: {fileID: 21300000, guid: 2904f4ef744ac44429ebfcaca04532b6, type: 3}
+  description: 'Adds +5 Block
+
+'
+  icon: {fileID: 21300000, guid: 30a14c81d8efc8d45a6183b8a43a5fef, type: 3}
   modifiers:
-    maxHealthFlat: 10
-    blockFlat: 0
+    maxHealthFlat: 0
+    blockFlat: 5
     healFlat: 0
     baseCoinsFlat: 0
     abilityDamagePercent: 0
     abilityRangePercent: 0
     aoeSizePercent: 0
     maxCombatMovePercent: 0
-    conditionalDamagePercent: 0

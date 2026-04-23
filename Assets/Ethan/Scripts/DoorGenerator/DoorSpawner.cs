@@ -166,7 +166,7 @@ public class DoorSpawner : MonoBehaviour
                     //West edge center: (0,0,0.9)//
 
                     //How far to pull door inward from wall edge//
-                    float doorInset = 1.25f;
+                    float doorInset = 1.5f;
 
                     if(dir == new Vector2Int(0,1)) //North//
                     {
