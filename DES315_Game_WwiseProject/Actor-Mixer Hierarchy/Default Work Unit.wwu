@@ -4857,6 +4857,10 @@
 							</ReferenceList>
 							<ChildrenList>
 								<AudioFileSource Name="Hemabolt" ID="{68F57873-B690-47EC-8F5B-41C5F29C459D}">
+									<PropertyList>
+										<Property Name="LoopBegin" Type="Real64" Value="0"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+									</PropertyList>
 									<Language>SFX</Language>
 									<AudioFile>Hemabolt.wav</AudioFile>
 									<MediaIDList>
