@@ -355,6 +355,16 @@
 							<ChildrenList>
 								<Event Name="TorchBreak" ID="{8CA9EF57-14CF-43F3-A51E-29FA1E74CB7A}">
 									<ChildrenList>
+										<Action Name="" ID="{B76763F1-53D5-42C8-9B7C-B1261C8C47E3}" ShortID="832330778">
+											<PropertyList>
+												<Property Name="ActionType" Type="int16" Value="2"/>
+											</PropertyList>
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Fire SND8761 Compressed" ID="{624CC96B-6020-4074-9772-847DDB3983DA}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
 										<Action Name="" ID="{5CA2F28E-EEC6-484A-BA1F-6975DEC78F4E}" ShortID="649112430">
 											<ReferenceList>
 												<Reference Name="Target">
@@ -442,6 +452,7 @@
 								<Action Name="" ID="{0BF9D8F8-D1D6-416D-9A88-EF39D48FFEBC}" ShortID="360196985">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="3"/>
+										<Property Name="Scope" Type="int16" Value="1"/>
 									</PropertyList>
 									<ReferenceList/>
 								</Action>
@@ -459,6 +470,7 @@
 								<Action Name="" ID="{2A011FB2-39E5-4E3E-A17A-AD4D0B87986F}" ShortID="224075004">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="3"/>
+										<Property Name="Scope" Type="int16" Value="1"/>
 									</PropertyList>
 									<ReferenceList/>
 									<ChildrenList>
@@ -485,6 +497,7 @@
 								<Action Name="" ID="{7FEB8BE4-51DF-4B91-9CEA-FAC99EE2CC0F}" ShortID="386162818">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="3"/>
+										<Property Name="Scope" Type="int16" Value="1"/>
 									</PropertyList>
 									<ReferenceList/>
 								</Action>
@@ -522,6 +535,7 @@
 								<Action Name="" ID="{9C034A5F-9AFC-4A05-881F-D37E78321613}" ShortID="204396720">
 									<PropertyList>
 										<Property Name="ActionType" Type="int16" Value="3"/>
+										<Property Name="Scope" Type="int16" Value="1"/>
 									</PropertyList>
 									<ReferenceList/>
 								</Action>
