@@ -194,8 +194,6 @@ Laurence Allen — Composer
 
 Matthew Van Aardt — Producer
 
-Charlie Banks — Co-Producer
-
 
 
 ###### Additional Credits

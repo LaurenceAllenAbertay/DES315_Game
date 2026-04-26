@@ -13,14 +13,17 @@ MonoBehaviour:
   m_Name: Heavy Shield
   m_EditorClassIdentifier: 
   itemName: Heavy Shield
-  description: Adds +7 Block
-  icon: {fileID: 21300000, guid: 0d8544089ec12f74995e1859b380944b, type: 3}
+  description: 'Adds +25 Max Health
+
+    -10% Max Movement'
+  icon: {fileID: 21300000, guid: 8412d1f0a190ae047844feb80a2868f6, type: 3}
   modifiers:
-    maxHealthFlat: 0
-    blockFlat: 7
+    maxHealthFlat: 25
+    blockFlat: 0
     healFlat: 0
     baseCoinsFlat: 0
     abilityDamagePercent: 0
     abilityRangePercent: 0
     aoeSizePercent: 0
-    maxCombatMovePercent: 0
+    maxCombatMovePercent: -10
+    conditionalDamagePercent: 0

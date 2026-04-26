@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -85,6 +86,15 @@ public class PlayerController : MonoBehaviour
 
     public delegate void MovementStateChanged(bool moving);
     public event MovementStateChanged OnMovementStateChanged;
+
+    public AK.Wwise.Event footstepSound = new AK.Wwise.Event();
+    private bool walking = false;
+    private float walkCount = 0.0f;
+    [Range(0.1f, 20.0f)]
+    public float moveSpeed = 10.0f;
+
+    [Range(0.01f, 1.0f)]
+    public float footstepRate = 0.3f;
 
     public bool IsInLight => lightDetectable != null && lightDetectable.IsInLight;
     public float CurrentLightLevel => lightDetectable != null ? lightDetectable.LightLevel : 0f;
@@ -249,17 +259,50 @@ public class PlayerController : MonoBehaviour
             else
                 UpdateHoldMovement();
         }
-        
+
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat && isMoving)
         {
             TrackMovementDistance();
         }
-        
+
         UpdateMovingState();
         UpdateDestinationIndicator();
-        
+
         lastFramePosition = transform.position;
-    }
+
+        float speed = moveSpeed;
+
+        Vector3 strafe = new Vector3(Input.GetAxis("Horizontal") * speed, 0.0f, 0.0f);
+        float forwardSpeed = Input.GetAxis("Vertical") * speed;
+
+
+        if (((Mathf.Abs(Input.GetAxisRaw("Horizontal")) > 0.0f) ||
+            (Mathf.Abs(Input.GetAxisRaw("Vertical")) > 0.0f)))
+        {
+            walking = true;
+        }
+        else
+        {
+            walking = false;
+
+            walkCount = footstepRate;
+        }
+
+        if (walking)
+        {
+            walkCount += Time.deltaTime * (speed / 10.0f);
+
+                if (walkCount > footstepRate)
+            {
+                footstepSound.Post(gameObject);
+
+                walkCount = 0.0f;
+            }
+
+
+
+        }
+    }   
 
     private void OnLightDetectableStateChanged(bool inLight)
     {
@@ -332,6 +375,7 @@ public class PlayerController : MonoBehaviour
                     return;
 
                 destinationPoint = navHit.position;
+
             }
 
             agent.isStopped = false;
