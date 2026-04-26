@@ -186,6 +186,13 @@
 												</Reference>
 											</ReferenceList>
 										</Action>
+										<Action Name="" ID="{8898071E-9BDF-4AD3-9C09-A16B9920C05A}" ShortID="377350435">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Enemy_Block" ID="{6711BC93-B1A9-40B8-B79E-CE3B71963708}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
 									</ChildrenList>
 								</Event>
 								<Event Name="BruteAttack" ID="{20D53960-7C44-495D-A27E-F84D6D5213B7}">
@@ -250,12 +257,12 @@
 										</Action>
 									</ChildrenList>
 								</Event>
-								<Event Name="GuntMove" ID="{9A60B414-2CC5-4E30-A76C-3A5CB7654D53}">
+								<Event Name="GruntMove" ID="{9A60B414-2CC5-4E30-A76C-3A5CB7654D53}">
 									<ChildrenList>
-										<Action Name="" ID="{9E152202-D399-4130-80AE-5620FDA90DCD}" ShortID="404933952">
+										<Action Name="" ID="{F6B4193B-1171-4F74-A3A6-CDC01E9814CC}" ShortID="502018719">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="Grunt" ID="{C63061B5-B261-4EC2-9A92-3891CDC2F2AD}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+													<ObjectRef Name="Move" ID="{0EEA08F7-8405-473D-9209-8DBC8C31D3B9}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>
@@ -266,7 +273,14 @@
 										<Action Name="" ID="{6269DFE4-83BC-4C0B-B9BD-350534F22A3C}" ShortID="115570152">
 											<ReferenceList>
 												<Reference Name="Target">
-													<ObjectRef Name="Attack" ID="{0EEA08F7-8405-473D-9209-8DBC8C31D3B9}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+													<ObjectRef Name="Move" ID="{0EEA08F7-8405-473D-9209-8DBC8C31D3B9}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+										<Action Name="" ID="{0349985D-4312-43DC-AB01-B09E467B94E2}" ShortID="993708627">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Flintlock" ID="{6893F140-04D5-410C-8EF2-DD52D3342239}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
 												</Reference>
 											</ReferenceList>
 										</Action>

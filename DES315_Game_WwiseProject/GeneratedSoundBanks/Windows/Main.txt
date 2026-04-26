@@ -11,6 +11,7 @@ Event	ID	Name			Wwise Object Path	Notes
 	1404805401	DoorOpen			\Default Work Unit\Environment\Door\DoorOpen	
 	1406895930	CoinSpend			\Default Work Unit\UI\Coin\CoinSpend	
 	1416938370	BruteBlock			\Default Work Unit\Enemy\Brute\BruteBlock	
+	1442481638	GruntMove			\Default Work Unit\Enemy\Grunt\GruntMove	
 	1506802029	BruteHeal			\Default Work Unit\Enemy\Brute\BruteHeal	
 	1580047315	BruteAttack			\Default Work Unit\Enemy\Brute\BruteAttack	
 	1598433574	PlayerMeleeAttack			\Default Work Unit\Ability\PlayerMeleeAttack	
@@ -26,7 +27,6 @@ Event	ID	Name			Wwise Object Path	Notes
 	2654324891	CardUI_Shuffle			\Default Work Unit\UI\Card\CardUI_Shuffle	
 	2669983563	CardUI_Pick			\Default Work Unit\UI\Card\CardUI_Pick	
 	2892697348	ChestOpen			\Default Work Unit\Environment\Chest\ChestOpen	
-	2921212052	GuntMove			\Default Work Unit\Enemy\Grunt\GuntMove	
 	3216143520	PlayerHeal			\Default Work Unit\Player\PlayerHeal	
 	3221502139	ShootHandBlood			\Default Work Unit\Ability\ShootHandBlood	
 	3282376362	UI_Open			\Default Work Unit\UI\Book\UI_Open	
@@ -51,6 +51,7 @@ Switch	ID	Name	Switch Group			Notes
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	3212125	LightGravel-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\LightGravel-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\GravelLight\LightGravel-03		142568
+	7656232	Block-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-03		149800
 	19904816	EnemyAttackPitched-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyAttackPitched-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Attack\EnemyAttackPitched-02		99806
 	20861450	HeavyWood-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyWood-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\WoodHeavy\HeavyWood-04		51976
 	20997532	EnemyBlockPitched-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyBlockPitched-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Block\EnemyBlockPitched-03		86582
@@ -65,6 +66,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	86937318	PlayerHeal-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerHeal-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Heal\PlayerHeal-03		81998
 	93788894	PlayerPain-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerPain-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Pain\PlayerPain-02		89314
 	97996265	EnemyPainPitched-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyPainPitched-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Pain\EnemyPainPitched-04		116056
+	98663561	Block-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-04		163800
 	101765747	EnemyMovePitched-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyMovePitched-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Move\EnemyMovePitched-01		95434
 	109699719	Grunt-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Grunt\Grunt-04		125776
 	117078103	HeavyStone-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyStone-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneHeavy\HeavyStone-04		96832
@@ -95,31 +97,34 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	225697627	EnemyBlockPitched-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyBlockPitched-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Block\EnemyBlockPitched-01		90512
 	225746361	EnemyDamaged-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyDamaged-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Hit\EnemyDamaged-04		172580
 	234773187	PlayerDeath-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerDeath-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Death\PlayerDeath-02		232858
-	235904423	Grunt-08	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Attack\Grunt-08		112066
+	235904423	Grunt-08	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Move\Grunt-08		112066
 	239476672	CardShuffle-21	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardShuffle-21_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\Shuffle\CardShuffle-21		175452
 	239830879	HeavyWood-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyWood-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\WoodHeavy\HeavyWood-05		54230
 	239855936	PlayerSwing-06	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerSwing-06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Sword\PlayerSwing-06		112604
 	244262875	EnemyMovePitched-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyMovePitched-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Move\EnemyMovePitched-05		60620
 	249541702	PlayerCast-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerCast-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Spell_01\PlayerCast-03		75086
 	260035028	EnemyMovePitched-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyMovePitched-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Move\EnemyMovePitched-03		98554
+	262560495	Block-08	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-08_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-08		139028
 	273314778	PrevPage-06	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PrevPage-06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Book\Previous Page\PrevPage-06		152672
 	288392327	PrevPage-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PrevPage-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Book\Previous Page\PrevPage-04		206752
 	290050387	HeavyGrass-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyGrass-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\GrassHeavy\HeavyGrass-05		100172
 	295190154	LightStone-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\LightStone-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneLight\LightStone-02		81144
 	304598166	CardShuffle-11	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardShuffle-11_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\Shuffle\CardShuffle-11		37848
 	305167182	Grunt-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Grunt\Grunt-03		132632
-	326215095	EnemyBlockPitched-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyBlockPitched-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Block\EnemyBlockPitched-02		140636
+	326215095	EnemyBlockPitched-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyBlockPitched-02_01F92E76.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Block\EnemyBlockPitched-02		82040
 	327300971	HeavyGrass-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyGrass-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\GrassHeavy\HeavyGrass-04		99176
 	330218231	NextPage-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\NextPage-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Book\Next Page\NextPage-03		249808
 	344867798	HeavyStone-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyStone-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneHeavy\HeavyStone-03		77220
 	352264063	HeavyGrass-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyGrass-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\GrassHeavy\HeavyGrass-02		81100
 	354451854	Grunt-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Grunt\Grunt-01		112066
 	354606587	LightStone-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\LightStone-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneLight\LightStone-01		100592
-	363496432	Grunt-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Grunt\Grunt-05		110924
+	363496432	Grunt-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Move\Grunt-05		110924
 	376520905	PlayerHeal-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerHeal-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Heal\PlayerHeal-04		119048
 	402109902	HeavyStone-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyStone-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneHeavy\HeavyStone-05		58900
 	412030350	CoinToss	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CoinToss_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Coin\CoinToss		264080
+	419161063	Block-06	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-06		129336
 	420762295	CardPick	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardPick_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\CardPick		175632
+	428529930	Block-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-05		159492
 	430398079	PlayerDamaged-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerDamaged-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Player\Player_Hit\PlayerDamaged-01		275740
 	436896071	Incinder_Gameplay	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Incinder_Gameplay_1B17FF3D.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Incinder_Gameplay		8467344
 	437784108	CoinDrop	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CoinDrop_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Coin\CoinDrop		225892
@@ -134,6 +139,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	519282052	NextPage-06	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\NextPage-06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Book\Next Page\NextPage-06		213088
 	529643543	Flintlock 4	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Flintlock 4_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Abilities\Flintlock\Flintlock 4		941680
 	534091470	PrevPage-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PrevPage-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Book\Previous Page\PrevPage-02		92644
+	542513235	Block-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-02		197188
 	542585731	Hemabolt	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Hemabolt_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Abilities\Hemabolt		1266176
 	549072123	Blood storm	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Blood storm_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Abilities\Blood storm		1408116
 	553643860	CardShuffle-20	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardShuffle-20_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\Shuffle\CardShuffle-20		236340
@@ -169,6 +175,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	686190957	TorchBreakShort	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\TorchBreakShort_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Environment\TorchBreakShort		299072
 	690074395	EnemyPainPitched-07	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyPainPitched-07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Pain\EnemyPainPitched-07		107774
 	695088713	Flintlock 2	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Flintlock 2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Abilities\Flintlock\Flintlock 2		941680
+	699034163	Block-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-01		161648
 	701991769	EnemyHealPitched-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyHealPitched-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Heal\EnemyHealPitched-04		95110
 	708134248	PlayerCast-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerCast-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Spell_01\PlayerCast-05		75100
 	747789225	PlayerCast-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerCast-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Spell_01\PlayerCast-02		85632
@@ -202,11 +209,12 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	929092099	BookClose	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\BookClose_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Book\BookClose		267580
 	937075724	EnemyMovePitched-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyMovePitched-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Move\EnemyMovePitched-02		113928
 	950584089	EnemyHealPitched-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyHealPitched-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Heal\EnemyHealPitched-02		122400
-	951020991	Grunt-06	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Grunt\Grunt-06		133774
+	951020991	Grunt-06	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-06_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Move\Grunt-06		133774
 	962061646	PlayerSwing-03	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\PlayerSwing-03_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Player\Sword\PlayerSwing-03		89828
 	970236375	CardShuffle-09	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardShuffle-09_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\Shuffle\CardShuffle-09		58192
 	971374909	LightStone-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\LightStone-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneLight\LightStone-05		90868
 	976902021	EnemyBlockPitched-04	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyBlockPitched-04_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Block\EnemyBlockPitched-04		201062
+	977753978	Block-07	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Block-07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Block\Block-07		151956
 	979645457	HeavyGravel-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyGravel-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\GravelHeavy\HeavyGravel-02		99348
 	990328796	HeavyStone-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\HeavyStone-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\StoneHeavy\HeavyStone-02		75972
 	990694112	EnemyPainPitched-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyPainPitched-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Brute\Pain\EnemyPainPitched-05		99492
@@ -223,7 +231,7 @@ In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
 	1035883470	EnemyDamaged-01	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\EnemyDamaged-01_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Hit_Impacts\Enemy\Enemy_Hit\EnemyDamaged-01		195360
 	1041528994	SwordSwing-02	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\SwordSwing-02_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Abilities\Swing\SwordSwing-02		59288
 	1043673606	CardShuffle-19	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardShuffle-19_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\Shuffle\CardShuffle-19		182756
-	1053365167	Grunt-07	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Attack\Grunt-07		141772
+	1053365167	Grunt-07	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\Grunt-07_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Vocals\Enemy\Grunt\Grunt\Move\Grunt-07		141772
 	1059909485	LightWood-05	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\LightWood-05_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Footsteps\WoodLight\LightWood-05		45076
 	1066866432	CardShuffle-16	C:\Users\adamd\Documents\GitHub\DES315_Game\DES315_Game_WwiseProject\.cache\Windows\SFX\CardShuffle-16_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\UI\Cards\Shuffle\CardShuffle-16		56112
 

@@ -35,8 +35,8 @@ namespace AK
         static const AkUniqueID GAMEOVER = 4158285989U;
         static const AkUniqueID GAMEPLAY_LOOPED = 3407605449U;
         static const AkUniqueID GRUNTATTACK = 347598145U;
+        static const AkUniqueID GRUNTMOVE = 1442481638U;
         static const AkUniqueID GRUNTPAIN = 933579397U;
-        static const AkUniqueID GUNTMOVE = 2921212052U;
         static const AkUniqueID MAINMENU_LOOPED = 2808240339U;
         static const AkUniqueID OPENINGANIMATIC = 4208309095U;
         static const AkUniqueID PLAYERDEATH = 1656947812U;

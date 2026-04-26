@@ -2216,6 +2216,13 @@
 								<Folder Name="Brute" ID="{4D0BE237-F817-4129-A31D-4EB0D77CEBFE}" ShortID="244744582">
 									<ChildrenList>
 										<RandomSequenceContainer Name="Block" ID="{B41D382A-BDBD-4EE6-A450-FA4A11A98D45}" ShortID="453025100">
+											<PropertyList>
+												<Property Name="Volume" Type="Real64">
+													<ValueList>
+														<Value>12</Value>
+													</ValueList>
+												</Property>
+											</PropertyList>
 											<ReferenceList>
 												<Reference Name="Conversion">
 													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
@@ -2258,6 +2265,10 @@
 													</ReferenceList>
 													<ChildrenList>
 														<AudioFileSource Name="EnemyBlockPitched-02" ID="{3236C44F-C9A2-4797-9989-6035A72E7826}">
+															<PropertyList>
+																<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+																<Property Name="TrimBegin" Type="Real64" Value="0.610372404153355"/>
+															</PropertyList>
 															<Language>SFX</Language>
 															<AudioFile>EnemyBlockPitched-02.wav</AudioFile>
 															<MediaIDList>
@@ -3046,53 +3057,9 @@
 																<ActiveSource Name="Grunt-04" ID="{E972B1DA-E1CA-4B1F-BD99-4C42F1A7BBF9}" Platform="Linked"/>
 															</ActiveSourceList>
 														</Sound>
-														<Sound Name="Grunt-05" ID="{646540CA-E21B-4E48-A2DA-3F712ED970C4}" ShortID="672662806">
-															<ReferenceList>
-																<Reference Name="Conversion">
-																	<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-																</Reference>
-																<Reference Name="OutputBus">
-																	<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-																</Reference>
-															</ReferenceList>
-															<ChildrenList>
-																<AudioFileSource Name="Grunt-05" ID="{D2CD437A-89DE-4A64-848F-70D7080C3641}">
-																	<Language>SFX</Language>
-																	<AudioFile>Grunt-05.wav</AudioFile>
-																	<MediaIDList>
-																		<MediaID ID="363496432"/>
-																	</MediaIDList>
-																</AudioFileSource>
-															</ChildrenList>
-															<ActiveSourceList>
-																<ActiveSource Name="Grunt-05" ID="{D2CD437A-89DE-4A64-848F-70D7080C3641}" Platform="Linked"/>
-															</ActiveSourceList>
-														</Sound>
-														<Sound Name="Grunt-06" ID="{087A35BF-5A36-48FD-A680-9663ED0DAA3E}" ShortID="994922065">
-															<ReferenceList>
-																<Reference Name="Conversion">
-																	<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
-																</Reference>
-																<Reference Name="OutputBus">
-																	<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
-																</Reference>
-															</ReferenceList>
-															<ChildrenList>
-																<AudioFileSource Name="Grunt-06" ID="{399E888E-5222-4DB4-8B4D-D243AB5D50EF}">
-																	<Language>SFX</Language>
-																	<AudioFile>Grunt-06.wav</AudioFile>
-																	<MediaIDList>
-																		<MediaID ID="951020991"/>
-																	</MediaIDList>
-																</AudioFileSource>
-															</ChildrenList>
-															<ActiveSourceList>
-																<ActiveSource Name="Grunt-06" ID="{399E888E-5222-4DB4-8B4D-D243AB5D50EF}" Platform="Linked"/>
-															</ActiveSourceList>
-														</Sound>
 													</ChildrenList>
 												</RandomSequenceContainer>
-												<RandomSequenceContainer Name="Attack" ID="{0EEA08F7-8405-473D-9209-8DBC8C31D3B9}" ShortID="702689027">
+												<RandomSequenceContainer Name="Move" ID="{0EEA08F7-8405-473D-9209-8DBC8C31D3B9}" ShortID="702689027">
 													<ReferenceList>
 														<Reference Name="Conversion">
 															<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
@@ -3144,6 +3111,50 @@
 															</ChildrenList>
 															<ActiveSourceList>
 																<ActiveSource Name="Grunt-07" ID="{56EF5EC0-7895-48B5-ACCF-E32B97DF9B12}" Platform="Linked"/>
+															</ActiveSourceList>
+														</Sound>
+														<Sound Name="Grunt-05" ID="{646540CA-E21B-4E48-A2DA-3F712ED970C4}" ShortID="672662806">
+															<ReferenceList>
+																<Reference Name="Conversion">
+																	<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+																</Reference>
+																<Reference Name="OutputBus">
+																	<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+																</Reference>
+															</ReferenceList>
+															<ChildrenList>
+																<AudioFileSource Name="Grunt-05" ID="{D2CD437A-89DE-4A64-848F-70D7080C3641}">
+																	<Language>SFX</Language>
+																	<AudioFile>Grunt-05.wav</AudioFile>
+																	<MediaIDList>
+																		<MediaID ID="363496432"/>
+																	</MediaIDList>
+																</AudioFileSource>
+															</ChildrenList>
+															<ActiveSourceList>
+																<ActiveSource Name="Grunt-05" ID="{D2CD437A-89DE-4A64-848F-70D7080C3641}" Platform="Linked"/>
+															</ActiveSourceList>
+														</Sound>
+														<Sound Name="Grunt-06" ID="{087A35BF-5A36-48FD-A680-9663ED0DAA3E}" ShortID="994922065">
+															<ReferenceList>
+																<Reference Name="Conversion">
+																	<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+																</Reference>
+																<Reference Name="OutputBus">
+																	<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+																</Reference>
+															</ReferenceList>
+															<ChildrenList>
+																<AudioFileSource Name="Grunt-06" ID="{399E888E-5222-4DB4-8B4D-D243AB5D50EF}">
+																	<Language>SFX</Language>
+																	<AudioFile>Grunt-06.wav</AudioFile>
+																	<MediaIDList>
+																		<MediaID ID="951020991"/>
+																	</MediaIDList>
+																</AudioFileSource>
+															</ChildrenList>
+															<ActiveSourceList>
+																<ActiveSource Name="Grunt-06" ID="{399E888E-5222-4DB4-8B4D-D243AB5D50EF}" Platform="Linked"/>
 															</ActiveSourceList>
 														</Sound>
 													</ChildrenList>
@@ -4869,6 +4880,184 @@
 											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
 										</Reference>
 									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="Block-01" ID="{87D746B7-871D-4E10-AB19-77FC86532FEE}" ShortID="674115742">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-01" ID="{67C23BFC-C5DC-47B0-BB19-1646AAD92FFE}">
+													<Language>SFX</Language>
+													<AudioFile>Block-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="699034163"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-01" ID="{67C23BFC-C5DC-47B0-BB19-1646AAD92FFE}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-02" ID="{4BE54F2A-6B3E-4442-9422-38779180ACF3}" ShortID="79344689">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-02" ID="{2E37EC90-DB46-46F3-9E56-65341E77BB0B}">
+													<Language>SFX</Language>
+													<AudioFile>Block-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="542513235"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-02" ID="{2E37EC90-DB46-46F3-9E56-65341E77BB0B}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-03" ID="{D2CA8FCE-A6D7-4D31-A12E-D57ECFB17BBD}" ShortID="301928815">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-03" ID="{3FBD6B4B-881B-4944-9CE6-6196C7BBA822}">
+													<Language>SFX</Language>
+													<AudioFile>Block-03.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="7656232"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-03" ID="{3FBD6B4B-881B-4944-9CE6-6196C7BBA822}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-04" ID="{87BA7E6E-4DE8-4A71-828C-D4AE92839633}" ShortID="1008617643">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-04" ID="{F3EE5697-090A-4E14-9129-9B10C48D87EC}">
+													<Language>SFX</Language>
+													<AudioFile>Block-04.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="98663561"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-04" ID="{F3EE5697-090A-4E14-9129-9B10C48D87EC}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-05" ID="{10904C0A-E52E-44FA-85A7-B990F93C08F8}" ShortID="758942441">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-05" ID="{81757CA4-39AC-4276-AFD9-6387AEB15314}">
+													<Language>SFX</Language>
+													<AudioFile>Block-05.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="428529930"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-05" ID="{81757CA4-39AC-4276-AFD9-6387AEB15314}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-06" ID="{D2D0D9BB-57D3-4E0C-8B77-0360D408FFDC}" ShortID="485069393">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-06" ID="{F89F7734-EE6E-42DB-AF3C-5D422B4C24CE}">
+													<Language>SFX</Language>
+													<AudioFile>Block-06.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="419161063"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-06" ID="{F89F7734-EE6E-42DB-AF3C-5D422B4C24CE}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-07" ID="{9F00F3FE-074B-47CB-BC3C-B2E6AA9F0A07}" ShortID="1014886249">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-07" ID="{3E423E86-F475-4B76-B21D-7169ECD85461}">
+													<Language>SFX</Language>
+													<AudioFile>Block-07.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="977753978"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-07" ID="{3E423E86-F475-4B76-B21D-7169ECD85461}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="Block-08" ID="{C15BD124-AD87-4313-96B6-06C75A63132D}" ShortID="908707104">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="Block-08" ID="{D54D972C-C7A0-4223-9542-F35438889250}">
+													<Language>SFX</Language>
+													<AudioFile>Block-08.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="262560495"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="Block-08" ID="{D54D972C-C7A0-4223-9542-F35438889250}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
 								</RandomSequenceContainer>
 							</ChildrenList>
 						</Folder>
