@@ -4759,7 +4759,120 @@
 								</RandomSequenceContainer>
 							</ChildrenList>
 						</Folder>
-						<Folder Name="Enemy" ID="{D957FFBB-A7EA-4776-BBEE-B4143830AD79}" ShortID="563077220"/>
+						<Folder Name="Enemy" ID="{D957FFBB-A7EA-4776-BBEE-B4143830AD79}" ShortID="563077220">
+							<ChildrenList>
+								<RandomSequenceContainer Name="Enemy_Hit" ID="{228A3D8A-423E-40DC-8D2C-7DBD38016700}" ShortID="246996728">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+									<ChildrenList>
+										<Sound Name="EnemyDamaged-01" ID="{7C755025-E31B-4A1E-81C6-1B174FBC2B78}" ShortID="1052756568">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EnemyDamaged-01" ID="{848DB045-CF6C-4939-89C0-1ECA6E041701}">
+													<Language>SFX</Language>
+													<AudioFile>EnemyDamaged-01.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="1035883470"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="EnemyDamaged-01" ID="{848DB045-CF6C-4939-89C0-1ECA6E041701}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="EnemyDamaged-02" ID="{289C2CA5-5127-4865-A748-E978EA9D124E}" ShortID="569436117">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EnemyDamaged-02" ID="{F323F574-4E54-456A-821C-C634D3905E2E}">
+													<Language>SFX</Language>
+													<AudioFile>EnemyDamaged-02.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="668178944"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="EnemyDamaged-02" ID="{F323F574-4E54-456A-821C-C634D3905E2E}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="EnemyDamaged-03" ID="{F4379842-41DF-4F03-BA5E-6E6FFA349F06}" ShortID="603829103">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EnemyDamaged-03" ID="{5717311B-51DD-46F4-900D-0B1CCEDB7E1D}">
+													<Language>SFX</Language>
+													<AudioFile>EnemyDamaged-03.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="1023121286"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="EnemyDamaged-03" ID="{5717311B-51DD-46F4-900D-0B1CCEDB7E1D}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+										<Sound Name="EnemyDamaged-04" ID="{5E21BB1B-D844-4C45-922A-E2170D402678}" ShortID="951061389">
+											<ReferenceList>
+												<Reference Name="Conversion">
+													<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+												</Reference>
+												<Reference Name="OutputBus">
+													<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+												</Reference>
+											</ReferenceList>
+											<ChildrenList>
+												<AudioFileSource Name="EnemyDamaged-04" ID="{2F8CC32A-973B-4542-A01C-749337DFFEDF}">
+													<Language>SFX</Language>
+													<AudioFile>EnemyDamaged-04.wav</AudioFile>
+													<MediaIDList>
+														<MediaID ID="225746361"/>
+													</MediaIDList>
+												</AudioFileSource>
+											</ChildrenList>
+											<ActiveSourceList>
+												<ActiveSource Name="EnemyDamaged-04" ID="{2F8CC32A-973B-4542-A01C-749337DFFEDF}" Platform="Linked"/>
+											</ActiveSourceList>
+										</Sound>
+									</ChildrenList>
+								</RandomSequenceContainer>
+								<RandomSequenceContainer Name="Enemy_Block" ID="{6711BC93-B1A9-40B8-B79E-CE3B71963708}" ShortID="651830215">
+									<ReferenceList>
+										<Reference Name="Conversion">
+											<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{1E5F7964-3D42-4373-8FF8-4F5B1C06A694}"/>
+										</Reference>
+										<Reference Name="OutputBus">
+											<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{DBF2826D-0721-461C-B147-4A3F1A74FED0}"/>
+										</Reference>
+									</ReferenceList>
+								</RandomSequenceContainer>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 			</ChildrenList>

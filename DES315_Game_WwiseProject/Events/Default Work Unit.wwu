@@ -219,6 +219,13 @@
 												</Reference>
 											</ReferenceList>
 										</Action>
+										<Action Name="" ID="{D4F97317-2AFD-42DC-BE81-F1B86F187CB2}" ShortID="379235044">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Enemy_Hit" ID="{228A3D8A-423E-40DC-8D2C-7DBD38016700}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
 									</ChildrenList>
 								</Event>
 							</ChildrenList>
@@ -251,24 +258,6 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="Player_Hit" ID="{A0203666-F065-4348-B89E-624FD8CE7FFA}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-							</ChildrenList>
-						</Event>
-						<Event Name="PlayerMeleeAttack" ID="{DF4F44C0-FA44-45F8-A677-E6AFF8116AB1}">
-							<ChildrenList>
-								<Action Name="" ID="{E8A0156F-C59D-4871-A032-C969A0A2DC1E}" ShortID="391924807">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Sword" ID="{CD3332E3-FB3C-4333-8083-4BFB68DDCFB9}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
-										</Reference>
-									</ReferenceList>
-								</Action>
-								<Action Name="" ID="{B53F3394-BA32-477C-9CAE-FB46DC3B4AE7}" ShortID="681600089">
-									<ReferenceList>
-										<Reference Name="Target">
-											<ObjectRef Name="Swing" ID="{C71F6D7B-8D77-4870-8652-0F9141A2F267}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
@@ -356,6 +345,24 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="Gun" ID="{CE275B4E-3682-48DF-941C-8E6E50C0AA7C}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+							</ChildrenList>
+						</Event>
+						<Event Name="PlayerMeleeAttack" ID="{DF4F44C0-FA44-45F8-A677-E6AFF8116AB1}">
+							<ChildrenList>
+								<Action Name="" ID="{E8A0156F-C59D-4871-A032-C969A0A2DC1E}" ShortID="391924807">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Sword" ID="{CD3332E3-FB3C-4333-8083-4BFB68DDCFB9}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{B53F3394-BA32-477C-9CAE-FB46DC3B4AE7}" ShortID="681600089">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Swing" ID="{C71F6D7B-8D77-4870-8652-0F9141A2F267}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
