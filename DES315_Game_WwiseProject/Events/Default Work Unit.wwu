@@ -247,6 +247,13 @@
 										</Reference>
 									</ReferenceList>
 								</Action>
+								<Action Name="" ID="{A3708CA3-F073-4C66-9C97-3704E74493E7}" ShortID="1014647595">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Hit" ID="{A0203666-F065-4348-B89E-624FD8CE7FFA}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
 							</ChildrenList>
 						</Event>
 						<Event Name="PlayerMeleeAttack" ID="{DF4F44C0-FA44-45F8-A677-E6AFF8116AB1}">
@@ -273,6 +280,13 @@
 									<ReferenceList>
 										<Reference Name="Target">
 											<ObjectRef Name="Pain" ID="{042C4883-2BBB-4C09-AACC-6D436A520C91}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+										</Reference>
+									</ReferenceList>
+								</Action>
+								<Action Name="" ID="{5A79A318-EA1B-4600-8E0C-757643D18E47}" ShortID="102676607">
+									<ReferenceList>
+										<Reference Name="Target">
+											<ObjectRef Name="Player_Hit" ID="{A0203666-F065-4348-B89E-624FD8CE7FFA}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
 										</Reference>
 									</ReferenceList>
 								</Action>
