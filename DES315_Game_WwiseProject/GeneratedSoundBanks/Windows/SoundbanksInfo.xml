@@ -156,7 +156,7 @@
 				</Event>
 			</Events>
 		</SoundBank>
-		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{228DB5BD-7FA2-F4A2-F442-754C89D7FCB1}">
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{DDCAE2B0-1B96-0BF2-CA33-13117DC44D12}">
 			<ShortName>Main</ShortName>
 			<Path>Main.bnk</Path>
 			<Media>
@@ -187,10 +187,6 @@
 				<File Id="46476386" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>LightGravel-01.wav</ShortName>
 					<CachePath>SFX/LightGravel-01_10C4C929.wem</CachePath>
-				</File>
-				<File Id="55532829" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyMovePitched-13.wav</ShortName>
-					<CachePath>SFX/EnemyMovePitched-13_10C4C929.wem</CachePath>
 				</File>
 				<File Id="59993749" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>yeah.wav</ShortName>
@@ -227,6 +223,10 @@
 				<File Id="101765747" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>EnemyMovePitched-01.wav</ShortName>
 					<CachePath>SFX/EnemyMovePitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="109699719" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-04.wav</ShortName>
+					<CachePath>SFX/Grunt-04_10C4C929.wem</CachePath>
 				</File>
 				<File Id="117078103" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>HeavyStone-04.wav</ShortName>
@@ -292,10 +292,6 @@
 					<ShortName>HeavyGrass-01.wav</ShortName>
 					<CachePath>SFX/HeavyGrass-01_10C4C929.wem</CachePath>
 				</File>
-				<File Id="188009124" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyMovePitched-15.wav</ShortName>
-					<CachePath>SFX/EnemyMovePitched-15_10C4C929.wem</CachePath>
-				</File>
 				<File Id="193244845" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerDamaged-03.wav</ShortName>
 					<CachePath>SFX/PlayerDamaged-03_10C4C929.wem</CachePath>
@@ -336,9 +332,17 @@
 					<ShortName>EnemyBlockPitched-01.wav</ShortName>
 					<CachePath>SFX/EnemyBlockPitched-01_10C4C929.wem</CachePath>
 				</File>
+				<File Id="225746361" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyDamaged-04.wav</ShortName>
+					<CachePath>SFX/EnemyDamaged-04_10C4C929.wem</CachePath>
+				</File>
 				<File Id="234773187" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerDeath-02.wav</ShortName>
 					<CachePath>SFX/PlayerDeath-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="235904423" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-08.wav</ShortName>
+					<CachePath>SFX/Grunt-08_10C4C929.wem</CachePath>
 				</File>
 				<File Id="239476672" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>CardShuffle-21.wav</ShortName>
@@ -368,10 +372,6 @@
 					<ShortName>PrevPage-06.wav</ShortName>
 					<CachePath>SFX/PrevPage-06_10C4C929.wem</CachePath>
 				</File>
-				<File Id="277133025" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyMovePitched-11.wav</ShortName>
-					<CachePath>SFX/EnemyMovePitched-11_10C4C929.wem</CachePath>
-				</File>
 				<File Id="288392327" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PrevPage-04.wav</ShortName>
 					<CachePath>SFX/PrevPage-04_10C4C929.wem</CachePath>
@@ -388,6 +388,10 @@
 					<ShortName>CardShuffle-11.wav</ShortName>
 					<CachePath>SFX/CardShuffle-11_10C4C929.wem</CachePath>
 				</File>
+				<File Id="305167182" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-03.wav</ShortName>
+					<CachePath>SFX/Grunt-03_10C4C929.wem</CachePath>
+				</File>
 				<File Id="326215095" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>EnemyBlockPitched-02.wav</ShortName>
 					<CachePath>SFX/EnemyBlockPitched-02_10C4C929.wem</CachePath>
@@ -400,10 +404,6 @@
 					<ShortName>NextPage-03.wav</ShortName>
 					<CachePath>SFX/NextPage-03_10C4C929.wem</CachePath>
 				</File>
-				<File Id="330687773" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyReliefPitched-03.wav</ShortName>
-					<CachePath>SFX/EnemyReliefPitched-03_10C4C929.wem</CachePath>
-				</File>
 				<File Id="344867798" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>HeavyStone-03.wav</ShortName>
 					<CachePath>SFX/HeavyStone-03_10C4C929.wem</CachePath>
@@ -412,9 +412,17 @@
 					<ShortName>HeavyGrass-02.wav</ShortName>
 					<CachePath>SFX/HeavyGrass-02_10C4C929.wem</CachePath>
 				</File>
+				<File Id="354451854" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-01.wav</ShortName>
+					<CachePath>SFX/Grunt-01_10C4C929.wem</CachePath>
+				</File>
 				<File Id="354606587" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>LightStone-01.wav</ShortName>
 					<CachePath>SFX/LightStone-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="363496432" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-05.wav</ShortName>
+					<CachePath>SFX/Grunt-05_10C4C929.wem</CachePath>
 				</File>
 				<File Id="376520905" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerHeal-04.wav</ShortName>
@@ -503,6 +511,10 @@
 				<File Id="559854880" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerScream-01.wav</ShortName>
 					<CachePath>SFX/PlayerScream-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="568056734" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-02.wav</ShortName>
+					<CachePath>SFX/Grunt-02_10C4C929.wem</CachePath>
 				</File>
 				<File Id="575976790" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>HeavyStone-01.wav</ShortName>
@@ -596,6 +608,10 @@
 					<ShortName>PrevPage-03.wav</ShortName>
 					<CachePath>SFX/PrevPage-03_10C4C929.wem</CachePath>
 				</File>
+				<File Id="668178944" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyDamaged-02.wav</ShortName>
+					<CachePath>SFX/EnemyDamaged-02_10C4C929.wem</CachePath>
+				</File>
 				<File Id="673919322" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerSwing-04.wav</ShortName>
 					<CachePath>SFX/PlayerSwing-04_10C4C929.wem</CachePath>
@@ -607,10 +623,6 @@
 				<File Id="677645746" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerScream-03.wav</ShortName>
 					<CachePath>SFX/PlayerScream-03_10C4C929.wem</CachePath>
-				</File>
-				<File Id="681916834" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyReliefPitched-02.wav</ShortName>
-					<CachePath>SFX/EnemyReliefPitched-02_10C4C929.wem</CachePath>
 				</File>
 				<File Id="686190957" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>TorchBreakShort.wav</ShortName>
@@ -631,10 +643,6 @@
 				<File Id="708134248" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerCast-05.wav</ShortName>
 					<CachePath>SFX/PlayerCast-05_10C4C929.wem</CachePath>
-				</File>
-				<File Id="715498737" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyMovePitched-12.wav</ShortName>
-					<CachePath>SFX/EnemyMovePitched-12_10C4C929.wem</CachePath>
 				</File>
 				<File Id="747789225" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerCast-02.wav</ShortName>
@@ -700,10 +708,6 @@
 					<ShortName>PlayerDeath-04.wav</ShortName>
 					<CachePath>SFX/PlayerDeath-04_10C4C929.wem</CachePath>
 				</File>
-				<File Id="838580558" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyMovePitched-10.wav</ShortName>
-					<CachePath>SFX/EnemyMovePitched-10_10C4C929.wem</CachePath>
-				</File>
 				<File Id="841292470" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>Small chest open.wav</ShortName>
 					<CachePath>SFX/Small chest open_10C4C929.wem</CachePath>
@@ -763,6 +767,10 @@
 				<File Id="950584089" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>EnemyHealPitched-02.wav</ShortName>
 					<CachePath>SFX/EnemyHealPitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="951020991" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-06.wav</ShortName>
+					<CachePath>SFX/Grunt-06_10C4C929.wem</CachePath>
 				</File>
 				<File Id="962061646" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>PlayerSwing-03.wav</ShortName>
@@ -824,13 +832,17 @@
 					<ShortName>PlayerHeal-01.wav</ShortName>
 					<CachePath>SFX/PlayerHeal-01_10C4C929.wem</CachePath>
 				</File>
-				<File Id="1016237802" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyReliefPitched-01.wav</ShortName>
-					<CachePath>SFX/EnemyReliefPitched-01_10C4C929.wem</CachePath>
+				<File Id="1023121286" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyDamaged-03.wav</ShortName>
+					<CachePath>SFX/EnemyDamaged-03_10C4C929.wem</CachePath>
 				</File>
 				<File Id="1023360547" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>NextPage-04.wav</ShortName>
 					<CachePath>SFX/NextPage-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1035883470" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyDamaged-01.wav</ShortName>
+					<CachePath>SFX/EnemyDamaged-01_10C4C929.wem</CachePath>
 				</File>
 				<File Id="1041528994" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>SwordSwing-02.wav</ShortName>
@@ -840,9 +852,9 @@
 					<ShortName>CardShuffle-19.wav</ShortName>
 					<CachePath>SFX/CardShuffle-19_10C4C929.wem</CachePath>
 				</File>
-				<File Id="1044067280" Language="SFX" Streaming="false" Location="Memory">
-					<ShortName>EnemyMovePitched-14.wav</ShortName>
-					<CachePath>SFX/EnemyMovePitched-14_10C4C929.wem</CachePath>
+				<File Id="1053365167" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Grunt-07.wav</ShortName>
+					<CachePath>SFX/Grunt-07_10C4C929.wem</CachePath>
 				</File>
 				<File Id="1059909485" Language="SFX" Streaming="false" Location="Memory">
 					<ShortName>LightWood-05.wav</ShortName>
@@ -885,43 +897,38 @@
 				<Event Id="1506802029" Name="BruteHeal" DurationType="OneShot" DurationMin="0.98972917" DurationMax="1.9373333">
 					<MediaRefs>
 						<MediaRef Id="79826535"/>
-						<MediaRef Id="330687773"/>
 						<MediaRef Id="654972532"/>
-						<MediaRef Id="681916834"/>
 						<MediaRef Id="701991769"/>
 						<MediaRef Id="950584089"/>
-						<MediaRef Id="1016237802"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="1185467356" Name="BruteHurt" DurationType="OneShot" DurationMin="0.99222916" DurationMax="1.5098958">
 					<MediaRefs>
 						<MediaRef Id="97996265"/>
+						<MediaRef Id="225746361"/>
 						<MediaRef Id="663322846"/>
+						<MediaRef Id="668178944"/>
 						<MediaRef Id="690074395"/>
 						<MediaRef Id="764431499"/>
 						<MediaRef Id="801224307"/>
 						<MediaRef Id="875457795"/>
 						<MediaRef Id="990694112"/>
 						<MediaRef Id="994700520"/>
+						<MediaRef Id="1023121286"/>
+						<MediaRef Id="1035883470"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="2186417968" Name="BruteMove" DurationType="OneShot" DurationMin="0.497625" DurationMax="1.3186458">
 					<MediaRefs>
-						<MediaRef Id="55532829"/>
 						<MediaRef Id="101765747"/>
-						<MediaRef Id="188009124"/>
 						<MediaRef Id="200105795"/>
 						<MediaRef Id="244262875"/>
 						<MediaRef Id="260035028"/>
-						<MediaRef Id="277133025"/>
 						<MediaRef Id="617075084"/>
 						<MediaRef Id="657464613"/>
-						<MediaRef Id="715498737"/>
 						<MediaRef Id="801192734"/>
-						<MediaRef Id="838580558"/>
 						<MediaRef Id="890781145"/>
 						<MediaRef Id="937075724"/>
-						<MediaRef Id="1044067280"/>
 					</MediaRefs>
 				</Event>
 				<Event Id="4049969704" Name="CardUI_Confirm" DurationType="OneShot" DurationMin="1.814" DurationMax="1.814">
@@ -1100,6 +1107,36 @@
 						<MediaRef Id="436896071"/>
 					</MediaRefs>
 				</Event>
+				<Event Id="347598145" Name="GruntAttack" DurationType="OneShot" DurationMin="1.1663594" DurationMax="1.4757968">
+					<MediaRefs>
+						<MediaRef Id="235904423"/>
+						<MediaRef Id="1053365167"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="933579397" Name="GruntPain" DurationType="OneShot" DurationMin="1.1544583" DurationMax="1.3924896">
+					<MediaRefs>
+						<MediaRef Id="109699719"/>
+						<MediaRef Id="225746361"/>
+						<MediaRef Id="305167182"/>
+						<MediaRef Id="354451854"/>
+						<MediaRef Id="363496432"/>
+						<MediaRef Id="568056734"/>
+						<MediaRef Id="668178944"/>
+						<MediaRef Id="951020991"/>
+						<MediaRef Id="1023121286"/>
+						<MediaRef Id="1035883470"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2921212052" Name="GuntMove" DurationType="OneShot" DurationMin="1.1544583" DurationMax="1.3924896">
+					<MediaRefs>
+						<MediaRef Id="109699719"/>
+						<MediaRef Id="305167182"/>
+						<MediaRef Id="354451854"/>
+						<MediaRef Id="363496432"/>
+						<MediaRef Id="568056734"/>
+						<MediaRef Id="951020991"/>
+					</MediaRefs>
+				</Event>
 				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.3861458" DurationMax="3.0626667">
 					<MediaRefs>
 						<MediaRef Id="193244845"/>
@@ -1232,5 +1269,5 @@
 			</SwitchGroups>
 		</SoundBank>
 	</SoundBanks>
-	<FileHash>{0C9EC176-F5A3-CC48-EE80-AF69D114B6DD}</FileHash>
+	<FileHash>{E7A64D93-23F6-8B8C-E9FC-ACEA9C2D6942}</FileHash>
 </SoundBanksInfo>

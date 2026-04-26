@@ -6,6 +6,7 @@
 				<SoundBank Name="Main" ID="{C41660A7-D1FB-4967-A63E-BF224C7E39E9}">
 					<ObjectInclusionList>
 						<ObjectRef Name="Gameplay_Looped" ID="{AAFED2C2-8181-4027-AF98-5C49E6C6EF4A}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="GruntAttack" ID="{174A0ADE-0757-404C-B6E7-8936C2AE0A5B}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="BruteHurt" ID="{51C0460E-C291-40AE-821A-BD1101996EB0}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="PlayerHurt" ID="{C9E5376F-693F-426D-944B-3352332959A6}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="TorchLoop" ID="{37E2A7B9-18F1-42BF-8B04-47F10797D8F6}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
@@ -24,6 +25,7 @@
 						<ObjectRef Name="BruteMove" ID="{B43324FD-5453-48A8-8CC0-C561BCE73EB5}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="PlayerDeath" ID="{72FF0CB9-4BE7-494D-A182-D9949BCB4264}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="BruteAttack" ID="{20D53960-7C44-495D-A27E-F84D6D5213B7}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="GruntPain" ID="{C36DE8DB-2BDF-49F3-84D6-18C74EDFB969}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="CoinToss" ID="{90787D80-C0E5-49FA-AE42-41AD69316D83}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="CoinMiss" ID="{ABA88992-47B1-4C2E-B706-F8204CA4CD30}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="UI_Open" ID="{E4067FE9-9991-4C40-94F1-F6CA3933372E}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
@@ -33,6 +35,7 @@
 						<ObjectRef Name="UI_NextPage" ID="{1795DDDA-78B9-4CEC-B250-EF15D2D5A1A9}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="DoorOpen" ID="{FAFE3DAC-55C9-4D14-B177-DA81C4AE59E0}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="BruteBlock" ID="{D1BB03C3-393A-4DF3-A660-39DF8476F934}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
+						<ObjectRef Name="GuntMove" ID="{9A60B414-2CC5-4E30-A76C-3A5CB7654D53}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="UI_PrevPage" ID="{C99BA61F-F20F-4E33-B459-3D7E3339E364}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="UI_Close" ID="{9B4628CF-A818-4E73-AC20-688DEBC973B1}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="CardUI_Start" ID="{5AF2F706-DB23-4E9F-991E-85CDA7E4A508}" WorkUnitID="{9A6EBCA9-B23E-4502-BE45-984B119A8D05}" Origin="Manual" Filter="7"/>

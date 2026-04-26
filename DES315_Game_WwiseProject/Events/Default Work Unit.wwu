@@ -230,6 +230,50 @@
 								</Event>
 							</ChildrenList>
 						</Folder>
+						<Folder Name="Grunt" ID="{3FC8C286-6DF1-4280-B479-2409898BA422}" ShortID="1066506093">
+							<ChildrenList>
+								<Event Name="GruntPain" ID="{C36DE8DB-2BDF-49F3-84D6-18C74EDFB969}">
+									<ChildrenList>
+										<Action Name="" ID="{141E6989-00A9-4891-A108-C5FEAAEC0A7C}" ShortID="891191858">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Grunt" ID="{C63061B5-B261-4EC2-9A92-3891CDC2F2AD}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+										<Action Name="" ID="{B5E64023-8C9D-41C5-9B55-546F6CC719FF}" ShortID="366041477">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Enemy_Hit" ID="{228A3D8A-423E-40DC-8D2C-7DBD38016700}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="GuntMove" ID="{9A60B414-2CC5-4E30-A76C-3A5CB7654D53}">
+									<ChildrenList>
+										<Action Name="" ID="{9E152202-D399-4130-80AE-5620FDA90DCD}" ShortID="404933952">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Grunt" ID="{C63061B5-B261-4EC2-9A92-3891CDC2F2AD}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+								<Event Name="GruntAttack" ID="{174A0ADE-0757-404C-B6E7-8936C2AE0A5B}">
+									<ChildrenList>
+										<Action Name="" ID="{6269DFE4-83BC-4C0B-B9BD-350534F22A3C}" ShortID="115570152">
+											<ReferenceList>
+												<Reference Name="Target">
+													<ObjectRef Name="Attack" ID="{0EEA08F7-8405-473D-9209-8DBC8C31D3B9}" WorkUnitID="{7959C9E0-BA15-4686-B24C-87E196EF1927}"/>
+												</Reference>
+											</ReferenceList>
+										</Action>
+									</ChildrenList>
+								</Event>
+							</ChildrenList>
+						</Folder>
 					</ChildrenList>
 				</Folder>
 				<Folder Name="Player" ID="{D7505BB8-A2B8-4333-B8EC-3A43307AA2DC}" ShortID="184851529">
