@@ -1830,9 +1830,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5df31f7f4cb98246bcde50e043c8a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSprite: {fileID: 21300000, guid: 05f8e30f1efcee446b7fdc22cc437c67, type: 3}
-  hoverSprite: {fileID: 21300000, guid: cf1910fbe6900114fb36d930997a84ea, type: 3}
-  targetingSprite: {fileID: 21300000, guid: b6da09843f80f4a48b2b004867502e13, type: 3}
+  defaultSprite: {fileID: 21300000, guid: 15f41dc00484e674a949b027b66c26e0, type: 3}
+  hoverSprite: {fileID: 21300000, guid: 895e4a9398b07604ab4ee19af23a9e42, type: 3}
+  targetingSprite: {fileID: 21300000, guid: 1a00d6ddee5b3e14fb5ff5b78dc85280, type: 3}
   cursorImage: {fileID: 671454170}
   playerAbilityManager: {fileID: 1107796541}
 --- !u!114 &191163813
@@ -15422,7 +15422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1865695371
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15482,12 +15482,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainMenuSceneName: MainMenu
-  scoreText: {fileID: 0}
-  timeText: {fileID: 0}
-  enemiesKilledText: {fileID: 0}
-  damageTakenText: {fileID: 0}
-  roomsExploredText: {fileID: 0}
-  chestsOpenedText: {fileID: 0}
+  scoreText: {fileID: 965492316}
+  timeText: {fileID: 1898046541}
+  enemiesKilledText: {fileID: 2090907686}
+  damageTakenText: {fileID: 763711505}
+  roomsExploredText: {fileID: 116490150}
+  chestsOpenedText: {fileID: 19252894}
 --- !u!1 &1867449106
 GameObject:
   m_ObjectHideFlags: 0
