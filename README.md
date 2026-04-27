@@ -138,9 +138,10 @@ Objectives: Find the Chalice in the final room and press E to escape the dungeon
 * Players can walk into enemy models
 * Some torches can't be targeted
 * Really far movement clicks don't move the player
-* Pause screen soft lock – if you press escape to exit out of the item or inventory , you will instead pause the game which will soft lock forcing a hard restart 
+* Pause screen soft lock – if you press escape to exit out of the item or inventory , you will instead pause the game which will soft lock forcing a hard restart
+* With items that reduce your coins, if you get to 0 you cannot act and are forced to leave the room an unequip the items or restart a run
 
-
+&#x20; 
 
 
 
@@ -217,8 +218,4 @@ VFX: VFX Impact and Hit Light version, Cartoon VFX by Wallcoeur, Unity Asset Sto
 VFX: VFX URP - Fire Package Cartoon VFX by Wallcoeur Unity Asset Store
 
 VFX: Free Slash VFX by MakerStudio, Unity Asset Store
-
-
-
-
 
