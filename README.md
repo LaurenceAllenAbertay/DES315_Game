@@ -4,7 +4,7 @@
 
 Gothic Roguelike Dungeon Crawler
 
-DES315 Abertay University 19/04/2026
+DES315 Abertay University 27/04/2026
 
 
 
@@ -74,10 +74,7 @@ Note: do not run the executable directly from inside the zip archive. Always ext
 |Escape|Pause the game|
 |Left Click|Move player to clicked location|
 |Right Click (Hold)|Rotate Camera|
-|W|Move Camera forward|
-|A|Move Camera left|
-|S|Move Camera right|
-|D|Move Camera backward|
+|WASD|Move Camera|
 |E|Interact (Open chests, activate win condition when in range, open doors)|
 
 
@@ -93,13 +90,11 @@ Combat triggers automatically when an enemy spots the player or the player enter
 |**Input**|**Action**|
 |-|-|
 |Left Click (floor)|Move within your available movement range|
-|1|Activate Ability Slot 1|
-|2|Activate Ability Slot 2|
-|3|Activate Ability Slot 3|
-|Left Click (After ability)|Confirm ability target|
-|Space|Flip coin|
-|Tab|End your turn and pass to enemy phase|
-|Escape|Cancel active ability targeting|
+|1,2,3|Activate Ability Slot 1,2,3|
+|Left Click|Confirm ability target|
+|Right Click|Cancel active ability targeting|
+|Space|Flip Coin|
+|Enter|End your turn and pass to enemy phase|
 
 
 
@@ -143,6 +138,9 @@ Objectives: Find the Chalice in the final room and press E to escape the dungeon
 * Players can walk into enemy models
 * Some torches can't be targeted
 * Really far movement clicks don't move the player
+* Pause screen soft lock – if you press escape to exit out of the item or inventory , you will instead pause the game which will soft lock forcing a hard restart 
+
+
 
 
 
@@ -200,9 +198,27 @@ Matthew Van Aardt — Producer
 
 Gareth Robinson — Academic Supervisor
 
-Asset \& Licensed Credits
+
+
+###### Asset \& Licensed Credits
 
 Audio Middleware: Wwise by Audiokinetic
 
+Audio Instrument Pack: BBC Symphony Orchestra Discover by Spitfire Audio
+
+Audio Sound Pack: Soundly Free
+
+Animations: Character Animations made in Mixamo by Adobe
+
 Font: CS Rohesia by Craft Supply Co.
+
+VFX: VFX Impact and Hit Light version, Cartoon VFX by Wallcoeur, Unity Asset Store
+
+VFX: VFX URP - Fire Package Cartoon VFX by Wallcoeur Unity Asset Store
+
+VFX: Free Slash VFX by MakerStudio, Unity Asset Store
+
+
+
+
 
