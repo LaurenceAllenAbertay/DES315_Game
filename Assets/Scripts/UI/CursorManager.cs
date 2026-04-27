@@ -18,6 +18,10 @@ public class CursorManager : MonoBehaviour
     private static readonly Vector2 PivotTopLeft = new Vector2(0f, 1f);
     private static readonly Vector2 PivotCenter  = new Vector2(0.5f, 0.5f);
 
+    [Header("Flip Spin")]
+    [SerializeField] private float flipSpinSpeed = 360f;
+
+    private float spinAngle = 0f;
     private Canvas canvas;
     private RectTransform canvasRect;
     private RectTransform cursorRect;
@@ -54,15 +58,30 @@ public class CursorManager : MonoBehaviour
         );
 
         bool isTargeting = playerAbilityManager != null && playerAbilityManager.IsTargeting && !PauseStack.IsPaused;
+        bool isFlipping  = isTargeting && playerAbilityManager.IsFlipping;
 
         if (isTargeting)
         {
             cursorRect.pivot = PivotCenter;
             cursorRect.localPosition = localPoint;
             cursorImage.sprite = targetingSprite != null ? targetingSprite : defaultSprite;
+
+            if (isFlipping)
+            {
+                spinAngle += flipSpinSpeed * Time.deltaTime;
+                if (spinAngle >= 360f) spinAngle -= 360f;
+            }
+            else
+            {
+                spinAngle = 0f;
+            }
+
+            cursorRect.localEulerAngles = new Vector3(0f, 0f, spinAngle);
         }
         else
         {
+            spinAngle = 0f;
+            cursorRect.localEulerAngles = Vector3.zero;
             cursorRect.pivot = PivotTopLeft;
             cursorRect.localPosition = localPoint;
             cursorImage.sprite = IsHoveringTarget(mousePosition) ? hoverSprite : defaultSprite;

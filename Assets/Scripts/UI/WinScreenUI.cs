@@ -9,8 +9,13 @@ public class WinScreenUI : MonoBehaviour
     [Header("Scene")]
     public string mainMenuSceneName = "MainMenu";
 
-    [Header("Stats Text")]
-    public TextMeshProUGUI statsText;
+    [Header("Stat Boxes")]
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI timeText;
+    public TextMeshProUGUI enemiesKilledText;
+    public TextMeshProUGUI damageTakenText;
+    public TextMeshProUGUI roomsExploredText;
+    public TextMeshProUGUI chestsOpenedText;
 
     private void OnEnable()
     {
@@ -19,27 +24,23 @@ public class WinScreenUI : MonoBehaviour
 
     private void PopulateStats()
     {
-        if (statsText == null) return;
-
         RunScoreManager rsm = RunScoreManager.Instance;
 
         if (rsm == null)
         {
             Debug.LogWarning("[WinScreenUI] No RunScoreManager found - stats will be empty.");
-            statsText.text = "Stats unavailable.";
             return;
         }
 
         int minutes = Mathf.FloorToInt(rsm.TimeTaken / 60f);
         int seconds = Mathf.FloorToInt(rsm.TimeTaken % 60f);
 
-        statsText.text =
-            $"Score: {rsm.CalculateScore():N0}\n" +
-            $"Time: {minutes:00}:{seconds:00}\n" +
-            $"Enemies Killed: {rsm.EnemiesKilled}\n" +
-            $"Damage Taken: {Mathf.RoundToInt(rsm.DamageTaken)}\n" +
-            $"Rooms Explored: {rsm.RoomsExplored}\n" +
-            $"Chests Opened: {rsm.ChestsOpened}";
+        if (scoreText != null)         scoreText.text         = $"Score\n{rsm.CalculateScore():N0}";
+        if (timeText != null)          timeText.text          = $"Time\n{minutes:00}:{seconds:00}";
+        if (enemiesKilledText != null) enemiesKilledText.text = $"Enemies\nKilled\n{rsm.EnemiesKilled}";
+        if (damageTakenText != null)   damageTakenText.text   = $"Damage\nTaken\n{Mathf.RoundToInt(rsm.DamageTaken)}";
+        if (roomsExploredText != null) roomsExploredText.text = $"Rooms\nExplored\n{rsm.RoomsExplored}";
+        if (chestsOpenedText != null)  chestsOpenedText.text  = $"Chests\nOpened\n{rsm.ChestsOpened}";
     }
 
     //Wire this to the main menu button's OnClick event in the Inspector -EM//
