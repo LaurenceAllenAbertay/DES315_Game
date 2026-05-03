@@ -123,14 +123,10 @@ public class EnemyVisionCone : MonoBehaviour
 
     private void Update()
     {
-        // Update visual mesh every frame (shows obstacle occlusion)
         UpdateVisualMesh();
         UpdateTriggerRadius();
     }
-
-    /// <summary>
-    /// Visual mesh that shows obstacle occlusion (updated every frame)
-    /// </summary>
+    
     private void UpdateVisualMesh()
     {
         Vector3[] vertices = new Vector3[visionResolution + 2];
@@ -178,10 +174,7 @@ public class EnemyVisionCone : MonoBehaviour
             visionTrigger.radius = visionRange;
         }
     }
-
-    /// <summary>
-    /// Called when something enters the vision cone trigger
-    /// </summary>
+    
     private void OnTriggerEnter(Collider other)
     {
         if (!IsPlayerLayer(other.gameObject)) return;
@@ -189,10 +182,7 @@ public class EnemyVisionCone : MonoBehaviour
         detectedPlayerTransform = other.transform;
         CheckLineOfSight();
     }
-
-    /// <summary>
-    /// Called while something stays in the vision cone trigger
-    /// </summary>
+    
     private void OnTriggerStay(Collider other)
     {
         if (!IsPlayerLayer(other.gameObject)) return;
@@ -200,10 +190,7 @@ public class EnemyVisionCone : MonoBehaviour
         detectedPlayerTransform = other.transform;
         CheckLineOfSight();
     }
-
-    /// <summary>
-    /// Called when something exits the vision cone trigger
-    /// </summary>
+    
     private void OnTriggerExit(Collider other)
     {
         if (!IsPlayerLayer(other.gameObject)) return;
@@ -212,9 +199,6 @@ public class EnemyVisionCone : MonoBehaviour
         playerDetected = false;
     }
 
-    /// <summary>
-    /// Performs a single raycast to check if we have line of sight to the player
-    /// </summary>
     private void CheckLineOfSight()
     {
         if (detectedPlayerTransform == null) return;
@@ -241,11 +225,9 @@ public class EnemyVisionCone : MonoBehaviour
             playerDetected = false;
             return;
         }
-
-        // Single raycast to check for obstacles between enemy and player
+        
         if (Physics.Raycast(transform.position, directionToPlayer.normalized, out RaycastHit hit, distanceToPlayer, obstacleMask | playerLayer))
         {
-            // Check if what we hit is the player (not an obstacle)
             if (IsPlayerLayer(hit.collider.gameObject))
             {
                 if (!playerDetected)
@@ -258,13 +240,9 @@ public class EnemyVisionCone : MonoBehaviour
             }
         }
 
-        // Obstacle is blocking line of sight
         playerDetected = false;
     }
-
-    /// <summary>
-    /// Check if a GameObject is on the player layer
-    /// </summary>
+    
     private bool IsPlayerLayer(GameObject obj)
     {
         return ((1 << obj.layer) & playerLayer) != 0;
@@ -307,7 +285,6 @@ public class EnemyVisionCone : MonoBehaviour
             currentAngle += angleStep;
         }
 
-        // Draw line to detected player
         if (detectedPlayerTransform != null)
         {
             Gizmos.color = playerDetected ? Color.green : Color.yellow;

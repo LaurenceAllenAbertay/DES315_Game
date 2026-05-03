@@ -43,8 +43,7 @@ public class CombatCarouselEntry : MonoBehaviour, IPointerEnterHandler, IPointer
         {
             cameraController = FindFirstObjectByType<CameraController>();
         }
-
-        // Pivot at top-centre so scaling expands downward, away from the screen edge
+        
         RectTransform rt = GetComponent<RectTransform>();
         if (rt != null)
         {

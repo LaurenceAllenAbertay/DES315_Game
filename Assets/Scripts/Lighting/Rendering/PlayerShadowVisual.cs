@@ -2,8 +2,6 @@ using UnityEngine;
 
 /// <summary>
 /// Darkens the player's renderers when they are in shadow by applying a colour tint
-/// via MaterialPropertyBlock (no material instances are created).
-/// Requires a LightDetectable component on the same GameObject.
 /// </summary>
 [RequireComponent(typeof(LightDetectable))]
 public class PlayerShadowVisual : MonoBehaviour

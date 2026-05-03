@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 /// <summary>
 /// URP Renderer Feature that applies the hard-edge shadow overlay as a fullscreen post-process pass.
-/// The shadow overlay only affects pixels belonging to objects on the occluderLayers mask.
 /// </summary>
 public class HardShadowFeature : ScriptableRendererFeature
 {
@@ -87,7 +86,7 @@ public class HardShadowFeature : ScriptableRendererFeature
         CoreUtils.Destroy(maskMaterial);
     }
     
-    // Pass 1: Render occluder-layer geometry into a single-channel mask texture.
+    // Pass 1: Render occluder layer geometry into a single channel mask texture.
     private class HardShadowOccluderMaskPass : ScriptableRenderPass
     {
         private readonly Material material;
@@ -154,7 +153,7 @@ public class HardShadowFeature : ScriptableRendererFeature
         }
     }
     
-    // Pass 2: Fullscreen overlay — only darkens occluder-mask pixels.
+    // Pass 2: Fullscreen overlay - only darkens occluder-mask pixels.
     private class HardShadowOverlayPass : ScriptableRenderPass
     {
         private const string PassName = "HardShadowOverlay";
@@ -235,10 +234,6 @@ public class HardShadowFeature : ScriptableRendererFeature
             }
         }
 
-        /// <summary>
-        /// Builds per-frame light arrays, resolves each light's URP additional light index,
-        /// and uploads all shader properties.
-        /// </summary>
         private int GatherAndUploadLights(ContextContainer frameData)
         {
             IReadOnlyCollection<LightSource> sources = HardShadowManager.GetLights();
@@ -274,7 +269,7 @@ public class HardShadowFeature : ScriptableRendererFeature
         }
 
         /// <summary>
-        /// Maps each visible Unity Light to its URP additional light index (directional lights excluded).
+        /// Maps each visible Unity Light to its URP additional light index
         /// </summary>
         private Dictionary<Light, int> BuildURPIndexLookup(ContextContainer frameData)
         {

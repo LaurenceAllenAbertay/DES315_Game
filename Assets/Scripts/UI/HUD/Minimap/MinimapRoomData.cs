@@ -1,10 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Attached to a room GameObject (alongside RoomLA) when the player first visits it.
-/// Fires a downward raycast grid over the room's XZ extent to produce a low-res
-/// Texture2D showing floor vs occluder pixels, then caches the result.
-/// </summary>
 public class MinimapRoomData : MonoBehaviour
 {
     public Texture2D ScannedTexture { get; private set; }

@@ -2,11 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// Attached to each combat log entry prefab.
-/// After <see cref="displayDuration"/> seconds the text fades out, then the GameObject is destroyed.
-/// Call <see cref="Initialize"/> immediately after instantiation.
-/// </summary>
 public class CombatLogEntry : MonoBehaviour
 {
     [Header("References")]
@@ -15,11 +10,7 @@ public class CombatLogEntry : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float displayDuration = 3f;
     [SerializeField] private float fadeDuration = 1f;
-
-    /// <summary>
-    /// Sets the message text and starts the display/fade timer.
-    /// Call this right after Instantiate().
-    /// </summary>
+    
     public void Initialize(string message, float overrideDisplayDuration = -1f, float overrideFadeDuration = -1f)
     {
         if (label != null)
@@ -36,10 +27,8 @@ public class CombatLogEntry : MonoBehaviour
 
     private IEnumerator FadeAndDestroy()
     {
-        // Wait at full opacity
         yield return new WaitForSeconds(Mathf.Max(0f, displayDuration));
-
-        // Lerp alpha to zero
+        
         if (label != null)
         {
             Color startColor = label.color;
@@ -57,11 +46,4 @@ public class CombatLogEntry : MonoBehaviour
 
         Destroy(gameObject);
     }
-
-#if UNITY_EDITOR
-    private void Reset()
-    {
-        label = GetComponentInChildren<TextMeshProUGUI>();
-    }
-#endif
 }

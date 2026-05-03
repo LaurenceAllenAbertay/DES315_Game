@@ -71,7 +71,7 @@ public class ConeTargetingVisualizer : MonoBehaviour
 
     private void UpdateMesh()
     {
-        // Make cone...
+        // Make cone
         Vector3[] vertices = new Vector3[resolution + 2];
         int[] triangles = new int[resolution * 3];
         

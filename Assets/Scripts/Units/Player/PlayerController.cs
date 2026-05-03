@@ -384,12 +384,7 @@ public class PlayerController : MonoBehaviour
             ShowDestinationIndicator(destinationPoint);
         }
     }
-
-    /// <summary>
-    /// Continuously moves the player toward the cursor position each frame while the button is held.
-    /// Speed and look-ahead both scale with cursor distance so the player decelerates as the cursor gets close.
-    /// Occluders are intentionally ignored — hold-move reads the ground directly beneath the cursor.
-    /// </summary>
+    
     private void UpdateHoldMovement()
     {
         if (mainCamera == null) return;
@@ -529,16 +524,12 @@ public class PlayerController : MonoBehaviour
         if (!CombatManager.Instance.InCombat) return true;
         return CombatManager.Instance.IsPlayerTurn;
     }
-
-    // Immediately cancels any pending movement when a targeting confirm fires,
-    // covering the case where the Move and ConfirmTarget actions share the same button.
+    
     private void OnAbilityTargetConfirmed(TargetingResult result)
     {
         StopMovement();
     }
-
-    // Returns true while targeting is active OR on the frame a target was just confirmed,
-    // preventing a same-frame movement click from slipping through.
+    
     private bool IsTargetingActive()
     {
         return targetingSystem != null && (targetingSystem.IsTargeting || targetingSystem.TargetJustConfirmed);

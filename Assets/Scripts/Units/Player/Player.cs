@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Player-specific functionality built on top of Unit base class
-/// </summary>
 public class Player : Unit
 {
     [Header("UI")]
@@ -76,10 +73,7 @@ public class Player : Unit
             StatsManager.Instance.OnModifiersChanged -= HandleModifiersChanged;
         }
     }
-
-    /// <summary>
-    /// Override AddBlock to only work during combat
-    /// </summary>
+    
     public override void AddBlock(float amount)
     {
         if (amount <= 0f) return;
@@ -91,10 +85,7 @@ public class Player : Unit
 
         base.AddBlock(amount);
     }
-
-    /// <summary>
-    /// Enter combat mode
-    /// </summary>
+    
     public void EnterCombat()
     {
         if (!isInCombat)
@@ -108,10 +99,7 @@ public class Player : Unit
             OnCombatStateChanged?.Invoke(true);
         }
     }
-
-    /// <summary>
-    /// Exit combat mode
-    /// </summary>
+    
     public void ExitCombat()
     {
         if (isInCombat)
@@ -125,14 +113,9 @@ public class Player : Unit
             OnCombatStateChanged?.Invoke(false);
         }
     }
-
-    /// <summary>
-    /// Reset coins at the start of player's turn
-    /// Called by CombatManager when player's turn starts
-    /// </summary>
+    
     public void StartTurn()
     {
-        // Calculate coins for this turn (base + any bonus from last turn)
         int coinsThisTurn = GetBaseCoins() + bonusCoinsNextTurn;
         currentCoins = coinsThisTurn;
         
@@ -141,53 +124,34 @@ public class Player : Unit
             Debug.Log($"[Player] Turn started with {currentCoins} coins (base: {GetBaseCoins()}, bonus: {bonusCoinsNextTurn})");
         }
 
-        // Reset bonus for next turn calculation
         bonusCoinsNextTurn = 0;
         
-        // Reset movement tracking for new turn
         distanceMovedThisTurn = 0f;
 
         OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
     }
-
-    /// <summary>
-    /// Called when player's turn ends
-    /// </summary>
+    
     public void EndTurn()
     {
 
     }
-
-    /// <summary>
-    /// Check if player can spend a coin
-    /// </summary>
+    
     public bool CanSpendCoin()
     {
         return CanSpendCoins(1);
     }
-
-    /// <summary>
-    /// Spend a coin
-    /// </summary>
+    
     public bool SpendCoin()
     {
         return SpendCoins(1);
     }
-
-    /// <summary>
-    /// Check if player can spend a number of coins (0 = free)
-    /// </summary>
+    
     public bool CanSpendCoins(int cost)
     {
         if (cost <= 0) return true;
         return currentCoins >= cost;
     }
 
-    /// <summary>
-    /// Spend a number of coins (0 = free).
-    /// When the infinite coins cheat is active the deduction is skipped but the
-    /// call still succeeds so all ability/movement logic works normally.
-    /// </summary>
     public bool SpendCoins(int cost)
     {
         if (cost <= 0) return true;
@@ -206,22 +170,14 @@ public class Player : Unit
         OnCoinsChanged?.Invoke(currentCoins, GetBaseCoins());
         return true;
     }
-
-    /// <summary>
-    /// Check if player can still move (has distance remaining)
-    /// </summary>
+    
     public bool CanMove()
     {
         if (!isInCombat) return true;
-        
-        // Check if there's distance remaining
+
         return distanceMovedThisTurn < MaxCombatMoveDistance;
     }
-
-    /// <summary>
-    /// Add distance to the movement tracker
-    /// Returns false if the movement would exceed the limit
-    /// </summary>
+    
     public bool AddMovementDistance(float distance)
     {
         if (!isInCombat) return true;
@@ -246,11 +202,7 @@ public class Player : Unit
         
         return true;
     }
-
-    /// <summary>
-    /// Get how much distance can still be moved to a target point
-    /// Returns the clamped distance or 0 if can't move
-    /// </summary>
+    
     public float GetAllowedMoveDistance(float requestedDistance)
     {
         if (!isInCombat) return requestedDistance;
@@ -258,12 +210,7 @@ public class Player : Unit
         float remaining = MaxCombatMoveDistance - distanceMovedThisTurn;
         return Mathf.Min(requestedDistance, remaining);
     }
-
-    /// <summary>
-    /// Perform a coin flip for ability success
-    /// Returns true if the ability hits, false if it misses
-    /// Also updates the flip chance based on the result
-    /// </summary>
+    
     public bool PerformCoinFlip()
     {
         float roll = Random.Range(0f, 100f);
@@ -275,15 +222,11 @@ public class Player : Unit
         }
 
         OnCoinFlipResult?.Invoke(success, currentFlipChance);
-
-        // Update flip chance based on result
+        
         if (success)
         {
-            // On success: decrease chance by 5%, down to 0%
-            // But if we were on a fail streak (chance > 60), reset to 60%
             if (currentFlipChance > BASE_FLIP_CHANCE)
             {
-                // Was on a fail streak, reset to base
                 currentFlipChance = BASE_FLIP_CHANCE;
                 if (debugMode)
                 {
@@ -292,7 +235,6 @@ public class Player : Unit
             }
             else
             {
-                // Normal success, decrease chance
                 currentFlipChance = Mathf.Max(MIN_FLIP_CHANCE, currentFlipChance - SUCCESS_PENALTY);
                 if (debugMode)
                 {
@@ -302,11 +244,8 @@ public class Player : Unit
         }
         else
         {
-            // On fail: increase chance by 10%, up to 100%
-            // But if we were on a success streak (chance < 60), reset to 60%
             if (currentFlipChance < BASE_FLIP_CHANCE)
             {
-                // Was on a success streak, reset to base
                 currentFlipChance = BASE_FLIP_CHANCE;
                 if (debugMode)
                 {
@@ -315,7 +254,6 @@ public class Player : Unit
             }
             else
             {
-                // Normal fail, increase chance
                 currentFlipChance = Mathf.Min(MAX_FLIP_CHANCE, currentFlipChance + FAIL_BONUS);
                 if (debugMode)
                 {
@@ -326,11 +264,7 @@ public class Player : Unit
 
         return success;
     }
-
-    /// <summary>
-    /// Override TakeDamage to support the infinite health cheat.
-    /// When active, all incoming damage is silently ignored.
-    /// </summary>
+    
     public override void TakeDamage(float amount)
     {
         if (CheatManager.Instance != null && CheatManager.Instance.InfiniteHealth)

@@ -5,10 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
 /// <summary>
-/// Draws a NavMesh-following path line from the player to the mouse cursor (or active destination
-/// while moving). Uses two separate LineRenderers so the white/red split is a hard colour swap.
-/// Active during the player's combat turn, or outside combat when ShowVisibilityFeatures is held.
-/// Hidden entirely while an ability is being targeted.
+/// Draws a NavMesh-following path line from the player to the mouse cursor
 /// </summary>
 public class MovementPathLine : MonoBehaviour
 {
@@ -98,11 +95,7 @@ public class MovementPathLine : MonoBehaviour
 
         DrawNavMeshLine(target.Value);
     }
-
-    /// <summary>
-    /// Returns the destination to draw toward: the agent's active destination while moving,
-    /// otherwise the mouse floor point.
-    /// </summary>
+    
     private Vector3? GetTarget()
     {
         if (agent != null && agent.hasPath && !agent.isStopped)
@@ -110,11 +103,7 @@ public class MovementPathLine : MonoBehaviour
 
         return GetMouseFloorPoint();
     }
-
-    /// <summary>
-    /// Calculates the NavMesh path to the target, smooths corners, then populates the two
-    /// LineRenderers: white up to remaining range, red beyond.
-    /// </summary>
+    
     private void DrawNavMeshLine(Vector3 target)
     {
         Vector3 origin = player.transform.position;
@@ -191,10 +180,7 @@ public class MovementPathLine : MonoBehaviour
             SetOutOfRangeText(true);
         }
     }
-
-    /// <summary>
-    /// Splits the smoothed point list at the remaining-distance boundary into two separate lists.
-    /// </summary>
+    
     private static void SplitPath(List<Vector3> points, float remaining,
         out List<Vector3> before, out List<Vector3> after)
     {
@@ -299,11 +285,7 @@ public class MovementPathLine : MonoBehaviour
 
         return showVisibilityAction != null && showVisibilityAction.IsPressed();
     }
-
-    /// <summary>
-    /// Rounds each NavMesh corner with a quadratic bezier. Pulls back cornerRadius along each
-    /// segment then curves through the corner as the control handle — no looping possible.
-    /// </summary>
+    
     private List<Vector3> BuildRoundedCornerPath(List<Vector3> controls)
     {
         List<Vector3> result = new List<Vector3>();

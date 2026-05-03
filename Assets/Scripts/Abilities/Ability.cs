@@ -89,7 +89,7 @@ public class Ability : ScriptableObject
     {
         if (targets == null || targets.Count == 0)
         {
-            // No targets, might be a self-only ability
+            // No targets
             AbilityExecutionContext context = new AbilityExecutionContext(caster, abilityName, baseMultiplier);
             ExecuteEffects(context);
             return;

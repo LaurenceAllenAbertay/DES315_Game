@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Simple destructible prop that dies when health is low.
-/// </summary>
 public class Prop : Unit
 {
 

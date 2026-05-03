@@ -54,11 +54,7 @@ public class TooltipManager : MonoBehaviour
         if (tooltipPanel.gameObject.activeSelf)
             PositionTooltip();
     }
-
-    /// <summary>
-    /// Snaps the tooltip to the cursor quadrant: the panel corner nearest the screen
-    /// centre is placed at the cursor so it always opens away from the screen edge.
-    /// </summary>
+    
     private void PositionTooltip()
     {
         Vector2 mousePos = Mouse.current != null
@@ -67,11 +63,7 @@ public class TooltipManager : MonoBehaviour
 
         bool isRight = mousePos.x > Screen.width * 0.5f;
         bool isTop   = mousePos.y > Screen.height * 0.5f;
-
-        // Pivot (0,0) = bottom-left corner anchors to cursor → panel extends up-right
-        // Pivot (1,0) = bottom-right corner              → panel extends up-left
-        // Pivot (0,1) = top-left corner                  → panel extends down-right
-        // Pivot (1,1) = top-right corner                 → panel extends down-left
+        
         float pivotX = isRight ? 1f : 0f;
         float pivotY = isTop   ? 1f : 0f;
         tooltipPanel.pivot = new Vector2(pivotX, pivotY);

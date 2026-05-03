@@ -243,21 +243,14 @@ public class CameraController : MonoBehaviour
 
         pendingYaw += angle;
     }
-
-    /// <summary>
-    /// Orbits the full camera arm (including Y) around the pivot, then faces the camera toward the pivot.
-    /// </summary>
+    
     private void ApplyRotation()
     {
         if (pendingYaw == 0f) return;
         currentYaw += pendingYaw;
         pendingYaw = 0f;
     }
-
-    /// <summary>
-    /// Single point that writes to transform. Derives position from pivotPoint + currentYaw,
-    /// clamps camera XZ to the room, and back-computes pivot from the clamped position so they stay consistent.
-    /// </summary>
+    
     private void ApplyCameraTransform()
     {
         Quaternion rot = Quaternion.Euler(cameraPitch, currentYaw, 0f);
@@ -423,10 +416,7 @@ public class CameraController : MonoBehaviour
             followPermitted = maxSnapDistance <= 0f || xzDist <= maxSnapDistance;
         }
     }
-
-    /// <summary>
-    /// Lerps the orbit pivot toward the player XZ while following, moving the camera by the same delta so the offset is preserved.
-    /// </summary>
+    
     private void ApplyPlayerFollow()
     {
         if (!isFollowingPlayer || !followPermitted || player == null) return;

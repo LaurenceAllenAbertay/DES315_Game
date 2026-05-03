@@ -186,13 +186,9 @@ public class PlayerAbilityManager : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// Try to start targeting for an ability
-    /// </summary>
+    
     private void TryStartAbility(int slotIndex)
     {
-        // Already targeting?
         if (activeAbilitySlot.HasValue)
         {
             if (targetingSystem != null && !targetingSystem.IsTargeting)
@@ -210,14 +206,12 @@ public class PlayerAbilityManager : MonoBehaviour
                 CancelTargeting();
             }
         }
-
-        // Valid slot?
+        
         if (slotIndex < 0 || slotIndex >= equippedAbilities.Length)
             return;
 
         Ability ability = equippedAbilities[slotIndex];
-
-        // Ability equipped?
+        
         if (ability == null)
         {
             if (debugMode)
@@ -226,8 +220,7 @@ public class PlayerAbilityManager : MonoBehaviour
             }
             return;
         }
-
-        // On cooldown?
+        
         if (cooldownTimers[slotIndex] > 0)
         {
             if (debugMode)
@@ -238,8 +231,7 @@ public class PlayerAbilityManager : MonoBehaviour
         }
 
         int abilityCoinCost = Mathf.Max(0, ability.coinCost);
-
-        // Check combat restrictions
+        
         if (CombatManager.Instance != null && CombatManager.Instance.InCombat)
         {
             if (!CombatManager.Instance.IsPlayerTurn)
@@ -255,8 +247,7 @@ public class PlayerAbilityManager : MonoBehaviour
             {
                 return;
             }
-
-            // Check if player has enough coins
+            
             if (!player.CanSpendCoins(abilityCoinCost))
             {
                 if (debugMode)
@@ -266,8 +257,7 @@ public class PlayerAbilityManager : MonoBehaviour
                 return;
             }
         }
-
-        // Start targeting
+        
         activeAbilitySlot = slotIndex;
         flipSelected = false;
         if (targetingSystem != null)
@@ -296,10 +286,7 @@ public class PlayerAbilityManager : MonoBehaviour
         if (debugMode)
             Debug.Log($"[AbilityManager] Started targeting for '{ability.abilityName}'");
     }
-
-    /// <summary>
-    /// Cancel current targeting
-    /// </summary>
+    
     public void CancelTargeting()
     {
         if (!activeAbilitySlot.HasValue) return;
@@ -313,10 +300,7 @@ public class PlayerAbilityManager : MonoBehaviour
         if (debugMode)
             Debug.Log("[AbilityManager] Targeting cancelled");
     }
-
-    /// <summary>
-    /// Called when targeting system confirms a target
-    /// </summary>
+    
     private void OnTargetConfirmed(TargetingResult result)
     {
         if (!activeAbilitySlot.HasValue) return;
@@ -329,27 +313,21 @@ public class PlayerAbilityManager : MonoBehaviour
             activeAbilitySlot = null;
             return;
         }
-
-        // Execute the ability with coin flip
+        
         ExecuteAbility(ability, result);
-
-        // Start cooldown regardless of hit/miss
+        
         cooldownTimers[slotIndex] = ABILITY_COOLDOWN;
 
         //matty addition - invoke the event so the animation controller can react to the cast
         OnAbilityCast?.Invoke(slotIndex);
-
-        // Clear active slot
+        
         activeAbilitySlot = null;
         flipSelected = false;
         targetingSystem.SetFlipVisuals(false);
         coinUI?.SetIsFlipping(false);
         SetCoinSpendingCount(0);
     }
-
-    /// <summary>
-    /// Called when targeting is cancelled
-    /// </summary>
+    
     private void OnTargetingCancelled()
     {
         activeAbilitySlot = null;
@@ -361,11 +339,7 @@ public class PlayerAbilityManager : MonoBehaviour
         coinUI?.SetIsFlipping(false);
         SetCoinSpendingCount(0);
     }
-
-    /// <summary>
-    /// Execute an ability with the given targeting result
-    /// Spends ability coin cost in combat and optionally performs a coin flip to scale the outcome
-    /// </summary>
+    
     private void ExecuteAbility(Ability ability, TargetingResult result)
     {
         bool inCombat = CombatManager.Instance != null && CombatManager.Instance.InCombat;
@@ -376,8 +350,7 @@ public class PlayerAbilityManager : MonoBehaviour
             if (player == null) return;
 
             int abilityCoinCost = Mathf.Max(0, ability.coinCost);
-
-            // Spend coins for ability
+            
             if (!player.SpendCoins(abilityCoinCost))
             {
                 if (debugMode)
@@ -397,8 +370,7 @@ public class PlayerAbilityManager : MonoBehaviour
         TryEnqueueAbilityCastMessage(ability, result);
 
         PlayAbilityCastSound(ability);
-
-        // Spawn visual effect if any
+        
         SpawnAbilityVFX(ability, result);
 
         ExecuteAbilityWithDelay(ability, result, flipMultiplier);
@@ -482,17 +454,13 @@ public class PlayerAbilityManager : MonoBehaviour
 
         abilityAudioSource.PlayOneShot(ability.castSound);
     }
-
-    /// <summary>
-    /// Spawns the visual effect for an ability at the appropriate location
-    /// </summary>
+    
     private void SpawnAbilityVFX(Ability ability, TargetingResult result)
     {
         if (ability.visualEffectPrefab == null) return;
 
         Vector3 spawnPosition = Vector3.zero;
-
-        // Determine spawn position based on targeting type
+        
         switch (ability.targetingType)
         {
             case TargetingType.PointAndClick:
@@ -514,15 +482,10 @@ public class PlayerAbilityManager : MonoBehaviour
 
         GameObject vfx = Instantiate(ability.visualEffectPrefab, spawnPosition, Quaternion.identity);
         
-        // Auto-destroy after some time (particle effects usually last a few seconds)
-        // This handles the user's question about needing code to destroy them.
         float vfxDuration = ability != null ? Mathf.Max(0.1f, ability.visualEffectDuration) : 5f;
         Destroy(vfx, vfxDuration);
     }
-
-    /// <summary>
-    /// Get the cooldown remaining for a slot (0 = ready)
-    /// </summary>
+    
     public float GetCooldownRemaining(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= cooldownTimers.Length)
@@ -530,10 +493,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
         return Mathf.Max(0, cooldownTimers[slotIndex]);
     }
-
-    /// <summary>
-    /// Get cooldown as a 0-1 ratio (for UI)
-    /// </summary>
+    
     public float GetCooldownRatio(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= equippedAbilities.Length)
@@ -546,9 +506,6 @@ public class PlayerAbilityManager : MonoBehaviour
         return Mathf.Clamp01(cooldownTimers[slotIndex] / ABILITY_COOLDOWN);
     }
 
-    /// <summary>
-    /// Check if an ability slot is ready to use
-    /// </summary>
     public bool IsAbilityReady(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= equippedAbilities.Length)
@@ -556,10 +513,7 @@ public class PlayerAbilityManager : MonoBehaviour
 
         return equippedAbilities[slotIndex] != null && cooldownTimers[slotIndex] <= 0;
     }
-
-    /// <summary>
-    /// Equip an ability to a slot
-    /// </summary>
+    
     public void EquipAbility(int slotIndex, Ability ability)
     {
         if (slotIndex < 0 || slotIndex >= equippedAbilities.Length)

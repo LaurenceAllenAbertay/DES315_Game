@@ -2,12 +2,6 @@ using UnityEngine;
 
 /// <summary>
 /// Combat log implementation of the message system.
-/// Each call to <see cref="EnqueueMessage"/> spawns a new log entry prefab inside
-/// the <see cref="logContainer"/> layout group. Entries fade out and self-destruct
-/// after the configured durations defined on <see cref="CombatLogEntry"/>.
-///
-/// Drop-in replacement for the old MessageUI — all callers using
-/// <c>MessageUI.Instance?.EnqueueMessage(...)</c> require no changes.
 /// </summary>
 public class MessageUI : MonoBehaviour
 {

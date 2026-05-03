@@ -65,10 +65,7 @@ public class HideOnCameraEnter : MonoBehaviour
         c.a = alpha;
         instanceMaterial.SetColor("_BaseColor", c);
     }
-
-    /// <summary>
-    /// Returns true if this object's colliders intersect the raycast from the camera to the player.
-    /// </summary>
+    
     private bool IsBlockingPlayer(Vector3 cameraPos, Vector3 playerPos)
     {
         Vector3 direction = playerPos - cameraPos;
@@ -86,12 +83,7 @@ public class HideOnCameraEnter : MonoBehaviour
         }
         return false;
     }
-
-    /// <summary>
-    /// Returns the minimum distance from the point to any collider's surface.
-    /// ClosestPoint returns the query point unchanged when inside a collider, giving distance 0.
-    /// Only reliable for convex colliders (Box, Sphere, Capsule, convex MeshCollider).
-    /// </summary>
+    
     private float DistanceToSurface(Vector3 point)
     {
         float minDistance = float.MaxValue;
@@ -104,11 +96,7 @@ public class HideOnCameraEnter : MonoBehaviour
         }
         return minDistance;
     }
-
-    /// <summary>
-    /// Drop-in replacement for Physics.Raycast that skips hits on objects whose HideOnCameraEnter
-    /// component is currently transparent, continuing through them to find the first solid hit.
-    /// </summary>
+    
     public static bool RaycastIgnoreTransparent(Ray ray, out RaycastHit hit, float maxDistance, LayerMask mask)
     {
         RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance, mask);

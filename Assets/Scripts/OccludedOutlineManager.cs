@@ -2,9 +2,6 @@
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
 
-/// <summary>
-/// Toggles URP Render Objects features for occluded outline effect
-/// </summary>
 public class OccludedOutlineManager : MonoBehaviour
 {
     [Header("Input")]

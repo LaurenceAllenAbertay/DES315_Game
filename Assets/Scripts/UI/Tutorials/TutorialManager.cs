@@ -40,11 +40,7 @@ public class TutorialManager : MonoBehaviour
     {
         Trigger("game_start");
     }
-
-    /// <summary>
-    /// Show the tutorial popup for the given trigger key and pause the game until closed.
-    /// Does nothing if the key was already shown this run, is missing from the database, or required UI references are unassigned.
-    /// </summary>
+    
     public void Trigger(string key)
     {
         if (!_tutorialsEnabled) return;

@@ -87,11 +87,7 @@ public class AbilitySlotUI : MonoBehaviour
         if (descriptionText != null)
             descriptionText.text = string.Empty;
     }
-
-    /// <summary>
-    /// Adds pointer enter/exit EventTrigger entries to a button for hover description display.
-    /// Clears existing triggers first to avoid duplicates on re-enable.
-    /// </summary>
+    
     private void AddHoverEvents(Button button, int slotIndex)
     {
         EventTrigger trigger = button.GetComponent<EventTrigger>() ?? button.gameObject.AddComponent<EventTrigger>();

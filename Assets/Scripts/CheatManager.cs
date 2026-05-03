@@ -2,11 +2,6 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-/// <summary>
-/// Manages cheat/debug toggles.
-/// Attach this to a persistent GameObject in the scene.
-/// The UI buttons in your cheat menu should call the public Toggle methods.
-/// </summary>
 public class CheatManager : MonoBehaviour
 {
     public static CheatManager Instance { get; private set; }
@@ -20,9 +15,7 @@ public class CheatManager : MonoBehaviour
     [Header("Final Room Arrow")]
     [Tooltip("Assign the FinalRoomArrow component in the scene")]
     public FinalRoomArrow finalRoomArrow;
-
-
-    // Events so the UI can update its toggle visuals without polling
+    
     public event System.Action<bool> OnInfiniteHealthChanged;
     public event System.Action<bool> OnInfiniteCoinsChanged;
     public event System.Action<bool> OnShowFinalRoomChanged;
@@ -45,14 +38,12 @@ public class CheatManager : MonoBehaviour
         }
         Instance = this;
     }
-
-    /// <summary>Toggle infinite health on/off.</summary>
+    
     public void ToggleInfiniteHealth()
     {
         SetInfiniteHealth(!infiniteHealth);
     }
-
-    /// <summary>Set infinite health explicitly.</summary>
+    
     public void SetInfiniteHealth(bool value)
     {
         if (infiniteHealth == value) return;
@@ -60,14 +51,12 @@ public class CheatManager : MonoBehaviour
         Debug.Log($"[CheatManager] Infinite Health: {infiniteHealth}");
         OnInfiniteHealthChanged?.Invoke(infiniteHealth);
     }
-
-    /// <summary>Toggle infinite coins (action points) on/off.</summary>
+    
     public void ToggleInfiniteCoins()
     {
         SetInfiniteCoins(!infiniteCoins);
     }
-
-    /// <summary>Set infinite coins explicitly.</summary>
+    
     public void SetInfiniteCoins(bool value)
     {
         if (infiniteCoins == value) return;

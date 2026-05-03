@@ -87,7 +87,6 @@ public class RoomLA : MonoBehaviour
 
     /// <summary>
     /// Finds all enemies whose position falls inside this room's boundaries at scene load time.
-    /// Must be called after all enemies have run Awake so positions are valid.
     /// </summary>
     private void CacheRoomEnemies()
     {

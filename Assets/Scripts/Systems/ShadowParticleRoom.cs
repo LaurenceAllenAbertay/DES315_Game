@@ -126,10 +126,7 @@ public class ShadowParticleRoom : MonoBehaviour
         if (isActiveRoom)
             RunFullLightCheck();
     }
-
-    /// <summary>
-    /// Checks a small batch of particle positions per frame against the light system to avoid per-frame full scans.
-    /// </summary>
+    
     private void StepLightChecks()
     {
         if (LightDetectionManager.Instance == null)
@@ -182,10 +179,7 @@ public class ShadowParticleRoom : MonoBehaviour
 
         checkIndex = 0;
     }
-
-    /// <summary>
-    /// Rejection-samples random positions within the room's collider AABB, discarding any outside the room's actual bounds.
-    /// </summary>
+    
     private void GeneratePositions()
     {
         Bounds roomBounds = ComputeRoomBounds();

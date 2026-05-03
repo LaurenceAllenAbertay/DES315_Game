@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Enemy-specific functionality built on top of Unit base class.
-/// Handles vision cones, shadow visibility via material swapping, and permanent reveal tracking.
-/// </summary>
 public class Enemy : Unit
 {
     [Header("UI")]

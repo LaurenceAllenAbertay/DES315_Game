@@ -1,0 +1,1272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="16" SoundBankVersion="145">
+	<RootPaths>
+		<ProjectRoot>../..</ProjectRoot>
+		<SourceFilesRoot>../../.cache/Windows</SourceFilesRoot>
+		<SoundBanksRoot>.</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>.</ExternalSourcesOutputRoot>
+	</RootPaths>
+	<DialogueEvents/>
+	<SoundBanks>
+		<SoundBank Id="1281810935" Type="User" Language="SFX" Hash="{ED013B34-2A85-8731-FAB5-807553FFEBF9}">
+			<ShortName>Start</ShortName>
+			<Path>Start.bnk</Path>
+			<Media>
+				<File Id="22925414" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-05.wav</ShortName>
+					<CachePath>SFX/PrevPage-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="273314778" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-06.wav</ShortName>
+					<CachePath>SFX/PrevPage-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="288392327" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-04.wav</ShortName>
+					<CachePath>SFX/PrevPage-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="330218231" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-03.wav</ShortName>
+					<CachePath>SFX/NextPage-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="483124774" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BookOpen.wav</ShortName>
+					<CachePath>SFX/BookOpen_10C4C929.wem</CachePath>
+				</File>
+				<File Id="505645022" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-02.wav</ShortName>
+					<CachePath>SFX/NextPage-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="519282052" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-06.wav</ShortName>
+					<CachePath>SFX/NextPage-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="534091470" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-02.wav</ShortName>
+					<CachePath>SFX/PrevPage-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="637354026" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-01.wav</ShortName>
+					<CachePath>SFX/NextPage-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="665672550" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-03.wav</ShortName>
+					<CachePath>SFX/PrevPage-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="754259102" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-05.wav</ShortName>
+					<CachePath>SFX/NextPage-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="769009061" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-01.wav</ShortName>
+					<CachePath>SFX/PrevPage-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="929092099" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BookClose.wav</ShortName>
+					<CachePath>SFX/BookClose_10C4C929.wem</CachePath>
+				</File>
+				<File Id="955620415" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Incinder_MainMenu.wav</ShortName>
+					<CachePath>SFX/Incinder_MainMenu_D0FD7626.wem</CachePath>
+				</File>
+				<File Id="1023360547" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-04.wav</ShortName>
+					<CachePath>SFX/NextPage-04_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2808240339" Name="MainMenu_Looped" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="955620415"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2519197294" Name="UI_Close" DurationType="OneShot" DurationMin="1.3931458" DurationMax="1.3931458">
+					<MediaRefs>
+						<MediaRef Id="929092099"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1855554456" Name="UI_NextPage" DurationType="OneShot" DurationMin="0.6733787" DurationMax="1.4156009">
+					<MediaRefs>
+						<MediaRef Id="330218231"/>
+						<MediaRef Id="505645022"/>
+						<MediaRef Id="519282052"/>
+						<MediaRef Id="637354026"/>
+						<MediaRef Id="754259102"/>
+						<MediaRef Id="1023360547"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3282376362" Name="UI_Open" DurationType="OneShot" DurationMin="1.7879364" DurationMax="1.7879364">
+					<MediaRefs>
+						<MediaRef Id="483124774"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="896450232" Name="UI_PrevPage" DurationType="OneShot" DurationMin="0.4556236" DurationMax="1.1715193">
+					<MediaRefs>
+						<MediaRef Id="22925414"/>
+						<MediaRef Id="273314778"/>
+						<MediaRef Id="288392327"/>
+						<MediaRef Id="534091470"/>
+						<MediaRef Id="665672550"/>
+						<MediaRef Id="769009061"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="1355168291" Type="User" Language="SFX" Hash="{986487A9-2683-E47A-8688-3D0FE6FDB954}">
+			<ShortName>Init</ShortName>
+			<Path>Init.bnk</Path>
+			<Plugins>
+				<AudioDevices>
+					<Plugin Id="2317455096" Name="No_Output" LibName="No Output" LibId="11862023"/>
+					<Plugin Id="3859886410" Name="System" LibName="System" LibId="11403271"/>
+				</AudioDevices>
+			</Plugins>
+			<Busses>
+				<Bus Id="3803692087" Name="Master Audio Bus"/>
+			</Busses>
+			<SwitchGroups>
+				<SwitchGroup Id="2615620554" Name="Footstep_Type">
+					<Switches>
+						<Switch Id="1697108119" Name="WoodHeavy"/>
+						<Switch Id="2097603749" Name="GravelHeavy"/>
+						<Switch Id="2525268562" Name="GrassHeavy"/>
+						<Switch Id="2548727596" Name="GravelLight"/>
+						<Switch Id="2677407975" Name="GrassLight"/>
+						<Switch Id="3912760598" Name="WoodLight"/>
+						<Switch Id="3929807209" Name="StoneHeavy"/>
+						<Switch Id="4103883880" Name="StoneLight"/>
+					</Switches>
+				</SwitchGroup>
+			</SwitchGroups>
+		</SoundBank>
+		<SoundBank Id="1831982039" Type="User" Language="SFX" Hash="{89981BBC-A6AD-734D-521B-2CA6AB205EB6}">
+			<ShortName>Opening</ShortName>
+			<Path>Opening.bnk</Path>
+			<Media>
+				<File Id="397428832" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>mus_AnimaticMusic.wav</ShortName>
+					<CachePath>SFX/mus_AnimaticMusic_D79FB2B7.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="4208309095" Name="OpeningAnimatic" DurationType="OneShot" DurationMin="55.999977" DurationMax="55.999977">
+					<MediaRefs>
+						<MediaRef Id="397428832"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+		</SoundBank>
+		<SoundBank Id="3161908922" Type="User" Language="SFX" Hash="{FBF50077-53F0-AD09-4FB0-33181C0220E6}">
+			<ShortName>Main</ShortName>
+			<Path>Main.bnk</Path>
+			<Media>
+				<File Id="3212125" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGravel-03.wav</ShortName>
+					<CachePath>SFX/LightGravel-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="19904816" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyAttackPitched-02.wav</ShortName>
+					<CachePath>SFX/EnemyAttackPitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="20861450" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyWood-04.wav</ShortName>
+					<CachePath>SFX/HeavyWood-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="20997532" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyBlockPitched-03.wav</ShortName>
+					<CachePath>SFX/EnemyBlockPitched-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="22925414" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-05.wav</ShortName>
+					<CachePath>SFX/PrevPage-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="33000027" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Fire SND8761 Compressed.wav</ShortName>
+					<CachePath>SFX/Fire SND8761 Compressed_D79FB2B7.wem</CachePath>
+				</File>
+				<File Id="46476386" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGravel-01.wav</ShortName>
+					<CachePath>SFX/LightGravel-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="55532829" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-13.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-13_10C4C929.wem</CachePath>
+				</File>
+				<File Id="59993749" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>yeah.wav</ShortName>
+					<CachePath>SFX/yeah_10C4C929.wem</CachePath>
+				</File>
+				<File Id="61477259" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-17.wav</ShortName>
+					<CachePath>SFX/CardShuffle-17_10C4C929.wem</CachePath>
+				</File>
+				<File Id="72252010" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerCast-01.wav</ShortName>
+					<CachePath>SFX/PlayerCast-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="72637485" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-18.wav</ShortName>
+					<CachePath>SFX/CardShuffle-18_10C4C929.wem</CachePath>
+				</File>
+				<File Id="79826535" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyHealPitched-03.wav</ShortName>
+					<CachePath>SFX/EnemyHealPitched-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="86937318" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerHeal-03.wav</ShortName>
+					<CachePath>SFX/PlayerHeal-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="93788894" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerPain-02.wav</ShortName>
+					<CachePath>SFX/PlayerPain-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="97996265" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-04.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="101765747" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-01.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="104101598" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-16.wav</ShortName>
+					<CachePath>SFX/SwordSwing-16_10C4C929.wem</CachePath>
+				</File>
+				<File Id="117078103" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyStone-04.wav</ShortName>
+					<CachePath>SFX/HeavyStone-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="124768926" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightStone-04.wav</ShortName>
+					<CachePath>SFX/LightStone-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="125605516" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyAttackPitched-03.wav</ShortName>
+					<CachePath>SFX/EnemyAttackPitched-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="141686110" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-14.wav</ShortName>
+					<CachePath>SFX/CardShuffle-14_10C4C929.wem</CachePath>
+				</File>
+				<File Id="143551498" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Flintlock.wav</ShortName>
+					<CachePath>SFX/Flintlock_10C4C929.wem</CachePath>
+				</File>
+				<File Id="145472790" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-13.wav</ShortName>
+					<CachePath>SFX/CardShuffle-13_10C4C929.wem</CachePath>
+				</File>
+				<File Id="145572863" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerSwing-01.wav</ShortName>
+					<CachePath>SFX/PlayerSwing-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="148126796" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGrass-03.wav</ShortName>
+					<CachePath>SFX/LightGrass-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="148844856" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGravel-03.wav</ShortName>
+					<CachePath>SFX/HeavyGravel-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="149730050" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerSwing-05.wav</ShortName>
+					<CachePath>SFX/PlayerSwing-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="153372176" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-05.wav</ShortName>
+					<CachePath>SFX/CardShuffle-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="157051879" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-03.wav</ShortName>
+					<CachePath>SFX/SwordSwing-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="167809886" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyAttackPitched-05.wav</ShortName>
+					<CachePath>SFX/EnemyAttackPitched-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="169802807" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardEnd.wav</ShortName>
+					<CachePath>SFX/CardEnd_10C4C929.wem</CachePath>
+				</File>
+				<File Id="171771320" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerPain-04.wav</ShortName>
+					<CachePath>SFX/PlayerPain-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="186590626" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGrass-01.wav</ShortName>
+					<CachePath>SFX/HeavyGrass-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="188009124" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-15.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-15_10C4C929.wem</CachePath>
+				</File>
+				<File Id="199066427" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerCast-04.wav</ShortName>
+					<CachePath>SFX/PlayerCast-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="199315037" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerSwing-02.wav</ShortName>
+					<CachePath>SFX/PlayerSwing-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="200105795" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-09.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-09_10C4C929.wem</CachePath>
+				</File>
+				<File Id="204887727" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightWood-02.wav</ShortName>
+					<CachePath>SFX/LightWood-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="207784324" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGrass-03.wav</ShortName>
+					<CachePath>SFX/HeavyGrass-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="217847425" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-12.wav</ShortName>
+					<CachePath>SFX/SwordSwing-12_10C4C929.wem</CachePath>
+				</File>
+				<File Id="221392445" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGravel-04.wav</ShortName>
+					<CachePath>SFX/HeavyGravel-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="223675437" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerScream-02.wav</ShortName>
+					<CachePath>SFX/PlayerScream-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="224566984" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyAttackPitched-01.wav</ShortName>
+					<CachePath>SFX/EnemyAttackPitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="225697627" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyBlockPitched-01.wav</ShortName>
+					<CachePath>SFX/EnemyBlockPitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="234773187" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerDeath-02.wav</ShortName>
+					<CachePath>SFX/PlayerDeath-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="239476672" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-21.wav</ShortName>
+					<CachePath>SFX/CardShuffle-21_10C4C929.wem</CachePath>
+				</File>
+				<File Id="239830879" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyWood-05.wav</ShortName>
+					<CachePath>SFX/HeavyWood-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="239855936" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerSwing-06.wav</ShortName>
+					<CachePath>SFX/PlayerSwing-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="244262875" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-05.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="249541702" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerCast-03.wav</ShortName>
+					<CachePath>SFX/PlayerCast-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="260035028" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-03.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="266374827" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-09.wav</ShortName>
+					<CachePath>SFX/SwordSwing-09_10C4C929.wem</CachePath>
+				</File>
+				<File Id="273314778" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-06.wav</ShortName>
+					<CachePath>SFX/PrevPage-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="277133025" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-11.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-11_10C4C929.wem</CachePath>
+				</File>
+				<File Id="288392327" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-04.wav</ShortName>
+					<CachePath>SFX/PrevPage-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="290050387" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGrass-05.wav</ShortName>
+					<CachePath>SFX/HeavyGrass-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="295190154" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightStone-02.wav</ShortName>
+					<CachePath>SFX/LightStone-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="304598166" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-11.wav</ShortName>
+					<CachePath>SFX/CardShuffle-11_10C4C929.wem</CachePath>
+				</File>
+				<File Id="310257819" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-10.wav</ShortName>
+					<CachePath>SFX/SwordSwing-10_10C4C929.wem</CachePath>
+				</File>
+				<File Id="326215095" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyBlockPitched-02.wav</ShortName>
+					<CachePath>SFX/EnemyBlockPitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="327300971" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGrass-04.wav</ShortName>
+					<CachePath>SFX/HeavyGrass-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="330218231" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-03.wav</ShortName>
+					<CachePath>SFX/NextPage-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="330687773" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyReliefPitched-03.wav</ShortName>
+					<CachePath>SFX/EnemyReliefPitched-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="333227023" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-14.wav</ShortName>
+					<CachePath>SFX/SwordSwing-14_10C4C929.wem</CachePath>
+				</File>
+				<File Id="344867798" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyStone-03.wav</ShortName>
+					<CachePath>SFX/HeavyStone-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="352264063" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGrass-02.wav</ShortName>
+					<CachePath>SFX/HeavyGrass-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="354606587" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightStone-01.wav</ShortName>
+					<CachePath>SFX/LightStone-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="376520905" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerHeal-04.wav</ShortName>
+					<CachePath>SFX/PlayerHeal-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="402109902" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyStone-05.wav</ShortName>
+					<CachePath>SFX/HeavyStone-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="412030350" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CoinToss.wav</ShortName>
+					<CachePath>SFX/CoinToss_10C4C929.wem</CachePath>
+				</File>
+				<File Id="420762295" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardPick.wav</ShortName>
+					<CachePath>SFX/CardPick_10C4C929.wem</CachePath>
+				</File>
+				<File Id="436896071" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Incinder_Gameplay.wav</ShortName>
+					<CachePath>SFX/Incinder_Gameplay_1B17FF3D.wem</CachePath>
+				</File>
+				<File Id="437784108" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CoinDrop.wav</ShortName>
+					<CachePath>SFX/CoinDrop_10C4C929.wem</CachePath>
+				</File>
+				<File Id="439767275" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CoinSpin.wav</ShortName>
+					<CachePath>SFX/CoinSpin_10C4C929.wem</CachePath>
+				</File>
+				<File Id="445052481" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightWood-03.wav</ShortName>
+					<CachePath>SFX/LightWood-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="462432207" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>laugh.wav</ShortName>
+					<CachePath>SFX/laugh_10C4C929.wem</CachePath>
+				</File>
+				<File Id="475601476" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerDeath-03.wav</ShortName>
+					<CachePath>SFX/PlayerDeath-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="483124774" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BookOpen.wav</ShortName>
+					<CachePath>SFX/BookOpen_10C4C929.wem</CachePath>
+				</File>
+				<File Id="498859171" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightStone-03.wav</ShortName>
+					<CachePath>SFX/LightStone-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="505645022" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-02.wav</ShortName>
+					<CachePath>SFX/NextPage-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="510667287" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CoinSpend.wav</ShortName>
+					<CachePath>SFX/CoinSpend_10C4C929.wem</CachePath>
+				</File>
+				<File Id="519282052" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-06.wav</ShortName>
+					<CachePath>SFX/NextPage-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="529643543" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Flintlock 4.wav</ShortName>
+					<CachePath>SFX/Flintlock 4_10C4C929.wem</CachePath>
+				</File>
+				<File Id="534091470" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-02.wav</ShortName>
+					<CachePath>SFX/PrevPage-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="542585731" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Hemabolt.wav</ShortName>
+					<CachePath>SFX/Hemabolt_10C4C929.wem</CachePath>
+				</File>
+				<File Id="549072123" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Blood storm.wav</ShortName>
+					<CachePath>SFX/Blood storm_10C4C929.wem</CachePath>
+				</File>
+				<File Id="553643860" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-20.wav</ShortName>
+					<CachePath>SFX/CardShuffle-20_10C4C929.wem</CachePath>
+				</File>
+				<File Id="559854880" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerScream-01.wav</ShortName>
+					<CachePath>SFX/PlayerScream-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="575976790" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyStone-01.wav</ShortName>
+					<CachePath>SFX/HeavyStone-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="576505224" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerHeal-02.wav</ShortName>
+					<CachePath>SFX/PlayerHeal-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="577685919" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyWood-01.wav</ShortName>
+					<CachePath>SFX/HeavyWood-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="592178317" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerPain-03.wav</ShortName>
+					<CachePath>SFX/PlayerPain-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="597654830" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightWood-01.wav</ShortName>
+					<CachePath>SFX/LightWood-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="600842646" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-01.wav</ShortName>
+					<CachePath>SFX/CardShuffle-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="605944057" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyWood-02.wav</ShortName>
+					<CachePath>SFX/HeavyWood-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="611281819" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerPain-01.wav</ShortName>
+					<CachePath>SFX/PlayerPain-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="615578039" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyWood-03.wav</ShortName>
+					<CachePath>SFX/HeavyWood-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="617075084" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-04.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="626088333" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-15.wav</ShortName>
+					<CachePath>SFX/SwordSwing-15_10C4C929.wem</CachePath>
+				</File>
+				<File Id="636361319" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGravel-04.wav</ShortName>
+					<CachePath>SFX/LightGravel-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="637354026" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-01.wav</ShortName>
+					<CachePath>SFX/NextPage-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="639018075" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGrass-01.wav</ShortName>
+					<CachePath>SFX/LightGrass-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="646425459" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGravel-05.wav</ShortName>
+					<CachePath>SFX/LightGravel-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="654972532" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyHealPitched-01.wav</ShortName>
+					<CachePath>SFX/EnemyHealPitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="655791488" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerPain-06.wav</ShortName>
+					<CachePath>SFX/PlayerPain-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="657464613" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-07.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-07_10C4C929.wem</CachePath>
+				</File>
+				<File Id="657975644" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardDeck.wav</ShortName>
+					<CachePath>SFX/CardDeck_10C4C929.wem</CachePath>
+				</File>
+				<File Id="659426776" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>DoorCreak.wav</ShortName>
+					<CachePath>SFX/DoorCreak_10C4C929.wem</CachePath>
+				</File>
+				<File Id="663322846" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-01.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="665544110" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-10.wav</ShortName>
+					<CachePath>SFX/CardShuffle-10_10C4C929.wem</CachePath>
+				</File>
+				<File Id="665672550" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-03.wav</ShortName>
+					<CachePath>SFX/PrevPage-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="673919322" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerSwing-04.wav</ShortName>
+					<CachePath>SFX/PlayerSwing-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="676851213" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Small chest close.wav</ShortName>
+					<CachePath>SFX/Small chest close_10C4C929.wem</CachePath>
+				</File>
+				<File Id="677645746" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerScream-03.wav</ShortName>
+					<CachePath>SFX/PlayerScream-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="681916834" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyReliefPitched-02.wav</ShortName>
+					<CachePath>SFX/EnemyReliefPitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="686190957" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>TorchBreakShort.wav</ShortName>
+					<CachePath>SFX/TorchBreakShort_10C4C929.wem</CachePath>
+				</File>
+				<File Id="690074395" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-07.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-07_10C4C929.wem</CachePath>
+				</File>
+				<File Id="695088713" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Flintlock 2.wav</ShortName>
+					<CachePath>SFX/Flintlock 2_10C4C929.wem</CachePath>
+				</File>
+				<File Id="700366924" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-08.wav</ShortName>
+					<CachePath>SFX/SwordSwing-08_10C4C929.wem</CachePath>
+				</File>
+				<File Id="701991769" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyHealPitched-04.wav</ShortName>
+					<CachePath>SFX/EnemyHealPitched-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="708134248" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerCast-05.wav</ShortName>
+					<CachePath>SFX/PlayerCast-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="711281976" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-06.wav</ShortName>
+					<CachePath>SFX/SwordSwing-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="715498737" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-12.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-12_10C4C929.wem</CachePath>
+				</File>
+				<File Id="747789225" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerCast-02.wav</ShortName>
+					<CachePath>SFX/PlayerCast-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="752791363" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-04.wav</ShortName>
+					<CachePath>SFX/CardShuffle-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="754259102" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-05.wav</ShortName>
+					<CachePath>SFX/NextPage-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="755030770" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGravel-02.wav</ShortName>
+					<CachePath>SFX/LightGravel-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="757114581" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardConfirmed.wav</ShortName>
+					<CachePath>SFX/CardConfirmed_10C4C929.wem</CachePath>
+				</File>
+				<File Id="762166395" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-15.wav</ShortName>
+					<CachePath>SFX/CardShuffle-15_10C4C929.wem</CachePath>
+				</File>
+				<File Id="764431499" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-02.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="765601403" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-06.wav</ShortName>
+					<CachePath>SFX/CardShuffle-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="769009061" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PrevPage-01.wav</ShortName>
+					<CachePath>SFX/PrevPage-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="785817419" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-01.wav</ShortName>
+					<CachePath>SFX/SwordSwing-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="787042999" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyAttackPitched-04.wav</ShortName>
+					<CachePath>SFX/EnemyAttackPitched-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="793328373" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerPain-05.wav</ShortName>
+					<CachePath>SFX/PlayerPain-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="801192734" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-06.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="801224307" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-06.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-06_10C4C929.wem</CachePath>
+				</File>
+				<File Id="823887887" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerDeath-04.wav</ShortName>
+					<CachePath>SFX/PlayerDeath-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="827287611" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-07.wav</ShortName>
+					<CachePath>SFX/SwordSwing-07_10C4C929.wem</CachePath>
+				</File>
+				<File Id="838580558" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-10.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-10_10C4C929.wem</CachePath>
+				</File>
+				<File Id="841292470" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Small chest open.wav</ShortName>
+					<CachePath>SFX/Small chest open_10C4C929.wem</CachePath>
+				</File>
+				<File Id="841672711" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerDeath-01.wav</ShortName>
+					<CachePath>SFX/PlayerDeath-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="845467199" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGrass-02.wav</ShortName>
+					<CachePath>SFX/LightGrass-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="848123604" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGrass-04.wav</ShortName>
+					<CachePath>SFX/LightGrass-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="848642799" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-02.wav</ShortName>
+					<CachePath>SFX/CardShuffle-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="849152164" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>Flintlock 3.wav</ShortName>
+					<CachePath>SFX/Flintlock 3_10C4C929.wem</CachePath>
+				</File>
+				<File Id="871082607" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerCast-06.wav</ShortName>
+					<CachePath>SFX/PlayerCast-06_DAC47C48.wem</CachePath>
+				</File>
+				<File Id="875457795" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-08.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-08_10C4C929.wem</CachePath>
+				</File>
+				<File Id="880489828" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-04.wav</ShortName>
+					<CachePath>SFX/SwordSwing-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="890781145" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-08.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-08_10C4C929.wem</CachePath>
+				</File>
+				<File Id="902623111" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-12.wav</ShortName>
+					<CachePath>SFX/CardShuffle-12_10C4C929.wem</CachePath>
+				</File>
+				<File Id="919711615" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightGrass-05.wav</ShortName>
+					<CachePath>SFX/LightGrass-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="929092099" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>BookClose.wav</ShortName>
+					<CachePath>SFX/BookClose_10C4C929.wem</CachePath>
+				</File>
+				<File Id="937075724" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-02.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="950584089" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyHealPitched-02.wav</ShortName>
+					<CachePath>SFX/EnemyHealPitched-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="962061646" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerSwing-03.wav</ShortName>
+					<CachePath>SFX/PlayerSwing-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="970236375" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-09.wav</ShortName>
+					<CachePath>SFX/CardShuffle-09_10C4C929.wem</CachePath>
+				</File>
+				<File Id="971374909" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightStone-05.wav</ShortName>
+					<CachePath>SFX/LightStone-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="976902021" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyBlockPitched-04.wav</ShortName>
+					<CachePath>SFX/EnemyBlockPitched-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="979645457" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGravel-02.wav</ShortName>
+					<CachePath>SFX/HeavyGravel-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="990328796" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyStone-02.wav</ShortName>
+					<CachePath>SFX/HeavyStone-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="990694112" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-05.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="991199934" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-13.wav</ShortName>
+					<CachePath>SFX/SwordSwing-13_10C4C929.wem</CachePath>
+				</File>
+				<File Id="994700520" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyPainPitched-03.wav</ShortName>
+					<CachePath>SFX/EnemyPainPitched-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="997305365" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-08.wav</ShortName>
+					<CachePath>SFX/CardShuffle-08_10C4C929.wem</CachePath>
+				</File>
+				<File Id="997504390" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightWood-04.wav</ShortName>
+					<CachePath>SFX/LightWood-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="999987267" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGravel-01.wav</ShortName>
+					<CachePath>SFX/HeavyGravel-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1001497438" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerHeal-05.wav</ShortName>
+					<CachePath>SFX/PlayerHeal-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1004620782" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-05.wav</ShortName>
+					<CachePath>SFX/SwordSwing-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1005438408" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>HeavyGravel-05.wav</ShortName>
+					<CachePath>SFX/HeavyGravel-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1006239137" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-03.wav</ShortName>
+					<CachePath>SFX/CardShuffle-03_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1007198670" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>PlayerHeal-01.wav</ShortName>
+					<CachePath>SFX/PlayerHeal-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1012071332" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-11.wav</ShortName>
+					<CachePath>SFX/SwordSwing-11_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1016237802" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyReliefPitched-01.wav</ShortName>
+					<CachePath>SFX/EnemyReliefPitched-01_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1023360547" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>NextPage-04.wav</ShortName>
+					<CachePath>SFX/NextPage-04_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1041528994" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>SwordSwing-02.wav</ShortName>
+					<CachePath>SFX/SwordSwing-02_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1043673606" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-19.wav</ShortName>
+					<CachePath>SFX/CardShuffle-19_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1044067280" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>EnemyMovePitched-14.wav</ShortName>
+					<CachePath>SFX/EnemyMovePitched-14_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1059909485" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>LightWood-05.wav</ShortName>
+					<CachePath>SFX/LightWood-05_10C4C929.wem</CachePath>
+				</File>
+				<File Id="1066866432" Language="SFX" Streaming="false" Location="Memory">
+					<ShortName>CardShuffle-16.wav</ShortName>
+					<CachePath>SFX/CardShuffle-16_10C4C929.wem</CachePath>
+				</File>
+			</Media>
+			<Events>
+				<Event Id="2566684358" Name="Bloodstorm" DurationType="OneShot" DurationMin="7.3334374" DurationMax="7.3334374">
+					<MediaRefs>
+						<MediaRef Id="72252010"/>
+						<MediaRef Id="199066427"/>
+						<MediaRef Id="249541702"/>
+						<MediaRef Id="549072123"/>
+						<MediaRef Id="708134248"/>
+						<MediaRef Id="747789225"/>
+						<MediaRef Id="871082607"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1580047315" Name="BruteAttack" DurationType="OneShot" DurationMin="1.0386459" DurationMax="1.72675">
+					<MediaRefs>
+						<MediaRef Id="19904816"/>
+						<MediaRef Id="125605516"/>
+						<MediaRef Id="167809886"/>
+						<MediaRef Id="224566984"/>
+						<MediaRef Id="787042999"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1416938370" Name="BruteBlock" DurationType="OneShot" DurationMin="0.90089583" DurationMax="2.093396">
+					<MediaRefs>
+						<MediaRef Id="20997532"/>
+						<MediaRef Id="225697627"/>
+						<MediaRef Id="326215095"/>
+						<MediaRef Id="976902021"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1506802029" Name="BruteHeal" DurationType="OneShot" DurationMin="0.98972917" DurationMax="1.9373333">
+					<MediaRefs>
+						<MediaRef Id="79826535"/>
+						<MediaRef Id="330687773"/>
+						<MediaRef Id="654972532"/>
+						<MediaRef Id="681916834"/>
+						<MediaRef Id="701991769"/>
+						<MediaRef Id="950584089"/>
+						<MediaRef Id="1016237802"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1185467356" Name="BruteHurt" DurationType="OneShot" DurationMin="0.99222916" DurationMax="1.5098958">
+					<MediaRefs>
+						<MediaRef Id="97996265"/>
+						<MediaRef Id="663322846"/>
+						<MediaRef Id="690074395"/>
+						<MediaRef Id="764431499"/>
+						<MediaRef Id="801224307"/>
+						<MediaRef Id="875457795"/>
+						<MediaRef Id="990694112"/>
+						<MediaRef Id="994700520"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2186417968" Name="BruteMove" DurationType="OneShot" DurationMin="0.497625" DurationMax="1.3186458">
+					<MediaRefs>
+						<MediaRef Id="55532829"/>
+						<MediaRef Id="101765747"/>
+						<MediaRef Id="188009124"/>
+						<MediaRef Id="200105795"/>
+						<MediaRef Id="244262875"/>
+						<MediaRef Id="260035028"/>
+						<MediaRef Id="277133025"/>
+						<MediaRef Id="617075084"/>
+						<MediaRef Id="657464613"/>
+						<MediaRef Id="715498737"/>
+						<MediaRef Id="801192734"/>
+						<MediaRef Id="838580558"/>
+						<MediaRef Id="890781145"/>
+						<MediaRef Id="937075724"/>
+						<MediaRef Id="1044067280"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4049969704" Name="CardUI_Confirm" DurationType="OneShot" DurationMin="1.814" DurationMax="1.814">
+					<MediaRefs>
+						<MediaRef Id="757114581"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="982717551" Name="CardUI_End" DurationType="OneShot" DurationMin="1.8192084" DurationMax="1.8192084">
+					<MediaRefs>
+						<MediaRef Id="169802807"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2669983563" Name="CardUI_Pick" DurationType="OneShot" DurationMin="0.91425" DurationMax="0.91425">
+					<MediaRefs>
+						<MediaRef Id="420762295"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2654324891" Name="CardUI_Shuffle" DurationType="OneShot" DurationMin="0.2140136" DurationMax="1.3392518">
+					<MediaRefs>
+						<MediaRef Id="61477259"/>
+						<MediaRef Id="72637485"/>
+						<MediaRef Id="141686110"/>
+						<MediaRef Id="145472790"/>
+						<MediaRef Id="153372176"/>
+						<MediaRef Id="239476672"/>
+						<MediaRef Id="304598166"/>
+						<MediaRef Id="553643860"/>
+						<MediaRef Id="600842646"/>
+						<MediaRef Id="665544110"/>
+						<MediaRef Id="752791363"/>
+						<MediaRef Id="762166395"/>
+						<MediaRef Id="765601403"/>
+						<MediaRef Id="848642799"/>
+						<MediaRef Id="902623111"/>
+						<MediaRef Id="970236375"/>
+						<MediaRef Id="997305365"/>
+						<MediaRef Id="1006239137"/>
+						<MediaRef Id="1043673606"/>
+						<MediaRef Id="1066866432"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2185107916" Name="CardUI_Start" DurationType="OneShot" DurationMin="2.01125" DurationMax="2.01125">
+					<MediaRefs>
+						<MediaRef Id="657975644"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1044338672" Name="ChestClose" DurationType="OneShot" DurationMin="1.6163125" DurationMax="1.6163125">
+					<MediaRefs>
+						<MediaRef Id="676851213"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2892697348" Name="ChestOpen" DurationType="OneShot" DurationMin="1.775669" DurationMax="1.775669">
+					<MediaRefs>
+						<MediaRef Id="841292470"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1138653966" Name="CoinMiss" DurationType="OneShot" DurationMin="1.1760209" DurationMax="1.1760209">
+					<MediaRefs>
+						<MediaRef Id="437784108"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1406895930" Name="CoinSpend" DurationType="OneShot" DurationMin="0.9872083" DurationMax="0.9872083">
+					<MediaRefs>
+						<MediaRef Id="510667287"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="767552063" Name="CoinToss" DurationType="OneShot" DurationMin="1.3749167" DurationMax="1.3749167">
+					<MediaRefs>
+						<MediaRef Id="412030350"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1404805401" Name="DoorOpen" DurationType="OneShot" DurationMin="2.0536509" DurationMax="2.0536509">
+					<MediaRefs>
+						<MediaRef Id="659426776"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1820443583" Name="FireFlintlock" DurationType="OneShot" DurationMin="4.9040833" DurationMax="4.9040833">
+					<MediaRefs>
+						<MediaRef Id="143551498"/>
+						<MediaRef Id="529643543"/>
+						<MediaRef Id="695088713"/>
+						<MediaRef Id="849152164"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2385628198" Name="Footsteps" DurationType="OneShot" DurationMin="0.30627084" DurationMax="0.8596042">
+					<SwitchContainers>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="4103883880" Default="true"/>
+							<MediaRefs>
+								<MediaRef Id="124768926"/>
+								<MediaRef Id="295190154"/>
+								<MediaRef Id="354606587"/>
+								<MediaRef Id="498859171"/>
+								<MediaRef Id="971374909"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="3912760598"/>
+							<MediaRefs>
+								<MediaRef Id="204887727"/>
+								<MediaRef Id="445052481"/>
+								<MediaRef Id="597654830"/>
+								<MediaRef Id="997504390"/>
+								<MediaRef Id="1059909485"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="2525268562"/>
+							<MediaRefs>
+								<MediaRef Id="186590626"/>
+								<MediaRef Id="207784324"/>
+								<MediaRef Id="290050387"/>
+								<MediaRef Id="327300971"/>
+								<MediaRef Id="352264063"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="1697108119"/>
+							<MediaRefs>
+								<MediaRef Id="20861450"/>
+								<MediaRef Id="239830879"/>
+								<MediaRef Id="577685919"/>
+								<MediaRef Id="605944057"/>
+								<MediaRef Id="615578039"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="3929807209"/>
+							<MediaRefs>
+								<MediaRef Id="117078103"/>
+								<MediaRef Id="344867798"/>
+								<MediaRef Id="402109902"/>
+								<MediaRef Id="575976790"/>
+								<MediaRef Id="990328796"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="2097603749"/>
+							<MediaRefs>
+								<MediaRef Id="148844856"/>
+								<MediaRef Id="221392445"/>
+								<MediaRef Id="979645457"/>
+								<MediaRef Id="999987267"/>
+								<MediaRef Id="1005438408"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="2548727596"/>
+							<MediaRefs>
+								<MediaRef Id="3212125"/>
+								<MediaRef Id="46476386"/>
+								<MediaRef Id="636361319"/>
+								<MediaRef Id="646425459"/>
+								<MediaRef Id="755030770"/>
+							</MediaRefs>
+						</SwitchContainer>
+						<SwitchContainer>
+							<SwitchValue GroupType="Switch" GroupId="2615620554" Id="2677407975"/>
+							<MediaRefs>
+								<MediaRef Id="148126796"/>
+								<MediaRef Id="639018075"/>
+								<MediaRef Id="845467199"/>
+								<MediaRef Id="848123604"/>
+								<MediaRef Id="919711615"/>
+							</MediaRefs>
+						</SwitchContainer>
+					</SwitchContainers>
+				</Event>
+				<Event Id="4158285989" Name="GameOver" DurationType="OneShot" DurationMin="6.403479" DurationMax="6.403479">
+					<MediaRefs>
+						<MediaRef Id="439767275"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3407605449" Name="Gameplay_Looped" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="436896071"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1656947812" Name="PlayerDeath" DurationType="OneShot" DurationMin="1.297375" DurationMax="3.0626667">
+					<MediaRefs>
+						<MediaRef Id="223675437"/>
+						<MediaRef Id="234773187"/>
+						<MediaRef Id="475601476"/>
+						<MediaRef Id="559854880"/>
+						<MediaRef Id="677645746"/>
+						<MediaRef Id="823887887"/>
+						<MediaRef Id="841672711"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3216143520" Name="PlayerHeal" DurationType="OneShot" DurationMin="0.81252086" DurationMax="1.2390833">
+					<MediaRefs>
+						<MediaRef Id="59993749"/>
+						<MediaRef Id="86937318"/>
+						<MediaRef Id="376520905"/>
+						<MediaRef Id="576505224"/>
+						<MediaRef Id="1001497438"/>
+						<MediaRef Id="1007198670"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3537581393" Name="PlayerHurt" DurationType="OneShot" DurationMin="0.9020208" DurationMax="1.7220417">
+					<MediaRefs>
+						<MediaRef Id="93788894"/>
+						<MediaRef Id="171771320"/>
+						<MediaRef Id="592178317"/>
+						<MediaRef Id="611281819"/>
+						<MediaRef Id="655791488"/>
+						<MediaRef Id="793328373"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2348858765" Name="PlayerLaugh" DurationType="OneShot" DurationMin="3.0169792" DurationMax="3.0169792">
+					<MediaRefs>
+						<MediaRef Id="462432207"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1598433574" Name="PlayerMeleeAttack" DurationType="OneShot" DurationMin="0.901125" DurationMax="1.329">
+					<MediaRefs>
+						<MediaRef Id="104101598"/>
+						<MediaRef Id="145572863"/>
+						<MediaRef Id="149730050"/>
+						<MediaRef Id="157051879"/>
+						<MediaRef Id="199315037"/>
+						<MediaRef Id="217847425"/>
+						<MediaRef Id="239855936"/>
+						<MediaRef Id="266374827"/>
+						<MediaRef Id="310257819"/>
+						<MediaRef Id="333227023"/>
+						<MediaRef Id="626088333"/>
+						<MediaRef Id="673919322"/>
+						<MediaRef Id="700366924"/>
+						<MediaRef Id="711281976"/>
+						<MediaRef Id="785817419"/>
+						<MediaRef Id="827287611"/>
+						<MediaRef Id="880489828"/>
+						<MediaRef Id="962061646"/>
+						<MediaRef Id="991199934"/>
+						<MediaRef Id="1004620782"/>
+						<MediaRef Id="1012071332"/>
+						<MediaRef Id="1041528994"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3221502139" Name="ShootHandBlood" DurationType="OneShot" DurationMin="6.5941772" DurationMax="6.5941772">
+					<MediaRefs>
+						<MediaRef Id="72252010"/>
+						<MediaRef Id="145572863"/>
+						<MediaRef Id="149730050"/>
+						<MediaRef Id="199066427"/>
+						<MediaRef Id="199315037"/>
+						<MediaRef Id="239855936"/>
+						<MediaRef Id="249541702"/>
+						<MediaRef Id="542585731"/>
+						<MediaRef Id="673919322"/>
+						<MediaRef Id="708134248"/>
+						<MediaRef Id="747789225"/>
+						<MediaRef Id="871082607"/>
+						<MediaRef Id="962061646"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="717429066" Name="TorchBreak" DurationType="OneShot" DurationMin="1.6948752" DurationMax="1.6948752">
+					<MediaRefs>
+						<MediaRef Id="686190957"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="4171534483" Name="TorchLoop" MaxAttenuation="15" DurationType="Infinite">
+					<MediaRefs>
+						<MediaRef Id="33000027"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="2519197294" Name="UI_Close" DurationType="OneShot" DurationMin="1.3931458" DurationMax="1.3931458">
+					<MediaRefs>
+						<MediaRef Id="929092099"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="1855554456" Name="UI_NextPage" DurationType="OneShot" DurationMin="0.6733787" DurationMax="1.4156009">
+					<MediaRefs>
+						<MediaRef Id="330218231"/>
+						<MediaRef Id="505645022"/>
+						<MediaRef Id="519282052"/>
+						<MediaRef Id="637354026"/>
+						<MediaRef Id="754259102"/>
+						<MediaRef Id="1023360547"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="3282376362" Name="UI_Open" DurationType="OneShot" DurationMin="1.7879364" DurationMax="1.7879364">
+					<MediaRefs>
+						<MediaRef Id="483124774"/>
+					</MediaRefs>
+				</Event>
+				<Event Id="896450232" Name="UI_PrevPage" DurationType="OneShot" DurationMin="0.4556236" DurationMax="1.1715193">
+					<MediaRefs>
+						<MediaRef Id="22925414"/>
+						<MediaRef Id="273314778"/>
+						<MediaRef Id="288392327"/>
+						<MediaRef Id="534091470"/>
+						<MediaRef Id="665672550"/>
+						<MediaRef Id="769009061"/>
+					</MediaRefs>
+				</Event>
+			</Events>
+			<SwitchGroups>
+				<SwitchGroup Id="2615620554" Name="Footstep_Type">
+					<Switches>
+						<Switch Id="1697108119" Name="WoodHeavy"/>
+						<Switch Id="2097603749" Name="GravelHeavy"/>
+						<Switch Id="2525268562" Name="GrassHeavy"/>
+						<Switch Id="2548727596" Name="GravelLight"/>
+						<Switch Id="2677407975" Name="GrassLight"/>
+						<Switch Id="3912760598" Name="WoodLight"/>
+						<Switch Id="3929807209" Name="StoneHeavy"/>
+						<Switch Id="4103883880" Name="StoneLight"/>
+					</Switches>
+				</SwitchGroup>
+			</SwitchGroups>
+		</SoundBank>
+	</SoundBanks>
+	<FileHash>{B86374FA-ED1A-7DC4-0DF5-C9C3CB325288}</FileHash>
+</SoundBanksInfo>

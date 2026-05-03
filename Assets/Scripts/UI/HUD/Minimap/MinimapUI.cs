@@ -5,17 +5,6 @@ using System.Collections.Generic;
 /// <summary>
 /// Displays the minimap composite texture inside a circular masked panel and manages
 /// player/enemy arrow markers that rotate to match their world-space facing direction.
-///
-/// Required scene setup:
-///   MinimapMask (Image + Mask component)
-///     └── DisplayRoot  (empty RectTransform, stretch-fill parent)
-///           └── MinimapImage (RawImage, stretch-fill parent)
-///           └── Markers      (empty RectTransform, stretch-fill parent)
-///
-/// Assign DisplayRoot to the displayRoot field, MinimapImage to minimapImage,
-/// Markers to markersContainer, and the Main Camera to cameraTransform.
-/// DisplayRoot rotates each frame so the camera's forward is always at the top.
-/// Markers counter-rotate so their arrows still show true world-space facing.
 /// </summary>
 public class MinimapUI : MonoBehaviour
 {
@@ -131,12 +120,7 @@ public class MinimapUI : MonoBehaviour
             PlaceMarker(enemyMarkerRects[i], enemy.transform.position, enemy.transform.eulerAngles.y);
         }
     }
-
-    /// <summary>
-    /// Converts a world-space position to a UI position inside markersContainer.
-    /// The marker's local rotation is the entity's world-space yaw minus the camera yaw,
-    /// which cancels out the rotation applied to displayRoot so arrows face correctly.
-    /// </summary>
+    
     private void PlaceMarker(RectTransform marker, Vector3 worldPos, float worldYRotation)
     {
         MinimapManager mgr = MinimapManager.Instance;

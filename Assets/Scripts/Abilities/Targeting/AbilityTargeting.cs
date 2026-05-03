@@ -746,7 +746,7 @@ public class AbilityTargeting : MonoBehaviour
     }
 
     /// <summary>
-    /// Rotates the caster to face the given flat (XZ) direction, respecting aimRotationSpeed.
+    /// Rotates the caster to face the given flat (XZ) direction
     /// </summary>
     private void RotateCasterToward(Vector3 direction)
     {

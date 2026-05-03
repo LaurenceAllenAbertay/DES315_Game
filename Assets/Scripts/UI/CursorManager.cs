@@ -87,10 +87,7 @@ public class CursorManager : MonoBehaviour
             cursorImage.sprite = IsHoveringTarget(mousePosition) ? hoverSprite : defaultSprite;
         }
     }
-
-    /// <summary>
-    /// Returns true if any UI element under the cursor has a HoverTarget component on it.
-    /// </summary>
+    
     private bool IsHoveringTarget(Vector2 screenPosition)
     {
         if (EventSystem.current == null) return false;

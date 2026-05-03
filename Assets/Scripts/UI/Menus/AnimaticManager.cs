@@ -62,11 +62,7 @@ public class AnimaticManager : MonoBehaviour
         if (anyKeyPressed || anyMousePressed)
             hintText.gameObject.SetActive(true);
     }
-
-    /// <summary>
-    /// Accumulates hold time while LMB is held and resets when released.
-    /// Triggers scene load once the threshold is reached.
-    /// </summary>
+    
     private void HandleSkipHold()
     {
         if (skipFillImage == null || Mouse.current == null)

@@ -1,9 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Tracks per-run statistics and calculates the final score when the run ends.
-/// Place on a persistent manager GameObject in the game scene.
-/// Call RegisterChestOpened() from your chest interaction script when a chest is opened.
+/// Tracks per-run statistics and calculates the final score when the run ends
 /// </summary>
 public class RunScoreManager : MonoBehaviour
 {
