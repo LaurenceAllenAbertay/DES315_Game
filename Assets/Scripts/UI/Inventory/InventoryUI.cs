@@ -96,11 +96,11 @@ public class InventoryUI : MonoBehaviour
 
     private void OnGamePaused()
     {
-        if (root != null && root.activeSelf)
-        {
-            if (root != null) root.SetActive(false);
-            if (inventoryButton != null) inventoryButton.SetActive(true);
-        }
+        //if (root != null && root.activeSelf)
+        //{
+        //    if (root != null) root.SetActive(false);
+        //    if (inventoryButton != null) inventoryButton.SetActive(true);
+        //}
     }
 
     public void Toggle()
